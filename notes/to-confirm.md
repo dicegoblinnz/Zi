@@ -17,6 +17,32 @@ Your rules left a few gaps, and the book has to say something in each one, so Cl
 9. **Downtime's Recover slot goes**, since downtime puts everything back.
 10. **Characters already saved move across** with each Title's 3 made 5 (the 2 more spread the way the 3 were, flagged for the player to check), every Root full, and a track's Scars on its Root.
 
+### 2. The character
+
+Written into 03, 03a, 03b and 18 on 16 Nov, with the crew in `notes/core-plan.md`.
+
+1. **The crew's 5s are their 3s made 5 the way a saved character's are**: the 2 more go where the 3 were (Mind 2 and Body 1 is Mind 3 and Body 2), so every Title keeps its feel. Four of them keep a Root at 0 (Vesk's and Wren's Soul, Isolde's and Ash's Body), so a hit there wounds them unless they take it on another Root for 2. Say if you'd like any of them to put a point there instead.
+2. **Every awakening's one kind now.** It says what the thing does, the way a permission does, with the Root it locks in brackets, and it's 2 steps on a roll it fits and 2 more for each Aura. What an active one used to buy with Aura is just what it does now, and anything bigger is going beyond. So Bram's *Knock them flat* puts *Prone* on everyone a swing beats, and Wren's arrows always reach what she can see.
+3. **Each crew awakening locks the Root it's used with**: Vesk's hook and Wren's bow on Body, Bram's hammer two of Body, Dorrie's pin on Mind, Isolde's chalk and Ash's stone on Soul.
+4. **An awakening needs a free point to lock**, and Scars lock theirs first. One on a Root with nothing left does nothing till there's room.
+5. **A saved character's awakening with no Root locks a point of their biggest Root**, flagged for them to check, the way a Title's spread is.
+6. **Straining a bond thread, and a big bite, give a point back on any of your Roots**, where they put Resolve up a size. On your Soul alone, Vesk and Wren would get nothing.
+7. **Borrowing through a bond thread lends one of their permissions** to justify bringing a Root into your roll, for 1 Aura, and you still pay for the Root.
+8. **Every ability's 1 Aura**, and the home tracks go.
+9. **The Healer's heal is a Root rolled unsplit**, less 5 for each Toll. Its Trait's *Come Prepared*, ignoring a step of Toll, and *Good Hands* goes, since what's healed never gives Aura. Its Push is the flat bonus, +2 a heal. *Pull them back* keeps someone in the scene when they take a Scar.
+10. **The Guardian's *Stand firm* makes the next two hits take 1 point between them**, not nothing. *Better Me Than You* pays 1 Aura for every blow he takes, so with both in Aura, nothing would ever get through him.
+11. **The Bard's Lift is a point back on the Mind** of every friend who hears it, and Crescendo makes it 2, then 3. It isn't a heal, so it adds no Toll.
+12. **The Bloodsworn's 3 steps are for every point of Body lost.** *Bleed for it* (1 Aura) spends a point for 3 steps, *Bleed out* (1 Aura) is 3 for every point it's down, and *Paid in Blood* is 1 Aura a point.
+13. **The Oracle's foresight stays two numbers an action**, however it's split, or with no limit on splitting it could swap a pile of 1s into every telegraph. *Foretold*'s truth lets anyone in the crew bring a Root in on it this scene, like a permission they've all got.
+14. **The Maker spends Aura on a friend's awakening**, 2 steps each, where it powered it. A Maker's tags and a Shifter's animal tags work like permissions, so they can justify bringing a Root in.
+15. **The Shadow's extra action for coming out of hiding goes**, with extra actions.
+16. **A Summoner's souls don't lock points** till the table's worked souls out on this core.
+17. **The Warrior's *Second Skin* is 1 step a piece of armour** on the roll when it lands, when Defend wasn't your action.
+18. **Boons:** Toughness's first hit takes no point, and its Burden locks a point. Recovery's 2 more, or 2 less, on each Root's roll at the end of a scene. Regen rolls the Root that's lost most, and a top face is a point back. Splits goes, since splitting has no limit, and Extra action is Acting, a Burden with no Boon.
+19. **Coin and Kit:** the Surgeon's Casebook eases Toll (*What worked*, in place of *Given an hour*), and Sister Hale's Thimble gives 3 more with every heal. A Burden that locked a track's d2 locks a point of that Root, *Others First* is the Recovery Burden, and the Lookout's Glass's *Eye to the Glass* is *Blinded* that won't fade, in place of a split.
+20. **Items are never steps.** A weapon, armour or anything you carry does what it is, and only Charge, a purse of gold and the smoke bomb say otherwise, because they say so.
+21. **The *Slow* Catch's awakenings take a round to wake**, where they took two actions.
+
 ## 14 Nov: stacking
 
 **Live since 14 Nov**, when you said to make it live. Part 1 of the stacking rework (`notes/stacking-plan.md`), from your 14 Nov chat (`notes/playtest-sheets/2026-11-14-chat-decisions.md`), built by thirteen chats on `rules/2026-11-14-stacking` with the book's core cut under it. These are the calls Claude made writing it down, before any chat built it, and each chat added its own in its subsection below. They're still yours to say yes or no to.

@@ -1,7 +1,8 @@
 // Steps into dice, exactly as the table in The Core (#steps-into-dice):
 // your die is your steps × 2, up to a d12, every six steps gives you another
 // d12, and whatever's left over makes one more die. The build script uses this
-// too, to check every set action on the crew's sheets.
+// too, to check the crew's sheets. Since the new core (16 Nov) splitting has
+// no limit: a roll's steps can be any dice at all that add up to them.
 
 export const SIZES = [2, 4, 6, 8, 10, 12];
 
@@ -12,6 +13,16 @@ export function stepsToDice(steps) {
   if (left) dice.push(left * 2);
   return dice;
 }
+
+// Dice unsplit, the way a heal and the end of a scene roll them: d12s first,
+// and what's left as one die, so 8 steps is a d12 and a d4. It's the table's
+// own shape, never split.
+export const fillDice = (steps) => stepsToDice(steps);
+
+// How many steps some dice are (a d8 is 4), and whether they're a split of
+// this many steps: every die a size on the ladder, adding up to the steps.
+export const stepsOf = (dice) => (Array.isArray(dice) ? dice : []).reduce((t, d) => t + d / 2, 0);
+export const isSplit = (dice, steps) => Array.isArray(dice) && dice.length > 0 && dice.every((d) => SIZES.includes(d)) && stepsOf(dice) === steps;
 
 // The way the book writes a set of dice: "d8", "d12 + d2", "2d12", "3d12 + d4".
 export function diceLabel(dice) {

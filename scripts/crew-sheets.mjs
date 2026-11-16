@@ -4,26 +4,27 @@
 // reads into book.json, and tests/check-companion.mjs breaks copies of the
 // chapter to make sure it stops on a sheet that doesn't add up.
 //
-// Since Mo's 14 Nov rework (stacking, notes/stacking-plan.md) a sheet reads:
+// Since Mo's 16 Nov rework (the new core, notes/core-plan.md) a sheet reads:
 //   **Points:** 35. Two Titles 10, four more permissions 4, …, and six things she carries 6.
-//   **First Title:** *The best cat burglar in the city* (Body 3). Permissions: *move unseen* (Body), …
-//   **Second Title:** *Raised by the Guild* (Mind 2, Body 1). Permissions: …
-//   **Roots:** Body 8 · Mind 4 · Soul 0.
+//   **First Title:** *The best cat burglar in the city* (Body 5). Permissions: *move unseen* (Body), …
+//   **Second Title:** *Raised by the Guild* (Mind 3, Body 2). Permissions: …
+//   **Roots:** Body 11 · Mind 5 · Soul 0.
 //   **Archetypes:** [Shadow](#a-shadow) (*Push*) · [Shadow](#a-shadow) (*Vanish*).
 //   **Carries:** … (equipment, 3 of 3) · … (utility, 3 of 3) · … (keepsake) · her pack, with a coil of rope (1 of 10).
 //   **Armour:** Common worn leathers (Body, 1 box).
 //   **Attuned (Awakened):** A grappling line.
-//   **Awakenings:** *Anywhere I can throw a hook* (passive): …
-//   **Numbers:** Aura 7 · Stamina d12 · Confidence d12 · Resolve d12 · Stride 3.
+//   **Awakenings:** *Anywhere I can throw a hook* (Body): …
+//   **Numbers:** Aura 5 · Stride 3.
 // and its threads, crew answers, Aspiration and the trouble that follows
-// them. Every number's checked: a Title's spread adds up to 3, the Roots
+// them. Every number's checked: a Title's spread adds up to 5, the Roots
 // line is what the Titles and permissions put on each Root, the points are
 // what points.js says they cost and what the Points line's parts add up to,
 // every ability's one of its archetype's, armour has a quality and a Root
 // and is something they carry, the attuned thing has the awakenings its
-// stage and its Catch give it, Aura's 5 and 2 for each attuned thing, and
-// every track starts at d12. There are no specialties, and an attuned thing
-// gets no Aura its own way, so a Specialties or an Its Aura line stops it.
+// stage and its Catch give it, each awakening names the Root whose point it
+// locks and that Root's got the point, and Aura's 5. There are no tracks, no
+// specialties, and an attuned thing gets no Aura, so a track in the numbers,
+// a Specialties line or an Its Aura line stops it.
 import { createHash } from "node:crypto";
 import { costOf } from "../src/companion/points.js";
 import { threadNote } from "../src/companion/threads.js";
@@ -59,12 +60,11 @@ const outerCommas = (s = "") => {
 };
 
 export const ROOT_NAMES = ["Body", "Mind", "Soul"];
-export const TRACK_OF = { Body: "Stamina", Mind: "Confidence", Soul: "Resolve" };
 export const STAGE_AWAKENINGS = { Awakened: 1, Tempered: 2, Perfected: 3 };
-// A Title puts 3 on the Roots, and Aura's 5 and 2 for each attuned thing.
-const TITLE_ROOTS = 3;
+// A Title puts 5 on the Roots, and Aura's 5. The tracks are gone.
+const TITLE_ROOTS = 5;
 const AURA = 5;
-const PER_ATTUNED = 2;
+const TRACKS = ["Stamina", "Confidence", "Resolve"];
 
 // Armour's quality, from the table in Quality: Common, Fine and Masterwork,
 // with 1, 2 and 3 boxes. A tier is its place in the table, so a saved
@@ -107,14 +107,14 @@ function crewSheet(name, titleText, body, block, ctx) {
     if (!(label in field)) warn(`there's no ${label} line`);
   }
   if ("Specialties" in field) warn("there's a Specialties line, and specialties are gone: a roll's a Root and everything on the sheet that fits");
-  if ("Its Aura" in field) warn("there's an Its Aura line, and an attuned thing gets no Aura its own way any more: it puts 2 on their Aura instead");
+  if ("Its Aura" in field) warn("there's an Its Aura line, and an attuned thing gets no Aura any more: each awakening locks a point of its Root instead");
   const rootOf = (s, what) => {
     const r = s.trim();
     if (!ROOT_NAMES.includes(r)) warn(`${what} is on "${r}", and a Root's Body, Mind or Soul`);
     return r;
   };
 
-  // Titles: each one's spread of 3 over the Roots, and its permissions, each
+  // Titles: each one's spread of 5 over the Roots, and its permissions, each
   // on a Root.
   const roots = Object.fromEntries(ROOT_NAMES.map((r) => [r, 0]));
   const titles = [];
@@ -122,14 +122,14 @@ function crewSheet(name, titleText, body, block, ctx) {
     if (!/^\w+ Title$/.test(label)) continue;
     const t = value.match(/^\*([^*]+)\* \(([^)]+)\)\. Permissions: (.+?)\.?$/);
     if (!t) {
-      warn(`can't read the ${label}: it's *the Title* (Body 3), or (Mind 2, Body 1). Permissions: *a permission* (its Root), …`);
+      warn(`can't read the ${label}: it's *the Title* (Body 5), or (Mind 3, Body 2). Permissions: *a permission* (its Root), …`);
       continue;
     }
     const spread = Object.fromEntries(ROOT_NAMES.map((r) => [r, 0]));
     for (const part of t[2].split(/,\s*/)) {
       const p = part.match(/^(\w+) (\d+)$/);
       if (!p || !ROOT_NAMES.includes(p[1])) {
-        warn(`the ${label}'s spread has "${part}", and it's each Root it puts something on, with how much: (Body 3), or (Mind 2, Body 1)`);
+        warn(`the ${label}'s spread has "${part}", and it's each Root it puts something on, with how much: (Body 5), or (Mind 3, Body 2)`);
         continue;
       }
       if (spread[p[1]]) warn(`the ${label}'s spread names ${p[1]} twice`);
@@ -172,7 +172,7 @@ function crewSheet(name, titleText, body, block, ctx) {
     if (new Set(have).size !== have.length) warn(`the ${a[1]} has the same ability twice`);
     const theirs = (rule?.abilities ?? []).map((x) => curly(x.name));
     for (const h of have) if (rule && !theirs.includes(h)) warn(`*${h}* isn't one of the ${a[1]}'s abilities, which are ${theirs.join(", ")}`);
-    return { name: a[1], id: a[2], home: rule?.home ?? null, have };
+    return { name: a[1], id: a[2], have };
   });
   if (archetypes.length < 1) warn("there are no archetypes on the Archetypes line");
 
@@ -220,37 +220,37 @@ function crewSheet(name, titleText, body, block, ctx) {
   else if (!(stage in STAGE_AWAKENINGS)) warn(`the attuned thing's stage is ${stage}, and it's Awakened, Tempered or Perfected`);
   const thing = attunedLabel ? field[attunedLabel] : "";
   const caught = thing.match(/, with its Catch, \*([^*]+)\*/);
+  // Each awakening names the Root whose point it locks, the one it fits.
   const awakenings = dots(dropStop(field.Awakenings ?? "")).map((seg) => {
-    const w = seg.match(/^\*([^*]+)\* \((passive|active)\): (.+)$/);
-    if (!w) warn(`can't read the awakening "${seg.slice(0, 40)}…": it's *its name* (passive or active): what it does`);
-    return w ? { name: plain(w[1]), kind: w[2], text: curly(w[3]) } : null;
+    const w = seg.match(/^\*([^*]+)\* \((\w+)\): (.+)$/);
+    if (!w) warn(`can't read the awakening "${seg.slice(0, 40)}…": it's *its name* (the Root it locks): what it does`);
+    return w ? { name: plain(w[1]), root: rootOf(w[2], `the awakening *${w[1]}*`), text: curly(w[3]) } : null;
   }).filter(Boolean);
   const room = (STAGE_AWAKENINGS[stage] ?? 1) * (caught ? 2 : 1);
   if (awakenings.length !== room) warn(`the attuned thing has ${awakenings.length} awakenings, and at ${stage}${caught ? " with its Catch" : ""} it's got ${room}`);
   const attuned = { name: plain(thing.replace(/\..*$/, "").replace(/, with its Catch.*$/, "").replace(/ \([^)]*\)$/, "")), props: thing.match(/^[^(.]+\(([^)]+)\)/)?.[1] ?? null, stage, catch: caught ? plain(caught[1]) : null, burden: null, awakenings };
+  // Each awakening locks a point of its Root, so the Root has to have it.
+  for (const r of ROOT_NAMES) {
+    const locks = awakenings.filter((w) => w.root === r).length;
+    if (locks > roots[r]) warn(`${locks === 1 ? "an awakening locks" : `${locks} awakenings lock`} ${locks === 1 ? "a point" : "points"} of ${r}, and their ${r}'s ${roots[r]}`);
+  }
 
-  // The numbers: Aura, 5 and 2 for the attuned thing, the three tracks at
-  // d12 to start, and the stride.
+  // The numbers: Aura, 5, and the stride. The tracks are gone, so there's
+  // no Stamina, Confidence or Resolve in them.
   const n = field.Numbers ?? "";
   const num = (re, what) => {
     const m = n.match(re);
     if (!m) warn(`can't find ${what} in the numbers`);
     return m;
   };
-  const tracks = Object.fromEntries(Object.values(TRACK_OF).map((tr) => {
-    const m = num(new RegExp(`\\b${tr} d(\\d+)(?: \\(([^)]+)\\))?`), tr);
-    if (m && m[1] !== "12") warn(`${tr} starts at d12, and the sheet says d${m[1]}`);
-    return [tr.toLowerCase(), { die: Number(m?.[1] ?? 12), note: m?.[2] ? curly(m[2]) : null }];
-  }));
-  if (/\bWound die\b|\bConfidence starts\b|\bResolve \d\b/.test(n)) warn("the numbers still have the wound die, Confidence's start or a Resolve count, and the tracks are Stamina, Confidence and Resolve at d12");
+  for (const tr of TRACKS) if (new RegExp(`\\b${tr}\\b`).test(n)) warn(`the numbers still have ${tr}, and the tracks are gone: a Root's points are its health`);
+  if (/\bWound die\b|\bConfidence starts\b/.test(n)) warn("the numbers still have the wound die or Confidence's start");
   const aura = Number(num(/\bAura (\d+)/, "Aura")?.[1] ?? AURA);
-  const wantAura = AURA + PER_ATTUNED * (attunedLabel ? 1 : 0);
-  if (aura !== wantAura) warn(`the numbers say Aura ${aura}, and it's ${AURA} and ${PER_ATTUNED} for the attuned thing, ${wantAura}`);
+  if (aura !== AURA) warn(`the numbers say Aura ${aura}, and it's ${AURA}`);
   const numbers = {
     aura,
     stride: Number(num(/\bStride (\d+)/, "Stride")?.[1] ?? 3),
     strideNote: n.match(/\bStride \d+ \(([^)]+)\)/)?.[1] ?? null,
-    ...tracks,
   };
 
   const threads = dropStop(field.Threads ?? "").split(" · ").filter(Boolean).map((seg) => {
@@ -279,6 +279,7 @@ function crewSheet(name, titleText, body, block, ctx) {
     pronoun: troubleLabel?.split(" ").pop() ?? "them",
     playsLike: ctx.inline(field["Plays like"] ?? ""),
     points: { start: 0, spent: 0 },
+    core: true,
     archetypes, titles,
     roots: Object.fromEntries(ROOT_NAMES.map((r) => [r, roots[r]])),
     carry, armour, attuned, numbers, threads, crewQs,

@@ -43,6 +43,49 @@ Newest wins. Everything Mo hasn't changed stands: Aspirations, threads and bonds
 - The GM's numbers. Hits of 1 point against Roots that are health change every budget. `tools/fight_sim.py` finds them again (prompt 3). At the table, note the round the first Bloodied lands in a big fight: round 3 or 4 of a 45-minute fight feels right.
 - The Summoner's souls on this core, and anything else that cost a track size.
 
+## The crew on the new core
+
+**For Mo's yes** (prompt 2, 16 Nov). Their sheets in 03b and every example in prompt 2's chapters (03, 03a, 03b and 18) come from this section, and prompts 3 to 6 take their numbers from here.
+
+Everyone keeps both Titles, all six permissions, both archetypes with both their abilities, their attuned thing and everything they carry, so every sheet's still 35 points with the same Points line. Each Title's 5 is its 3 from stacking made 5, the 2 more spread the way the 3 were (`toFive()` in `roots.js`, the same thing a saved character gets), so every Title keeps its feel. Aura's 5. Each awakening locks a point of the Root in its brackets, so a Root holds its number less what's locked, and still rolls all of it. A roll below is the Root at full, and 2 for each awakening that fits.
+
+Four of them have a Root at 0, as they did on stacking: Vesk's and Wren's Soul, and Isolde's and Ash's Body. On the new core that's no health there, so the first hit at it wounds them, unless they take it on another Root for 2 points. That's how they were spread, so it's kept, and it's Mo's call whether any of them should put a point there instead.
+
+| Who | Titles | Roots | Locked | Holds | Total |
+| --- | --- | --- | --- | --- | --- |
+| Vesk | *The best cat burglar in the city* (Body 5) · *Raised by the Guild* (Mind 3, Body 2) | Body 11 · Mind 5 · Soul 0 | 1 Body (her hook) | Body 10 · Mind 5 · Soul 0 | 15 |
+| Bram | *The wall that held the harbour gate* (Body 5) · *A sergeant who lost his stripes* (Soul 3, Mind 2) | Body 9 · Mind 3 · Soul 4 | 2 Body (his hammer) | Body 7 · Mind 3 · Soul 4 | 14 |
+| Dorrie | *The voice that talked a duke out of his own house* (Soul 5) · *The woman with a hundred names* (Mind 3, Body 2) | Body 3 · Mind 7 · Soul 6 | 1 Mind (her pin) | Body 3 · Mind 6 · Soul 6 | 15 |
+| Isolde | *The last student of a dead order* (Soul 5) · *A scholar of forbidden texts* (Mind 5) | Body 0 · Mind 9 · Soul 7 | 1 Soul (her chalk) | Body 0 · Mind 9 · Soul 6 | 15 |
+| Wren | *The hunter who has never lost a trail* (Mind 5) · *An outrider from the border war* (Body 5) | Body 8 · Mind 8 · Soul 0 | 2 Body (her bow) | Body 6 · Mind 8 · Soul 0 | 14 |
+| Ash | *The last fire-speaker of the Ember Court* (Soul 5) · *The Court's runaway heir* (Mind 3, Soul 2) | Body 0 · Mind 5 · Soul 11 | 1 Soul (her stone) | Body 0 · Mind 5 · Soul 10 | 15 |
+
+Their awakenings, each 2 steps on a roll it fits and 2 more for each Aura:
+
+- **Vesk:** *Anywhere I can throw a hook* (Body), every roll she makes with her grappling line.
+- **Bram:** *Ring the bell* (Body), every roll he makes with his war hammer · *Knock them flat* (Body), a swing to knock someone down, and everyone it beats is *Prone*.
+- **Dorrie:** *Someone who matters* (Mind), every roll where she passes as someone of rank.
+- **Isolde:** *A circle anywhere I can kneel* (Soul), her ward the dead can't cross, drawn wherever she kneels, with room for her and a friend.
+- **Wren:** *Long shot* (Body), every roll she makes with her longbow · *Hit anything I can see* (Body), her arrows reach anything she can see, and cover doesn't help it.
+- **Ash:** *Fire without a word* (Soul), every roll she throws fire with.
+
+Two rolls each, with what they were on stacking:
+
+| Who | Roll | Steps | Dice | Was |
+| --- | --- | --- | --- | --- |
+| Vesk | Picking a lock: her Body | 11 | d12 + d10 | 13 |
+| Vesk | Over Lord Vane's roof: her Body and her hook | 13 | 2d12 + d2 | 16 |
+| Bram | Defending behind his shield: his Body, and Defend's dice go in with it when it lands | 9 | d12 + d6 | 14 |
+| Bram | Barking an order: his Soul, and his Body brought in on *fight in a shield wall* for a point | 4, or 13 | d8, or 2d12 + d2 | 6 |
+| Dorrie | Lying past the gate guard: her Mind | 7 | d12 + d2 | 11 |
+| Dorrie | Passing as someone of rank: her Mind and her pin | 9 | d12 + d6 | 12 |
+| Isolde | Reading the order's old script: her Mind | 9 | d12 + d6 | 12 |
+| Isolde | Drawing a ward: her Soul and her chalk | 9 | d12 + d6 | 10 |
+| Wren | Shooting from cover: her Body and *Long shot* | 10 | d12 + d8 | 12 |
+| Wren | Following a trail: her Mind | 8 | d12 + d4 | 10 |
+| Ash | Throwing fire: her Soul and *Fire without a word* | 13 | 2d12 + d2 | 13 |
+| Ash | Commanding a room: her Soul | 11 | d12 + d10 | 12 |
+
 ## The shared pieces
 
 Every chat codes to these names and shapes, so the pieces fit when they land. Prompt 2 builds them, and the rest stub them till it lands.
@@ -122,3 +165,26 @@ A chat changes only its own files, its own parts of `tests/` and its own blocks 
 ### 0. Write it down
 
 Written 16 Nov: the decisions, this plan, the calls and the line in CLAUDE.md, on `rules/2026-11-16-core` off `main`. Prompts 1 and 2 can start.
+
+### 2. The character
+
+Built 16 Nov on `rules/2026-11-16-core-character` and landed. Its calls are in `notes/to-confirm.md` under 16 Nov, 2.
+
+- **03b:** the six crew from The crew on the new core above, each Title spread 5, Aura 5 and no tracks, and each awakening `*Its name* (Root): what it does`. The Quick Build, Wren's example and the Title ideas say a Title's 5.
+- **03:** Building Your Character on the new core: a Title's 5 on your Roots, a Root's points as its dice, health and spend, a roll as one Root at full and bringing another in on a permission, items never steps, attunement (each awakening locks a point of its Root, 2 steps on a roll it fits and 2 more for each Aura, no powering, no Aura on the maximum), armour ticking a box instead of a point, bond threads (borrowing a permission to bring a Root in, straining one for a point back on any Root), Boons on points (no Splits or Extra action Boon, Acting as a Burden with no Boon), and Vesk built start to finish on the new numbers.
+- **03a:** every ability's 1 Aura and no archetype has a home track. The Healer's heal is a Root unsplit, less 5 a Toll, with *Come Prepared* ignoring a step of Toll, and every archetype and example is on the new core (the calls say what changed in each).
+- **18:** every attuned thing's awakenings with the Root each locks, what they do in place of what Aura bought, the Surgeon's Casebook's *What worked* ignoring a step of Toll, Sister Hale's Thimble giving 3 more with every heal, and Dorrie's worked example on the new numbers.
+- **The build:** `scripts/crew-sheets.mjs` stops on a Title that doesn't spread 5, a track in the numbers, Aura that isn't 5, an awakening without its Root, or awakenings locking more of a Root than it's got, and puts `core: true` on each crew sheet. `build-content.mjs` reads an ability as `**Its name (1 Aura):**` with its `cost`, warns on a home track, needs no Splits or Extra action Boon, and reads Coin and Kit's awakenings as `{ name, root, text }`. Appendix D's archetype lines (prompt 1's) are on the new core, since the paper sheet takes each Trait's short words from them.
+- **`dice.js`:** `fillDice(steps)`, `stepsOf(dice)` and `isSplit(dice, steps)`.
+- **`armour.js`:** `onRoot(c, s, root)` and `boxesOn(c, s, root)`, the pieces on a Root that can still take a hit.
+- **`roots.js`:** the shared pieces, as above. `rootsSheet()` makes a Title spread 3 into 5 (`toFive()`, with `fromThree` on it) unless the sheet says `core: true`, and a grown Title spread 3 always. An awakening with no Root locks their biggest Root, `guessed`. `choicesOf()` adds `{ k: "five", t, was }` and `{ k: "lock", a, name, root }`. The state's `v: 4` (`freshCore()`, `normalCore()`): `pts`, `wound`, `toll`, `scars` by Root, `blaze` (a Root whose Scar waits for its Catch), `out` (left the scene) and `core` (till they've seen the move). The rest: `awakeningsOf()` (keys the same as `thingsOf()`'s, each with its `root` and whether it `works`), `lockedOf()`, `capOf()`, `spendPts()`, `takeHits()`, `canBlaze()`, `blazeOn()`, `lastScar()`, `takeScar()`, `healBy(…, { other, ease, bonus })`, `restOf()`, `sceneEnd()`, `downtimeRest()`, `countRoll()` (with `conds`, `pool` and `plus` as well, and `short` and `ok` for what can't be paid) and `payFor()`. `archetypesOf()` gives each ability its `cost`.
+- **Checks:** `tests/check-companion.mjs` part 1e, no browser.
+
+What the other prompts need from it:
+
+- **The screens that haven't moved:** everything from stacking they use is still at the bottom of `roots.js` (the tracks, `freshRoots()`, `normalRoots()` and the rest, on a v3 state), so the play screen, the builder, downtime and print still draw. `countRoll()` is the new one, so the old roll card counts the Root and awakenings and nothing else. Powering's gone (`passivesOf()` is empty). `src/pages/kit.astro` (4's) counts its rolls at the new totals and reads no track, so the build goes through, and the rest of the page is still stacking's.
+- **3:** the crew's numbers above, for the Learn deck and `tools/fight_sim.py`. Chapter 07, Magic, isn't on anyone's list, and its Summoning still has souls on a track size.
+- **4:** `normalCore()` in place of `normalRoots()`, with notes for `s.core` and `s.choose`'s `five` and `lock`. Abilities are paid in Aura (`cost`), there's no `home`, and Push is still `push` on `archetypesOf()`. The Healer heals with `healBy(…, { other: true, ease: 1 })`, and the Thimble's `bonus` is 3. A roll's `bring` takes a permission's key or a borrowed one's words. `learn.js` and the kit move with it.
+- **5:** the builder spreads `TITLE_ROOTS` (5) already. An awakening needs its `root` carried through the build (`fixAwk()` and `sheetOf()` in `builder.js`, and `fromCrew()` and `randomBuild()` in `ways.js`, which drop it, so a copy of Isolde's chalk locks her Mind, her biggest, till then), and a sheet the builder makes can say `core: true`. Print reads archetypes' `home` and the tracks, so part 1f has 47 checks waiting on it. Downtime's Recover goes to `downtimeRest()`.
+- **6:** `extraCost()` and `EXTRA_AURA` are still there for `table-rules.js` till extra actions go, and `takeHits()` is what When it lands takes.
+- **1:** Appendix D's archetype lines changed here. Straining a bond thread and a big bite give a point back on any Root (03), borrowing lends a permission, and `roots.js` keeps every roll at least a d2 and the last Scar as the one that locks a Root's last point. `check_terms.py`'s *Aura Push* and *area for anyone* now catch the new rules (03a's Push and Sculpt at 1 Aura). 03 links Wounds and Scars to `#s-blaze` and Toll and quick heals to `#s-healing`.

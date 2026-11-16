@@ -27,11 +27,11 @@ for (const a of ARCH) if (!SIGILS[a.name]) throw new Error(`The kit has no sigil
 const vesk = crew.vesk;
 const n = vesk.numbers;
 const order = ["vesk", "dorrie", "bram", "isolde", "wren", "ash"];
-// A roll off a crew sheet, the way the roll card counts it: one Root, and
-// every thing named, a step each (stacking, notes/stacking-plan.md). Each
-// name's a thing's words on the sheet, and one taken twice (Shadow) is two.
-// The build stops if a sheet's lost one, or a roll doesn't come to the
-// plan's steps.
+// A roll off a crew sheet: on the new core (16 Nov, notes/core-plan.md) it's
+// one Root at full and 2 for each awakening named, and nothing else named
+// counts. Each name's a thing's words on the sheet. The build stops if a
+// sheet's lost one, or a roll doesn't come to the plan's steps. Prompt 4 of
+// notes/core-plan.md moves the rest of this page onto the new core.
 function rollOf(c, root, names, { cases = [], want = 0 } = {}) {
   const all = thingsOf(c, {});
   const keys = names.flatMap((n) => {
@@ -40,25 +40,26 @@ function rollOf(c, root, names, { cases = [], want = 0 } = {}) {
     return found.map((x) => x.key);
   });
   const caseKeys = cases.flatMap((n) => all.filter((x) => x.name === n).map((x) => x.key));
-  const k = countRoll(c, {}, { root, using: [...keys, ...caseKeys], cases: caseKeys });
-  if (want && k.total !== want) throw new Error(`The kit's ${c.name} comes to ${k.total} steps on ${root}, not ${want}. Check src/pages/kit.astro against notes/stacking-plan.md.`);
+  const awk = keys.filter((key) => key.startsWith("awk|")).map((key) => ({ key }));
+  const k = countRoll(c, {}, { root, using: [...keys, ...caseKeys], cases: caseKeys, awk });
+  if (want && k.total !== want) throw new Error(`The kit's ${c.name} comes to ${k.total} steps on ${root}, not ${want}. Check src/pages/kit.astro against notes/core-plan.md.`);
   return { ...k, names: [...names, ...cases] };
 }
 const T = (c, i) => c.titles[i].text;
 const bram = crew.bram;
 // Vesk at the vault door: her Body, both Titles, the two permissions about
 // locks and her picks, 13 steps.
-const lock = rollOf(vesk, "Body", [T(vesk, 0), T(vesk, 1), "pick a mechanical lock", "know how a lock’s built", "a perfect set of picks"], { want: 13 });
+const lock = rollOf(vesk, "Body", [T(vesk, 0), T(vesk, 1), "pick a mechanical lock", "know how a lock’s built", "a perfect set of picks"], { want: 11 });
 // Bram barks an order: his Soul, his second Title, the order and Leader, a d12.
-const barked = rollOf(bram, "Soul", [T(bram, 1), "bark an order that gets obeyed", "Leader"], { want: 6 });
+const barked = rollOf(bram, "Soul", [T(bram, 1), "bark an order that gets obeyed", "Leader"], { want: 4 });
 // Over Lord Vane's roof: past a d12, two d12s and a d8.
-const roof = rollOf(vesk, "Body", [T(vesk, 0), "move unseen", "run the rooftops", "Shadow", vesk.attuned[0].name, vesk.attuned[0].awakenings[0].name, "soft-soled boots"], { want: 16 });
+const roof = rollOf(vesk, "Body", [T(vesk, 0), "move unseen", "run the rooftops", "Shadow", vesk.attuned[0].name, vesk.attuned[0].awakenings[0].name, "soft-soled boots"], { want: 13 });
 // Bram Defends: his Body, both Titles, the line and the shield wall,
 // Guardian, his plate and his shield.
-const bramDefend = rollOf(bram, "Body", [T(bram, 0), T(bram, 1), "hold the line", "fight in a shield wall", "Guardian", ...bram.armour.map((a) => a.name)], { want: 14 });
+const bramDefend = rollOf(bram, "Body", [T(bram, 0), T(bram, 1), "hold the line", "fight in a shield wall", "Guardian", ...bram.armour.map((a) => a.name)], { want: 9 });
 // The Core's own example: Bram chasing a smuggler, explaining his second
 // Title for 1 Aura.
-const chase = rollOf(bram, "Body", [], { cases: [T(bram, 1)], want: 8 });
+const chase = rollOf(bram, "Body", [], { cases: [T(bram, 1)], want: 9 });
 const stepsSaid = (k) => `${k} ${k === 1 ? "step" : "steps"}`;
 // Seals (stage 1 of notes/faction-feel-plan.md): every charge with the kinds
 // of faction the builder deals it to, every field and mark, the Brinewake's
@@ -135,9 +136,9 @@ const glyphWords = { agenda: doesOf(/agenda/i), crew: doesOf(/crew/i) };
             </div>
           </div>
           <div class="vtrack">
-            <div class="vt die-t"><span class="vl">Stamina</span><Fragment set:html={die(n.stamina.die, { label: `Stamina d${n.stamina.die}` })} /></div>
-            <div class="vt die-t"><span class="vl">Confidence</span><Fragment set:html={die(n.confidence.die, { label: `Confidence d${n.confidence.die}` })} /></div>
-            <div class="vt die-t"><span class="vl">Resolve</span><Fragment set:html={die(n.resolve.die, { label: `Resolve d${n.resolve.die}` })} /></div>
+            <div class="vt die-t"><span class="vl">Stamina</span><Fragment set:html={die(n.stamina?.die ?? 12, { label: `Stamina d${n.stamina?.die ?? 12}` })} /></div>
+            <div class="vt die-t"><span class="vl">Confidence</span><Fragment set:html={die(n.confidence?.die ?? 12, { label: `Confidence d${n.confidence?.die ?? 12}` })} /></div>
+            <div class="vt die-t"><span class="vl">Resolve</span><Fragment set:html={die(n.resolve?.die ?? 12, { label: `Resolve d${n.resolve?.die ?? 12}` })} /></div>
             <div class="vt"><span class="vl">Aura</span><Fragment set:html={aura(n.aura, n.aura)} /></div>
           </div>
           <div class="vtiles">

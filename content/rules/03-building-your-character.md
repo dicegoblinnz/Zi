@@ -5,8 +5,8 @@ slug: building-your-character
 order: 3
 part: "Play"
 partNumber: "Part I"
-source: 2026-10-02 rulebook, and Mo's chat decisions, 6 to 8 and 14 Nov 2026
-updated: 2026-11-14
+source: 2026-10-02 rulebook, and Mo's chat decisions, 6 to 8, 14 and 16 Nov 2026
+updated: 2026-11-16
 ---
 :::quote
 Your whole character fits in a few plain sentences and some numbers.
@@ -16,9 +16,9 @@ You build your character with **35 points**. Here's what they buy:
 
 | What you buy | Points | What it comes with |
 | --- | --- | --- |
-| A Title | 5 | 3 on your Roots, spread however you like, and one permission |
+| A Title | 5 | 5 on your Roots, spread however you like, and one permission |
 | An archetype | 5 | its mechanic, its Trait and one ability |
-| An attuned thing | 5 | 2 on your Aura maximum, and one awakening |
+| An attuned thing | 5 | one awakening |
 | Another permission | 1 | 1 on its Root |
 | Another ability | 1 | one more off its archetype's list |
 | Something you carry | 1 | your keepsake and your bag are free |
@@ -30,17 +30,17 @@ An awakening's a point as well, but what you attune starts out with room for the
 
 Here's how it goes, step by step:
 
-1.  **Titles**: who you are, a role or a school of magic. Each one's 3 on your Roots, and it comes with a permission.
+1.  **Titles**: who you are, a role or a school of magic. Each one's 5 on your Roots, and it comes with a permission.
 2.  **Archetypes**, like Guardian or Shadow. Each one comes with its Trait and an ability.
 3.  **Permissions** on your Titles, each one 1 on its Root.
 4.  **Your Roots**, added up.
 5.  **What you carry:** 3 equipment, 3 utility items and a keepsake, and a bag.
-6.  **Attunement**: each attuned thing starts at Awakened, with its awakening.
+6.  **Attunement**: each attuned thing starts at Awakened, with its awakening, which locks a point of the Root it fits.
 7.  **Your numbers**, and **two bond threads** with the crew, or three if you write a hostile thread as well.
 8.  **A few answers** that tie you to the rest of the crew, and they're where your bond threads come from.
 9.  **An Aspiration** at d2.
 
-You start with Stamina, Confidence and Resolve all at d12, a stride of 3, and an Aura maximum of 5, with 2 more for each attuned thing. Your armour sits on whichever Root it guards.
+You start with every Root full, a stride of 3, and an Aura maximum of 5. Your armour sits on whichever Root it guards.
 
 In a hurry? The [Quick Build](#s-quick) gets you a character in ten minutes, or you can pick one of the [six ready-made characters](#s-pregens) and play. If you've got a character in your head but not the words for it yet, start from the [Title ideas](#s-title-ideas): example Titles and permissions, and the archetypes that suit them.
 
@@ -50,7 +50,7 @@ In a hurry? The [Quick Build](#s-quick) gets you a character in ten minutes, or 
 
 A **Title** is who you are: a role or a school of magic, real and specific. *The best cat burglar in the city*, *Captain of the Guard* and *Master of Illusions* are all Titles. Each one's **5 points**.
 
-**Each Title puts 3 on your Roots, spread however you like**: all 3 on one, 2 on one and 1 on another, or 1 on each. Put them where the Title lives. Vesk's *The best cat burglar in the city* is all hands and feet, so it's Body 3. Her *Raised by the Guild* is mostly what she learned growing up there, with a bit of knife work, so it's Mind 2 and Body 1. **Every Title comes with one permission** (see [Step 3](#s-writing-permissions)), and the Title itself is a step on any roll it fits.
+**Each Title puts 5 on your Roots, spread however you like**: all 5 on one, 3 on one and 2 on another, or any mix you like. Put them where the Title lives. Vesk's *The best cat burglar in the city* is all hands and feet, so it's Body 5. Her *Raised by the Guild* is mostly what she learned growing up there, with a bit of knife work, so it's Mind 3 and Body 2. **Every Title comes with one permission** (see [Step 3](#s-writing-permissions)). Your Roots are your dice, your health and what you spend, so every Title you earn makes you harder to put down.
 
 One role or one school per Title. *Archmage* is too wide, so pick the school you're known for. A Title that could mean anything tells the table nothing, but one that says exactly what your character's good at, and how they got that way, does all the work.
 
@@ -85,7 +85,7 @@ One role or one school per Title. *Archmage* is too wide, so pick the school you
 :::sheet[Bram's first Title]
 **Title:** *The wall that held the harbour gate.*
 
-**Roots:** Body 3.
+**Roots:** Body 5.
 
 **Permissions:** *hold the line* (Body) · *guard one person* (Body) · *lift what two men can't* (Body).
 
@@ -94,7 +94,7 @@ One role or one school per Title. *Archmage* is too wide, so pick the school you
 
 That's 7 points: 5 for the Title, which came with *hold the line*, and 1 each for the other two.
 
-**Titles are the biggest growth in the game.** When your Aspiration climbs past d12, a new Title is one of the things you can take. It comes with its 3 for your Roots and one permission, and Grow fills it from there. It counts the same way your first ones do, and it raises the stakes for the whole table: the GM's [threat budget](#s-threat-budget) grows as the crew earns them.
+**Titles are the biggest growth in the game.** When your Aspiration climbs past d12, a new Title is one of the things you can take. It comes with its 5 for your Roots and one permission, and Grow fills it from there. It counts the same way your first ones do, and it raises the stakes for the whole table: the GM's [threat budget](#s-threat-budget) grows as the crew earns them.
 
 ## Step 2: Archetypes {#s-step-archetypes}
 
@@ -102,25 +102,25 @@ An **archetype**, like Guardian, Healer or Shadow, is the kind of character you 
 
 -   **Its mechanic**, something only it can do. A Guardian intercepts blows for free for every friend within his stride, and a Hunter marks a creature so everyone who acts against it rolls her Mark die as well.
 -   **Its Trait**, something that's always true of you because of it. Most cost nothing, and the few that cost Aura or come once a scene say so.
--   **One ability**, your pick off its list, Push included. You pay for abilities out of your tracks when you use them, more are a point each, and an archetype holds six at most.
+-   **One ability**, your pick off its list, Push included. You pay for abilities in Aura when you use them, more are a point each, and an archetype holds six at most.
 
-There are seventeen, and you'll find them all in [The Archetypes](#s-how-archetypes). An archetype's a step on any roll it fits, like everything else on your sheet.
+There are seventeen, and you'll find them all in [The Archetypes](#s-how-archetypes).
 
-Your archetypes don't belong to your Titles. Bram's a Guardian and a Leader, and his Titles are *The wall that held the harbour gate* and *A sergeant who lost his stripes*. **You can take the same archetype twice**, like Vesk, for 5 points each time. Each one comes with its own ability, so she's got Push and Vanish, and her Push is +3 instead of +2. On a roll they both fit, that's two steps. Your archetypes don't limit your actions, either: you can buy as many extra actions as your Aura pays for, 3 for the first in a round, then 4, then 5 (see [Extra actions](#s-extra-actions)).
+Your archetypes don't belong to your Titles. Bram's a Guardian and a Leader, and his Titles are *The wall that held the harbour gate* and *A sergeant who lost his stripes*. **You can take the same archetype twice**, like Vesk, for 5 points each time. Each one comes with its own ability, so she's got Push and Vanish, and her Push is +3 instead of +2. Your archetypes don't give you more actions: everyone gets one a round, and more dice is how you do more.
 
 If you're not sure which ones you're after, the table in [Picking Your Archetypes](#s-picking-archetypes) says what each one's for, and every [Title idea](#s-title-ideas) says which ones suit it.
 
 ## Step 3: Permissions {#s-writing-permissions}
 
-A **permission** is something your character can do. Each Title comes with one, more are **a point each**, and they have to fit inside the Title they're on. **Each permission puts 1 on its Root**, the one that fits how you do it, and you write it next to it: *pick a mechanical lock* (Body). It's a step on every roll it fits as well, so it's worth a couple of minutes to get right. Here's how I write them.
+A **permission** is something your character can do. Each Title comes with one, more are **a point each**, and they have to fit inside the Title they're on. **Each permission puts 1 on its Root**, the one that fits how you do it, and you write it next to it: *pick a mechanical lock* (Body). It's also what lets you bring another Root into a roll: name the permission that says why, and pay for it (see [Roots](#s-step-roots)). So it's worth a couple of minutes to get right. Here's how I write them.
 
 ### Every part of your sheet does a different job {#kinds-of-word}
 
 | On your sheet | What it is | Example |
 | --- | --- | --- |
-| Title | who you are, a name, and 3 on your Roots | *The best cat burglar in the city* |
-| Root | how you're doing it: Body, Mind or Soul | Body |
-| Permission | something you can do, 1 on its Root, and a step on any roll it fits | *pick a mechanical lock* |
+| Title | who you are, a name, and 5 on your Roots | *The best cat burglar in the city* |
+| Root | how you're doing it, Body, Mind or Soul, and your dice, your health and what you spend there | Body |
+| Permission | something you can do, 1 on its Root, and what lets you bring a Root into a roll | *pick a mechanical lock* |
 | Catch | trouble the GM can run with, from an attuned thing or a Scar | *Wanted* · *a spear through the shoulder* |
 
 If what you've written reads like a name, like *Combat master*, it's a Title. If it's something you can do, like *pick a mechanical lock*, it's a permission. If it's one word for what kind of person you are, like *Strong* or *Deceptive*, that's what your Roots are for, so build the Root instead.
@@ -167,12 +167,12 @@ Picture the moment you'd use it, then ask how often it'd come up. A good permiss
 
 | Who | Title | Permissions |
 | --- | --- | --- |
-| Vesk | *The best cat burglar in the city* (Body 3) | *move unseen* (Body) · *run the rooftops* (Body) · *pick a mechanical lock* (Body) |
-| Bram | *The wall that held the harbour gate* (Body 3) | *hold the line* (Body) · *guard one person* (Body) · *lift what two men can't* (Body) |
-| Ash | *The last fire-speaker of the Ember Court* (Soul 3) | *throw fire* (Soul) · *make a threat stick* (Soul) · *feel every flame in a room* (Mind) |
-| Isolde | *The last student of a dead order* (Soul 3) | *speak with the recently dead* (Soul) · *draw a ward the dead can't cross* (Soul) · *read the order's old script* (Mind) |
-| Dorrie | *The voice that talked a duke out of his own house* (Soul 3) | *talk my way past a door* (Soul) · *read a room in a glance* (Mind) · *make a lie sound like old news* (Mind) |
-| Wren | *The hunter who has never lost a trail* (Mind 3) | *follow any trail* (Mind) · *move through the wild unseen* (Body) · *know a beast's habits* (Mind) |
+| Vesk | *The best cat burglar in the city* (Body 5) | *move unseen* (Body) · *run the rooftops* (Body) · *pick a mechanical lock* (Body) |
+| Bram | *The wall that held the harbour gate* (Body 5) | *hold the line* (Body) · *guard one person* (Body) · *lift what two men can't* (Body) |
+| Ash | *The last fire-speaker of the Ember Court* (Soul 5) | *throw fire* (Soul) · *make a threat stick* (Soul) · *feel every flame in a room* (Mind) |
+| Isolde | *The last student of a dead order* (Soul 5) | *speak with the recently dead* (Soul) · *draw a ward the dead can't cross* (Soul) · *read the order's old script* (Mind) |
+| Dorrie | *The voice that talked a duke out of his own house* (Soul 5) | *talk my way past a door* (Soul) · *read a room in a glance* (Mind) · *make a lie sound like old news* (Mind) |
+| Wren | *The hunter who has never lost a trail* (Mind 5) | *follow any trail* (Mind) · *move through the wild unseen* (Body) · *know a beast's habits* (Mind) |
 
 ### The quick test {#the-quick-test}
 
@@ -200,29 +200,31 @@ A few to start from, sorted by what they're for. The [Title ideas](#s-title-idea
 
 ## Step 4: Roots {#s-step-roots}
 
-Now add them up, so every roll starts from a number. **Each Root is what your Titles put on it, and 1 for every permission on it.** Write your three Roots. Nothing else goes in, because everything else on your sheet is a step on the rolls it fits, and what you carry only counts while you're using it.
+Now add them up. **Each Root is what your Titles put on it, and 1 for every permission on it.** Write your three Roots. Nothing else goes in.
+
+That number does three jobs at once. It's **the steps you roll**, since a roll's one Root at full, so a Body of 9 is a d12 and a d6. It's **your health** there: every hit that gets through to it takes a point, and once it's got none left, the next one wounds it. And it's **what you spend** to bring it into a roll. So the stronger you get, the harder you are to put down.
 
 :::rule
-**A roll's steps:** one Root, and 1 for every thing on your sheet that fits what you're doing: each Title, permission, archetype, ability, attuned thing, awakening and item you're using. Each one you have to explain is 1 Aura, and so is bringing anything else in.
+**A roll** is one Root, the one that fits how you're doing it, at full, whatever it's got left. **Bring another Root in** by naming the permission that justifies it and paying 1 point from that Root, or 3 Aura, and all of it goes on the roll too. An awakening's 2 steps on any roll it fits.
 :::
 
-| Bram's | Where it comes from | Steps |
+| Bram's | Where it comes from | Points |
 | --- | --- | --- |
-| Body | 3 from his first Title, *hold the line*, *guard one person*, *lift what two men can't*, *fight in a shield wall* | 7 |
-| Mind | 1 from his second Title, *spot who's in charge* | 2 |
-| Soul | 2 from his second Title, *bark an order that gets obeyed* | 3 |
+| Body | 5 from his first Title, *hold the line*, *guard one person*, *lift what two men can't*, *fight in a shield wall* | 9 |
+| Mind | 2 from his second Title, *spot who's in charge* | 3 |
+| Soul | 3 from his second Title, *bark an order that gets obeyed* | 4 |
 
-Defending behind his shield is his Body, both Titles, *hold the line*, *fight in a shield wall*, Guardian, his plate and his shield, 14 steps: two d12s and a d4. Barking an order is his Soul, his second Title, *bark an order that gets obeyed* and Leader, 6 steps, a d12, so for now he's a better wall than he is a sergeant.
+Defending behind his shield is his Body, 9 steps, a d12 and a d6, and swinging his war hammer is the same 9 with *Ring the bell*'s 2 more, 11, a d12 and a d10. Barking an order is his Soul, 4 steps, a d8, so for now he's a better wall than he is a sergeant. When an order really has to land, he brings his Body in on *fight in a shield wall*, since a man who's held one knows exactly what to shout. That's a point of his Body, and 13 steps, two d12s and a d2.
 
 :::example[Growing a Root]
-Two Grows later, Bram's added *fight two at once* and *fight in tight spaces* to his first Title, both Body. His Body's 9 now, and both of them fit a doorway with two guards coming, so with both his Titles, *hold the line*, his war hammer and *Ring the bell*, he's rolling 16: two d12s and a d8.
+Two Grows later, Bram's added *fight two at once* and *fight in tight spaces* to his first Title, both Body. His Body's 11 now, so a doorway with two guards coming is a d12 and a d10, and with his war hammer's *Ring the bell* it's 13, two d12s and a d2. That's 2 more points to lose before a hit can wound him, and 2 more to spend.
 :::
 
 ## Step 5: Items and what you carry {#s-items}
 
-**Plain items are just what they are.** A sword's a sword. Each thing you carry is **a point**, and your keepsake and your bag are free. When you're using it and it fits, it's **1 more on the roll**, the same as everything else on your sheet. Vesk's knife is a step when she's fighting with it, and a dagger's still 1 more on the Body of someone with nothing else on their sheet for a fight. An item never adds to a Root, because it only counts while you're using it. A rope lets you climb down a well, and a lantern lets you see what's at the bottom.
+**Plain items are just what they are.** A sword's a sword. Each thing you carry is **a point**, and your keepsake and your bag are free. An item lets you do what it does: a rope lets you climb down a well, and a lantern lets you see what's at the bottom. It never adds to a Root, and it's never steps on a roll, because a roll's your Root.
 
-**Armour sits on one of your Roots.** Body armour's worn leathers, a chain shirt, plate, a helmet or a shield. Mind armour's what keeps your head straight while it fits the scene, like court clothes at court or a guard's uniform in the barracks. Soul armour's what holds you together, like a holy symbol or a ward stitched into your coat. Write each piece's quality beside it, Common, Fine or Masterwork, with a box for every hit it can take for you there: 1, 2 or 3. Each piece is an item too, so it's 1 more on a roll it fits, like Bram's plate when he Defends. What you start with is Common, and one piece can be Fine, like Bram's plate. How armour works, and breaking it, is in [Armour](#s-armour).
+**Armour sits on one of your Roots.** Body armour's worn leathers, a chain shirt, plate, a helmet or a shield. Mind armour's what keeps your head straight while it fits the scene, like court clothes at court or a guard's uniform in the barracks. Soul armour's what holds you together, like a holy symbol or a ward stitched into your coat. Write each piece's quality beside it, Common, Fine or Masterwork, with a box for every hit it can take for you there: 1, 2 or 3. What you start with is Common, and one piece can be Fine, like Bram's plate. How armour works, and breaking it, is in [Armour](#s-armour).
 
 Plain items don't have Catches. Plate's heavy and a pistol's loud, and the story knows it, but trouble like *Loud* and *Fragile* only goes on [attuned things](#s-attunement). Things you use up, like a smoke bomb or an antidote, are utility items you cross off once they're used.
 
@@ -256,14 +258,14 @@ The trail runs into a cave. Her utility's full, so she puts the snare kit away i
 
 **Bag:** Rations, a waterskin and a change of clothes. 3 of 10.
 
-**Attuned:** The ring that was his, Awakened. **Awakenings:** *Bear the family seal* (passive) · *Pass as a Vane* (active), for its Catch, *Marked*.
+**Attuned:** The ring that was his, Awakened. **Awakenings:** *Bear the family seal* (Soul) · *Pass as a Vane* (Mind), for its Catch, *Marked*.
 :::
 
-That's all an item is: one line, and for an attuned thing, its awakenings. There aren't any hidden properties, and there's no "+1 to hit". A plain sword's 1 more when you're fighting with it, a piece of armour has its Root and its boxes, and rope lets you use rope.
+That's all an item is: one line, and for an attuned thing, its awakenings. There aren't any hidden properties, and there's no "+1 to hit". A plain sword lets you fight with a sword, a piece of armour has its Root and its boxes, and rope lets you use rope.
 
 ### Weapons and their properties {#s-weapon-props}
 
-A weapon's a plain item, so it's 1 more when you fight with it, like anything else. Its **properties** say what it lets you do that bare hands can't. They're what make a spear a spear, and they come free with the weapon.
+A weapon's a plain item, so it lets you do what it does, like anything else. Its **properties** say what it lets you do that bare hands can't. They're what make a spear a spear, and they come free with the weapon.
 
 | Property | What it does |
 | --- | --- |
@@ -322,11 +324,11 @@ Weapons, armour and anything else you wear or wield are equipment. Tools and thi
 
 ### Things you use up: 20 {#consumables-20}
 
-Each of these is a utility item, and you cross it off once it's used. Use one in a roll and it's a step like anything else you're using, and then it's crossed off. You can get more in play, even mid-scene, if there's someone to get it from: a purse of gold, a favour called in, or a promise made. Deep in a vault with nobody to buy from, you've only got what you packed.
+Each of these is a utility item, and you cross it off once it's used. Use one and it does what it says, and then it's crossed off. You can get more in play, even mid-scene, if there's someone to get it from: a purse of gold, a favour called in, or a promise made. Deep in a vault with nobody to buy from, you've only got what you packed.
 
 | Item | What it does |
 | --- | --- |
-| **Medical kit** | Break *Bleeding*, *Burning* or *Poisoned* on someone, no roll. Or use it for a quick heal that costs no Aura: put one of someone's tracks up a size, no roll. |
+| **Medical kit** | Break *Bleeding*, *Burning* or *Poisoned* on someone, no roll. Or use it for a [quick heal](#s-healing) that costs no Aura. |
 | **Antidote** | Break *Poisoned*, no roll. Nothing can poison you for the rest of the scene. |
 | **Acid vial** | Strip one protective tag (*Armoured*, *Warded*, *Fortified*) from a threat, or one tick off it if it's got a multiplier. No roll. |
 | **Smoke bomb** | A burst of smoke one square out from where it lands, for one round. Anything aimed into it or out of it is one step less. |
@@ -378,20 +380,17 @@ When you **attune** something, it's bound to you, and it grows with you. It's al
 
 Attuned things are on top of what you carry, so they don't take up your equipment or your utility. They're magic, and they can't be broken.
 
--   **It puts 2 on your Aura maximum.** One attuned thing takes you from 5 to 7, and two make it 9. That's all the Aura it gets you, and it'll eat some of it back when you power it.
--   **It's an item.** When you're using it and it fits, it's 1 more on your roll, the same as any item.
--   **It comes with one awakening.** An **awakening** is something the thing does, and it's a step on any roll it fits, like everything else on your sheet. Put Aura into it and it does more. Give the thing its Catch and it gets a second awakening, free. That's all an Awakened thing holds, so the rest come as it grows (see [Three stages](#attunement-stages)).
+-   **It comes with one awakening.** An **awakening** is something the thing does, written the way you'd write a permission, with the Root it fits after it: *Anywhere I can throw a hook* (Body). Give the thing its Catch and it gets a second awakening, free. That's all an Awakened thing holds, so the rest come as it grows (see [Three stages](#attunement-stages)).
+-   **Each awakening locks a point of its Root** for as long as it's attuned. Vesk's Body is 11, and with her hook attuned she can hold 10 of it. A locked point isn't there to lose or to spend, but it never shrinks your dice, so she still rolls all 11.
+-   **It's 2 steps on any roll it fits.** As you roll, **each Aura you spend on it is 2 more**. Vesk over Lord Vane's roof is her Body's 11 and her hook's 2, 13 steps, and with 2 Aura on it that's 17, two d12s and a d10.
+-   **It does what it says, too.** Wren's *Hit anything I can see* lets her arrows reach anything she can see, the way a permission lets you do something, and it's 2 steps on those shots. Pushing it past what it says is [going beyond](#s-going-beyond), the same as anything else.
 
-**A passive awakening is powered.** While you're acting, put Aura into it, which is free and takes no action. That Aura comes off what you've got and off your maximum till the scene ends, up to **2** in each awakening, and it works for as much as is powering it. Vesk's grappling line has *Anywhere I can throw a hook*, +1 on one die of every roll she makes with it for each Aura powering it. She powers it with 2 on Lord Vane's roof, so it's +2 for the rest of the scene, she's 2 down, and her maximum's 5 till the scene ends. Wins and top faces fill her back up to that 5, and while she's acting she can still go past it.
+**It needs a point to lock.** If the Root it fits hasn't got one free, the awakening does nothing till it has. Attuned things don't touch your Aura, so your maximum's 5 however many you've got.
 
-**An active awakening spends it.** Spend the Aura when you use the thing, as part of your action, and it happens. Spend more for more: another target, further, bigger, whatever it says it gets more of.
+-   **Take the same awakening twice** and it locks two points, and it's 4 steps on a roll it fits.
+-   **Only you can spend Aura on it**, or a [Maker](#a-maker) who can touch it.
 
--   **Take the same awakening twice** and you can power it with up to 4 between them.
--   **Only you can power it**, or a [Maker](#a-maker) who can touch it.
--   **It stops at the end of the scene.** Nothing's powering anything any more, your maximum's back where it was, and you start the next scene full, so nobody walks into a fight already charged.
--   **A number an awakening adds** after you roll doesn't make a top face, so there's no Aura for it.
-
-Write each awakening the way you'd write a permission, as something the thing itself does, and say whether it's passive or active. A grappling line climbs and swings, and a ring of command makes people listen.
+Write each awakening the way you'd write a permission, as something the thing itself does, and give it the Root it fits. A grappling line climbs and swings, which is Body, and a ring of command makes people listen, which is Soul.
 
 ### Three stages {#attunement-stages}
 
@@ -403,35 +402,35 @@ An attuned thing grows in three stages. **Each new stage needs a material**, fou
 | Tempered | 2 | 2 more with a Burden (the Catch becomes the Burden) | 4 |
 | Perfected | 3 | 3 more with a Burden and a Catch | 6 |
 
-That's six awakenings at most, with one Catch and one Burden. You can't take a Burden before Tempered, so there aren't any when you make your character. What's a material? Whatever makes sense for the thing, like steel from a vault door your picks have beaten.
+That's six awakenings at most, with one Catch and one Burden, and each one locks its point, so a thing that's grown a long way takes a lot of you with it. You can't take a Burden before Tempered, so there aren't any when you make your character. What's a material? Whatever makes sense for the thing, like steel from a vault door your picks have beaten.
 
 A **Burden** is a permanent cost from the list in [Boons and Burdens](#s-boons), like *Bad Knee* (stride −2). It's always on, and it's worth two awakenings on that thing, or a Boon for you instead.
 
-**You can hand an attuned thing to a friend** with a free attunement slot. Its awakenings, its Catch and its Burden go with it, and so does a Boon its Burden paid for.
+**You can hand an attuned thing to a friend** with a free attunement slot. Its awakenings, its Catch and its Burden go with it, and so does a Boon its Burden paid for. Its points come unlocked on you, and its awakenings lock theirs instead.
 
-If you're a [Summoner](#a-summoner), your summoning attunement holds souls, one to each awakening, on the same three stages, and it takes an attunement slot like anything else you attune (see [Summoning](#s-summoning)). Some attuned things come out of the story already Tempered or Perfected, and you'll find them, and how to write your own, in [Attuned things from the story](#s-rare).
+If you're a [Summoner](#a-summoner), your summoning attunement holds souls, one to each awakening, on the same three stages, and it takes an attunement slot like anything else you attune (see [Summoning](#s-summoning)). A soul doesn't lock a point. Some attuned things come out of the story already Tempered or Perfected, and you'll find them, and how to write your own, in [Attuned things from the story](#s-rare).
 
 ### Catch ideas: 12 {#catches-12}
 
-A **Catch** is trouble that comes with an attuned thing. (The other Catches on your sheet come from [Scars](#s-blaze).) It has to be something that can bring real trouble into a scene, something the GM can run with, and if it'd never come up, it isn't a Catch. You can let it bite as often as you like for 1 Aura, as long as it brings real trouble every time, and 1 Aura on your own roll keeps it quiet (see [Getting it back](#getting-it-back)). Letting it bite is always your call. When it bites in a big way, one that changes the scene or costs you something you wanted, your Resolve comes up a size instead of the Aura (see [Catches and Trouble](#s-trouble)).
+A **Catch** is trouble that comes with an attuned thing. (The other Catches on your sheet come from [Scars](#s-blaze).) It has to be something that can bring real trouble into a scene, something the GM can run with, and if it'd never come up, it isn't a Catch. You can let it bite as often as you like for 1 Aura, as long as it brings real trouble every time, and 1 Aura on your own roll keeps it quiet (see [Getting it back](#getting-it-back)). Letting it bite is always your call. When it bites in a big way, one that changes the scene or costs you something you wanted, you get a point back on any of your Roots instead of the Aura (see [Catches and Trouble](#s-trouble)).
 
 | \# | Catch | What it means |
 | --- | --- | --- |
 | 1 | **Loud** | Everyone knows where you are. |
 | 2 | **Heavy** | Your stride's 1 unit shorter for each thing you've got that's *Heavy*. |
-| 3 | **Fragile** | It can't break, but when a consequence breaks something you carry, the GM can name this instead. It goes dormant (it isn't an item and its awakenings don't work) until you mend it in downtime. |
+| 3 | **Fragile** | It can't break, but when a consequence breaks something you carry, the GM can name this instead. It goes dormant (its awakenings don't work, though they still lock their points) until you mend it in downtime. |
 | 4 | **Fussy** | 3 charges. Each awakening you use spends one. A downtime slot of upkeep refills them. |
 | 5 | **Marked** | You can be identified by it from a distance. |
 | 6 | **Cursed** | When you let it bite, it puts a condition on you, at a d6. Agree which condition when you attune it. |
 | 7 | **Wanted** | Someone else wants it, and knows you have it. Let it bite and they come for it. |
-| 8 | **Slow** | Using its awakenings takes two of your actions, not one: hold your action a round first, or use an extra action. |
+| 8 | **Slow** | Its awakenings take a round to wake. Say you're readying it on one roll, and they work from your next. |
 | 9 | **Conspicuous** | Can't be hidden. |
 | 10 | **Bright** | Can't be used in darkness. |
 | 11 | **Narrow** | Only useful in specific circumstances (aquatic, urban, indoors). |
 | 12 | **Delicate** | A 1 on any die where it's used makes it dormant until the end of the scene. |
 
 :::example[Wren's longbow]
-Wren attunes her longbow when she makes her character, for 5 points, and it puts her Aura maximum up to 7. It's Awakened with one awakening, *Long shot*: a passive one, +1 on one die of every roll she makes with it for each Aura powering it. She gives it its Catch now, *Wanted* (the Duke's foresters want it back, and they know she's got it), and that buys it a second awakening for nothing: *Hit anything I can see*, an active one. 1 Aura and one die she shoots with goes at anything she can see, however far, and cover doesn't help it. When she's shooting from cover, the bow and *Long shot* are a step each, and when she's shooting at something a long way off, *Hit anything I can see* is one more.
+Wren attunes her longbow when she makes her character, for 5 points. It's Awakened with one awakening, *Long shot* (Body), 2 steps on every roll she makes with it, and it locks a point of her Body. She gives it its Catch now, *Wanted* (the Duke's foresters want it back, and they know she's got it), and that buys it a second awakening for nothing: *Hit anything I can see* (Body), so her arrows reach anything she can see, however far, and cover doesn't help it. That's another point of her Body locked, so she can hold 6 of its 8. Shooting from cover is her Body's 8 and *Long shot*'s 2, 10 steps, and at something a long way off *Hit anything I can see* is 2 more, 12, two d12s.
 
 In the market at Thornby, Wren's player lets *Wanted* bite: one of the foresters knows the bow, and the GM has him follow her out of the market with two friends. Wren takes 1 Aura.
 
@@ -440,9 +439,9 @@ If she wants the bow Tempered one day, she'll need a material first, and the str
 
 ## Step 7: Your numbers and bonds {#s-starting-numbers}
 
-Your [Aura](#s-aura) maximum is 5, and 2 more for each attuned thing you've got, so with one it's 7. You're full at the start of every scene. Aura's what you spend on the small stuff, like explaining why something fits or winning a tie, it buys extra actions (3 for the first in a round, then 4, then 5), and it's what powers your attuned thing.
+Your [Aura](#s-aura) maximum is 5, and you're full at the start of every scene. Aura's what you spend on the small stuff, like winning a tie or going beyond, and on the bigger things: bringing a Root into a roll for 3, your archetype's abilities, and more steps from your awakenings.
 
-Your **tracks** all start at **d12**: Stamina for your Body, Confidence for your Mind and Resolve for your Soul. Every hit that gets through to a Root drops its track a size, and they're what you roll to defend yourself when the telegraphs land. They're also what your archetype's abilities cost. At the end of every scene each one can come back a size, and downtime brings them back further. It's all in [The Tracks](#s-tracks).
+**Every Root starts full**, less the points your awakenings lock. Its points are your health there: each hit that gets through to it takes one, and when it's got none left, the next hit **wounds** it, *Bloodied* for your Body, *Frayed* for your Mind and *Hollow* for your Soul. When the telegraphs land, the Root they're at is what you roll to stop them. At the end of every scene each Root rolls, unsplit, and gets back what it rolls, and downtime puts everything back. It's all in [Wounds and Scars](#s-blaze) and [Healing](#s-healing).
 
 Your stride is 3: that's how far you move each round without spending an action (see [Movement and Range](#s-movement)). Your armour's whatever you wear, on the Root it guards, with its boxes, and how it works is at the end of this chapter.
 
@@ -458,12 +457,12 @@ Any thread can be **strained**, which means it's nearly snapped. So a single thr
 
 Every thread's a hook the GM can pull, and a bond thread's something you can lean on, too:
 
--   **Borrow through a bond thread.** 1 Aura brings one thing off their sheet into your roll as a step, the same as anything else you bring in, and it doesn't strain anything. Through a faction, it's one of its assets. A place or a cause has nothing to lend, but you can still strain a thread with it. You can't borrow through a strained thread until it's mended.
--   **Strain a bond thread.** Lean on them in the story, like calling in the favour, using their name, dragging them into it or using the secret, and your **Resolve comes up a size**. It's free, it doesn't take an action, and the thread's now **strained**.
+-   **Borrow through a bond thread.** 1 Aura lets one of their permissions justify bringing a Root into your roll, which you still pay for, and it doesn't strain anything. Through a faction, it's one of its assets. A place or a cause has nothing to lend, but you can still strain a thread with it. You can't borrow through a strained thread until it's mended.
+-   **Strain a bond thread.** Lean on them in the story, like calling in the favour, using their name, dragging them into it or using the secret, and you get **a point back on any of your Roots**. It's free, it doesn't take an action, and the thread's now **strained**.
 -   **Mend it.** Make it right with them, by roleplaying it, doing them a favour or paying them, whatever suits them. That happens in downtime or in a scene with them, not in the middle of the fight where you strained it. Then it's whole again.
--   **Strain it again before it's mended and it snaps.** Your Resolve still comes up, but cross the thread out. When the last thread goes, so does the bond.
+-   **Strain it again before it's mended and it snaps.** You still get the point, but cross the thread out. When the last thread goes, so does the bond.
 
-**A hostile thread bites like a Catch.** Let it bring you real trouble and take 1 Aura, or a size of Resolve for a big bite, one that changes the scene or costs you something you wanted (see [Catches and Trouble](#s-trouble)). You can't borrow through it, and you can't strain it for Resolve. Doing right by them strains it instead, and doing right by them again snaps it, and the grudge is over. Wrong them again before it snaps, and it's whole again.
+**A hostile thread bites like a Catch.** Let it bring you real trouble and take 1 Aura, or a point back on any of your Roots for a big bite, one that changes the scene or costs you something you wanted (see [Catches and Trouble](#s-trouble)). You can't borrow through it, and you can't strain it for a point. Doing right by them strains it instead, and doing right by them again snaps it, and the grudge is over. Wrong them again before it snaps, and it's whole again.
 
 :::example[Vesk's threads]
 *Dorrie: we have pulled a dozen jobs. I trust her with my life.* (bond)
@@ -480,9 +479,9 @@ The first two come from her answers in Connect. The fence is outside the crew, a
 New threads come from [Grow](#grow) in downtime, and when the crew's [Party Goal](#s-goal) is done, everyone writes one to someone the Goal brought into their life.
 
 :::example[Straining a thread]
-Vesk's on Vane's roof with her Resolve down to d4, and the guards are coming up the stairs. She whistles down to Dorrie in the courtyard to make a fuss and pull them back down, and Dorrie does, so now Dorrie's the one with the whole household looking at her. That's leaning on their thread, *We have pulled a dozen jobs. I trust her with my life.* Vesk's Resolve comes up to d6, and the thread's strained on both their sheets. After the job she gives Dorrie the pick of the haul, and it's mended.
+Vesk's on Vane's roof with her Body down to 2, and the guards are coming up the stairs. She whistles down to Dorrie in the courtyard to make a fuss and pull them back down, and Dorrie does, so now Dorrie's the one with the whole household looking at her. That's leaning on their thread, *We have pulled a dozen jobs. I trust her with my life.* Vesk gets a point back on her Body, so it's 3, and the thread's strained on both their sheets. After the job she gives Dorrie the pick of the haul, and it's mended.
 
-Her thread with the fence, *I owe a debt I would rather not discuss*, is hostile, so she can't lean on it for Resolve. She brings the fence a cut of the haul anyway. That's doing right by him, so the thread's strained, and one more good turn will snap it and clear the debt.
+Her thread with the fence, *I owe a debt I would rather not discuss*, is hostile, so she can't lean on it for a point. She brings the fence a cut of the haul anyway. That's doing right by him, so the thread's strained, and one more good turn will snap it and clear the debt.
 :::
 
 ### Playing the strain {#s-playing-the-strain}
@@ -507,7 +506,7 @@ A hostile thread goes the other way. It's strained because they've done right by
 It never stops you working together in the moment. You still combo and still intercept for each other.
 
 :::example[Vesk and Bram]
-Vesk's bond thread with Bram is *He once carried me out of a fire. I have never said thank you.* Her Resolve's down to d2 on a wall and she yells for him to haul her up again, so she strains it, and her Resolve comes up to d4. Bram's player says he's starting to feel like her ladder, and she can fix it by saying thank you. It was their only thread, so none are whole now, and he's cold with her until she makes it right. At the bar afterwards she finally says it. The thread's mended, and she rewrites it now that it's said.
+Vesk's bond thread with Bram is *He once carried me out of a fire. I have never said thank you.* Her Body's down to 1 on a wall and she yells for him to haul her up again, so she strains it, and her Body's back up to 2. Bram's player says he's starting to feel like her ladder, and she can fix it by saying thank you. It was their only thread, so none are whole now, and he's cold with her until she makes it right. At the bar afterwards she finally says it. The thread's mended, and she rewrites it now that it's said.
 :::
 
 ## Step 8: Connect {#s-connect}
@@ -535,24 +534,24 @@ Bram answers three. He already knows Isolde, because he's guarded her since she 
 
 Your **Aspiration** is one thing you want. It starts at **d2** and climbs as you chase it, so the first steps come easy and the last ones are hard work. The crew writes its [Party Goal](#s-goal) at d2 as well, and it climbs the same way.
 
--   **Chase it.** When something you do really moves it along, roll against its die, built from whatever you're doing about it. Beat it and it climbs one. In a scene, that's an action aimed at it, when the GM says it's within reach (usually once or twice a session). In downtime, it's a slot.
+-   **Chase it.** When something you do really moves it along, roll against its die, with the Root that fits what you're doing about it. Beat it and it climbs one. In a scene, that's an action aimed at it, when the GM says it's within reach (usually once or twice a session). In downtime, it's a slot.
 -   **One step a roll.** However many dice you put on it, one roll moves it one step at most. More dice is advantage, and your best die counts.
 -   **A setback** steps it back down one, never below d2.
 
 When it climbs past d12, it **resolves**: you get what you were after, and you take **a new Title**, **a new archetype** or **a new attuned thing**, your pick, with the permission, ability or awakening it comes with. Then write a new Aspiration at d2.
 
-Your Aspiration is also somewhere a consequence can land. When a blow or a failure costs you, you can step your Aspiration back down instead of taking it on your tracks or your gear, so the fight costs you your dream instead of your skin. You can't do it while it's at d2.
+Your Aspiration is also somewhere a consequence can land. When a blow or a failure costs you, you can step your Aspiration back down instead of taking it on your Roots or your gear, so the fight costs you your dream instead of your skin. You can't do it while it's at d2.
 
 :::example[Vesk's Aspiration, session by session]
-**Session 1:** *Own the score of a lifetime*, at d2. She's cracking a merchant's strongbox in the Low Market when the GM says it's within reach. That's her Body, both Titles, *pick a mechanical lock*, *know how a lock's built* and her picks, 13 steps, two d12s and a d2, all on the one intent. Her best die's a 7 against the Aspiration's d2, which rolls a 1, and it climbs to d4.
+**Session 1:** *Own the score of a lifetime*, at d2. She's cracking a merchant's strongbox in the Low Market when the GM says it's within reach. That's her Body, 11 steps, a d12 and a d10, all on the one intent. Her best die's a 7 against the Aspiration's d2, which rolls a 1, and it climbs to d4.
 
-**Downtime:** she spends a slot on it, the same 13 steps. 6 against the d4's 2, so it's d6.
+**Downtime:** she spends a slot on it, the same 11 steps. 6 against the d4's 2, so it's d6.
 
 **Session 2:** She gets run out of a warehouse. That's a setback, so it's back to d4.
 
-**Sessions 3 to 6:** She spends a slot on it most downtimes and pulls one good job, and it climbs to d12. The last few steps took her a few goes, because two d12s and a d2 against a d12 is still no sure thing.
+**Sessions 3 to 6:** She spends a slot on it most downtimes and pulls one good job, and it climbs to d12. The last few steps took her a few goes, because a d12 and a d10 against a d12 is still no sure thing.
 
-**Session 7:** She robs the Vane Estate. Her last roll is at the vault itself, her two d12s and a d2 against the Aspiration's d12. Her best is 9 against its 9, and she pays 1 Aura to take the tie. It climbs past d12 and resolves. Vesk takes a third Title, *The woman who has never been seen*, with its 3 for her Roots and one permission. Her new Aspiration, *Find out who the fence really is*, starts at d2.
+**Session 7:** She robs the Vane Estate. Her last roll is at the vault itself, her d12 and d10 against the Aspiration's d12. Her best is 9 against its 9, and she pays 1 Aura to take the tie. It climbs past d12 and resolves. Vesk takes a third Title, *The woman who has never been seen*, with its 5 for her Roots and one permission. Her new Aspiration, *Find out who the fence really is*, starts at d2.
 :::
 
 ### A good Aspiration {#s-good-aspiration}
@@ -581,9 +580,7 @@ Armour sits on one of your Roots, and it takes hits for you there.
 -   **Mind armour** is what keeps your head straight, and it counts while it fits the scene: court clothes at court, a guard's uniform in the barracks, a disguise you trust.
 -   **Soul armour** is what holds you together, like a holy symbol, a ward stitched into your coat or a relic of your order.
 
-**When a hit gets through to that Root, your armour can take it instead.** It's one of the costs you can offer when the GM names one: *not my Stamina, my shield takes it* (see [Consequences](#s-consequences)). Tick one of its boxes, and your track stays where it is.
-
-**Each piece is an item, so it's 1 more on a roll it fits.** When Bram [Defends](#s-defend) behind his shield, his plate and his shield are 2 of his 14 steps, and Dorrie's court clothes are a step when she's passing as someone of rank.
+**When a hit gets through to that Root, your armour can take it instead.** It's one of the costs you can offer when the GM names one: *not my Body, my shield takes it* (see [Consequences](#s-consequences)). Tick one of its boxes, and you keep the point.
 
 ### Quality {#s-armour-quality}
 
@@ -597,25 +594,24 @@ Every piece of armour has a **quality**: **Common**, **Fine** or **Masterwork**.
 
 So the more you wear, the more hits you can take. Bram's plate is Fine and his shield's Common, so that's three hits to his Body between them before they're both gone, and Vesk's Common leathers can take one.
 
--   **When the last box goes**, it's crossed out until it's mended, and it isn't 1 more on anything till then.
--   **Quality doesn't add a step.** A Masterwork shield's 1 more when you Defend, the same as a Common one.
--   **A hit that's two sizes**, because it found a [vulnerability](#s-vulnerable), is two boxes. Put them on one piece or two, or tick one and let the other drop your track.
+-   **When the last box goes**, it's crossed out until it's mended.
+-   **A hit that's two points**, because it found a [vulnerability](#s-vulnerable) or it's from something deadly, is two boxes. Put them on one piece or two, or tick one and take the other point.
 -   **A helmet's armour like any other.** It's Body armour and one of your equipment, and it's got a quality and boxes like the rest.
 -   **What you start with is Common**, and one piece can be Fine. Better comes from play: buy it (see [Upgrading gear](#upgrading-gear)), or take it off someone who won't be needing it.
 -   **Attuned things are magic**, and they can't be broken, so attuned armour hasn't got boxes, and it can't take a hit for you.
 
 ### Broken Armour {#recovering-armour}
 
-Broken armour's mended in downtime, the same as anything else you carry: it takes a downtime slot, and usually a purse of gold as well (see [Recover](#recover)). A piece with boxes ticked that hasn't broken yet is mended the same way, every box on it at once.
+Broken armour's mended in downtime, the same as anything else you carry: it takes a downtime slot, and usually a purse of gold as well (see [Downtime](#downtime)). A piece with boxes ticked that hasn't broken yet is mended the same way, every box on it at once.
 
 :::example[Armour at the table]
 Bram's wearing Fine plate, with two boxes, and a Common shield, with one, and they're both Body armour.
 
-Round 1: a Warden's spear gets through, and the GM names a size of Stamina. It's early and he'd rather keep his plate's boxes, so he takes it, and his Stamina's d10.
+Round 1: a Warden's spear gets through, and the GM names a point of his Body. It's early and he'd rather keep his plate's boxes, so he takes it, and his Body's on 6 of the 7 it can hold.
 
-Round 3: another spear gets through, and the GM names a size of Stamina. Bram offers his plate instead and ticks one of its two boxes, so his Stamina's still d10.
+Round 3: another spear gets through, and the GM names a point of his Body. Bram offers his plate instead and ticks one of its two boxes, so his Body's still on 6.
 
-Round 4: another gets through, and he offers his plate again. That's its last box, so it breaks, and when he Defends it isn't 1 more till it's mended. His shield's still got its box for the next one.
+Round 4: another gets through, and he offers his plate again. That's its last box, so it breaks, and it's no use to him till it's mended. His shield's still got its box for the next one.
 
 Downtime: he spends a slot and a purse of gold at the smithy, and his plate's mended, both boxes clear.
 :::
@@ -626,25 +622,24 @@ A **Boon** is a permanent upgrade, like shrugging off the first hit each scene o
 
 A **Burden** is a permanent cost, and it only ever comes on an attuned thing. Titles never take them. A Burden's worth two awakenings on that thing, or a Boon for you, and a thing can't take one before it's Tempered (see [Attunement](#s-attunement)).
 
--   **Give them names from the story:** *Iron Lungs* (the first hit you take each scene doesn't drop a track), *Bad Knee* (stride −2).
--   **A Burden is always on**, and it's got to cost you something you actually use. Nothing goes below its smallest size, so a Burden that would take a die below d2 doesn't count.
+-   **Give them names from the story:** *Iron Lungs* (the first hit you take each scene doesn't take a point), *Bad Knee* (stride −2).
+-   **A Burden is always on**, and it's got to cost you something you actually use. A Burden on something you haven't got, like locking a point of a Root that's 0, doesn't count.
 -   **You can take the same Boon more than once.**
 
 | Lever | Boon | Burden |
 | --- | --- | --- |
-| Toughness | the first hit you take each scene doesn't drop a track | one track's smallest size is locked, the way a Scar locks it |
-| Recovery | your tracks come back on a 3 or more at the end of a scene, not a 4 | your tracks come back on a 5 or more, not a 4 |
-| Regen | at the end of each round, roll your lowest track, and a top face puts it up a size | none |
+| Toughness | the first hit you take each scene doesn't take a point | a point of one of your Roots is locked, the way a Scar locks it |
+| Recovery | each Root gets 2 more back at the end of a scene | each Root gets 2 less back at the end of a scene |
+| Regen | at the end of each round, roll the Root that's lost most, unsplit, and a top face on any of its dice puts a point back on it | none |
 | Aura | +2 to your maximum | −2 to your maximum |
 | Stride | +2 | −2 |
 | Getting around | climb, swim or cross difficult ground at full stride (one of them each time you take it) | difficult ground costs you 3 a square |
-| Extra action | one extra action a scene | you say your action before the GM telegraphs, and you're stuck with it |
-| Splits | +1 split | −1 split |
+| Acting | none: everyone gets one action a round | you say your action before the GM telegraphs, and you're stuck with it |
 | Ties | you win every tie, attacking too, without paying Aura | you lose every tie, even defending, and can't pay to win one |
 | Going beyond | once a scene, go beyond without spending Aura | none |
 | Armour | one piece of your armour has one more box | your armour can't be better than Common |
 | Conditions | one condition (say which) can't touch you | one condition doesn't fade on you, and stays until someone breaks it with an action |
-| Defend | none: bring everything that fits to it instead | you can't Defend as your action |
+| Defend | none: it's a whole Root already | you can't Defend as your action |
 | Intercept | none: intercepting for free is the Guardian's | you can't intercept |
 | Kit | carry one more item | carry one fewer item |
 
@@ -653,10 +648,10 @@ A **Burden** is a permanent cost, and it only ever comes on an attuned thing. Ti
 -   **Beat a threat:** take 1 Aura whenever a threat of any kind falls to you, whether it's a monster, a locked door, a puzzle or an argument.
 -   **In your element:** start a scene somewhere your Title belongs and take 1 Aura, even past your maximum.
 
-Some levers aren't on the menu, and that's on purpose: bringing things in, leading, downtime slots and bonds. Taking the same archetype again gets you a bigger Push (see [The Archetypes](#s-how-archetypes)). For the Defend and Intercept levers, see [Defend](#s-defend) and [Intercept](#s-intercept).
+Some levers aren't on the menu, and that's on purpose: bringing a Root in, splitting, leading, downtime slots and bonds. Taking the same archetype again gets you a bigger Push (see [The Archetypes](#s-how-archetypes)). For the Defend and Intercept levers, see [Defend](#s-defend) and [Intercept](#s-intercept).
 
 :::example[Building a Boon in]
-Say you're making a sellsword, and you want to soak up more punishment than anyone. Your first Title's *The sword the Margrave couldn't buy*, and it's Body 3. It comes with *fight with a sword* (Body), and you put 2 points into the Toughness Boon on it. You call it *Iron Lungs*, so the first hit you take each scene doesn't drop a track. That's 7 points on that Title: one permission, a Boon in two slots, and three more slots on it to fill as you grow.
+Say you're making a sellsword, and you want to soak up more punishment than anyone. Your first Title's *The sword the Margrave couldn't buy*, and it's Body 5. It comes with *fight with a sword* (Body), and you put 2 points into the Toughness Boon on it. You call it *Iron Lungs*, so the first hit you take each scene doesn't take a point. That's 7 points on that Title: one permission, a Boon in two slots, and three more slots on it to fill as you grow.
 :::
 
 ## A Complete Character, Start to Finish {#a-complete-character-start-to-finish}
@@ -667,13 +662,13 @@ Here's what it looks like to build a character, and every choice here is a real 
 
 ### Step 1: Titles {#step-1-title}
 
-The player wants a thief called Vesk, and he's got 35 points to build her with. For her first Title he starts to write *Thief*. The GM pushes back: "The best at what? A thief who does what?" He has a think and comes up with *The best cat burglar in the city.* It's all hands and feet, so all 3 go on her Body.
+The player wants a thief called Vesk, and he's got 35 points to build her with. For her first Title he starts to write *Thief*. The GM pushes back: "The best at what? A thief who does what?" He has a think and comes up with *The best cat burglar in the city.* It's all hands and feet, so all 5 go on her Body.
 
-For the second Title he asks himself where she learned it all, and writes *Raised by the Guild*. It's a real role, and it hands the GM a whole Guild to play with. It's mostly what she knows, so it's Mind 2, and Body 1 for the knife work they taught her. Two Titles are 10 points, so he's got 25 left.
+For the second Title he asks himself where she learned it all, and writes *Raised by the Guild*. It's a real role, and it hands the GM a whole Guild to play with. It's mostly what she knows, so it's Mind 3, and Body 2 for the knife work they taught her. Two Titles are 10 points, so he's got 25 left.
 
 ### Step 2: Archetypes {#step-2-archetypes}
 
-He picks the Shadow. When she gets into hiding, the dice she hid with go into her shadow pool, the things she noticed while nobody was looking, and she can add them to any roll after that. He takes it twice, for 10 points, and each one comes with an ability: Push, +2 on her roll to hide or on a shadow die for 1 Stamina, and Vanish, hidden again with no roll for 1 Stamina. She's taken Shadow twice, so her Push is +3, and she's got the Shadow's Trait, *Any Shadow Will Do*. That leaves 15.
+He picks the Shadow. When she gets into hiding, the dice she hid with go into her shadow pool, the things she noticed while nobody was looking, and she can add them to any roll after that. He takes it twice, for 10 points, and each one comes with an ability: Push, +2 on her roll to hide or on a shadow die for 1 Aura, and Vanish, hidden again with no roll for 1 Aura. She's taken Shadow twice, so her Push is +3, and she's got the Shadow's Trait, *Any Shadow Will Do*. That leaves 15.
 
 ### Step 3: Permissions {#step-3-permissions}
 
@@ -690,18 +685,18 @@ He adds them up:
 
 | Vesk's | Steps |
 | --- | --- |
-| Body | 8: 3 from her first Title, 1 from her second, and four permissions |
-| Mind | 4: 2 from her second Title, and two permissions |
+| Body | 11: 5 from her first Title, 2 from her second, and four permissions |
+| Mind | 5: 3 from her second Title, and two permissions |
 | Soul | 0 |
 
-So sneaking across a roof is her Body, her first Title, *move unseen*, *run the rooftops* and Shadow twice, 13 steps, and that's before anything she carries. When she gets into hiding, those dice go in her shadow pool. Her Soul's 0, so a roll on it is a d2 unless something on her sheet fits, and the player's happy with that. She's a loner.
+So sneaking across a roof is her Body, 11 steps, a d12 and a d10. When she gets into hiding, those dice go in her shadow pool. Her Soul's 0, so a roll on it is a d2, and anything that gets through to her Soul wounds her straight away, unless she takes it on her Body for 2 points. The player's happy with that. She's a loner.
 
 ### Step 5: What she carries {#step-4-items-three}
 
 Everything she carries is a point, bar her keepsake and her bag.
 
--   **Equipment:** Common worn leathers, which are Body armour with one box, a knife and soft-soled boots, which is all 3. The boots are a step whenever she's sneaking.
--   **Utility:** a purse of gold, a smoke bomb and a perfect set of picks, which is all 3. The picks are in her hands nearly every time she works a lock, so picking one is her Body, both Titles, *pick a mechanical lock*, *know how a lock's built* and her picks, 13 steps, two d12s and a d2.
+-   **Equipment:** Common worn leathers, which are Body armour with one box, a knife and soft-soled boots, which is all 3.
+-   **Utility:** a purse of gold, a smoke bomb and a perfect set of picks, which is all 3. The picks are what she works a lock with, and picking one is her Body, 11 steps, a d12 and a d10.
 -   **Keepsake:** the first coin she ever stole.
 -   **Bag:** empty, and ready for whatever she lifts.
 
@@ -709,15 +704,15 @@ That's 6 points, and 5 left.
 
 ### Step 6: Attunement {#step-6-attunement}
 
-5 points is one attuned thing, and he picks her grappling line. It puts 2 on her Aura maximum, so it's 7. It's an item, so it's a step whenever she climbs or swings with it. It starts at Awakened, with one awakening, *Anywhere I can throw a hook*, a passive one: a step of its own whenever she's using the line, and once she's powered it, +1 on one die of every roll she makes with it for each Aura powering it, up to 2.
+5 points is one attuned thing, and he picks her grappling line. It starts at Awakened, with one awakening, *Anywhere I can throw a hook*. It's Body, so it locks a point of her Body, and she can hold 10 of its 11. It's 2 steps on every roll she makes with the line, and 2 more for each Aura she spends on it.
 
-So over Lord Vane's roof it all comes together: her Body, her first Title, *move unseen*, *run the rooftops*, Shadow twice, her grappling line, *Anywhere I can throw a hook* and her boots, 16 steps, two d12s and a d8.
+So over Lord Vane's roof it all comes together: her Body's 11 and her hook's 2, 13 steps, two d12s and a d2, and with 2 Aura on the hook it's 17, two d12s and a d10.
 
 He could give the line its Catch now for a second awakening, free, but there's no trouble he wants on it yet, so he leaves it. It doesn't count towards what she carries, and it can't be broken. That's all 35 points spent.
 
 ### Step 7: Numbers and bonds {#step-6-bonds}
 
-She starts with the usual numbers: Aura 7, her 5 and 2 for her grappling line, and her Stamina, Confidence and Resolve all at d12. Her stride's 3, and her worn leathers are her only armour.
+She starts with the usual numbers: Aura 5, and every Root full but the point her hook locks, so that's 10 on her Body and 5 on her Mind, and her Soul's 0. Her stride's 3, and her worn leathers are her only armour.
 
 Her threads cost nothing, and they come from her answers to the crew questions, so he writes them in the next step.
 
@@ -751,17 +746,17 @@ That's six threads on five bonds. Both of Dorrie's go under her name, on the one
 :::sheet[The best cat burglar in the city]
 **Points:** 35. Two Titles 10, four more permissions 4, Shadow twice 10 (*Push* and *Vanish* come with them), her grappling line 5, and six things she carries 6.
 
-**Titles:** The best cat burglar in the city (Body 3) · Raised by the Guild (Mind 2, Body 1).
+**Titles:** The best cat burglar in the city (Body 5) · Raised by the Guild (Mind 3, Body 2).
 
-**Archetypes:** Shadow (*Push*) · Shadow (*Vanish*). The dice she hides with go in her shadow pool, and her Push is +3 for 1 Stamina.
+**Archetypes:** Shadow (*Push*) · Shadow (*Vanish*). The dice she hides with go in her shadow pool, and her Push, at 1 Aura, is +3.
 
 **Permissions:** *move unseen* (Body), *run the rooftops* (Body), *pick a mechanical lock* (Body) on her first Title · *know how a lock's built* (Mind), *fight dirty with a knife* (Body), *find a buyer for anything* (Mind) on her second.
 
-**Roots:** Body 8 · Mind 4 · Soul 0.
+**Roots:** Body 11 · Mind 5 · Soul 0.
 
 **Carries:** Common worn leathers (Body, 1 box), a knife, soft-soled boots (equipment, 3 of 3) · a purse of gold, a smoke bomb, a perfect set of picks (utility, 3 of 3) · the first coin she ever stole (keepsake) · an empty bag (0 of 10).
 
-**Attuned (Awakened):** A grappling line. **Awakening:** *Anywhere I can throw a hook* (passive).
+**Attuned (Awakened):** A grappling line. **Awakening:** *Anywhere I can throw a hook* (Body).
 
 **Threads:** Dorrie: *We have pulled a dozen jobs. I trust her with my life.* (bond) and *We came up on the same streets. She never asks why.* (Dorrie's, bond) · Bram: *He once carried me out of a fire. I have never said thank you.* (bond) · Isolde: *She stole the book that started all this.* (Isolde's, hostile) · Wren: *I owe her for the night she hid me from the watch.* (Wren's, bond) · The fence: *I owe a debt I would rather not discuss.* (hostile)
 
@@ -769,5 +764,5 @@ That's six threads on five bonds. Both of Dorrie's go under her name, on the one
 
 **Aspiration:** Own the score of a lifetime (d2).
 
-**Numbers:** Aura 7 · Stamina d12 · Confidence d12 · Resolve d12 · Stride 3.
+**Numbers:** Aura 5 · Stride 3.
 :::

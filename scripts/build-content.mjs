@@ -362,9 +362,11 @@ const plain = (s = "") => curly(s.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1").replac
 const italics = (s = "") => [...s.matchAll(/\*([^*]+)\*/g)].map((m) => plain(m[1]));
 const dropStop = (s = "") => s.trim().replace(/\.$/, "");
 
-// What each archetype does, what 1 Aura gets it and what its 1 Resolve
-// spend is, from The Archetypes, and what it's for, from the table in Picking
-// Your Archetypes (the builder's archetype cards say it).
+// What each archetype does, its Trait, and its abilities, each with its price
+// in Aura, from The Archetypes, and what it's for, from the table in Picking
+// Your Archetypes (the builder's archetype cards say it). Since the new core
+// (16 Nov) an archetype has no home track: its abilities are paid in Aura,
+// written **Its name (1 Aura):** what it does.
 function archetypesFrom(doc, inline, qr) {
   const out = {};
   // Appendix D's line for each archetype, which gives its Trait in a few
@@ -374,11 +376,12 @@ function archetypesFrom(doc, inline, qr) {
   const picking = sectionOf(doc.body, "s-picking-archetypes").split(/^### /m)[0];
   const rows = tableRows(picking);
   const forLine = new Map(rows.map((r) => [plain(r[0]), plain(r[1] ?? "")]));
-  const homeLine = new Map(rows.map((r) => [plain(r[0]), plain(r[2] ?? "")]));
   for (const m of doc.body.matchAll(/^## (.+?) \{#(a-[a-z-]+)\}\n([\s\S]*?)(?=^## |(?![\s\S]))/gm)) {
     const [, archetype, id, text] = m;
-    const home = text.match(/^\*\*Home track:\*\* (\w+)\.?$/m)?.[1] ?? null;
-    const abilities = [...text.matchAll(/^\*\*(.+?) \(1 (\w+)\):\*\* (.+)$/gm)].map((a) => ({ name: curly(a[1]), cost: a[2], text: plain(a[3]), html: inline(a[3]) }));
+    if (/^\*\*Home track:\*\*/m.test(text)) companionWarn(`the ${archetype} archetype still has a home track, and abilities are paid in Aura now`);
+    const priced = [...text.matchAll(/^\*\*(.+?) \((\d+) (\w+)\):\*\* (.+)$/gm)];
+    const abilities = priced.map((a) => ({ name: curly(a[1]), cost: Number(a[2]), text: plain(a[4]), html: inline(a[4]) }));
+    for (const a of priced) if (a[3] !== "Aura") companionWarn(`the ${archetype}'s ${a[1]} costs ${a[2]} ${a[3]}, and abilities are paid in Aura`);
     // Its Trait, in the rule box as **Trait:** *Its name*. What it does.
     const traitLine = text.match(/^\*\*Trait:\*\* \*([^*\n]+)\*\.\s+(\S.*)$/m);
     const trait = traitLine ? { name: curly(traitLine[1]), text: plain(traitLine[2]), html: inline(traitLine[2]), short: "" } : { name: "", text: "", html: "", short: "" };
@@ -391,12 +394,9 @@ function archetypesFrom(doc, inline, qr) {
       else trait.short = plain(said.charAt(0).toUpperCase() + said.slice(1));
     }
     if (!forLine.get(archetype)) companionWarn(`the ${archetype} archetype isn't in the table in Picking Your Archetypes, so its card in the builder has nothing to say what it's for`);
-    if (!["Stamina", "Confidence", "Resolve"].includes(home)) companionWarn(`the ${archetype} archetype has no home track (**Home track:** Stamina, Confidence or Resolve)`);
-    else if (homeLine.get(archetype) !== home) companionWarn(`the ${archetype} archetype's home track is ${home}, but the table in Picking Your Archetypes says ${homeLine.get(archetype) || "nothing"}`);
-    if (!abilities.length) companionWarn(`the ${archetype} archetype has no abilities I can read (**Its name (1 ${home ?? "Track"}):** what it does)`);
+    if (!abilities.length) companionWarn(`the ${archetype} archetype has no abilities I can read (**Its name (1 Aura):** what it does)`);
     if (abilities.length > 6) companionWarn(`the ${archetype} archetype has ${abilities.length} abilities, and an archetype holds six at most`);
-    for (const a of abilities) if (a.cost !== home) companionWarn(`the ${archetype}'s ${a.name} costs 1 ${a.cost}, and its home track's ${home}`);
-    out[archetype] = { id, summary: inline(text.trim().split(/\n\s*\n/)[0]), for: forLine.get(archetype) ?? "", home, trait, abilities };
+    out[archetype] = { id, summary: inline(text.trim().split(/\n\s*\n/)[0]), for: forLine.get(archetype) ?? "", trait, abilities };
   }
   return out;
 }
@@ -998,7 +998,9 @@ function buildFrom(rulesDoc, ideasDoc, archetypes, inline, warn) {
     ...[...(boonSec.split(/\*\*Boons that get you Aura back\.\*\*/)[1] ?? "").split(/\n\n(?!-)/)[0].matchAll(/^-\s+\*\*([^*:]+):\*\* (.+)$/gm)].map((m) => ({ lever: plain(m[1]), text: plain(m[2]).replace(/\.$/, ""), burden: "", aura: true })),
   ];
   if (build.boons.length < 12) warn(`expected the Boons table and the Aura Boons, found ${build.boons.length} Boons`);
-  for (const lever of ["Toughness", "Aura", "Stride", "Kit", "Ties", "Splits", "Extra action", "Armour", "Recovery"]) if (!build.boons.some((b) => b.lever === lever)) warn(`the builder needs the ${lever} Boon, and Boons and Burdens hasn't got it`);
+  for (const lever of ["Toughness", "Aura", "Stride", "Kit", "Ties", "Armour", "Recovery", "Regen"]) if (!build.boons.some((b) => b.lever === lever)) warn(`the builder needs the ${lever} Boon, and Boons and Burdens hasn't got it`);
+  // Splitting has no limit and there are no extra actions on the new core.
+  for (const lever of ["Splits", "Extra action"]) if (build.boons.some((b) => b.lever === lever)) warn(`Boons and Burdens still has the ${lever} Boon, and the new core hasn't got one`);
   const expect = { quick: 7, quickTest: 4, catches: 12, connect: 10 };
   for (const [key, n] of Object.entries(expect)) if (build[key].length !== n) warn(`the builder expected ${n} ${key}, found ${build[key].length}`);
   for (const [key, n] of Object.entries({ archetypes: 10, ideas: 20, items: 4, usedUp: 10, keepsakes: 5, permIdeas: 4 })) {
@@ -1054,7 +1056,7 @@ const ctx = {
   qualities: qualitiesFrom(docWith("{#s-armour-quality}"), (msg) => companionWarn(msg)),
 };
 const crewDoc = docWith("{#s-pregens}");
-// The crew on stacking (notes/stacking-plan.md), every sheet checked as it's
+// The crew on the new core (notes/core-plan.md), every sheet checked as it's
 // read (scripts/crew-sheets.mjs).
 const roots = crewDoc ? crewFrom(crewDoc, ctx) : [];
 if (roots.length !== 6) companionWarn(`expected the six crew sheets, found ${roots.length}`);
@@ -1065,18 +1067,18 @@ const rootsBuild = buildDoc && ideasDoc ? buildFrom(buildDoc, ideasDoc, ctx.arch
 if (!rootsBuild) companionWarn("can't find Building Your Character or the Quick Build for the builder");
 else rootsBuild.qualities = ctx.qualities;
 // The book's attuned things from the story (Coin and Kit), each with its
-// awakenings, for random characters to start from. Since 14 Nov none of them
-// gets you Aura its own way (notes/stacking-plan.md), so aura's left empty
-// till the builder stops asking for it (prompt 7).
+// awakenings, for random characters to start from. Since 16 Nov each
+// awakening names the Root whose point it locks, *Its name* (Body): what it
+// does, and none of them gets you Aura.
 function thingsFrom(doc, warn) {
   const out = [];
   for (const id of ["twelve-rare-things", "eight-legendary-things"]) {
     const sec = sectionOf(doc.body, id);
     for (const m of sec.matchAll(/^:::sheet\[([^\]]+)\]\n([\s\S]*?)\n:::$/gm)) {
       const wakes = m[2].match(/^\*\*(?:Tempered|Perfected)\*\* (.+)$/m)?.[1] ?? "";
-      const awakenings = dots(wakes).map((w) => w.match(/^\*([^*]+)\* \((passive|active)\): (.+)$/)).filter(Boolean).map((x) => ({ name: plain(x[1]), kind: x[2], text: plain(x[3]).replace(/\.$/, "") }));
-      if (!awakenings.length) warn(`can't read ${m[1]}'s awakenings in Coin and Kit`);
-      else out.push({ name: curly(m[1]), aura: "", awakenings });
+      const awakenings = dots(wakes).map((w) => w.match(/^\*([^*]+)\* \((Body|Mind|Soul)\): (.+)$/)).filter(Boolean).map((x) => ({ name: plain(x[1]), root: x[2], text: plain(x[3]).replace(/\.$/, "") }));
+      if (!awakenings.length || awakenings.length !== dots(wakes).length) warn(`can't read ${m[1]}'s awakenings in Coin and Kit: each one's *its name* (the Root it locks): what it does`);
+      if (awakenings.length) out.push({ name: curly(m[1]), aura: "", awakenings });
     }
   }
   if (out.length < 12) warn(`found only ${out.length} attuned things in Coin and Kit`);
@@ -1085,9 +1087,10 @@ function thingsFrom(doc, warn) {
 if (rootsBuild && docWith("{#twelve-rare-things}")) rootsBuild.things = thingsFrom(docWith("{#twelve-rare-things}"), (msg) => companionWarn(`builder: ${msg}`));
 const rootsConditions = docWith("{#s-conditions-list}") ? conditionsFrom(docWith("{#s-conditions-list}"), inline) : [];
 if (rootsConditions.length < 10) companionWarn(`found only ${rootsConditions.length} conditions in Conflict`);
-// The companion plays the crew on Roots, with the builder's data (the
-// archetypes with their home tracks and abilities, the Title ideas, items,
-// Catches and armour's qualities) and the conditions read off the chapters.
+// The companion plays the crew on the new core, with the builder's data (the
+// archetypes with their abilities and what each costs in Aura, the Title
+// ideas, items, Catches and armour's qualities) and the conditions read off
+// the chapters.
 const crew = roots;
 const build = rootsBuild;
 const conditions = rootsConditions;

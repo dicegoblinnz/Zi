@@ -1,13 +1,14 @@
 // Armour's boxes (Armour and Quality in Building Your Character). Every piece
-// of equipment on a character's Defend is armour, a shield or a helmet, and
-// its quality (Common, Fine or Masterwork, read off the book) is how many
-// boxes it's got. A blow it takes for them ticks one, and the last one breaks
-// it: it's crossed out till it's mended, the same as anything else they
-// carry, and comes off Defend till then. A piece with boxes ticked is still a
-// line. What's ticked is kept in the character's state by where it is and its
-// name, like crossed: state.boxes["equipment|plate armour"]. Mending, in
-// downtime, clears every box on one piece. Attuned things can't break, so
-// they're never armour here.
+// of armour sits on a Root, Body unless the sheet says otherwise, and its
+// quality (Common, Fine or Masterwork, read off the book) is how many boxes
+// it's got. On the new core (16 Nov) a hit that gets through to that Root
+// can tick one of its boxes instead of taking a point, and a hit that's more
+// than one, off a vulnerability or a deadly threat, is a box each. The last
+// box breaks it: it's crossed out till it's mended, the same as anything else
+// they carry. A piece with boxes ticked is still a line. What's ticked is
+// kept in the character's state by where it is and its name, like crossed:
+// state.boxes["equipment|plate armour"]. Mending, in downtime, clears every
+// box on one piece. Attuned things can't break, so they're never armour here.
 
 export const keyOf = (a) => `equipment|${a.name}`;
 export const piecesOf = (c) => (Array.isArray(c?.armour) ? c.armour : []);
@@ -15,8 +16,12 @@ export const pieceAt = (c, key) => piecesOf(c).find((a) => keyOf(a) === key) ?? 
 export const isBroken = (s, a) => Boolean(s.crossed?.[keyOf(a)]);
 export const tickedOf = (s, a) => (isBroken(s, a) ? a.boxes : Math.min(a.boxes, Math.max(0, Math.round(Number(s.boxes?.[keyOf(a)]) || 0))));
 export const leftOf = (s, a) => a.boxes - tickedOf(s, a);
-// Pieces that can still take a blow.
+// Pieces that can still take a hit.
 export const standing = (c, s) => piecesOf(c).filter((a) => leftOf(s, a) > 0);
+// Pieces on a Root that can still take a hit there, and how many hits
+// they've got left between them.
+export const onRoot = (c, s, root) => standing(c, s).filter((a) => (a.root ?? "Body") === root);
+export const boxesOn = (c, s, root) => onRoot(c, s, root).reduce((t, a) => t + leftOf(s, a), 0);
 // Anything with a box ticked or broken, for downtime to mend.
 export const worn = (c, s) => piecesOf(c).filter((a) => tickedOf(s, a) > 0);
 
