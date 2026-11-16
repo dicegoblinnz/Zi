@@ -58,7 +58,7 @@ Or it's one of these instead:
 -   **Heal** someone, if you're a [Healer](#a-healer). See [Healing](#s-healing).
 -   **Lead**, if you're a [Leader](#a-leader): an order or a rallying song, with its steps handed out to friends who can hear or see you.
 -   **Pull something out of your bag.**
--   **Take a breath.** Your Mind gets 1 point back, as far as half its maximum.
+-   **Take a breath.** Your Mind gets 1 point back, as far as half its maximum, rounded up.
 
 Some things are free: your stride (before, during or after your action), a few words, and dropping something or putting it away. [Intercepting](#s-intercept) for a friend costs 1 Aura but no action, and a Guardian does it for free.
 
@@ -83,7 +83,7 @@ You play Zi'Dara on a grid first, where 1 square is 1 unit, about five feet.
 :::
 
 -   **Stride is free.** Every character has a base **stride of 3 units**. Every round you can move your stride without spending your action, whether that's before, during or after it.
--   **Going further takes dice.** Put any of your dice on moving, from a Root that fits how you're moving, and what they roll is how many more units you go. Dice you put on moving add together, the one place in Zi'Dara where dice add, and the rest of your dice can do whatever you went there to do.
+-   **Going further takes dice.** Put any of your dice on moving, from a Root that fits how you're moving, and what they roll is how many more units you go. Dice you put on moving add together, which dice hardly ever do, and the rest of your dice can do whatever you went there to do.
 -   **Diagonals count as one.** It keeps things quick.
 -   **Difficult ground**, like deep snow, a slick floor or a crowd, costs 2 units a square.
 -   **Your sheet can change your stride.** The Stride Boon adds 2 units. A Stride Burden takes 2 away, and a *Heavy* Catch on something you've attuned takes 1, to a minimum of 0. A [Teleporter](#a-teleporter)'s stride can be a teleport of up to 10 units.
@@ -530,7 +530,7 @@ You don't have to wait for the end of the scene, but only a [Healer](#a-healer) 
 -   **Top faces still pay.** A heal roll's top faces give you Aura like any die's, but what it heals never does.
 
 :::example[A heal]
-Say you're a Healer, and your Title's *The field surgeon of the Red Company*. Your Soul's 6, so your heal's a d12. Vesk's on 2 points of Body after the roof, and you roll an 8, so she's back on 10, her maximum. That's her first heal this scene, so it's whole, and now she's got 1 Toll. Two rounds later she's down again, and your next heal on her rolls 9, less 5 for her Toll, so it's 4, and she's on 2 Toll. Bram's right beside her and nobody's healed him yet, so a heal on him would be whole.
+Say you're a Healer, and your Title's *The field surgeon of the Red Company*. Your Soul's 6, so your heal's a d12. Vesk's on 2 points of Body after the roof, and you roll an 8, so she's back on 10, her maximum. That's her first heal this scene, so it's whole, and now she's got 1 Toll. Two rounds later she's down to 4, and your next heal rolls 5. Your Healer's Trait ignores a step of Toll, so that one's whole too, and she's on 9 with 2 Toll. When you heal her again it rolls 9, less 5 for the step your Trait doesn't cover, so it's 4. Bram's right beside her and nobody's healed him yet, so a heal on him would be whole.
 :::
 
 **Quick heal.** Anyone can do this one. Pay 1 Aura and your action, and someone you can reach gets 1 point back on one of their Roots, no roll. It isn't a heal roll, so Toll doesn't touch it and it doesn't give any. It's how a crew with no Healer gets by: Dorrie can't stitch a wound, but she can spend the Aura and her action to keep Bram on his feet.

@@ -49,7 +49,7 @@ updated: 2026-11-16
 
 ## Your action {#s-qr-action}
 
--   One a round, and nothing gets you another. Usually it's a roll, with an intent on every die: act, answer a telegraph, move past your stride, break a condition, study. Or it's Defend, a heal if you're a Healer, a lead if you're a Leader, pulling something from your bag, or taking a breath (1 point back on your Mind, as far as half its maximum). Your stride, a few words, and dropping something or putting it away are free. Intercepting costs 1 Aura but no action.
+-   One a round, and nothing gets you another. Usually it's a roll, with an intent on every die: act, answer a telegraph, move past your stride, break a condition, study. Or it's Defend, a heal if you're a Healer, a lead if you're a Leader, pulling something from your bag, or taking a breath (1 point back on your Mind, as far as half its maximum, rounded up). Your stride, a few words, and dropping something or putting it away are free. Intercepting costs 1 Aura but no action.
 -   **Combo:** two or more actions into the same thing at the same time, yours and your friends'. You roll once, and every action brings the Root that fits how they're helping, all of it. Each of you can bring a Root in with your own permission and pay for it yourself. No Aura for the combo, and whoever rolls takes the Aura.
 -   **Lead** (the Leader's): build an order or a rallying song from a Root and hand its steps to friends who can hear or see you, this round. They don't have to fit.
 -   Outside a round, it's one roll for each go at something.
@@ -57,7 +57,7 @@ updated: 2026-11-16
 ## Aura {#aura}
 
 -   Up to 5, or more with the Aura Boon. You're full every scene, and there's none in downtime. While you're acting it can go past your maximum, and once you've finished acting for the round, anything over is gone. Off your turn it stops at your maximum, and you can give the rest to a friend in the scene.
--   **Spend 1:** an ability, each time you use it · 2 more steps on an awakening that fits · go beyond · win a tie when you're acting · intercept for a friend within your stride · a quick heal · keep a Catch quiet.
+-   **Spend 1:** an ability, each time you use it · 2 more steps on an awakening that fits · borrow one thing through a bond thread · go beyond · win a tie when you're acting · intercept for a friend within your stride · a quick heal · keep a Catch quiet.
 -   **Get 1 back:** every die of yours that wins · every top face · letting a Catch bite, as often as you like, as long as it's real trouble · bringing real trouble on yourself with no Catch · a great setup that didn't land, if the GM says so · Boons that say so.
 -   **Spend 3:** bring a Root in, when a permission explains it, instead of paying a point of that Root.
 
@@ -74,7 +74,7 @@ updated: 2026-11-16
 
 ## Study {#study}
 
-Roll against its Challenge. Win, and pick one: a hidden tag · a straight answer. An Oracle can pay 1 Aura for *Foretold* and introduce a truth instead: say something that wasn't obvious to anyone else, and it's true, and it matters for the whole crew this scene.
+Roll against its Challenge. Win, and pick one: a hidden tag · a straight answer. An Oracle can pay 1 Aura for *Foretold* and introduce a truth instead: say something that wasn't obvious to anyone else, and it's true, a tag on whatever it's about for the whole crew this scene.
 
 ## The round {#s-qr-round}
 

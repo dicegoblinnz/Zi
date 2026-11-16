@@ -40,9 +40,11 @@ A **permission** is something you can do, written as a doing word with how, what
 
 The rest of your sheet doesn't touch your Roots, and it isn't counted on a roll either. Your **archetypes**, like Guardian or Shadow, are separate from your Titles. Each one's got something only it can do, a Trait that's always true of you, and abilities you pay for in Aura. They're all in [The Archetypes](#s-how-archetypes). Your **attuned thing** is something personal that's bound to you, and each of its **awakenings** locks a point of the Root it fits and puts 2 steps on a roll it fits (see [Attunement](#s-attunement)). Everything you carry does what it is: a sword cuts, a rope gets you up a wall and a lockpick opens locks.
 
+[How a roll adds up](#how-permissions-stack) has Vesk's Roots, and everything that goes on a roll.
+
 ### How a roll adds up {#how-permissions-stack}
 
--   **One Root, rolled at full.** Pick the one that fits how you're doing it. Points you've spent, lost or locked never make its dice smaller.
+-   **One Root a roll, at full.** Pick the one that fits how you're doing it. Points you've spent, lost or locked never make its dice smaller.
 -   **Another Root, when a permission explains it**, for 1 point of that Root or 3 Aura, and all of it goes on too (see [Bringing In a Root](#s-bring)).
 -   **2 steps for an awakening that fits**, and 2 more for every Aura you put in it.
 -   **And nothing else.** Your Titles, permissions, archetypes, abilities and items aren't counted. A condition that's on you can still be a step for you or against you (see [Conditions](#s-conditions)).
@@ -230,6 +232,7 @@ Anything that works on its own, like a summoned beast or a raised servant acting
 -   **Bring a Root in**, for **3**, when a permission explains it and you'd rather keep that Root's points (see [Bringing In a Root](#s-bring)).
 -   **Put more into an awakening**: **1** for 2 more steps on a roll it fits, as many as you like (see [Attunement](#s-attunement)).
 -   **Pay for an ability**, **1** each time you use it (see [Abilities](#s-abilities)).
+-   **Borrow** one thing off a friend's sheet through a bond thread you share, for **1** (see [Bonds and threads](#s-bonds)).
 -   **Go beyond** what something normally does, for **1**.
 -   **Win a tie** when you're the one acting, for **1**.
 -   **Intercept** for a friend within your stride, for **1**: take any of the blows aimed at their Body, and they come at you instead (see [Intercept](#s-intercept)). A [Guardian](#a-guardian) does it for free. Fear and despair are inside your friend's head, so nobody can step in front of those.
@@ -245,7 +248,7 @@ Anything that works on its own, like a summoned beast or a raised servant acting
 :::example[Aura at one table]
 **Spent:** Wren's shooting from the gallery at the archer and the two men beside him. That's her Body, 8 steps, and her longbow's *Long shot* fits, 2 more. She's on 5, and she puts 2 into the bow for 4 steps more, so it's 14 steps, two d12s and a d4, and she's on 3.
 
-**Past her maximum:** All three of her dice win, and one lands on its top face, so she's on 7 while she's acting. The brute's club is coming at Isolde, whose Body is 0, so Wren pays 1 to intercept it and she's on 6. When she's done for the round, the 1 over her maximum is gone.
+**Past her maximum:** All three of her dice win, and one lands on its top face, so she's on 7 while she's acting. The brute's club is coming at Isolde beside her, and Isolde's Body is 0, so Wren pays 1 to intercept it and she's on 6. When she's done for the round, the 1 over her maximum is gone.
 
 **Got back:** Crossing the market, Vesk's player says a watch sergeant knows her face from the posters. The GM has him shout for the watch, and Vesk takes 1 Aura.
 :::
@@ -289,7 +292,7 @@ Trouble's yours to bring. Letting your Catches bite is up to you, and the GM doe
 :::example[Trouble at the table]
 **A hostile thread:** Vesk owes the fence, and it's a hostile thread on her sheet. Halfway across a Guild warehouse roof, her player lets it bite: the fence's boy is under the drainpipe, and he wants paying tonight. The GM runs with it, and now there's a debt collector shouting under the watchman's window. Vesk takes 1 Aura, the same as she would for a Catch.
 
-**A big bite:** Bram's Soul is down to 2 after a reroll at the gate, and his attuned war hammer has the Catch *Marked*. At the harbour, his player lets it bite in a big way: the Vane Estate's man on the quay knows that hammer from across the water, and the boat the crew spent a week arranging leaves without them. That costs them something they wanted, so Bram gets a point of Soul back instead of the Aura, and he's on 3.
+**A big bite:** Bram's Soul is down to 2 after two rerolls at the gate, and his attuned war hammer has the Catch *Marked*. At the harbour, his player lets it bite in a big way: the Vane Estate's man on the quay knows that hammer from across the water, and the boat the crew spent a week arranging leaves without them. That costs them something they wanted, so Bram gets a point of Soul back instead of the Aura, and he's on 3.
 :::
 
 ## Working Together {#s-teamwork}
@@ -323,4 +326,4 @@ Most things worth fighting have more going on than they show. **Study** is an in
 
 Study works on people, places, stakes and whole scenes, and it finds what's really there.
 
-If you're an [Oracle](#a-oracle) with *Foretold*, you can make something true instead. When you win a Study, pay 1 Aura and **introduce a truth**: something that wasn't obvious to anyone else. Say it, and it's true, and it matters here for the whole crew for the rest of the scene. Isolde wins her Study on the brute, pays for Foretold and says his left knee never healed right. Now it didn't, and anyone in the crew can go for it this scene.
+If you're an [Oracle](#a-oracle) with *Foretold*, you can make something true instead. When you win a Study, pay 1 Aura and **introduce a truth**: something that wasn't obvious to anyone else. Say it, and it's true: a tag on whatever it's about for the rest of the scene, there for the whole crew to use like any tag they've found. Isolde wins her Study on the brute, pays for Foretold and says his left knee never healed right. Now it didn't, and anyone in the crew can go for it this scene.
