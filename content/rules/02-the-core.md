@@ -326,4 +326,4 @@ Most things worth fighting have more going on than they show. **Study** is an in
 
 Study works on people, places, stakes and whole scenes, and it finds what's really there.
 
-If you're an [Oracle](#a-oracle) with *Foretold*, you can make something true instead. When you win a Study, pay 1 Aura and **introduce a truth**: something that wasn't obvious to anyone else. Say it, and it's true: a tag on whatever it's about for the rest of the scene, there for the whole crew to use like any tag they've found. Isolde wins her Study on the brute, pays for Foretold and says his left knee never healed right. Now it didn't, and anyone in the crew can go for it this scene.
+If you're an [Oracle](#a-oracle) with *Foretold*, you can make something true instead. When you win a Study, pay 1 Aura and **introduce a truth**: something that wasn't obvious to anyone else. Say it, and it's true from now on, and anyone in the crew can bring a Root in on it this scene, like a permission they've all got. Isolde wins her Study on the brute, pays for Foretold and says his left knee never healed right. Now it didn't, and anyone in the crew can go for it this scene.

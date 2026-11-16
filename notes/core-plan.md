@@ -140,7 +140,7 @@ The crew in every example are moved across by this plan's rule for saved charact
 
 For the prompts after this one:
 
-- **Prompt 2**: Appendix D's archetype lines are the plan's swaps (call 15), and a bond thread's borrow and strain are written as call 7 and 12 say. Your 03, 03a and 18 are the truth for both, so tell prompt 7 where they differ. The Shadow's coming out of hiding and the Extra action Boon have nothing left to give, since no extra actions are left (call 2).
+- **Prompt 2**: Appendix D's archetype lines and *Foretold* are yours word for word, off your branch as it was pushed, bar the Healer's Trait, still *Good Hands* so the build matches the 03a that's landed. Take your *Come Prepared* line when you merge. A bond thread's borrow and strain in Appendix D are written as calls 7 and 12 say, so check them against your 03. Merging will want the player reference and `src/data/sheets.json` built again (`npm run sheets`), and both notes keep both our sections.
 - **Prompt 3**: Appendix D's *Round budget* and *Threat budget* bullets still have stacking's numbers, and the player reference keeps them out, so move them with Running the Game's. Conflict's Telegraphs and Multipliers and the glossary point at Running the Game and name no numbers. Deadly threats' hits (call 11) want a tag in the Tag Reference and a line in the Threat Builder. The Learn deck's 25 cards on these sections are named by the build.
 - **Prompt 4**: the companion's rules on tap read these sections' new words already, by the same ids.
 - **Prompt 5**: redraw the player reference's second page for points, wounds and Toll.

@@ -74,7 +74,7 @@ updated: 2026-11-16
 
 ## Study {#study}
 
-Roll against its Challenge. Win, and pick one: a hidden tag · a straight answer. An Oracle can pay 1 Aura for *Foretold* and introduce a truth instead: say something that wasn't obvious to anyone else, and it's true, a tag on whatever it's about for the whole crew this scene.
+Roll against its Challenge. Win, and pick one: a hidden tag · a straight answer. An Oracle can pay 1 Aura for *Foretold* and introduce a truth instead: say something that wasn't obvious to anyone else, and it's true, and anyone in the crew can bring a Root in on it this scene.
 
 ## The round {#s-qr-round}
 
@@ -143,25 +143,25 @@ A hit, a point off the Root it's at · a box on your armour on that Root instead
 
 ## The archetypes {#s-qr-archetypes}
 
-Each ability's 1 Aura each time you use it, and they stack. Most have a Push: +2 on one die of the mechanic after you roll, +3 if you've taken it twice. Each one's Trait comes after its mechanic, and the whole of each is in [The Archetypes](#archetypes).
+Each ability's 1 Aura, and they stack. Most have a Push: +2 on one die of the mechanic after you roll, +3 if you've taken it twice. Each one's Trait comes after its mechanic, and the whole of each is in [The Archetypes](#archetypes).
 
--   **Bard:** your action lets every friend who can hear you rest their Mind, the way they would at the end of a scene, or your song Defends you all against fear, split as you like. *All Eyes on Me:* 1 Aura a threat, and it watches only you while you perform.
--   **Bloodsworn:** every point your Body loses is 3 steps on your action, and you can spend it on purpose. *Paid in Blood:* 1 Aura for every point your Body loses.
+-   **Bard:** your action gives every friend who can hear you a point back on their Mind, or your song Defends you all against fear, split as you like. *All Eyes on Me:* 1 Aura a threat, and it watches only you while you perform.
+-   **Bloodsworn:** every point your Body loses is 3 steps on your action, and you can spend them on purpose. *Paid in Blood:* 1 Aura for every point your Body loses.
 -   **Elementalist:** one of your dice can be an area, a burst, a cone or a line, for no Aura. *Eye of the Storm:* your areas and your loose element never hurt you.
 -   **Face:** put your dice on a threat unrolled, as influence, and roll them before one of its telegraphs lands: each of its dice your best one beats does what you say. *I Know a Guy:* once a scene, someone you know turns up and helps.
 -   **Gambler:** once a round, flip any die you can see after it lands: its size plus 1, less what it rolled. *Bad Luck Pays:* 1 Aura for each 1 of yours that stays a 1.
 -   **Guardian:** you intercept for free, for every friend within your stride. *Better Me Than You:* 1 Aura for each blow you intercept for a friend.
--   **Healer:** only you make heal rolls: unsplit, and the patient gets back what you roll, less their Toll. *Good Hands:* your heals ignore a step of Toll.
+-   **Healer:** only you make heal rolls: a Root, unsplit, and they get back what it rolls, less 5 for each Toll. *Good Hands:* your heals ignore a step of Toll.
 -   **Hunter:** mark a creature, and anyone acting against it rolls your Mark die too, which jumps when it falls. *Good Hunting:* 1 Aura for each die a friend wins against your Mark.
 -   **Illusionist:** meet or beat the threats' Challenge, and they believe your illusion till they interact with it or try to get through. *Made You Look:* 1 Aura when a threat swings at, talks to or walks into one.
 -   **Leader:** an order hands its steps to friends who can hear or see you. *Where It's Needed:* each round, move 1 step for each of you from roll to roll.
--   **Maker:** each die that beats an item's size gives it a tag for the scene, and you can put your Aura into a friend's awakening. *Maker's Mark:* one item keeps a tag of yours.
+-   **Maker:** each die that beats an item's size gives it a tag for the scene, and you can spend Aura on a friend's awakening. *Maker's Mark:* one item keeps a tag of yours, a permission or a hit taken.
 -   **Oracle:** roll your action as foresight, and swap the numbers into anyone's dice that round, if they fit. *Seen It Coming:* each round, roll 3 of the threats' dice before anyone moves. *Foretold* (1 Aura): a Study you win can be a truth.
 -   **Shadow:** the dice you hide with go in your shadow pool, for any roll after. *Any Shadow Will Do:* any patch of dark's enough to hide in.
 -   **Shifter:** catch animal tags against their die, and keep them till downtime. *Something of the Beast:* a beast's sense or size, picked each scene.
 -   **Summoner:** only you catch souls and summon them. *Pocket Summon:* one soul out free once a scene, with no action.
 -   **Teleporter:** your stride can be a 10-unit teleport, and 1 Aura opens a portal. *Not There:* once a scene, teleport, and what's landing on you misses.
--   **Warrior:** your dice explode in a fight. *Second Skin:* if you haven't Defended, your armour's 1 step a piece on your Body's defence.
+-   **Warrior:** your dice explode in a fight. *Second Skin:* if you haven't Defended, your armour's 1 step a piece when it lands.
 
 ## Bonds and threads {#s-qr-threads}
 
