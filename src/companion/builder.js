@@ -221,7 +221,7 @@ export function normalBuild(raw, B = null, { fresh = false } = {}) {
       else if (x?.three && typeof x.three === "object" && sumOf(fixRoots(x.three)) === R.OLD_TITLE_ROOTS) t.three = fixRoots(x.three);
       else if (stacked && spread && sumOf(t.roots) === R.OLD_TITLE_ROOTS) {
         t.three = t.roots;
-        t.roots = R.toFive(t.roots, t.perms);
+        t.roots = R.toFive(t.roots, t.perms.filter((p) => p.text.trim()));
       }
       return t;
     });
@@ -356,7 +356,7 @@ export function sheetOf(ch, B) {
   return sheet;
 }
 
-function makeSheet(ch, b, B) {
+function makeSheet(ch, b, B, { draft = false } = {}) {
   const ARCH = new Map(B.archetypes.map((a) => [a.name, a]));
   const IDEA = new Map(B.ideas.map((x) => [x.id, x]));
   const n = numbersOf(b);
@@ -366,9 +366,10 @@ function makeSheet(ch, b, B) {
   // so roots.js makes it 5 the same way and says so (fromThree). Once a
   // change is saved, it's a spread like any other, and the sheet says it's on
   // the new core (core), so a Title the player's left at 3 stays at 3.
-  const three = b.titles.some((t) => titleIn(t) && t.three);
+  // A draft's the build as it stands on the screen, so it's on the new core.
+  const three = !draft && b.titles.some((t) => titleIn(t) && t.three);
   const titles = b.titles.filter(titleIn).map((t) => ({
-    text: titleName(t), name: titleName(t), ...(t.from && t.roots[t.from] === R.TITLE_ROOTS ? { root: t.from } : t.three ? { roots: { ...t.three } } : { roots: { ...t.roots } }),
+    text: titleName(t), name: titleName(t), ...(t.from && t.roots[t.from] === R.TITLE_ROOTS ? { root: t.from } : t.three && three ? { roots: { ...t.three } } : { roots: { ...t.roots } }),
     permissions: t.perms.filter((p) => p.text.trim()).map((p) => ({ text: p.text.trim(), root: p.root })),
     boons: t.boons.map((x) => ({ lever: x.lever, name: x.name.trim(), on: x.on.trim() })),
   }));
@@ -553,7 +554,7 @@ export function spreadFor(roots) {
   const by = ROOTS.filter((r) => n[r]).sort((a, z) => n[z] - n[a]);
   if (!by.length) return noRoots();
   const three = by.length === 1 ? { ...noRoots(), [by[0]]: 3 } : by.length === 2 ? { ...noRoots(), [by[0]]: 2, [by[1]]: 1 } : { Body: 1, Mind: 1, Soul: 1 };
-  return R.toFive(three, roots.map((root) => ({ root })));
+  return R.toFive(three, roots.filter((r) => ROOTS.includes(r)).map((root) => ({ root })));
 }
 
 // ---------------------------------------------------------------- downtime's growth
@@ -639,7 +640,7 @@ export function foldGrown(raw, grown, B) {
       const roots = spread ? fixRoots(g.roots) : root ? { ...noRoots(), [root]: R.TITLE_ROOTS } : noRoots();
       const p = g.perm && typeof g.perm === "object" && words(g.perm.text, 120) ? { text: words(g.perm.text, 120), root: rootOf(g.perm.root) } : blankPerm();
       const three = spread && sumOf(roots) === R.OLD_TITLE_ROOTS;
-      b.titles.push({ idea: "", text, roots: three ? R.toFive(roots, [p]) : roots, perms: [p], boons: [], ...(!spread && root ? { from: root } : {}), ...(three ? { three: roots } : {}) });
+      b.titles.push({ idea: "", text, roots: three ? R.toFive(roots, p.text ? [p] : []) : roots, perms: [p], boons: [], ...(!spread && root ? { from: root } : {}), ...(three ? { three: roots } : {}) });
     } else if (g.k === "arch") {
       const arch = words(g.arch, 24);
       if (!arch || b.archs.length >= MAX_ARCHS) continue;
@@ -665,6 +666,10 @@ export function foldGrown(raw, grown, B) {
     atLeast(a.awk, 1, blankAwk);
   }
   for (const t of b.titles) if (!t.perms.length && !t.boons.length) t.perms.push(blankPerm());
+  // An awakening grown before the new core hasn't got a Root, so it's on
+  // their biggest till they say, the way roots.js reads it.
+  const big = bigOf(b);
+  for (const a of b.attuned) for (const w of a.awk) if (awkIn(w) && !w.root) Object.assign(w, { root: big, guessed: true });
   return normalBuild(b, B);
 }
 
@@ -1237,7 +1242,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     return `<div class="bd-tiles${rail ? ' bd-rail" tabindex="0"' : ' bd-grid"'} role="list" aria-label="Your Roots">${ROOTS.map((r) => tile(`root:${r}`, r, roots[r])).join("")}</div>`;
   }
   // The sheet the build makes, for everything on it that can be a step.
-  const draftSheet = () => R.rootsSheet(makeSheet({ id: "draft", name: b().name || "Draft", hash: "own" }, b(), B), [], B);
+  const draftSheet = () => R.rootsSheet(makeSheet({ id: "draft", name: b().name || "Draft", hash: "own" }, b(), B, { draft: true }), [], B);
   // Step 3: what the Roots add up to and where each one comes from, what
   // each holds once its awakenings have locked their points, and the
   // awakenings, the one thing besides a Root that's steps on a roll.
@@ -1304,7 +1309,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       <div class="bd-ask"><p class="bd-label">Its awakening <small>it comes with one</small></p>${awkTip(i)}</div>
       ${awkRow(a, i, a.awk[0], 0, "Its awakening")}
       ${field(`a${i}.catch`, "Its Catch, if you’d like a second awakening, free", a.catch, { max: 60, ph: "Wanted" })}${catches(i, a)}
-      ${a.catch.trim() || awkIn(a.awk[1] ?? blankAwk()) ? awkRow(a, i, a.awk[1] ?? blankAwk("active"), 1, "Its second awakening") : ""}${drop(i)}</fieldset>`;
+      ${a.catch.trim() || awkIn(a.awk[1] ?? blankAwk()) ? awkRow(a, i, a.awk[1] ?? blankAwk(), 1, "Its second awakening") : ""}${drop(i)}</fieldset>`;
     // A saved character's, at any stage, with up to six awakenings.
     const grown = (a, i) => {
       const r = roomOf(a);
@@ -1792,7 +1797,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       if (kind === "arch") x.have.splice(i, 1);
       if (kind === "title" || kind === "arch") {
         // The switch and the open pickers follow the ones that are left.
-        const keys = kind === "title" ? ["ideas", "idea", "boon", "shape"] : ["pick"];
+        const keys = kind === "title" ? ["ideas", "idea", "boon"] : ["pick"];
         for (const key of keys) {
           for (let q = i; q < arr.length; q++) d.deep[`${key}${q}`] = d.deep[`${key}${q + 1}`];
           delete d.deep[`${key}${arr.length}`];
