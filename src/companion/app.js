@@ -528,7 +528,9 @@ function noteTable(s) {
   // dice aimed at it go to the GM. The rest went at other things.
   const first = r.kind === "action" ? r.foes?.[0] : null;
   const at0 = r.kind === "action" ? (r.dice ?? []).filter((x) => x.at === 0) : [];
-  const rolled = () => at0.map((x) => ({ size: x.size, total: x.nat + x.plus, out: outcome(x) }));
+  // The table keeps 12 dice of an answer at most, so a roll split past that
+  // sends its best 12.
+  const rolled = () => at0.map((x) => ({ size: x.size, total: x.nat + x.plus, out: outcome(x) })).sort((a, b) => b.total - a.total).slice(0, 12);
   if (r.kind === "action" && r.tele) {
     // It's an answer while it's against the telegraph's die, or the number the GM rolled for it.
     const answered = first?.v != null && at0.length > 0 && (first.size === r.tele.d || !first.size);
@@ -2022,8 +2024,11 @@ function defencePool(c, s, r) {
   });
   const points = Object.fromEntries(R.ROOTS.map((x) => [x, groups.reduce((t, x2) => t + (x2.k.points[x] ?? 0), 0)]));
   const aura = groups.reduce((t, x) => t + x.aura, 0);
+  // The telegraphs land once you've finished acting, so Aura past your
+  // maximum is gone by the time you pay.
+  const have = s.acting ? Math.min(s.aura, R.auraMax(c, s)) : s.aura;
   const need = groups.flatMap((x) => x.k.short.filter((y) => /^a permission/.test(y)));
-  const short = [...need, ...R.ROOTS.filter((x) => points[x] > s.pts[x]).map((x) => `${points[x]} ${points[x] === 1 ? "point" : "points"} of ${x}`), ...(aura > s.aura ? [`${aura} Aura`] : [])];
+  const short = [...need, ...R.ROOTS.filter((x) => points[x] > s.pts[x]).map((x) => `${points[x]} ${points[x] === 1 ? "point" : "points"} of ${x}`), ...(aura > have ? [`${aura} Aura`] : [])];
   return { groups, points, aura, short: short.length ? `${/^a permission/.test(short[0]) ? "Name the permission that brings it in" : `You need ${andList(short)}`}.` : "" };
 }
 
