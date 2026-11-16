@@ -121,7 +121,7 @@ Vesk's only thread with Bram is a bond thread: the fire he carried her out of, a
 
 Dorrie's slot is a roll at the Goal, sending Vane's investigators the wrong way: her Mind, 7 steps, a d12 and a d2, against the Goal's d4. Her best is 6 against 3, so the Goal climbs to d6. Her new permission puts her Soul up to 7.
 
-Isolde's other slot is a point in her Aspiration, its third, so it's 3 of 5. Her new permission puts her Mind up to 10 for next time.
+Isolde's other slot is a point in her Aspiration. She'd put two in it before, so it's 3 of 5 now. Her new permission puts her Mind up to 10 for next time.
 
 Bram's slot mends his plate. His ribs don't need one: he finished last session Bloodied, with no points of Body left, and downtime started by putting him back on 7 with the wound gone.
 

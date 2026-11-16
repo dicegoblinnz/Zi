@@ -54,7 +54,7 @@ updated: 2026-11-14
 
 -   **Campaign, ending a** — [Ending a Campaign](#s-ending)
 -   **Carrying** — [What You Carry](#s-carrying)
--   **Catch** — [Catches and Trouble](#s-trouble), [Attunement](#s-attunement), [Wounds, Scars and the Blaze](#s-blaze), [Catches and Trouble at the Table](#s-catches-gm)
+-   **Catch** — [Catches and Trouble](#s-trouble), [Attunement](#s-attunement), [Catches and Trouble at the Table](#s-catches-gm)
 -   **Challenge** — [Threats](#s-challenges)
 -   **Character sheet** — [Appendix A](#s-sheet-character)
 -   **Check-ins** — [Check-Ins](#s-check-ins)

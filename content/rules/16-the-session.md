@@ -46,7 +46,7 @@ If the planning's still going after twenty minutes, make a move. Something in th
 
 ### The aftermath {#s-aftermath}
 
-The aftermath is where the job's consequences arrive, like the pay that comes up short, or the people they crossed finding out who did it. If the job set back the Goal or anyone's Aspiration, step it down now, and if a scene put one within reach and nobody rolled for it, say so, so they know to chase it next time. Then leave a **hook**: something that pulls them into the next session whether they planned for it or not, like a name they've never heard or a letter in a hand they know.
+The aftermath is where the job's consequences arrive, like the pay that comes up short, or the people they crossed finding out who did it. If the job set back the Goal, step it down now, and if it set back anyone's Aspiration, take a point off it. If a scene put the Goal within reach and nobody rolled for it, say so, so they know to chase it next time. Then leave a **hook**: something that pulls them into the next session whether they planned for it or not, like a name they've never heard or a letter in a hand they know.
 
 ## Closing the session {#closing-the-session}
 

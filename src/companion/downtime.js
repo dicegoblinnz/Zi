@@ -550,11 +550,17 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
     return said;
   }
 
-  // A second slot's ability can't be one the first one's taking.
+  // A second slot's ability can't be one the first one's taking, and a slot
+  // on a Scar the slots before it have grown already moves to the next Scar
+  // with room, or to none.
   function act(el, d, c, s) {
     act1(el, d, c, s);
     d.slots.forEach((sl, j) => {
       if (sl.k === "ability" && sl.name && !spareOf(c, sl.a, takenBefore(c, d, j, sl.a)).some((x) => x.name === sl.name)) sl.name = "";
+      if (sl.k === "scar") {
+        const room = (x) => x && !x.trait && x.n < R.SCAR_SLOTS;
+        if (!room(sl.key && scarAt(s, d, j, sl.key))) sl.key = scarsOf(s).map((x) => scarAt(s, d, j, x.key)).find(room)?.key ?? "";
+      }
     });
   }
 

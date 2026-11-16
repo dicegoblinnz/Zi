@@ -45,7 +45,7 @@ The character sheet is one A4 sheet, printed back to back. The front's for play 
 
 Vesk's front says Body 11, with 5 from her first Title, 2 from her second and 4 from her permissions, so she rolls a d12 and a d10. Her hook's awakening locks 1, so her Body holds 10, and that's what she writes in her points when a scene starts. Mind's 5, with 3 from her second Title and 2 from her permissions, and Soul's 0. Turn it over and her first Title's spread is Body 5, her second's is Mind 3 and Body 2, and every permission has its Root ringed beside it, so you can always see where a number came from.
 
-Title cards don't have a Catch line. Your Catches live on your attuned things and in your Scars, both on the front.
+Title cards don't have a Catch line. Your Catches live on your attuned things, and your Scars on their Roots, both on the front.
 
 The rest of what you reach for at the table, what Aura buys, the round and your action among them, is in the **player reference**, a separate four-page PDF on the [Sheets page](/sheets/). It's the [quick reference](#appendix-quick) in four parts, a page each, with what you reach for most first:
 
@@ -71,7 +71,7 @@ Two A4 sheets, printed double-sided. The fronts are faction board tiles A and B,
 -   How it grows · What an extra resource can buy
 -   The Goal (d2 → d4 → d6 → d8 → d10 → d12 → past d12: the crew grows)
 -   Projects (what it is · what happens when it's done · d2 → d12)
--   Aspirations (every player's, d2 → d12)
+-   Aspirations (every player's, its words and its points, 0 to 5)
 -   Party holdings (the big things the crew owns together)
 -   People the crew relies on
 -   Crew assets to pick from (all twelve, with what each one does)

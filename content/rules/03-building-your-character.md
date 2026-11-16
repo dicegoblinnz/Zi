@@ -80,7 +80,7 @@ One role or one school per Title. *Archmage* is too wide, so pick the school you
 
 ### What a Title holds {#what-a-title-holds}
 
-**A Title holds its spread and its permissions.** It comes with one permission, more are a point each, and it holds six at most. There's no Catch and no Burden on a Title: Catches come from [attunement](#s-attunement) and from [Scars](#s-blaze), and Burdens only ever come on attuned things.
+**A Title holds its spread and its permissions.** It comes with one permission, more are a point each, and it holds six at most. There's no Catch and no Burden on a Title: Catches come from [attunement](#s-attunement), and Burdens only ever come on attuned things.
 
 :::sheet[Bram's first Title]
 **Title:** *The wall that held the harbour gate.*

@@ -102,7 +102,7 @@ RETIRED = [
     # 16 Nov, later: an Aspiration is 5 points put in, with no roll, and a
     # Scar is a negative permission that can grow into a Trait, not a Catch.
     ("Aspiration die", r"\bAspiration[’']?s?\b[^.|]{0,40}\b(at|on|to) d(2|4|6|8|10|12)\b|\bAspiration (roll|climbs|resolves)\b|\bclimbs past d12 and resolves\b|\bAspirations? at d2\b"),
-    ("Scar as a Catch", r"\bScars? (is|as|written down as) a Catch\b|\bCatches? (come|comes) from (a )?Scars?\b|\bScar's a Catch\b|\bor a Scar\b"),
+    ("Scar as a Catch", r"\bScars? (is|as|written down as) a Catch\b|\bCatches? (come|comes) from (a )?Scars?\b|\bScar's a Catch\b|\bor a Scar\b|\bCatches[^.]{0,80}\b(from|in) (your )?\[?Scars\b"),
     ("splits by action", r"\b(takes?|uses?) (a|one of your|up your) splits?\b|\bsplits? to spare\b|\bevery action in the roll gives\b|\bgives? you a split\b"),
 ]
 
