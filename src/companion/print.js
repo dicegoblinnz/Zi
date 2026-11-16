@@ -263,7 +263,7 @@ export async function fillSheet(ch, c, s0, { goal = null, B = null, blank = null
     for (const a of shown.filter((x) => x.boxes > ROWS.boxes)) notes.push(`Armour on ${r}: ${withQuality(a.name, a.quality)} has ${a.boxes} boxes, ${tickedOf(s, a)} ticked.`);
     for (const a of pieces.slice(ROWS.armour)) notes.push(`Armour on ${r}: ${withQuality(a.name, a.quality)}, ${tickedOf(s, a)} of ${a.boxes} ${a.boxes === 1 ? "box" : "boxes"} ticked.`);
   }
-  if (s.blaze) notes.push(`A Scar on your ${s.blaze} waits for its Catch.`);
+  if (s.blaze) notes.push(`A Scar on your ${s.blaze} waits to be written in.`);
   s.conditions.slice(0, ROWS.conditions).forEach((x, i) => {
     put(`condition_${i + 1}`, x.name);
     ring(`condition_${i + 1}_die`, `d${x.die}`);

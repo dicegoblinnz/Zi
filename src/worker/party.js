@@ -101,7 +101,8 @@ function faceFrom(raw, me, members) {
   const others = new Set(members.filter((m) => m.end && m.id !== me.id).map((m) => m.end));
   const a = raw.asp && typeof raw.asp === "object" ? raw.asp : null;
   const die = Number(a?.die);
-  const asp = a ? { text: line(a.text, 160), die: Number.isInteger(die) && die >= 2 && die <= 12 && die % 2 === 0 ? die : 2 } : null;
+  const pts = typeof a?.pts === "number" ? a.pts : NaN;
+  const asp = a ? { text: line(a.text, 160), die: Number.isInteger(die) && die >= 2 && die <= 12 && die % 2 === 0 ? die : 2, ...(Number.isInteger(pts) && pts >= 0 && pts <= 5 ? { pts } : {}) } : null;
   const threads = (Array.isArray(raw.threads) ? raw.threads : []).slice(0, 80)
     .filter((t) => t && typeof t === "object" && others.has(String(t.with)))
     .map((t) => ({ with: String(t.with), text: line(t.text, 240), kind: t.kind === "hostile" ? "hostile" : "bond", whose: line(t.whose, 60) || null, strained: t.strained === true }))

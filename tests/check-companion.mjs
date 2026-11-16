@@ -90,7 +90,7 @@
 //    random character, a Toughness Boon taking the first hit, a Gambler's
 //    flips paid in Aura, and a Healer's heal with Toll.
 // 4. Points, wounds, Scars and rest: Vesk spending and getting a point back,
-//    her Body hit to 0 and Bloodied, a Scar written as a Catch that locks a
+//    her Body hit to 0 and Bloodied, a Scar written as what it stops her doing, locking a
 //    point, out of the scene, the rest at the end of it, 2 for 1, heals with
 //    Toll and taking a breath. Dorrie's court clothes on her Mind against a
 //    lie, and Isolde's Body Bloodied by the first hit, her Blaze and her
@@ -1285,11 +1285,11 @@ if (part("1e")) {
     s.pts.Body = 1;
     const three = RS.takeHits(c, s, "Body", 3);
     same([three.lost, three.wound, three.scar, s.pts.Body, s.wound.Body, s.blaze], [1, true, true, 0, true, "Body"], "a ×3 hit on Body 1 empties it, then wounds it, then Scars it");
-    same(RS.takeHits(c, s, "Mind", 1).lost, 0, "with a Scar waiting for its Catch, nothing more lands");
+    same(RS.takeHits(c, s, "Mind", 1).lost, 0, "with a Scar waiting for its words, nothing more lands");
     const gone = RS.freshCore(c);
     gone.out = true;
     same([RS.takeHits(c, gone, "Body", 1).lost, gone.pts.Body], [0, 7], "and nothing lands on someone who's left the scene");
-    same([RS.takeScar(c, s, "Body", "a spear through the shoulder"), s.scars.Body, s.out, s.blaze], [{ last: false }, ["a spear through the shoulder"], true, null], "the Scar's a Catch on his Body, and he leaves the scene");
+    same([RS.takeScar(c, s, "Body", "a spear through the shoulder"), s.scars.Body, s.out, s.blaze], [{ last: false }, ["a spear through the shoulder"], true, null], "the Scar's on his Body, and he leaves the scene");
     same([RS.lockedOf(c, s).Body, RS.capOf(c, s, "Body")], [3, 3], "the Scar locks a point for good, and wounded he can hold half of what's left, rounded up");
     // A Root at 0 has nothing to lose but its wound.
     const i = sheet("isolde");
@@ -2242,12 +2242,12 @@ if (part("4")) {
   for (let i = 0; i < 3; i++) await page.click('#cc-panel button[data-act="hit"][data-r="Body"]:not([data-on])');
   await page.click('#cc-panel button[data-act="hit"][data-r="Body"]:not([data-on])');
   has(await page.textContent('form[data-form="scar"]'), "A Scar on your Body.", "a hit on her wounded Body at 0 is a Scar");
-  await page.fill('form[data-form="scar"] input[name="scar"]', "a spear through the shoulder");
+  await page.fill('form[data-form="scar"] input[name="scar"]', "can’t lift my left arm");
   await page.click('form[data-form="scar"] button[type="submit"]');
   has(await page.textContent("#app"), "You’ve left the scene.", "the Scar takes her out of the scene");
   same([await t.pts("Body"), await page.$$eval(".cc-stat.t-body .zd-scars i.on", (els) => els.length)], ["0/5", 1], "her Body on 0 of 5 with a Scar, still Bloodied");
   await t.panel("Body");
-  has(await page.textContent("#cc-panel"), "a spear through the shoulder", "her Scar written as a Catch");
+  has(await page.textContent("#cc-panel"), "can’t lift my left arm", "her Scar written as what it stops her doing");
   same(await page.isDisabled('#cc-panel button[data-act="hit"][data-r="Body"]:not([data-on])'), true, "no hits while she's out of the scene");
   // The rest at the end of the scene: her Body unsplit, a d12 and a d10.
   await page.click('.cc-note [data-act="scene"]');
@@ -2267,6 +2267,18 @@ if (part("4")) {
   same(await t.pts("Mind"), "3/5", "and another, to half of 5");
   same(await page.isDisabled('#cc-panel button[data-act="breath"]'), true, "no further than half");
   await shot(page, "vesk-scarred");
+  // The Sheet tab: her Scar with no Catch to bite, three slots from a Trait,
+  // and her Aspiration as points, a setback taking one off.
+  await page.click('.cc-tabs a[data-t="sheet"]');
+  await page.click('details[data-open="sh-scars"] summary');
+  has(await page.textContent('details[data-open="sh-scars"]'), "can’t lift my left arm on your Body, 0 of 3 downtime slots to a Trait", "her Scar on the Sheet tab, 0 of 3 to a Trait");
+  same((await page.textContent('details[data-open="sh-trouble"]')).includes("can’t lift"), false, "and never with the Catches");
+  await page.click('details[data-open="sh-asp"] summary');
+  await page.click('details[data-open="sh-asp"] button[data-act="asp-set"][data-v="3"]');
+  has(await page.textContent('details[data-open="sh-asp"] .cc-fold-g'), "3 of 5", "her Aspiration set to 3 of 5");
+  await page.click('details[data-open="sh-asp"] button[data-act="asp"]');
+  has(await page.textContent('details[data-open="sh-asp"] .cc-fold-g'), "2 of 5", "a setback taking a point off");
+  await page.click('.cc-tabs a[data-t="play"]');
 
   // Dorrie's court clothes on her Mind take a lie.
   await play(page, "dorrie", "Dorrie");

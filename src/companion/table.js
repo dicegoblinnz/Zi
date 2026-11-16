@@ -2193,7 +2193,7 @@ export function makeTable(d) {
       if (rid === false) return;
       d.answer(root, null, { rid });
     },
-    // The Blaze on a wounded Root: the Scar's taken, waiting for its Catch,
+    // The Blaze on a wounded Root: the Scar's taken, waiting for its words,
     // and it's their action.
     blaze: (el) => {
       const root = el.dataset.r;

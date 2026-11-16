@@ -30,6 +30,10 @@ import { bondId, mateFor, threadState, wordsKey } from "./threads.js";
 import { stepsToDice } from "./dice.js";
 import { die as kitDie, grow as growDie, mini as kitMini } from "../kit/kit.js";
 import { tip } from "./tip.js";
+import { ASP_PTS, aspOf } from "./roots.js";
+
+// An Aspiration's points, or the die an older phone shared.
+const aspSaid = (a) => `${Number.isInteger(a.pts) ? a.pts : aspOf({ asp: a.die })} of ${ASP_PTS}`;
 
 const KEY = "zi-party";
 const POLL = 20000;
@@ -187,7 +191,7 @@ export function makeParty(d) {
       for (const t of p.threads) threads.push({ with: `${m.id}:${m.character.id}`, text: t.text, kind: t.kind, whose: t.whose || `${ch.name}’s`, strained: Boolean(t.strained) });
     }
     // Which character it's for, so one shared just before a switch can't land on the next.
-    return { ch: ch.id, asp: { text: s.aspText || c.aspiration?.text || "", die: s.asp }, threads };
+    return { ch: ch.id, asp: { text: s.aspText || c.aspiration?.text || "", die: s.asp, pts: aspOf(s) }, threads };
   }
 
   // Threads moved on this phone since it last agreed with the Worker, ready to
@@ -742,11 +746,11 @@ export function makeParty(d) {
     const mineC = mineCh ? d.normal(mineCh) : null;
     const asps = k.crew.filter((m) => m.character).map((m) => {
       const own = m.id === me() && mineC;
-      const a = own ? { text: mineCh.state.aspText || mineC.aspiration?.text || "", die: mineCh.state.asp } : m.asp;
+      const a = own ? { text: mineCh.state.aspText || mineC.aspiration?.text || "", die: mineCh.state.asp, pts: aspOf(mineCh.state) } : m.asp;
       return { name: m.character.name, player: m.id === me() ? "you" : first(m.name), a };
     });
-    const aspsFold = fold("asps", "Aspirations", asps.length ? `<span class="cc-gl-wrap">${asps.map((x) => `<span class="cc-gl">${x.a ? kitMini(x.a.die) : ""}${esc(x.name)} <small>${x.a ? `d${x.a.die}` : "not shared yet"}</small></span>`).join("")}</span>` : online() ? "Nobody’s playing in it yet" : "They show up when you’ve got a signal",
-      `${asps.length ? `<ul class="pt-lines">${asps.map((x) => `<li class="pt-line pt-asp">${x.a ? kitMini(x.a.die) : ""}<div class="pt-line-in"><p><b>${esc(x.name)}</b> <small>${esc(x.player)}${x.a ? ` · d${x.a.die}` : ""}</small></p><p>${x.a ? `<em>${esc(x.a.text)}</em>` : "Shows up when their phone’s opened the campaign."}</p></div></li>`).join("")}</ul>` : ""}`, false,
+    const aspsFold = fold("asps", "Aspirations", asps.length ? `<span class="cc-gl-wrap">${asps.map((x) => `<span class="cc-gl">${esc(x.name)} <small>${x.a ? aspSaid(x.a) : "not shared yet"}</small></span>`).join("")}</span>` : online() ? "Nobody’s playing in it yet" : "They show up when you’ve got a signal",
+      `${asps.length ? `<ul class="pt-lines">${asps.map((x) => `<li class="pt-line pt-asp"><div class="pt-line-in"><p><b>${esc(x.name)}</b> <small>${esc(x.player)}${x.a ? ` · ${aspSaid(x.a)}` : ""}</small></p><p>${x.a ? `<em>${esc(x.a.text)}</em>` : "Shows up when their phone’s opened the campaign."}</p></div></li>`).join("")}</ul>` : ""}`, false,
       ["About Aspirations", "Every player’s, where everyone can see them. Each one changes on its player’s own sheet."]);
 
     const holdings = fold("holdings", "Party holdings", doc.holdings.length ? few(doc.holdings.map((x) => esc(x.text)), 4) : none,

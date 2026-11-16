@@ -8,7 +8,7 @@
 // one click handler reads data-act. Every change goes through change(), so it
 // saves, redraws and can be undone. Every explanation's a question bubble
 // (tip.js), never a paragraph on the screen.
-import { SIZES, diceLabel, diceShapes, fillDice, rollDie, sizeDown, sizeUp, stepsToDice } from "./dice.js";
+import { SIZES, diceLabel, diceShapes, fillDice, rollDie, stepsToDice } from "./dice.js";
 import { tip } from "./tip.js";
 import { readLanes } from "./roller-rules.js";
 import { openStore } from "./store.js";
@@ -593,7 +593,7 @@ function gainAura(s, c, n = 1) {
 }
 // A hit that gets through to a Root, or more than one, each a point off it,
 // or 2 points of another Root each (on). At 0 it wounds it, and on a wounded
-// Root at 0 it's a Scar, waiting for its Catch. It says what happened.
+// Root at 0 it's a Scar, waiting for what it takes from them. It says what happened.
 function hitAt(c, s, root, n = 1, on = null) {
   const h = R.takeHits(c, s, root, n, { on });
   if (!h.ok) return `Your ${on} hasn’t got ${2 * n} points to take it with.`;
@@ -845,8 +845,8 @@ function panelView(key, c, s) {
     const locks = R.awakeningsOf(c, s).filter((w) => w.works && w.root === root);
     const pieces = piecesOf(c).filter((a) => (a.root ?? "Body") === root);
     const others = R.ROOTS.filter((x) => x !== root && s.pts[x] >= 2);
-    const scars = s.scars[root].map((x, i) => `<li class="cc-item">${x ? `<p><em>${esc(x)}</em> <small>a Scar, locking a point</small></p><div class="cc-row"><button type="button" class="button sm" data-act="unscar" data-r="${root}" data-i="${i}">The story’s taken it away</button></div>`
-      : `<form class="cc-form" data-form="scar-text" data-r="${root}" data-i="${i}"><label class="cc-field">Write this Scar in as a Catch, like <em>a spear through the shoulder</em> <input name="text" maxlength="80" autocomplete="off" required></label><button type="submit" class="button sm">Write it in</button></form>`}</li>`).join("");
+    const scars = s.scars[root].map((x, i) => `<li class="cc-item">${x ? `<p><em>${esc(x)}</em> <small>a Scar, locking a point${scarGrew(s, root, i)}</small></p><div class="cc-row"><button type="button" class="button sm" data-act="unscar" data-r="${root}" data-i="${i}">The story’s taken it away</button></div>`
+      : `<form class="cc-form" data-form="scar-text" data-r="${root}" data-i="${i}"><label class="cc-field">Write in what this Scar stops you doing, like <em>can’t see out of my left eye</em> <input name="text" maxlength="80" autocomplete="off" required></label><button type="submit" class="button sm">Write it in</button></form>`}</li>`).join("");
     const armour = pieces.map((a) => {
       const ticked = tickedOf(s, a);
       const key2 = `equipment|${a.name}`;
@@ -885,7 +885,7 @@ function panelView(key, c, s) {
 const cap2 = (s) => cap(String(s));
 
 // What can't wait: a Scar. The hit that did it, or the Blaze they took, is
-// written as a Catch on that Root, locking a point for good, and they leave
+// written in as what it stops them doing, locking a point for good, and they leave
 // the scene, or the character dies (their call). A Scar that would lock the
 // Root's last point is the last: they die or retire. Out of the scene, they
 // wait for the next one.
@@ -895,7 +895,7 @@ function alertView(ch, c, s) {
     const last = R.lastScar(c, s, r);
     const chose = s.blazing === true;
     return `<form class="cc-form cc-note is-warn" data-form="scar" role="alert"><p><b>${chose ? `You Blaze, on your ${r}.` : `A Scar on your ${r}.`}</b> ${chose ? "Say something extraordinary, and it happens, no roll. " : `Your ${r} was ${R.WOUNDS[r]} with nothing left, and that hit’s a Scar. `}From your very first Blaze you can choose for your character to die.${last ? ` This Scar would lock your ${r}’s last point, so ${esc(ch.name)} dies or retires, your call, once it’s done.` : ` If you don’t, you leave the scene, and the Scar locks a point of your ${r} for good.`}</p>
-      ${last ? "" : `<label class="cc-field">${chose ? "The Scar it leaves" : "The hit that did it"}, as a Catch, like <em>a spear through the shoulder</em> or <em>can’t stand the dark</em> <input name="scar" maxlength="80" autocomplete="off"></label>`}
+      ${last ? "" : `<label class="cc-field">${chose ? "The Scar it leaves" : "The hit that did it"}, as what it stops you doing, like <em>can’t see out of my left eye</em> or <em>can’t stand the dark</em> <input name="scar" maxlength="80" autocomplete="off"></label>`}
       <div class="cc-row">${last ? `<button type="button" class="button" data-act="die" data-how="retire">${esc(ch.name)} retires</button>` : '<button type="submit" class="button primary">Take the Scar and leave the scene</button>'}<button type="button" class="button" data-act="die">${esc(ch.name)} dies</button>${chose ? '<button type="button" class="button" data-act="unblaze">Not yet</button>' : ""}</div></form>`;
   }
   if (s.out && !s.dead) return `<div class="cc-note is-warn" role="status"><p><b>You’ve left the scene.</b> You’re back for the next one, with a New scene.</p><div class="cc-row"><button type="button" class="button sm" data-act="scene">New scene</button></div></div>`;
@@ -909,6 +909,22 @@ function alertView(ch, c, s) {
 // with the one it's on now lit up.
 function ring(act, from, to, now, label, low = from) {
   return `<div class="cc-ring" role="group" aria-label="${label}">${SIZES.filter((d) => d >= from && d <= to).map((d) => `<button type="button" class="cc-ringbtn" data-act="${act}" data-v="${d}"${pressed(d === now)}${off(d < low)} aria-label="d${d}">${kitDie(d, { label: `d${d}`, state: d === now ? "top" : d < low ? "low" : "" })}</button>`).join("")}</div>`;
+}
+
+// An Aspiration's points, each a pip to tap straight to, 0 to 4. The fifth
+// goes in with downtime, where it comes good.
+function aspPips(now) {
+  return `<div class="cc-ring dt-pips" role="group" aria-label="Aspiration, ${now} of ${R.ASP_PTS}">${Array.from({ length: R.ASP_PTS }, (_, v) => `<button type="button" class="cc-ringbtn" data-act="asp-set" data-v="${v}"${pressed(v === now)} aria-label="${v} of ${R.ASP_PTS}">${v}</button>`).join("")}</div>`;
+}
+// Points in an Aspiration, with the old die kept in step for older phones.
+function setAsp(s, v) {
+  s.aspPts = clamp(Number(v) || 0, 0, R.ASP_PTS - 1);
+  s.asp = Math.min(12, 2 + 2 * s.aspPts);
+}
+// How far a Scar's grown toward its Trait, for its line.
+function scarGrew(s, r, i) {
+  const g = R.scarGrowOf(s, r, i);
+  return g.trait ? `, its Trait: ${esc(g.trait)}` : g.n ? `, ${g.n} of ${R.SCAR_SLOTS} slots to a Trait` : "";
 }
 
 // The last roll, from what normal() keeps of it. A GM sees her players' too
@@ -1224,13 +1240,12 @@ function sheetFolds(ch, c, look = false) {
     return `${esc(p.person)}${hostile || worst ? ` <small>${[hostile ? "hostile" : "", worst ? worst.st : ""].filter(Boolean).join(", ")}</small>` : ""}`;
   });
 
-  const scarList = R.ROOTS.flatMap((r) => s.scars[r].map((x) => ({ text: x || "a Scar not written in yet", from: `a Scar on your ${r}` })));
+  const scarList = R.ROOTS.flatMap((r) => s.scars[r].map((x, i) => ({ r, i, text: x || "a Scar not written in yet", g: R.scarGrowOf(s, r, i) })));
   const bites = [
     ...c.attuned.filter((a) => a.catch).map((a) => ({ text: a.catch, from: `the Catch on ${lower(a.name)}` })),
-    ...scarList,
     ...c.trouble.map((x) => ({ text: x, from: `trouble that follows ${c.pronoun === "him" ? "him" : c.pronoun === "her" ? "her" : "them"}` })),
   ].map((b) => `<li class="cc-item"><p><em>${esc(b.text)}</em> <small>${esc(b.from)}</small></p>${look ? "" : `<div class="cc-row"><button type="button" class="button sm" data-act="bite" data-big="0" aria-label="Let ${esc(b.text)} bite: +1 Aura">Let it bite: +1 Aura</button><button type="button" class="button sm" data-act="bite" data-big="1" aria-label="A big bite from ${esc(b.text)}: a point of Soul back">A big bite: a point of Soul back</button></div>`}</li>`).join("");
-  const bitesAt = [...c.attuned.filter((a) => a.catch).map((a) => a.catch), ...scarList.map((x) => x.text), ...c.trouble].map((x) => `<em>${esc(x)}</em>`);
+  const bitesAt = [...c.attuned.filter((a) => a.catch).map((a) => a.catch), ...c.trouble].map((x) => `<em>${esc(x)}</em>`);
   const notesAt = String(s.notes ?? "").trim().split("\n")[0];
 
   return `${fold("roots", "Roots", rootsAt, `${ask("roots", ["A Title puts 5 on your Roots, spread however you like, and a permission puts 1 on its Root. Nothing else does.", "A Root’s number is its dice, its health and what you spend, less a point for each awakening on it and each Scar.", "A roll’s one Root at full, the one that fits how you’re doing it.", link("how-permissions-stack", "How a roll adds up, in the rules")], "Where your Roots come from")}<ul class="cc-acts">${rootRows}</ul>`, marked("root"))}
@@ -1247,10 +1262,12 @@ function sheetFolds(ch, c, look = false) {
     ${threads}`, marked("thr"))}
   ${fold("trouble", "Catches and trouble", few(bitesAt, 3) || (look ? "None" : "Bring real trouble on yourself for 1 Aura"), `${ask("trouble", ["Let one bite and bring real trouble into the scene, and you take 1 Aura.", "A big bite that changes the scene or costs you something you wanted gets you a point of Soul back instead. Your hostile threads bite the same way, from Threads.", link("s-trouble", "Catches and trouble in the rules")], "How a Catch bites")}${look ? "" : `${goldOf("trouble") ? `<p>${gold("trouble", "The trouble that follows you changed in the rules")}</p>${was("trouble")}` : ""}`}
     <ul class="cc-list">${bites}${look ? "" : `<li class="cc-item"><p>Nothing here fits? Bring real trouble on yourself in the story anyway.</p><div class="cc-row"><button type="button" class="button sm" data-act="bite" data-big="0" aria-label="Real trouble with no Catch: +1 Aura">+1 Aura</button></div></li>`}</ul>`, marked("trouble"))}
-  ${fold("asp", "Aspiration", `<span class="cc-gl">${kitMini(s.asp)}<em>${esc(s.aspText || c.aspiration.text)}</em> <small>d${s.asp}</small></span>`, look ? `<p><em>${esc(s.aspText || c.aspiration.text)}</em>, d${s.asp}.</p>` : `${ask("asp", ["When the GM says it’s within reach, roll against its die, and if you beat it, it climbs.", "Past d12, it’s a new Title, archetype or attuned thing, and a new Aspiration at d2.", link("s-aspiration", "How Aspiration works")], "How your Aspiration climbs")}${goldOf("asp") ? `<p>${gold("asp", "Its words changed in the rules")}</p>${was("asp")}` : ""}
+  ${scarList.length ? fold("scars", "Scars", few(scarList.map((x) => `<em>${esc(x.g.trait ? `${x.text}, ${x.g.trait}` : x.text)}</em>`), 3), `${ask("scars", ["A Scar locks a point of its Root for good, and it’s something you can’t do any more, upheld like a permission the other way round. It never bites for Aura.", `Three downtime slots grow it into a Trait, something it gives you that nobody else has, and it’s still a Scar.`, link("s-blaze", "Scars in the rules")], "How a Scar works")}
+    <ul class="cc-list">${scarList.map((x) => `<li class="cc-item"><p><em>${esc(x.text)}</em> <small>on your ${x.r}${x.g.trait ? "" : `, ${x.g.n} of ${R.SCAR_SLOTS} downtime slots to a Trait`}</small></p>${x.g.trait ? `<p>Its Trait: <em>${esc(x.g.trait)}</em></p>` : ""}</li>`).join("")}</ul>`) : ""}
+  ${fold("asp", "Aspiration", `<span class="cc-gl"><em>${esc(s.aspText || c.aspiration.text)}</em> <small>${R.aspOf(s)} of ${R.ASP_PTS}</small></span>`, look ? `<p><em>${esc(s.aspText || c.aspiration.text)}</em>, ${R.aspOf(s)} of ${R.ASP_PTS}.</p>` : `${ask("asp", ["Put a point in it with a downtime slot. At 5 it comes good, and you take a new Title, archetype or attuned thing and write a new one in at 0.", "A setback in the story takes a point off it.", link("s-aspiration", "How Aspiration works")], "How your Aspiration fills")}${goldOf("asp") ? `<p>${gold("asp", "Its words changed in the rules")}</p>${was("asp")}` : ""}
     <label class="cc-field"><span class="sr-only">Your Aspiration</span><input class="cc-plain" data-in="asp-text" maxlength="120" value="${esc(s.aspText || c.aspiration.text)}" autocomplete="off"></label>
-    ${ring("asp-set", 2, 12, s.asp, "Aspiration")}
-    <div class="cc-row"><button type="button" class="button" data-act="asp" data-d="-1"${off(s.asp <= 2)}>A setback</button><button type="button" class="button" data-act="asp" data-d="1">It climbs</button></div>
+    ${aspPips(R.aspOf(s))}
+    <div class="cc-row"><button type="button" class="button" data-act="asp" data-d="-1"${off(R.aspOf(s) <= 0)}>A setback: a point off</button></div>
     <details class="cc-rulebox" data-open="asp-good"${ui.open.has("asp-good") ? " open" : ""}><summary>What makes a good Aspiration</summary><div class="cc-rule">${ruleHtml("s-good-aspiration")}</div></details>`, marked("asp"))}
   ${look ? (notesAt ? fold("notes", "Notes", esc(notesAt.length > 70 ? `${notesAt.slice(0, 68)}…` : notesAt), `<p class="cc-notes-read">${esc(s.notes).replace(/\n/g, "<br>")}</p>`) : "")
     : fold("notes", "Notes", notesAt ? esc(notesAt.length > 70 ? `${notesAt.slice(0, 68)}…` : notesAt) : "Nothing written yet", `<label class="sr-only" for="cc-notes">Notes</label><textarea id="cc-notes" data-in="notes" rows="5">${esc(s.notes)}</textarea>`)}
@@ -3157,7 +3174,7 @@ const ACT = {
     return `Your Toll’s ${s.toll}.`;
   }),
   // The Blaze: while you're wounded, take the Scar on your own terms. It's
-  // your action, and it waits for its Catch like any Scar.
+  // your action, and it waits for its words like any Scar.
   blaze: (el) => change("taking the Blaze", (s) => {
     const r = el.dataset.r;
     if (!R.blazeOn(s, r)) return "";
@@ -3178,13 +3195,22 @@ const ACT = {
     s.wound[r] = false;
     return `You’re not ${R.WOUNDS[r]} any more, so your ${r} heals as far as ${R.capOf(c, s, r)} again.`;
   }),
-  // The GM can take a Scar away when the story's earned it: Catch and all,
+  // The GM can take a Scar away when the story's earned it: Trait and all,
   // and the point it locked comes back.
   unscar: (el) => change("a Scar taken away", (s) => {
     const r = el.dataset.r;
-    const [gone] = (s.scars[r] ?? []).splice(Number(el.dataset.i), 1);
+    const at = Number(el.dataset.i);
+    const [gone] = (s.scars[r] ?? []).splice(at, 1);
     if (gone == null) return "";
-    return `${gone ? `${cap(gone)} is gone, Catch and all` : "The Scar’s gone"}, and the point it locked on your ${r} is back.`;
+    // What each Scar after it had grown moves down with it.
+    const grow = { ...(s.scarGrow ?? {}) };
+    for (let i = at; i <= s.scars[r].length; i += 1) {
+      const next = grow[R.scarKey(r, i + 1)];
+      if (next) grow[R.scarKey(r, i)] = next;
+      else delete grow[R.scarKey(r, i)];
+    }
+    s.scarGrow = grow;
+    return `${gone ? `${cap(gone)} is gone, Trait and all` : "The Scar’s gone"}, and the point it locked on your ${r} is back.`;
   }),
   die: (el) => change(el.dataset.how === "retire" ? "their retiring" : "their death", (s, c, ch) => {
     s.blaze = null;
@@ -3197,20 +3223,14 @@ const ACT = {
     return `${ch.name} dies, and what they died for happens.`;
   }),
   "asp-set": (el) => change("changing your Aspiration", (s) => {
-    s.asp = even(el.dataset.v, 2, 12);
-    return `Your Aspiration’s at d${s.asp}.`;
+    setAsp(s, el.dataset.v);
+    return `Your Aspiration’s at ${s.aspPts} of ${R.ASP_PTS}.`;
   }),
-  asp: (el) => change(Number(el.dataset.d) > 0 ? "your Aspiration climbing" : "a setback", (s) => {
-    if (Number(el.dataset.d) < 0) {
-      s.asp = sizeDown(s.asp);
-      return `A setback. Your Aspiration steps down to d${s.asp}.`;
-    }
-    if (s.asp >= 12) {
-      s.asp = 2;
-      return "It climbs past d12 and resolves. Take a new Title with one permission, a new archetype or a new attuned thing in downtime, and write your new Aspiration in. It starts at d2.";
-    }
-    s.asp = sizeUp(s.asp);
-    return `It climbs to d${s.asp}.`;
+  // A setback in the story takes a point off. Points go in with downtime.
+  asp: () => change("a setback", (s) => {
+    if (R.aspOf(s) <= 0) return "";
+    setAsp(s, R.aspOf(s) - 1);
+    return `A setback. Your Aspiration’s back to ${s.aspPts} of ${R.ASP_PTS}.`;
   }),
   scene: () => newScene(),
   "rest-go": () => restRoll(false),
@@ -3738,7 +3758,7 @@ document.addEventListener("submit", (e) => {
   if (kind.startsWith("ft-")) return turn.submit(kind, form, f);
   if (kind.startsWith("fd-")) return found.submit(kind, form, f);
   if (kind === "name") return start(roll?.crew, String(f.get("name") ?? "").trim().slice(0, 40));
-  // A Scar they live through: a Catch in their words on that Root, locking a
+  // A Scar they live through: what it stops them doing, in their words, locking a
   // point of it for good, and they leave the scene.
   if (kind === "scar") {
     const text = String(f.get("scar") ?? "").trim().slice(0, 80);
@@ -3746,7 +3766,7 @@ document.addEventListener("submit", (e) => {
       const r = s.blaze;
       if (!r || !R.takeScar(c, s, r, text)) return "";
       delete s.blazing;
-      return `You leave the scene with a Scar on your ${r}${text ? `, ${text}` : ""}. It locks a point of it for good, so it holds ${R.capOf(c, s, r)} now.${text ? " Let it bite whenever you like, for 1 Aura." : ` Write it in as a Catch on your ${r}’s panel.`}`;
+      return `You leave the scene with a Scar on your ${r}${text ? `, ${text}` : ""}. It locks a point of it for good, so it holds ${R.capOf(c, s, r)} now.${text ? " It’s something you can’t do any more, and three downtime slots can grow it into a Trait." : ` Write in what it stops you doing on your ${r}’s panel.`}`;
     });
     return;
   }

@@ -11,7 +11,7 @@
 // each Aura spent on it. A hit takes a point off its Root, or 2 off another
 // that has them. A hit on a Root at 0 wounds it (Bloodied, Frayed or Hollow),
 // and a wounded Root heals only to half what it can hold. A hit on a wounded
-// Root at 0 is a Scar, a Catch that locks a point for good, and you leave the
+// Root at 0 is a Scar, something you can't do any more, locking a point for good, and you leave the
 // scene. A heal recovers what it rolls, less 5 for each Toll, and every heal
 // from someone or something else adds 1 Toll. The end of a scene rolls each
 // Root unsplit and recovers what it rolls, and drops Toll by 1, and downtime
@@ -21,13 +21,13 @@
 //
 // A character's state (state.v === 4):
 //   { v, aura, acting, pts: { Body, Mind, Soul }, wound: { Body, Mind, Soul },
-//     toll, scars: { Body: [Catch], Mind: [], Soul: [] }, blaze, out, dead,
+//     toll, scars: { Body: [words], Mind: [], Soul: [] }, blaze, out, dead,
 //     conditions, threads, crossed, boxes, picked, asp, aspText, notes, last,
 //     grown, before, moved, core, choose, seen, tele, tough, beyond, elem, pool }
 // pts is what each Root's got now, full on a new character (capOf). wound
 // says which Roots are wounded, toll is how many heals from someone else
-// they've had since it last cleared, and scars are the Catches each Root's
-// Scars left. blaze is a Root whose Scar is waiting for its Catch (a hit on
+// they've had since it last cleared, and scars are the words of each Root's
+// Scars left. blaze is a Root whose Scar is waiting for its words (a hit on
 // it wounded at 0, or the Blaze taken), and out says they've left the scene.
 // core is there till the player's seen that the character moved onto the new
 // core, and choose is what that move left for them to choose (choicesOf).
@@ -651,7 +651,7 @@ export function blazeOn(s, root) {
 // yet is the last one: they die or retire, the player's call. A Root at 0
 // has no point for a Scar to lock.
 export const lastScar = (c, s, root) => (c.roots?.[root] ?? 0) > 0 && (s.scars?.[root]?.length ?? 0) + 1 >= (c.roots?.[root] ?? 0);
-// The Scar written: a Catch in the player's words on that Root, locking a
+// The Scar written: what it stops them doing, in the player's words on that Root, locking a
 // point for good, and they leave the scene.
 export function takeScar(c, s, root, catchText) {
   if (!ROOTS.includes(root)) return false;
