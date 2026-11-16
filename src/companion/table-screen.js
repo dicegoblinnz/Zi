@@ -64,22 +64,26 @@ const net = { ws: null, open: false, tries: 0, failed: 0, timer: 0, steady: 0, b
 
 // ------------------------------------------------------------ the words
 
-// Where an extra action came from. One bought with Aura comes from the table
-// already said with its price ("4 Aura", screenOf() in table-rules.js), and
-// an answer's act is how it was rolled ("12 steps on Body"), or the Root and
-// specialty one from before stacking rolled, as it was.
+// Where an extra action came from, on a round from before the new core, when
+// they could be bought. One bought with Aura comes from the table already
+// said with its price ("4 Aura", screenOf() in table-rules.js), and an
+// answer's act is how it was rolled ("20 steps on Body and Mind"), or the
+// Root and specialty one from before stacking rolled, as it was.
 const MORE = { aura: "3 Aura", resolve: "3 Aura", held: "held last round", hiding: "out of hiding", boon: "the Extra action Boon", trait: "the Extra action Boon" };
 const GOOD = new Set(["stopped", "held", "clear"]);
 const BAD = new Set(["hit", "landed", "through"]);
 // The best die on an answer: the one that won it, or the highest that didn't.
 const best = (a) => Math.max(...a.dice.filter((x) => x.out === "beat" || x.out === "won").map((x) => x.total), ...(a.won ? [] : a.dice.map((x) => x.total)));
 const withWho = (a) => (a.with?.length ? `, with ${andList(a.with)} in it,` : "");
-// The Root a telegraph's at, and the track that rides against it. One from
-// before Roots only says blow or fear. What stopped it is what the defence
-// says, a track or Defend.
+// The Root a telegraph's at, which rolls against it. One from before Roots
+// only says blow or fear. What stopped it is what the defence says, the Root
+// or Defend. How many hits each die is when it gets through.
 const ROOT_OF = (t) => (["Body", "Mind", "Soul"].includes(t.root) ? t.root : t.kind === "fear" ? "Mind" : "Body");
-const TRACK = { Body: "Stamina", Mind: "Confidence", Soul: "Resolve" };
-const against = (t, def = null) => (def?.on || TRACK[ROOT_OF(t)]);
+const against = (t, def = null) => (def?.on || ROOT_OF(t));
+const hitsOf = (t) => Math.max(1, Number(t.hits) || 1);
+const hitsAt = (t) => (hitsOf(t) > 1 ? `, ${hitsOf(t)} hits a die` : "");
+// What getting through cost, the way the table said it.
+const costLine = (p, def) => (def?.cost ? stop(`${p ? `${p}: ` : ""}${cap(def.cost)}`) : "");
 // Archetypes for someone's crest: the book's for one of the crew, their own
 // build's otherwise, and whatever they've grown in downtime. A character can
 // say it's anyone, so only the crew's own names count.
@@ -105,10 +109,10 @@ const oneOf = (t) => (t.aim === "stake" ? (t.ifLands ? `If it lands, ${t.ifLands
 // What goes at the foot of the card while it's coming.
 function whenOf(t, v) {
   if (t.state !== "coming") return "";
-  if (t.aim === "place") return `Hits whoever’s there, at their ${ROOT_OF(t)}`;
+  if (t.aim === "place") return `Hits whoever’s there, at their ${ROOT_OF(t)}${hitsAt(t)}`;
   if (t.aim === "stake") return "";
-  if (t.icp) return `${t.icp.name} took it for ${t.at}`;
-  return `At ${t.at}’s ${ROOT_OF(t)}, against their ${TRACK[ROOT_OF(t)]}`;
+  if (t.icp) return `${t.icp.name} took it for ${t.at}${hitsAt(t)}`;
+  return `At ${t.at}’s ${ROOT_OF(t)}${hitsAt(t)}`;
 }
 
 // How it went, in a band across the bottom of the card: the word to read from
@@ -128,7 +132,7 @@ function verdict(t) {
     const inIt = (t.there ?? []).filter((p) => p.in);
     const names = andList(inIt.map((p) => p.name));
     if (s === "stopped") [word, lines] = ["Stopped", [`${a.name} answered it${withWho(a)} with ${a.act}: ${best(a)} against its ${a.opp}, so it missed everyone.`]];
-    else if (s === "hit") [word, lines] = ["Landed then and there", [`${a.name}’s ${a.act}${withWho(a)} came up ${best(a)} against its ${a.opp}, ${inIt.length ? `so it hit ${names} with no defence.` : `but nobody was ${t.where}.`}`]];
+    else if (s === "hit") [word, lines] = ["Landed then and there", [`${a.name}’s ${a.act}${withWho(a)} came up ${best(a)} against its ${a.opp}, ${inIt.length ? `so it hit ${names} with no defence.` : `but nobody was ${t.where}.`}`, ...inIt.map((p) => costLine(p.name, p.def))]];
     else if (s === "clear") [word, lines] = ["Landed on nobody", [`Nobody was ${t.where}.`]];
     else {
       word = s === "landed" ? `Landed on ${names}` : s === "held" ? "Stopped when it landed" : "It got through";
@@ -136,7 +140,7 @@ function verdict(t) {
       const toRoll = inIt.filter((p) => !p.def).map((p) => p.name);
       lines = [
         toRoll.length ? `${andList(toRoll)} ${toRoll.length === 1 ? "rolls" : "roll"} When it lands.` : "",
-        ...inIt.filter((p) => p.def).map((p) => (p.def.stopped ? `${p.name} stopped it: ${p.def.mine} against its ${p.def.v}.` : `It got through to ${p.name}: ${p.def.mine == null ? `no die left on their ${against(t)}` : `${p.def.mine} against its ${p.def.v}`}.`)),
+        ...inIt.filter((p) => p.def).map((p) => (p.def.stopped ? `${p.name} stopped it: ${p.def.mine} against its ${p.def.v}.` : `It got through to ${p.name}: ${p.def.mine == null ? `no die left on their ${against(t)}` : `${p.def.mine} against its ${p.def.v}`}.${p.def.cost ? ` ${costLine("", p.def)}` : ""}`)),
       ];
     }
   } else {
@@ -146,10 +150,10 @@ function verdict(t) {
     if (s === "stopped") [word, lines] = ["Stopped", [`${a.name} answered it${a.k !== t.k ? ` for ${t.at}` : ""}${withWho(a)} with ${a.act}: ${best(a)} against its ${a.opp}.`]];
     else if (s === "hit") {
       const own = a.k != null && a.k === (t.icp ? t.icp.k : t.k);
-      [word, lines] = ["Landed then and there", [`${a.name}’s ${a.act}${withWho(a)} came up ${best(a)} against its ${a.opp}, ${own ? `so it hit ${on} with no defence.` : "so it landed with no defence."}`]];
+      [word, lines] = ["Landed then and there", [`${a.name}’s ${a.act}${withWho(a)} came up ${best(a)} against its ${a.opp}, ${own ? `so it hit ${on} with no defence.` : `so it landed on ${on} with no defence.`}`, costLine(on, t.def)]];
     } else if (s === "landed") [word, lines] = [`Landed on ${on}`, [`${took}${on} rolls When it lands.`]];
     else if (s === "held") [word, lines] = ["Stopped when it landed", [`${took}${on}’s ${against(t, t.def)} came up ${t.def.mine} against its ${t.def.v}.`]];
-    else [word, lines] = ["It got through", [`${took}${t.def.mine == null ? `There was no die left on ${on}’s ${against(t)} for it.` : `${on}’s ${against(t, t.def)} came up ${t.def.mine} against its ${t.def.v}.`}`]];
+    else [word, lines] = ["It got through", [`${took}${t.def.mine == null ? `There was no die left on ${on}’s ${against(t)} for it.` : `${on}’s ${against(t, t.def)} came up ${t.def.mine} against its ${t.def.v}.`}`, costLine("", t.def)]];
   }
   lines = lines.filter(Boolean);
   return `<div class="ts-v ${GOOD.has(s) ? "is-good" : "is-bad"}"><div class="ts-vt"><p class="ts-vw">${esc(word)}</p>${lines.map((l) => `<p class="ts-vl">${esc(l)}</p>`).join("")}</div>${dice ? `<span class="ts-vd" aria-hidden="true">${dice}</span>` : ""}</div>`;
@@ -287,9 +291,12 @@ function crewPart(v) {
     const lines = p.acts.map(actLine);
     const on = r && !r.over && p.left != null;
     const left = on ? (p.left ? `${p.left === 1 ? "One action" : `${cap(words(p.left))} actions`} left` : "Done this round") : "";
-    const more = p.more.length ? `${p.more.length === 1 ? "An extra action" : `${cap(words(p.more.length))} extra actions`}: ${andList(p.more.map((k) => MORE[k] ?? k))}` : "";
-    const none = !r ? "" : r.over ? "Didn’t act this round" : "Hasn’t acted yet";
-    return `<li class="ts-p card${on && !p.left ? " is-done" : ""}"><span class="ts-pc" aria-hidden="true">${crestOf(archOf(p))}</span><div class="ts-pb"><h3 class="ts-pn">${esc(p.name)}</h3>${lines.length ? `<ul class="ts-pa">${lines.map((x) => `<li>${esc(cap(x))}</li>`).join("")}</ul>` : none ? `<p class="ts-pq">${none}</p>` : ""}${left || more ? `<p class="ts-pl">${esc([left, more].filter(Boolean).join(" · "))}</p>` : ""}</div></li>`;
+    const more = p.more?.length ? `${p.more.length === 1 ? "An extra action" : `${cap(words(p.more.length))} extra actions`}: ${andList(p.more.map((k) => MORE[k] ?? k))}` : "";
+    // The wounds the table's seen this fight, and whether they've left the scene.
+    const out = p.out ? (p.out === "blaze" ? "Blazed, and out of the scene" : "Scarred, and out of the scene") : "";
+    const hurt = [...(Array.isArray(p.wounds) ? p.wounds : []), out].filter(Boolean);
+    const none = out ? "" : !r ? "" : r.over ? "Didn’t act this round" : "Hasn’t acted yet";
+    return `<li class="ts-p card${on && !p.left ? " is-done" : ""}${out ? " is-out" : ""}"><span class="ts-pc" aria-hidden="true">${crestOf(archOf(p))}</span><div class="ts-pb"><h3 class="ts-pn">${esc(p.name)}</h3>${hurt.length ? `<p class="ts-ph">${esc(hurt.join(" · "))}</p>` : ""}${lines.length ? `<ul class="ts-pa">${lines.map((x) => `<li>${esc(cap(x))}</li>`).join("")}</ul>` : none ? `<p class="ts-pq">${none}</p>` : ""}${left || more ? `<p class="ts-pl">${esc([left, more].filter(Boolean).join(" · "))}</p>` : ""}</div></li>`;
   };
   return `<h2 id="ts-ch" class="visually-hidden">The crew</h2><ul class="ts-people">${v.crew.map(person).join("")}</ul>`;
 }

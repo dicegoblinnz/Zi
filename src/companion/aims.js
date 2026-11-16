@@ -67,16 +67,22 @@ export function whoAndDoes(sentence, fallback) {
 // starts or ends with (the ship, for The ship in the bay); "the scene clock";
 // and "everyone on the gallery, Body, Staggered" is a part of the place.
 // One at a stake puts a new tag in its way if it lands: the one in italics
-// after the stake, if it names one, or the telegraph's own words (line). It
-// gives { why } when it can't tell.
+// after the stake, if it names one, or the telegraph's own words (line). A
+// deadly one says its hits after the Root, "Body, 2 hits, Pinned", and hits is
+// how many each die is when it gets through (1 when it doesn't say). It gives
+// { why } when it can't tell.
 export const ROOT_WORDS = new Set(["Body", "Mind", "Soul", "Defend", "Confidence"]);
 export const FEAR_WORDS = new Set(["Mind", "Soul", "Confidence"]);
 const ROOT_OF = { Body: "Body", Mind: "Mind", Soul: "Soul", Defend: "Body", Confidence: "Mind" };
+const HITS = /^([1-6]) hits?$/i;
 export function readAim(text, stakes, line = "") {
-  const parts = String(text ?? "").split(",").map((x) => x.trim()).filter(Boolean);
+  const all = String(text ?? "").split(",").map((x) => x.trim()).filter(Boolean);
+  const said = all.find((x) => HITS.test(x));
+  const hits = said ? Number(said.match(HITS)[1]) : 1;
+  const parts = all.filter((x) => x !== said);
   const j = parts.findIndex((x) => ROOT_WORDS.has(x));
   const target = j >= 0 ? parts.slice(0, j) : parts;
-  const out = { root: j >= 0 ? ROOT_OF[parts[j]] : "Body", kind: j >= 0 && FEAR_WORDS.has(parts[j]) ? "fear" : "blow", aim: "crew", one: j >= 0 ? curly(flat(parts.slice(j + 1).join(", "))).replace(/^[a-z]/, (c) => c.toUpperCase()) : "" };
+  const out = { root: j >= 0 ? ROOT_OF[parts[j]] : "Body", hits, kind: j >= 0 && FEAR_WORDS.has(parts[j]) ? "fear" : "blow", aim: "crew", one: j >= 0 ? curly(flat(parts.slice(j + 1).join(", "))).replace(/^[a-z]/, (c) => c.toUpperCase()) : "" };
   const head = flat(target[0] ?? "");
   if (!head) return j >= 0 ? out : { why: "it isn't aimed at anything" };
   if (/^the scene clock$/i.test(head)) return target.length > 1 ? { why: "it says more than the table can hold" } : { ...out, aim: "clock" };
@@ -88,6 +94,7 @@ export function readAim(text, stakes, line = "") {
   const near = names.filter((n) => key(n).startsWith(`${want} `) || key(n).endsWith(` ${want}`));
   const stake = exact.length === 1 ? exact[0] : !exact.length && near.length === 1 ? near[0] : null;
   if (!stake || j >= 0) return { why: `"${head}" isn't one of its stakes, the scene clock or a part of the place` };
+  if (hits > 1) return { why: "a stake takes no hits" };
   if (target.length > 2) return { why: "it says more than the table can hold" };
   const named = target[1]?.match(/^\*([^*]+)\*$/)?.[1] ?? "";
   return { ...out, aim: "stake", stake, tag: curly(flat(named || line).replace(/[.\s]+$/, "")).replace(/,/g, "") };
