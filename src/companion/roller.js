@@ -1,14 +1,16 @@
 // The dice roller, off the play screen and the Characters list: any dice of
 // yours against any of theirs, with no telegraph or threat to set up. Tap the
 // dice onto each side, say who's going at who, and they all roll together,
-// on the phone or as real dice tapped in. A throw can be more than one action
-// (Mo's 14 Nov ask), each with its own dice of yours, theirs and who's going
-// at who, like your d12 and d8 at the brute's d10, your d6 at the archer's d4
-// and their d8 coming at you. The action being set up is open and the rest
-// fold into a line each, so one action looks the way the roller always has.
-// roller-rules.js reads it: each action on its own (what beat what, what's
-// stopped and what gets through, matched so the most get stopped, with a
-// swap), and the Aura from every win and top face added up across them. It's
+// on the phone or as real dice tapped in. A throw can go at more than one
+// target (Mo's 14 Nov ask, and on the new core every die's an intent), each
+// with its own dice of yours, theirs and who's going at who, like your d12
+// and d8 at the brute's d10, your d6 at the archer's d4 and their d8 coming
+// at you, which is a hit for each that gets through, or more for a deadly
+// threat. The target being set up is open and the rest fold into a line
+// each, so one looks the way the roller always has. roller-rules.js reads it:
+// each target on its own (what beat what, what's stopped and what gets
+// through, matched so the most get stopped, with a swap), and the Aura from
+// every win and top face added up across them. It's
 // only dice, so it never touches a character, and the set-up's kept on the
 // phone as zi-dice for next time. What it's for and how it reads sit behind
 // question bubbles (tip.js), so they don't take up the screen.
@@ -22,18 +24,19 @@ const WORDS = { beat: "Beat it", tie: "Tie", under: "Under", stopped: "Stopped",
 const WHOSE = { you: ["Your", "yours"], them: ["Their", "theirs"] };
 // How an action's read: in the head with one action, and on each action's
 // own head with several.
-const HOW = { act: "You’re going at them, so ties are theirs.", each: "Everyone defends on their own, and ties are theirs.", defend: "They’re coming at you, so ties are yours.", free: "Nothing to beat, so it’s just the numbers." };
+const HOW = { act: "You’re going at them, so ties are theirs.", each: "Everyone defends on their own, and ties are theirs.", defend: "They’re coming at you, so ties are yours, and each that gets through is a hit.", free: "Nothing to beat, so it’s just the numbers." };
 const SHORT = { act: "You’re going at them.", each: "Everyone defends on their own.", defend: "They’re coming at you.", free: "Nothing to beat." };
 const WAY = { them: "You’re going at them", you: "They’re coming at you" };
 
 // The question bubbles' words.
 const ABOUT = "Any dice you like, yours and theirs, all rolled together.";
 const SHEET = " It’s only dice, so your sheet stays as it is.";
-const MORE = " Add another action to go at more than one thing in the same throw, or to have something coming at you as well. Each action’s read on its own, and the Aura’s added up across them: 1 for every die of yours that wins and 1 for every top face.";
-const WHO = "<b>You’re going at them:</b> each of your dice has to beat their roll, and a tie’s theirs unless you pay 1 Aura. When they’ve got more than one die, it’s one thing rolling them all, so their best one stands, the way a <em>Layered</em> threat’s does.<br><b>They’re coming at you:</b> each of your dice stops one of theirs it beats or ties, since ties are yours, and whatever’s left gets through.";
+const MORE = " Every die’s an intent, so add another target to go at more than one thing in the same throw, or to have something coming at you as well. Each target’s read on its own, and the Aura’s added up across them: 1 for every die of yours that wins and 1 for every top face.";
+const WHO = "<b>You’re going at them:</b> each of your dice has to beat their roll, and a tie’s theirs unless you pay 1 Aura. When they’ve got more than one die, it’s one thing rolling them all, so their best one stands, the way a <em>Layered</em> threat’s does.<br><b>They’re coming at you:</b> each of your dice stops one of theirs it beats or ties, since ties are yours, and whatever’s left gets through, a hit each, or more for a deadly threat.";
 const EACH = "<b>One:</b> one thing’s rolling all their dice, so its best one stands, the way a <em>Layered</em> threat’s does.<br><b>Several:</b> everyone in your area or sweep defends on their own, a die each, against your one die, and whatever you beat, your intent happens to it.";
 const MOVE = "That’s only if it’s a Move, the one roll where dice add. Anything else, each die counts on its own.";
 const SWAP = "The phone’s matched your dice so the most get stopped. Tap Swap on two of theirs to trade the dice of yours on them.";
+const HITS_SAID = "Every die of theirs that gets through is a hit, a point off the Root it’s at. A deadly threat’s telegraph says it’s more, and a vulnerability on you is one more on top.";
 
 // k: esc, icon, throwDie, calm, tumble, feel, dialog, open (turns the dialog
 // to a state), roll (the dialog's state), redraw (draws the dialog again,
@@ -58,7 +61,7 @@ export function makeRoller(k) {
   const keep = (r) => {
     const full = r.acts.filter(hasDice);
     try {
-      localStorage.setItem(KEY, JSON.stringify({ acts: (full.length ? full : [r.acts[r.at]]).map(({ you, them, def, each }) => ({ you, them, def, each })) }));
+      localStorage.setItem(KEY, JSON.stringify({ acts: (full.length ? full : [r.acts[r.at]]).map(({ you, them, def, each, hits }) => ({ you, them, def, each, hits })) }));
     } catch {}
   };
 
@@ -70,7 +73,7 @@ export function makeRoller(k) {
   }
 
   const many = (r) => r.acts.length > 1;
-  const nameOf = (a) => `Action ${a + 1}`;
+  const nameOf = (a) => `Target ${a + 1}`;
   const both = (x) => x.you.length > 0 && x.them.length > 0;
   // With one of yours against several of theirs, they could be one thing
   // rolling them all or several things defending on their own.
@@ -79,7 +82,7 @@ export function makeRoller(k) {
     : x.you.length ? `${diceLabel(x.you)}, with nothing to beat`
     : x.them.length ? `Their ${diceLabel(x.them)}, with nothing of yours`
     : "No dice on yet.");
-  const setSaid = (r) => (many(r) ? `${r.acts.length} actions, all rolled together.` : said(r.acts[0]));
+  const setSaid = (r) => (many(r) ? `${r.acts.length} targets, all rolled together.` : said(r.acts[0]));
   // The dice on one side as small tokens, two the same as one: d12 + 2d6.
   const tokens = (list, own) => {
     const sizes = [...new Set([...list].sort((p, q) => q - p))];
@@ -113,9 +116,11 @@ export function makeRoller(k) {
     const at = ` data-a="${a}"`;
     const each = asksEach(x) ? `<${h} class="dz-q"><span id="dz-each-${a}">One target, or several?</span>${tip(`dz-each-${a}`, EACH, "What one and several mean")}</${h}>
       <div class="cc-chips" role="group" aria-labelledby="dz-each-${a}">${b("each", "One", `${at} data-v="0"${pressed(!x.each)}`, "cc-chipbtn")}${b("each", "Several", `${at} data-v="1"${pressed(x.each)}`, "cc-chipbtn")}</div>` : "";
+    const hits = x.def === "you" ? `<${h} class="dz-q"><span id="dz-hits-${a}">Each that gets through is</span>${tip(`dz-hits-${a}`, HITS_SAID, "Hits")}</${h}>
+      <div class="cc-chips" role="group" aria-labelledby="dz-hits-${a}">${[1, 2, 3, 4].map((n) => b("hits", `${n} ${n === 1 ? "hit" : "hits"}`, `${at} data-v="${n}"${pressed((x.hits ?? 1) === n)}`, "cc-chipbtn")).join("")}</div>` : "";
     return `<fieldset class="cc-group dz-who" aria-labelledby="dz-who-${a}"><legend><span id="dz-who-${a}">Who’s going at who?</span>${tip(`dz-who-${a}`, WHO, "How each way’s read")}</legend>
       <div class="cc-chips">${b("def", WAY.them, `${at} data-v="them"${pressed(x.def === "them")}`, "cc-chipbtn")}${b("def", WAY.you, `${at} data-v="you"${pressed(x.def === "you")}`, "cc-chipbtn")}</div>
-      ${each}</fieldset>`;
+      ${each}${hits}</fieldset>`;
   }
 
   // The action being set up, whole. With several, it has its number and a
@@ -148,7 +153,7 @@ export function makeRoller(k) {
       <button type="button" class="cc-x" data-act="close" aria-label="Close">${k.icon.close}</button></div>
     <div class="dlg-body dz${many(r) ? " is-many" : ""}">
       ${r.acts.map((_, a) => (a === r.at ? openAct(r, a) : shutAct(r, a))).join("")}
-      <div class="dz-moreline">${b("more", `<span aria-hidden="true">+</span> Add another action`, off(full || !hasDice(r.acts[r.at])), "button dz-more")}${full ? `<p class="cc-small">That’s ${ACTIONS}, the most a throw holds.</p>` : ""}</div>
+      <div class="dz-moreline">${b("more", `<span aria-hidden="true">+</span> Add another target`, off(full || !hasDice(r.acts[r.at])), "button dz-more")}${full ? `<p class="cc-small">That’s ${ACTIONS}, the most a throw holds.</p>` : ""}</div>
     </div>
     <div class="dlg-foot">${b("go", "Roll", off(none), "button primary")}${b("real", "Roll real dice", off(none))}</div>`;
   }
@@ -174,7 +179,7 @@ export function makeRoller(k) {
   const tapped = (t) => [...t.mine, ...t.theirs].every((d) => d.v > 0);
 
   // An action as it was thrown, the way roller-rules.js reads one.
-  const laneOf = (r, a) => ({ mine: r.thrown[a].mine, theirs: r.thrown[a].theirs, def: r.acts[a].def, each: r.acts[a].each, assign: r.thrown[a].assign });
+  const laneOf = (r, a) => ({ mine: r.thrown[a].mine, theirs: r.thrown[a].theirs, def: r.acts[a].def, each: r.acts[a].each, hits: r.acts[a].hits ?? 1, assign: r.thrown[a].assign });
 
   // What an action's dice did, said once: a line to read at a glance (main),
   // a tie that's theirs unless you pay for it (note), and whether it's dice
@@ -191,7 +196,8 @@ export function makeRoller(k) {
       const main = !x.through ? (n === 1 ? "It’s stopped." : `All ${n} stopped, so nothing gets through.`)
         : !x.stopped ? (n === 1 ? "It gets through." : `None stopped, so all ${n} get through.`)
         : `${x.stopped} stopped, and ${x.through === 1 ? "one gets" : `${x.through} get`} through.`;
-      return { main, note: "", move: false };
+      const note = x.hits ? `That’s ${x.hits === 1 ? "a hit" : `${x.hits} hits`}${x.each > 1 ? `, ${x.each} each` : ""}.` : "";
+      return { main, note, move: false };
     }
     if (x.way === "each") {
       const n = x.lanes.length;
@@ -301,7 +307,7 @@ export function makeRoller(k) {
       ${totalLine}
     </div>${foot}`;
     }
-    // Several actions: the Aura across them first, then each one on its own.
+    // Several targets: the Aura across them first, then each one on its own.
     const heard = spin ? "Rolling…" : read.lanes.map((x, a) => `${nameOf(a)}: ${aloud(r.thrown[a], x)}`).join(" ");
     const blocks = read.lanes.map((x, a) => {
       const free = x.way === "free" && !r.thrown[a].mine.length ? "Nothing of yours on it." : SHORT[x.way];
@@ -311,7 +317,7 @@ export function makeRoller(k) {
         ${diceView(r, a, x)}
       </section>`;
     }).join("");
-    return `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">Dice roller</h2><p class="cc-small dz-how">${r.thrown.length} actions, each read on its own.</p></div>${close}</div>
+    return `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">Dice roller</h2><p class="cc-small dz-how">${r.thrown.length} targets, each read on its own.</p></div>${close}</div>
     <div class="dlg-body cc-moment dz-result is-many">
       <div class="dz-heard" role="status">${spin ? '<p class="dz-verdict">Rolling…</p>' : `${totalLine}<p class="sr-only">${esc(heard)}</p>`}</div>
       ${blocks}
@@ -385,13 +391,15 @@ export function makeRoller(k) {
       if (r.swap?.a === a) r.swap = null;
     } else if (what === "each") {
       x.each = el.dataset.v === "1";
+    } else if (what === "hits") {
+      x.hits = Math.min(4, Math.max(1, Math.trunc(Number(el.dataset.v)) || 1));
     } else if (what === "more") {
       // A new action's going at them, since several things to go at is what
       // more than one action's mostly for. One left with nothing on it opens
       // instead, so they don't pile up.
       if (r.acts.length >= ACTIONS || !hasDice(r.acts[r.at])) return;
       const empty = r.acts.findIndex((y) => !hasDice(y));
-      if (empty < 0) r.acts.push({ you: [], them: [], def: "them", each: false });
+      if (empty < 0) r.acts.push({ you: [], them: [], def: "them", each: false, hits: 1 });
       r.at = look = empty < 0 ? r.acts.length - 1 : empty;
     } else if (what === "pick") {
       r.at = look = a;
@@ -440,7 +448,7 @@ export function makeRoller(k) {
         r.swap = null;
       }
     } else return;
-    if (["add", "off", "clear", "def", "each", "more", "drop"].includes(what)) keep(r);
+    if (["add", "off", "clear", "def", "each", "hits", "more", "drop"].includes(what)) keep(r);
     k.redraw();
     if (look != null) lookAt(look);
   }
