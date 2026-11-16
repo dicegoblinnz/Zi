@@ -14,19 +14,24 @@
 // - "you": they're coming at you. Each of your dice stops one of theirs it
 //   beats or ties, since ties are yours, and whatever's left gets through.
 //   The dice are matched so the most get stopped, and you can swap two.
+//   Every die of theirs that gets through is a hit, a point off the Root it's
+//   at, or more for a deadly threat or a vulnerability (hits, each).
 // With dice on one side only there's nothing to beat, so it's just the
 // numbers, and added up, since a Move's the one roll where dice add.
 //
-// A throw can be several actions at once (Mo's 14 Nov ask): your d12 and d8
-// at the brute's d10, your d6 at the archer's d4, and their d8 coming at you.
-// Each one's read on its own, the way readDice reads one, and readLanes adds
-// up the Aura across them. The roll card's several targets read with it too.
+// A throw can go at several things at once (Mo's 14 Nov ask, and on the new
+// core every die's an intent): your d12 and d8 at the brute's d10, your d6 at
+// the archer's d4, and their d8 coming at you. Each target's read on its own,
+// the way readDice reads one, and readLanes adds up the Aura across them. The
+// roll card's several targets read with it too.
 
 export const SIDES = [2, 4, 6, 8, 10, 12];
 // The most dice on one side of an action.
 export const MOST = 12;
-// The most actions in one throw.
+// The most targets in one throw (they were actions before the new core).
 export const ACTIONS = 8;
+// The most hits a die of theirs that gets through can be.
+export const HITS = 9;
 
 const outOf = (v, to) => (v > to ? "beat" : v === to ? "tie" : "under");
 const count = (list, what) => list.filter((x) => x === what).length;
@@ -65,7 +70,7 @@ function fits(assign, mine, theirs) {
 
 // mine and theirs are the dice as they came up, [{ size, v }]. assign is a
 // matching from a swap, when they're coming at you.
-export function readDice({ mine = [], theirs = [], def = "them", each = false, assign = null } = {}) {
+export function readDice({ mine = [], theirs = [], def = "them", each = false, assign = null, hits = 1 } = {}) {
   const tops = mine.flatMap((d, i) => (d.v === d.size ? [i] : []));
   if (!mine.length || !theirs.length) {
     const list = mine.length ? mine : theirs;
@@ -79,7 +84,9 @@ export function readDice({ mine = [], theirs = [], def = "them", each = false, a
     });
     const used = new Set(match);
     const outs = lanes.map((l) => l.out);
-    return { way: "defend", tops, assign: match, lanes, stopped: count(outs, "stopped"), through: count(outs, "through"), spare: mine.flatMap((_, i) => (used.has(i) ? [] : [i])) };
+    const through = count(outs, "through");
+    const each_ = Math.min(HITS, Math.max(1, Math.trunc(Number(hits)) || 1));
+    return { way: "defend", tops, assign: match, lanes, stopped: count(outs, "stopped"), through, each: each_, hits: through * each_, spare: mine.flatMap((_, i) => (used.has(i) ? [] : [i])) };
   }
   if (each && mine.length === 1 && theirs.length > 1) {
     const lanes = theirs.map((d, j) => ({ j, i: 0, out: outOf(mine[0].v, d.v) }));
@@ -115,18 +122,19 @@ export function readLanes(lanes = []) {
   const add = (f) => read.reduce((n, x) => n + f(x), 0);
   const wins = add((x) => x.won);
   const tops = add((x) => x.tops.length);
-  return { lanes: read, wins, stops: add((x) => (x.way === "defend" ? x.won : 0)), tops, aura: wins + tops };
+  return { lanes: read, wins, stops: add((x) => (x.way === "defend" ? x.won : 0)), tops, aura: wins + tops, hits: add((x) => x.hits ?? 0) };
 }
 
-// What's kept on the phone between rolls: the actions, each with the dice on
-// each side, who's defending and whether they're one thing or several. A
+// What's kept on the phone between rolls: the targets, each with the dice on
+// each side, who's defending, whether they're one thing or several, and how
+// many hits each of theirs is when it's coming at you. A
 // set-up kept before there were actions ({ you, them, def, each }) comes back
 // as one. An action with no dice is dropped beside one with some, but a lone
 // one keeps its way. Anything that isn't one comes back as an action starts:
 // no dice, and them coming at you, since dice matched to blocks after the
 // roll are what the roller was asked for, till it's set the other way.
 const side = (list) => (Array.isArray(list) ? list.map(Number).filter((d) => SIDES.includes(d)).slice(0, MOST) : []);
-const actOf = (x) => ({ you: side(x.you), them: side(x.them), def: x.def === "them" ? "them" : "you", each: x.each === true });
+const actOf = (x) => ({ you: side(x.you), them: side(x.them), def: x.def === "them" ? "them" : "you", each: x.each === true, hits: Math.min(HITS, Math.max(1, Math.trunc(Number(x.hits)) || 1)) });
 export const hasDice = (a) => a.you.length > 0 || a.them.length > 0;
 export function setupOf(raw) {
   const x = raw && typeof raw === "object" ? raw : {};

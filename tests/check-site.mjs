@@ -164,14 +164,14 @@ for (const [width, scheme] of [[390, "light"], [1280, "dark"]]) {
   const outside = await sealed(context);
   const page = await context.newPage();
   // A word the book uses all through, so there's always something to find.
-  await page.goto(BASE + "/search/?q=Stamina");
-  await page.waitForSelector(".pagefind-ui__result", { timeout: 10000 }).catch(() => note("search: no results for 'Stamina'"));
+  await page.goto(BASE + "/search/?q=Bloodied");
+  await page.waitForSelector(".pagefind-ui__result", { timeout: 10000 }).catch(() => note("search: no results for 'Bloodied'"));
   const count = await page.locator(".pagefind-ui__result").count();
   const size = await page.evaluate(() => parseFloat(getComputedStyle(document.querySelector("#search input")).fontSize));
   if (size < 16) note(`search: the input's text is ${size}px, under 16px`);
   if (outside.length) note(`search: fetches from outside the site: ${[...new Set(outside)].slice(0, 3).join(", ")}`);
   if (SHOTS) await page.screenshot({ path: join(SHOTS, "search-390-light.png") });
-  console.log(`search: ${count} results for "Stamina"`);
+  console.log(`search: ${count} results for "Bloodied"`);
   await context.close();
 }
 

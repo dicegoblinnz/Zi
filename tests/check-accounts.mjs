@@ -1332,14 +1332,14 @@ try {
   await kai.page.evaluate(() => window.ziCompanion.setDice([2, 3]));
   await kai.page.click('#cc-dialog [data-act="d-go"]');
   await kai.page.waitForFunction(() => /It got through/.test(document.querySelector("#cc-dialog li.cc-hit")?.textContent ?? ""));
-  has(await kai.page.textContent("#cc-dialog li.cc-hit"), "It got through: your Confidence’s 2 against its 3.", "her 2 doesn't stop its 3");
+  has(await kai.page.textContent("#cc-dialog li.cc-hit"), "It got through: your Mind’s 2 against its 3.", "her 2 doesn't stop its 3");
   await kai.page.click('#cc-dialog [data-act="d-pay"][data-what="hit"]');
   await until(async () => (await cardText(mo.page, "The maid")).includes("It got through. Vesk’s Mind came up 2 against its 3."), "what got through, on Mo's page", 4000);
   same((await teleOf("The maid"))?.def?.on, "Mind", "the table has her Mind as the Root that rolled against it");
-  await until(async () => (await cardText(mo.page, "The maid")).includes("Confidence down to d10"), "and what it cost", 4000);
+  await until(async () => (await cardText(mo.page, "The maid")).includes("1 hit: a point off Mind"), "and what it cost", 4000);
   // Kai's Undo takes it back off Mo's page: first the cost, then the roll.
   await kai.page.click('#cc-dialog .dlg-foot [data-act="undo"]');
-  await until(async () => !(await cardText(mo.page, "The maid")).includes("Confidence down"), "the cost undone on Mo's page", 4000);
+  await until(async () => !(await cardText(mo.page, "The maid")).includes("a point off Mind"), "the cost undone on Mo's page", 4000);
   await kai.page.click('#cc-dialog .dlg-foot [data-act="undo"]');
   await until(async () => (await cardText(mo.page, "The maid")).includes("It landed. Vesk rolls When it lands next."), "the roll undone on Mo's page", 4000);
   await kai.page.click("#cc-dialog .cc-x");
@@ -1530,10 +1530,11 @@ try {
   await kai.page.waitForSelector('#cc-dialog .cc-foe .zd-die[data-d=\"6\"]');
   has(await text(kai.page, "#cc-dialog"), "Friend 1’s steps", "Bram's steps are in the roll");
   const comboAura = (await stateIn(kai.page, "vesk-aaaaaa")).aura;
-  await kai.page.evaluate(() => window.ziCompanion.setDice([9, 1, 4]));
+  // 22 steps are three d12s and a d8, against the attendant's d6.
+  await kai.page.evaluate(() => window.ziCompanion.setDice([9, 1, 4, 3, 6]));
   await kai.page.click('#cc-dialog [data-act="go"]');
   await kai.page.waitForSelector("#cc-dialog .tg-verdict");
-  has(await text(kai.page, "#cc-dialog .tg-verdict"), "Stopped. It never lands.", "her d12's 9 beats its 4");
+  has(await text(kai.page, "#cc-dialog .tg-verdict"), "Stopped. It never lands.", "her d12's 9 beats its 6");
   await until(async () => (await teleOf("The attendant"))?.ans?.with?.[0]?.ch === "bram-ssssss", "the table has Bram in Vesk's answer", 4000);
   same((await stateIn(kai.page, "vesk-aaaaaa")).aura, comboAura + 1, "Vesk gets the Aura for the win, since she rolled");
   await until(async () => (await text(sam.page, ".tg-yours")).includes("In on the attendant with Vesk: stopped"), "and his phone says how it went", 4000);
@@ -1699,7 +1700,8 @@ try {
   await kai.page.click('li.tg:has(h3:text-is("The pipes")) [data-do="land"]');
   await kai.page.waitForSelector('#cc-dialog [data-act="d-go"]');
   same(await kai.page.$$eval("#cc-dialog .cc-inc .zd-die", (els) => els.map((el) => el.dataset.d)), ["6"], "the pipes' d6 from round 3, on its own");
-  await kai.page.evaluate(() => window.ziCompanion.setDice([4, 2]));
+  // Her Body's two dice, a 4 and a 1, against the pipes' 2.
+  await kai.page.evaluate(() => window.ziCompanion.setDice([4, 1, 2]));
   await kai.page.click('#cc-dialog [data-act="d-go"]');
   await kai.page.waitForFunction(() => /Stopped by/.test(document.querySelector("#cc-dialog .cc-hits")?.textContent ?? ""));
   await until(async () => (await cardText(mo.page, "The pipes")).includes("Vesk stopped it when it landed: 4 against its 2."), "her 4 stops the pipes, on Mo's page", 4000);
@@ -1708,7 +1710,7 @@ try {
   await kai.page.click('.tile[data-act="defence"]');
   await kai.page.waitForSelector('#cc-dialog [data-act="d-go"]');
   same(await kai.page.$$eval("#cc-dialog .cc-inc .zd-die", (els) => els.map((el) => el.dataset.d)), ["8"], "then the bath-man's d8 from round 2");
-  await kai.page.evaluate(() => window.ziCompanion.setDice([7, 3]));
+  await kai.page.evaluate(() => window.ziCompanion.setDice([7, 3, 5]));
   await kai.page.click('#cc-dialog [data-act="d-go"]');
   await kai.page.waitForFunction(() => /Stopped by/.test(document.querySelector("#cc-dialog .cc-hits")?.textContent ?? ""));
   await until(async () => (await teleOf("A bath-man"))?.def?.stopped === true, "her 7 stops the bath-man, on the table", 4000);
