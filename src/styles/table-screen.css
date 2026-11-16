@@ -178,6 +178,9 @@ html.ts-live.ts-still, html.ts-live.ts-still * { cursor: none; }
 .ts .ts-pq { margin: 0.25rem 0 0; color: var(--muted); font-size: 0.98rem; }
 .ts .ts-pl { margin: 0.3rem 0 0; font-size: 0.9rem; font-weight: 700; color: var(--gold-ink); }
 .ts-p.is-done .ts-pl { color: var(--muted); }
+/* A wound the table's seen this fight, and leaving the scene with a Scar. */
+.ts .ts-ph { margin: 0.15rem 0 0; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.04em; color: var(--zd-harm-ink); }
+.ts-p.is-out { opacity: 0.72; }
 
 /* ── No code yet, or one that didn't work */
 .ts-entry-wrap { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr); place-items: center; padding-block: 1rem 2rem; }

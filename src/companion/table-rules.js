@@ -8,38 +8,52 @@
 // table screen's is screenOf(), built for it alone.
 //
 //   a round      { id, n, at, over, tele, acts, held, moved }   over is when it ended, or 0
-//     acts       what each of the crew spent their actions on, by "user|ch":
+//     acts       what each of the crew spent their action on, by "user|ch":
 //                { name, more, paid, list }. Everyone's got one action a
-//                round, and more holds where any extra ones came from: aura,
-//                bought with Aura, as many as they like (stacking, 14 Nov
-//                2026), and held, hiding and boon (the Extra action Boon),
-//                once each. paid is what each one bought with Aura cost, in
-//                order: 3, then 4, then 5 (extraCost() in roots.js), and one
-//                from before prices were kept cost 3. An answer is an action
+//                round, and there's no getting another (the new core, 16 Nov
+//                2026): every die's an intent, so one roll can answer a
+//                telegraph, work a stake and do something else, a die each,
+//                and it's still one action. Everything one roll did carries
+//                that roll's id as rid (an answer, a roll at the scene, a
+//                roll on a Root), and the table counts an action for each
+//                rid, and one for each thing with none. more and paid are
+//                only ever on a round from before, when extra actions were
+//                bought (stacking, 14 Nov): more says where each came from
+//                (aura, held, hiding, boon) and paid what each Aura one cost,
+//                and they still read the way they did. An answer is an action
 //                too, kept on its telegraph. Each act in list is
-//                { id, k, ref, steps, t }, and:
+//                { id, k, ref, steps, t, rid }, and:
 //                  join    their action put into whoever answers telegraph ref:
-//                          steps, everything on their sheet that fits, and
-//                          paid, the Aura it cost to explain any of it. One
-//                          from before stacking has act, the specialty it was.
-//                  work    a roll at a stake or an event (ref): root and steps,
-//                          roll { dice, opp, won, real }, aim (the tag it's
-//                          going for, or slow or drive), and did, what it
-//                          changed. One from before has act, not root.
+//                          root, the Root they bring, all of it, and steps,
+//                          that Root and their awakenings that fit. It costs no
+//                          Aura. One from stacking has paid, the Aura it cost
+//                          to explain what went in, and one from before
+//                          stacking has act, the specialty it was.
+//                  work    a roll at a stake or an event (ref): root, bring and
+//                          steps the way an answer has them, roll { dice, opp,
+//                          won, real }, aim (the tag it's going for, or slow or
+//                          drive), and did, what it changed. One from before
+//                          has act, not root.
 //                  ground  using a piece of the ground (ref), with act
-//                  else    something else: act says what (Defend, a Move, a
-//                          roll on a Root, or their own words)
+//                  else    something else: act says what (Defend, a Move, the
+//                          Blaze with the Root it's on, a roll on a Root, or
+//                          their own words). Its id is the rid of the roll
+//                          it opens, when it's a roll on a Root.
 //     held       a stake's or an event's die, rolled once a round: { ref: n }
 //     moved      what the end of the round stepped down: [{ ref, from, to, out }]
-//   a telegraph  { id, who, does, d, root, kind, one, at, sent, seen, ans, def,
-//                  icp, fx, did, there }
+//   a telegraph  { id, who, does, d, hits, root, kind, one, at, sent, seen,
+//                  ans, def, icp, fx, did, there }
 //     who and does  who's telegraphing and what it's doing, in the GM's words
 //     d             how hard: its die
+//     hits          how many hits each of its dice is when it gets through: 1,
+//                   or 2 or more for a deadly threat, said face up when it
+//                   goes out. One from before the new core hasn't got it, and
+//                   it's 1 (hitsOf()).
 //     root          the Root it's at (Roots, 8 Nov 2026): Body (blows, blades,
 //                   teeth), Mind (fear, lies and pressure) or Soul (despair,
-//                   temptation, curses). When it lands, the track for that Root
-//                   rolls against it (Stamina, Confidence or Resolve), and a
-//                   Defend can stop it too.
+//                   temptation, curses). When it lands, that Root rolls
+//                   against it at full, and a Defend can stop it too, and
+//                   every hit that gets through takes a point of it.
 //     kind          "blow" at a Body, "fear" at a Mind or Soul, kept for a
 //                   table from before Roots, which only had kind: rootOf()
 //                   reads a blow as Body and fear as Mind
@@ -52,15 +66,27 @@
 //                   part of the place ("everyone in the crowd", and where's
 //                   "in the crowd")
 //     seen          when it reached the player's phone, or 0
-//     ans           how someone answered it: { user, ch, name, root, steps,
-//                   dice, opp, real, won, at, late, with }, or null. root is
-//                   the Root they rolled and steps everything in it (howOf()
-//                   says it). One from before stacking has act, the Root and
-//                   specialty it rolled, in place of root, and reads as it was.
+//     ans           how someone answered it: { user, ch, name, root, bring,
+//                   steps, rid, dice, opp, real, won, at, late, with }, or
+//                   null. root is the Root they rolled, bring the Roots they
+//                   brought in on it, steps everything in it (howOf() says
+//                   it) and rid the roll it was, so the rest of what that
+//                   roll did is the same action. One from before stacking
+//                   has act, the Root and specialty it rolled, in place of
+//                   root, and reads as it was.
 //     def           their When it lands, once it's landed: { on, stopped,
-//                   mine, v, paid, real, at }, or null. on is what stopped it
-//                   or what it rode on: the track for its Root (Stamina,
-//                   Confidence or Resolve) or Defend
+//                   mine, v, paid, real, at, hits, lost, box, wound, scar },
+//                   or null. on is what stopped it or what it rode on: its
+//                   Root or Defend (a track's name on one from before the new
+//                   core, read as its Root by onOf()). What got through, when
+//                   it did: hits, how many (its own and a vulnerability's),
+//                   lost, the points it took off each Root ({ Body: 2 }, 2
+//                   for 1 included), box, armour's boxes it ticked, and wound
+//                   and scar, the Root it wounded or Scarred, or "". paid is
+//                   what it cost in the player's words. A lost answer lands
+//                   then and there with no defence, and the one it landed on
+//                   writes what it cost the same way, with mine null and
+//                   nothing stopped.
 //     icp           a friend who intercepted it, so it comes at them when it
 //                   lands: { user, ch, name, free, at }. Only one at a Body
 //                   can be, never one at the scene.
@@ -88,11 +114,16 @@
 //                  and what happens when it steps past d2. scene: it's the
 //                  scene clock. out: done
 //
-// The rules (05-conflict.md): one action a round each, and answering a
-// telegraph spends it. Win the answer and it's stopped. Lose it and it lands
-// at once, with no defence. Intercepting costs no action. Whatever nobody
-// answered lands at the end of the round, and whoever it's aimed at (or
-// whoever intercepted it) rolls When it lands. One at a stake or a clock has
+// The rules (05-conflict.md): one action a round each, and every die in it
+// is an intent, so one roll can answer telegraphs and work the scene, a die
+// each. Win an answer and it's stopped. Lose it and it lands at once, with no
+// defence. Intercepting costs no action. Whatever nobody answered lands at
+// the end of the round, and whoever it's aimed at (or whoever intercepted it)
+// rolls When it lands: the Root it's at, at full. Every die of it that gets
+// through is a hit, or more for a deadly threat, and a hit takes a point of
+// that Root. A hit on a Root at 0 wounds it, and one on a wounded Root at 0
+// is a Scar, and they leave the scene, so nothing more's aimed at them and
+// they don't act again till the fight's over. One at a stake or a clock has
 // no defence: anyone can answer it, and if it lands, it does what it said.
 // One at a place lands on whoever's in it when it lands, so getting out gets
 // you clear. A stake's tags go a win at a time, and an event's slowed or
@@ -102,30 +133,32 @@
 
 import { applyTurn, forgetTurn, isTurnOp, turnView } from "./turn-rules.js";
 import { applyFound, forgetFound, foundView, isFoundOp, leftFound } from "./found-rules.js";
-import { EXTRA_AURA, extraCost } from "./roots.js";
 
 export const SIZES = [2, 4, 6, 8, 10, 12];
-// The Roots a telegraph can be at, and the track that rides against each.
+// The Roots a telegraph can be at. A Root rolls against what's at it.
 export const ROOTS = ["Body", "Mind", "Soul"];
-export const TRACK_AT = { Body: "Stamina", Mind: "Confidence", Soul: "Resolve" };
-export const DEFS = ["Stamina", "Confidence", "Resolve", "Defend"];
+export const WOUNDS = { Body: "Bloodied", Mind: "Frayed", Soul: "Hollow" };
+// What rolled against a telegraph on a table from before the new core: the
+// track for its Root, read as that Root now.
+const TRACK_WAS = { Stamina: "Body", Confidence: "Mind", Resolve: "Soul" };
+export const onOf = (def) => (def?.on === "Defend" ? "Defend" : ROOTS.includes(def?.on) ? def.on : TRACK_WAS[def?.on] ?? "");
 // The Root a telegraph's at. One sent before Roots only says blow or fear.
 export const rootOf = (t) => (ROOTS.includes(t?.root) ? t.root : t?.kind === "fear" ? "Mind" : "Body");
-// more and list are only how much a round's record holds. There's no cap on
-// actions: by the time someone's bought their twentieth extra one it's cost
-// them 250 Aura.
+// How many hits each of its dice is when it gets through: a deadly threat's
+// are 2 or more, and one from before had 1.
+export const MOST_HITS = 6;
+export const hitsOf = (t) => Math.min(MOST_HITS, Math.max(1, Math.floor(Number(t?.hits)) || 1));
+// more and list are only how much a round's record holds, more for one from
+// before, when extra actions could be bought.
 export const MAX = { who: 60, does: 140, one: 140, name: 60, act: 60, paid: 80, tele: 24, rounds: 12, more: 20, list: 24, ground: 8, stakes: 6, events: 6, tags: 8, text: 140, tag: 80 };
-// Where an extra action can come from (Extra actions, in Conflict): Aura, as
-// many as you like at 3, then 4, then 5 a round, and holding last round's,
-// coming out of hiding and the Extra action Boon, once each, which don't put
-// the price up. From before Roots, 1 Resolve reads as Aura and a trait as the
-// Boon, and fired-up Confidence is gone.
-export const MORE = ["aura", "held", "hiding", "boon"];
-export const ONCE = ["held", "hiding", "boon"];
+// Where an extra action came from, on a round from before the new core:
+// Aura (3, then 4, then 5), holding last round's, coming out of hiding and
+// the Extra action Boon. From before Roots, 1 Resolve reads as Aura and a
+// trait as the Boon. There's no getting another action now.
 const MORE_WAS = { resolve: "aura", trait: "boon" };
-// Each of someone's extra actions this round, where it came from, and what
-// the ones bought with Aura cost: [{ k, paid }]. One bought before prices were
-// kept on the table cost 3, the old price, and still says so.
+const OLD_PRICE = 3;
+// Each of someone's extra actions in a round from before, where it came from,
+// and what the ones bought with Aura cost: [{ k, paid }].
 export function moresOf(a) {
   const prices = Array.isArray(a?.paid) ? a.paid : [];
   let i = 0;
@@ -133,33 +166,16 @@ export function moresOf(a) {
     const k = MORE_WAS[was] ?? was;
     if (k !== "aura") return { k };
     const paid = Number(prices[i++]);
-    return { k, paid: Number.isInteger(paid) && paid > 0 ? paid : EXTRA_AURA };
+    return { k, paid: Number.isInteger(paid) && paid > 0 ? paid : OLD_PRICE };
   });
-}
-// Whether one character's Aura ones cost what they should (each player's
-// count on their own, never the crew's together): each one more than the one
-// before it, and never less than its place in the round says, 3 for the
-// first, 4 for the second and so on (extraCost()). The phone's count can be
-// ahead of the table's, when one bought on the roll card went into a roll of
-// its own, so a price can be higher than its place. A price the record hasn't
-// got (an older phone's) isn't checked. Returns what's wrong, or "".
-const ORD = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth"];
-export function priceWrong(paid) {
-  let before = 0;
-  for (let i = 0; i < paid.length; i++) {
-    const p = paid[i];
-    if (p == null) continue;
-    const least = Math.max(extraCost(i), before + 1);
-    if (p < least) return `The ${ORD[i] ?? "next"} extra action you buy this round is ${least} Aura, not ${p}.`;
-    before = p;
-  }
-  return "";
 }
 // What a round's actions being turned down costs a phone, or gives it back.
 // The table's record (has) stands, and the phone's (mine) is what it paid
-// for: an Aura extra or a friend's answer the table hasn't got gives back
-// what it cost (the ones it has are the cheapest, since the rest were bought
-// after them), and one it has that the phone hadn't costs it again. Returns
+// for: an extra action from before, or Aura paid to explain what went into a
+// friend's answer on stacking, the table hasn't got gives back what it cost,
+// and one it has that the phone hadn't costs it again. Nothing on the new
+// core costs Aura here, so this is only ever a phone that was buying extra
+// actions when the new core came in getting its Aura back. Returns
 // { aura, bought }: the Aura to put back (below 0 to take off) and the change
 // to how many extras they've bought. Settling twice gives nothing the second
 // time, once the phone's record is the table's.
@@ -185,14 +201,30 @@ export function settleActs(mine, has) {
   for (const a of joins(has)) if (!joins(mine).some((x) => x.id === a.id)) aura -= Number(a.paid) || 0;
   return { aura, bought };
 }
-// How an answer, or a roll at the scene, was rolled, in words: its steps on
-// the Root it rolled ("12 steps on Body"). One from before stacking says the
-// Root and specialty it rolled, as it was ("Body and Archery").
+// How a roll went, in words: its steps on the Root it rolled, and the Roots
+// it brought in ("20 steps on Body and Mind"). One from before stacking says
+// the Root and specialty it rolled, as it was ("Body and Archery").
 export const stepsSaid = (n) => `${n} ${n === 1 ? "step" : "steps"}`;
-export const howOf = (a) => (ROOTS.includes(a?.root) ? `${stepsSaid(Number(a.steps) || 1)} on ${a.root}` : String(a?.act ?? ""));
-// What someone put into a friend's answer: their steps, or the specialty one
-// from before stacking put in.
-export const joinHow = (a) => (a?.act ? String(a.act) : stepsSaid(Number(a?.steps) || 1));
+const rootsSaid = (a) => [a.root, ...(Array.isArray(a.bring) ? a.bring : [])].join(" and ");
+export const howOf = (a) => (ROOTS.includes(a?.root) ? `${stepsSaid(Number(a.steps) || 1)} on ${rootsSaid(a)}` : String(a?.act ?? ""));
+// What someone put into a friend's answer: their Root, all of it ("9 steps on
+// Body"), the steps one from stacking put in, or the specialty one from before
+// stacking put in.
+export const joinHow = (a) => (a?.act ? String(a.act) : ROOTS.includes(a?.root) ? howOf(a) : stepsSaid(Number(a?.steps) || 1));
+// What getting through cost, in words, off a When it lands: what the player
+// wrote, or what the numbers say ("2 hits, 2 points off Body and Bloodied").
+export function costOf(def) {
+  if (!def || def.stopped) return "";
+  const parts = [];
+  const lost = def.lost && typeof def.lost === "object" ? def.lost : {};
+  for (const r of ROOTS) if (lost[r]) parts.push(`${lost[r] === 1 ? "a point" : `${lost[r]} points`} off ${r}`);
+  if (def.box) parts.push(def.box === 1 ? "a box of armour" : `${def.box} boxes of armour`);
+  if (ROOTS.includes(def.wound)) parts.push(WOUNDS[def.wound]);
+  if (ROOTS.includes(def.scar)) parts.push(`a Scar on ${def.scar}`);
+  const hits = Number(def.hits) || 0;
+  const said = parts.length ? `${hits ? `${hits === 1 ? "1 hit" : `${hits} hits`}: ` : ""}${parts.length > 1 ? `${parts.slice(0, -1).join(", ")} and ${parts[parts.length - 1]}` : parts[0]}` : "";
+  return said || String(def.paid ?? "");
+}
 const ID = /^[A-Za-z0-9_-]{6,32}$/;
 // An archetype's name, as the crest draws it.
 const ARCH = /^[A-Za-z][A-Za-z' -]{0,23}$/;
@@ -240,17 +272,65 @@ export function findEl(doc, id) {
   }
   return null;
 }
-// How many actions someone's used this round, and how many they've got.
+// How many actions someone's used this round, and how many they've got. One
+// roll's one action whatever it did, so everything carrying the same rid
+// counts once: an answer, a roll at the scene, and the roll on a Root it was
+// opened from. Anything without one is an action of its own. They've got one,
+// and on a round from before the new core, one more for each extra one.
 export function spentBy(round, user, ch, { except = null } = {}) {
   const a = round?.acts?.[keyOf(user, ch)];
-  const answers = (round?.tele ?? []).filter((t) => t.id !== except && t.ans && t.ans.user === user && t.ans.ch === ch).length;
-  return { used: answers + (a?.list?.length ?? 0), have: 1 + (a?.more?.length ?? 0) };
+  const used = new Set();
+  for (const t of round?.tele ?? []) if (t.id !== except && t.ans && t.ans.user === user && t.ans.ch === ch) used.add(t.ans.rid ? `r:${t.ans.rid}` : `a:${t.id}`);
+  for (const x of a?.list ?? []) used.add(x.k !== "join" && x.rid ? `r:${x.rid}` : `r:${x.id}`);
+  return { used: used.size, have: 1 + (a?.more?.length ?? 0) };
 }
 // Whoever's put their action into whoever answers this telegraph.
 export const joinersOf = (round, id) => Object.entries(round?.acts ?? {}).flatMap(([key, a]) => (a.list ?? []).filter((x) => x.k === "join" && x.ref === id).map((x) => {
   const [user, ch] = key.split("|");
-  return { user, ch, name: a.name, act: x.act, steps: x.steps };
+  return { user, ch, name: a.name, act: x.act, steps: x.steps, ...(ROOTS.includes(x.root) ? { root: x.root } : {}) };
 }));
+// Everyone who's left the scene this fight, by "user|ch": a hit that Scarred
+// them when it landed, or the Blaze, which is taking the Scar on purpose.
+// They're back once the GM ends the fight. skip: a round whose Blaze doesn't
+// count, for the round someone's sending their actions for, so the Blaze
+// itself can go up.
+export function outOf(doc, { skip = null } = {}) {
+  const out = new Map();
+  for (const r of doc?.rounds ?? []) {
+    for (const t of r.tele) {
+      if (ROOTS.includes(t.def?.scar)) {
+        const on = landsOn(t);
+        if (on?.user) out.set(keyOf(on.user, on.ch), { why: "scar", root: t.def.scar, n: r.n });
+      }
+      for (const [key, p] of Object.entries(t.there ?? {})) if (ROOTS.includes(p?.def?.scar)) out.set(key, { why: "scar", root: p.def.scar, n: r.n });
+    }
+    if (r === skip) continue;
+    for (const [key, a] of Object.entries(r.acts ?? {})) {
+      const b = (a.list ?? []).find((x) => x.k === "else" && x.set && x.act === "Blaze");
+      if (b) out.set(key, { why: "blaze", root: ROOTS.includes(b.root) ? b.root : "", n: r.n });
+    }
+  }
+  return out;
+}
+// The wounds the table's seen this fight, by "user|ch": [Root], from what
+// each When it lands wrote.
+export function woundsOf(doc) {
+  const out = new Map();
+  const add = (key, root) => {
+    if (!ROOTS.includes(root)) return;
+    const list = out.get(key) ?? [];
+    if (!list.includes(root)) list.push(root);
+    out.set(key, list);
+  };
+  for (const r of doc?.rounds ?? []) {
+    for (const t of r.tele) {
+      const on = landsOn(t);
+      if (t.def && on?.user) add(keyOf(on.user, on.ch), t.def.wound);
+      for (const [key, p] of Object.entries(t.there ?? {})) add(key, p?.def?.wound);
+    }
+  }
+  return out;
+}
 // Whether anyone worked a stake or an event this round.
 export const workedIn = (round, ref) => Object.values(round?.acts ?? {}).some((a) => (a.list ?? []).some((x) => x.k === "work" && x.ref === ref));
 
@@ -346,7 +426,9 @@ export function teleFrom(x, roster, now, doc = null) {
   const d = Number(x.d);
   if (!who || !does || !SIZES.includes(d)) return null;
   const root = ROOTS.includes(x.root) ? x.root : x.kind === "fear" ? "Mind" : "Body";
-  const base = { id: String(x.id), who, does, d, root, kind: root === "Body" ? "blow" : "fear", one: line(x.one, MAX.one), sent: now, seen: 0, ans: null, def: null };
+  const hits = hitsOf(x);
+  const base = { id: String(x.id), who, does, d, hits, root, kind: root === "Body" ? "blow" : "fear", one: line(x.one, MAX.one), sent: now, seen: 0, ans: null, def: null };
+  const out = outOf(doc);
   const k = x.at?.k;
   // A stake or an event on the scene, and what it does if it lands. A stake
   // gets a new tag in its way, or its clock drops when it's got one.
@@ -363,27 +445,31 @@ export function teleFrom(x, roster, now, doc = null) {
       if (!tag) return { why: "Say what goes in its way if it lands." };
       fx = { tag };
     }
-    return { ...base, root: "Body", kind: "blow", one: "", at: { k, ref: el.id, name: el.name }, fx };
+    return { ...base, hits: 1, root: "Body", kind: "blow", one: "", at: { k, ref: el.id, name: el.name }, fx };
   }
-  // A part of the place: everyone playing's in it when it goes out.
+  // A part of the place: everyone playing's in it when it goes out, bar
+  // anyone who's left the scene.
   if (k === "place") {
     const p = placeOf(x.at.name);
     if (!p) return null;
     const there = {};
-    for (const m of roster ?? []) if (m.ch) there[keyOf(m.user, m.ch)] = { name: line(m.cname, MAX.name) || "Someone", in: 1, at: now };
+    for (const m of roster ?? []) if (m.ch && !out.has(keyOf(m.user, m.ch))) there[keyOf(m.user, m.ch)] = { name: line(m.cname, MAX.name) || "Someone", in: 1, at: now };
     return { ...base, at: { k, name: p.name, where: p.where }, there };
   }
   const m = (roster ?? []).find((p) => p.ch && p.user === x.at?.user && p.ch === x.at?.ch);
   if (!m) return { why: "Whoever it was aimed at isn’t playing here now." };
+  if (out.has(keyOf(m.user, m.ch))) return { why: `${line(m.cname, MAX.name) || "Someone"}’s left the scene with a Scar, so there’s nothing to aim at till the fight’s over.` };
   const arch = (Array.isArray(x.at?.arch) ? x.at.arch : []).slice(0, 4).map((a) => line(a, 24)).filter((a) => ARCH.test(a));
   return { ...base, at: { user: m.user, ch: m.ch, name: line(m.cname, MAX.name) || "Someone", player: first(m.name), arch } };
 }
 
-// An answer roll from the phone: the set action, its dice and what the
-// telegraph's die came up. Each die beat it, tied or came in under, counted
-// here from the numbers, and a tie's only won when the phone says 1 Aura paid
-// for it. It's won when a die beat it or won the tie. Several dice on one
-// answer are advantage, so the best counts.
+// An answer roll from the phone: the Root it was rolled on and the Roots
+// brought in, its steps, its dice and what the telegraph's die came up. Each
+// die beat it, tied or came in under, counted here from the numbers, and a
+// tie's only won when the phone says 1 Aura paid for it. It's won when a die
+// beat it or won the tie. Several dice on one answer are advantage, so the
+// best counts. rid is the roll it was, so whatever else that roll did is the
+// same action.
 export function answerFrom(a) {
   if (!a || typeof a !== "object" || !Array.isArray(a.dice)) return null;
   const opp = num(a.opp, 1, 60);
@@ -395,21 +481,42 @@ export function answerFrom(a) {
   // The Root it was rolled on and its steps. A phone from before stacking
   // only says the Root and specialty it rolled, and that's kept as it was.
   const how = ROOTS.includes(a.root) ? { root: a.root } : { act: line(a.act, MAX.act) || "Their roll" };
-  return { ...how, steps: num(a.steps, 1, 99) ?? 1, dice, opp, real: a.real === true, won: dice.some((x) => x.out === "beat" || x.out === "won") };
+  if (how.root) {
+    const bring = [...new Set((Array.isArray(a.bring) ? a.bring : []).map((b) => (typeof b === "string" ? b : b?.root)).filter((r) => ROOTS.includes(r) && r !== how.root))];
+    if (bring.length) how.bring = bring;
+  }
+  const rid = ID.test(String(a.rid ?? "")) ? { rid: String(a.rid) } : {};
+  return { ...how, steps: num(a.steps, 1, 99) ?? 1, ...rid, dice, opp, real: a.real === true, won: dice.some((x) => x.out === "beat" || x.out === "won") };
 }
 
 // When it lands, for one telegraph: whether a die stopped it, what that die
-// came up (or null when there wasn't one left for it), what the telegraph's
-// die came up, and what getting through cost.
-// on: the die that stopped it, or that it rode on: the track for its Root
-// (Stamina, Confidence or Resolve), or Defend's.
+// came up (or null when there wasn't one left for it, or it landed with no
+// defence), what the telegraph's die came up, and what getting through cost.
+// on: the Root that rolled against it, or Defend. A phone from before the
+// new core says its track, read as that Root. What got through, in numbers:
+// hits, lost ({ Body, Mind, Soul } points), box (armour's boxes), and wound
+// and scar, the Root it wounded or Scarred.
 export function defenceFrom(r) {
   if (!r || typeof r !== "object") return null;
   const v = num(r.v, 1, 60);
   if (v == null) return null;
   const mine = r.mine == null ? null : num(r.mine, 0, 60);
   // A die stops a telegraph it beats or ties.
-  return { on: DEFS.includes(r.on) ? r.on : "Defend", stopped: r.stopped === true && mine != null && mine >= v, mine, v, paid: line(r.paid, MAX.paid), real: r.real === true };
+  const stopped = r.stopped === true && mine != null && mine >= v;
+  const out = { on: onOf(r) || "Defend", stopped, mine, v, paid: line(r.paid, MAX.paid), real: r.real === true };
+  if (stopped) return out;
+  const hits = num(r.hits, 0, 30);
+  if (hits) out.hits = hits;
+  const lost = {};
+  for (const x of ROOTS) {
+    const n = num(r.lost?.[x], 0, 60);
+    if (n) lost[x] = n;
+  }
+  if (Object.keys(lost).length) out.lost = lost;
+  const box = num(r.box, 0, 9);
+  if (box) out.box = box;
+  for (const k of ["wound", "scar"]) if (ROOTS.includes(r[k])) out[k] = r[k];
+  return out;
 }
 
 // A piece of the scene the GM put on the table, or null if it doesn't make
@@ -449,15 +556,17 @@ function actFrom(x) {
     if (!ID.test(String(x.ref ?? ""))) return null;
     out.ref = String(x.ref);
   }
-  // A roll at the scene names the Root it was rolled on, and what a friend
-  // put into an answer is their steps, everything on their sheet that fits,
-  // with the Aura it cost them to explain any of it. One from before
-  // stacking keeps its act, the specialty it was.
+  // A roll at the scene names the Root it was rolled on and any brought in,
+  // and the roll it was (rid). What a friend put into an answer is their
+  // Root, all of it, with their awakenings that fit, and it costs nothing.
+  // One from stacking says the Aura it cost them to explain what went in,
+  // and one from before stacking keeps its act, the specialty it was.
   if (k === "work") {
-    const a = answerFrom({ ...x.roll, root: x.root, act: x.act, steps: x.steps });
+    const a = answerFrom({ ...x.roll, root: x.root, bring: x.bring, act: x.act, steps: x.steps });
     if (!a) return null;
     if (a.root) {
       out.root = a.root;
+      if (a.bring) out.bring = a.bring;
       delete out.act;
     }
     out.roll = { dice: a.dice, opp: a.opp, won: a.won, real: a.real };
@@ -465,22 +574,29 @@ function actFrom(x) {
   }
   if (k === "join") {
     if (!out.act) delete out.act;
+    if (ROOTS.includes(x.root)) {
+      out.root = x.root;
+      delete out.act;
+    }
     const paid = num(x.paid, 0, out.steps);
     if (paid) out.paid = paid;
   }
+  // The Blaze says the Root it's on.
+  if (k === "else" && out.set && out.act === "Blaze" && ROOTS.includes(x.root)) out.root = x.root;
+  if (k !== "join" && ID.test(String(x.rid ?? ""))) out.rid = String(x.rid);
   return out;
 }
+// What someone did with their action this round, from their phone. more and
+// paid are the extra actions a phone from before the new core bought, kept
+// only so it can be told no and given its Aura back.
 function actsFrom(x) {
   if (!x || typeof x !== "object") return null;
-  // Holding last round's, coming out of hiding and the Boon give one each,
-  // and Aura as many as they like, each with what it cost them (paid, the
-  // Aura ones' prices in order, null for one an older phone didn't price).
   const more = [];
   const paid = [];
   const prices = Array.isArray(x.paid) ? x.paid : [];
   for (const was of Array.isArray(x.more) ? x.more : []) {
     const m = MORE_WAS[was] ?? was;
-    if (!MORE.includes(m) || (ONCE.includes(m) && more.includes(m)) || more.length >= MAX.more) continue;
+    if (!["aura", "held", "hiding", "boon"].includes(m) || more.length >= MAX.more) continue;
     if (m === "aura") paid.push(num(prices[paid.length], 1, 999));
     more.push(m);
   }
@@ -502,7 +618,7 @@ function saidOf(a, doc) {
 }
 // Something else, mid-sentence: a set action keeps its capital (Defend,
 // Sneak), and anything else doesn't (taking a breath, pull the rope out).
-export const actSaid = (a) => (a.set || /^[A-Z][A-Z]/.test(a.act ?? "") ? String(a.act ?? "") : String(a.act ?? "").replace(/^[A-Z]/, (m) => m.toLowerCase()));
+export const actSaid = (a) => (a.set && a.act === "Blaze" ? `taking the Blaze${ROOTS.includes(a.root) ? ` on ${a.root}` : ""}` : a.set || /^[A-Z][A-Z]/.test(a.act ?? "") ? String(a.act ?? "") : String(a.act ?? "").replace(/^[A-Z]/, (m) => m.toLowerCase()));
 
 // A clock or an event steps down a size, and past d2 the stake's lost or the
 // event happens. It's kept in the round, so a roll that turns up late can put
@@ -793,6 +909,7 @@ export function apply(doc, op, who, roster, now, { phoneNow = null, server = fal
       if (onScene(t) && hit.round !== last) return no(`Round ${hit.round.n}’s gone by, so what landed on ${atName(t)} stands. Tell the GM.`);
       if (t.ans && !mine) return no(`${t.ans.name} answered ${lower(t.who)} first.`);
       if (t.def || inIt(t).some((p) => p.def)) return no("It’s landed already.");
+      if (op.a != null && outOf(doc).has(keyOf(who.user, who.ch))) return no("You’ve left the scene, so you can’t answer anything till the fight’s over.");
       if (op.a == null) {
         if (mine) t.ans = null;
         settle(doc, hit.round, t);
@@ -801,11 +918,12 @@ export function apply(doc, op, who, roster, now, { phoneNow = null, server = fal
       const a = answerFrom(op.a);
       if (!a) return no("That answer didn’t make sense.");
       if (a.opp > t.d) return no(`That answer was against a ${a.opp}, and ${lower(t.who)}’s d${t.d} can’t roll that.`);
-      // One action a round: answering spends it, unless they've got another.
+      // One action a round: answering spends it, and whatever else the same
+      // roll did is the same action.
       const acts = hit.round.acts?.[keyOf(who.user, who.ch)];
       if ((acts?.list ?? []).some((x) => x.k === "join" && x.ref === t.id)) return no(`You put your action into whoever answers ${lower(t.who)}, so you can’t answer it as well.`);
-      const sp = spentBy(hit.round, who.user, who.ch, { except: t.id });
-      if (sp.used >= sp.have) return no(`You’ve spent your action this round${acts?.list?.length ? ` on ${saidOf(acts.list[acts.list.length - 1], doc)}` : ""}. Got another? Say where it came from on your phone.`);
+      const sp = spentBy({ ...hit.round, tele: [...hit.round.tele.filter((x) => x !== t), { ...t, ans: { user: who.user, ch: who.ch, rid: a.rid } }] }, who.user, who.ch);
+      if (sp.used > sp.have) return no(`You’ve spent your action this round${acts?.list?.length ? ` on ${saidOf(acts.list[acts.list.length - 1], doc)}` : ""}. Every die’s an intent, so one roll can answer it and do the rest.`);
       // When it was rolled, by the phone's clock, put on the server's: so an
       // answer rolled in the round with no signal isn't late when it arrives.
       // A couple of seconds' grace for the time it took to get here.
@@ -814,7 +932,7 @@ export function apply(doc, op, who, roster, now, { phoneNow = null, server = fal
       // Whoever put their action in with them, and the phone counted.
       const counted = new Set((Array.isArray(op.a.with) ? op.a.with : []).slice(0, 8).map((x) => keyOf(x?.user, x?.ch)));
       const joined = joinersOf(hit.round, t.id).filter((j) => counted.has(keyOf(j.user, j.ch)) && !(j.user === who.user && j.ch === who.ch));
-      t.ans = { user: who.user, ch: who.ch, name: line(who.cname, MAX.name) || "Someone", ...a, ...(joined.length ? { with: joined.map((j) => ({ user: j.user, ch: j.ch, name: line(j.name, MAX.name) || "Someone", act: j.act, steps: j.steps })) } : {}), at: rolled, late: hit.round.over && rolled > hit.round.over + (timed ? 2000 : 0) ? 1 : 0 };
+      t.ans = { user: who.user, ch: who.ch, name: line(who.cname, MAX.name) || "Someone", ...a, ...(joined.length ? { with: joined.map((j) => ({ user: j.user, ch: j.ch, name: line(j.name, MAX.name) || "Someone", act: j.act, steps: j.steps, ...(j.root ? { root: j.root } : {}) })) } : {}), at: rolled, late: hit.round.over && rolled > hit.round.over + (timed ? 2000 : 0) ? 1 : 0 };
       // At a stake or an event: lost, it does what it said then and there.
       settle(doc, hit.round, t);
       return yes();
@@ -834,7 +952,10 @@ export function apply(doc, op, who, roster, now, { phoneNow = null, server = fal
         const on = landsOn(t);
         if (on.user !== who.user || on.ch !== who.ch) return no(t.icp && t.at.user === who.user && t.at.ch === who.ch ? `${t.icp.name} took that one for you.` : "That one wasn’t aimed at you.");
       }
-      if (!hit.round.over || t.ans) return no("That one didn’t land on you at the end of the round.");
+      // A lost answer lands then and there with no defence, and they write
+      // what it cost: nothing stops it.
+      const now0 = Boolean(t.ans && !t.ans.won);
+      if (!now0 && (!hit.round.over || t.ans)) return no("That one didn’t land on you at the end of the round.");
       if (op.r == null) {
         if (mine) delete mine.def;
         else t.def = null;
@@ -843,9 +964,10 @@ export function apply(doc, op, who, roster, now, { phoneNow = null, server = fal
       const r = defenceFrom(op.r);
       if (!r) return no("That roll didn’t make sense.");
       if (r.v > t.d) return no(`That roll was against a ${r.v}, and ${lower(t.who)}’s d${t.d} can’t roll that.`);
-      // A track only stops what's at its own Root. Defend can stop anything.
+      if (now0 && (r.stopped || r.mine != null)) return no(`${cap(lower(t.who))} landed then and there, so there’s no defence against it.`);
+      // Its own Root rolls against it. Defend can stop anything it fits.
       const at = rootOf(t);
-      if (r.on !== "Defend" && r.on !== TRACK_AT[at]) return no(`${cap(lower(t.who))} was at ${atRoot(t)}, so it’s ${TRACK_AT[at]} or Defend that rolls against it.`);
+      if (!now0 && r.on !== "Defend" && r.on !== at) return no(`${cap(lower(t.who))} was at ${atRoot(t)}, so it’s ${at === "Body" ? "a Body" : `a ${at}`} or Defend that rolls against it.`);
       if (mine) mine.def = { ...r, at: now };
       else t.def = { ...r, at: now };
       return yes();
@@ -874,6 +996,7 @@ export function apply(doc, op, who, roster, now, { phoneNow = null, server = fal
         return yes();
       }
       if (hit.round.over) return no(`Round ${hit.round.n}’s over, so it’s too late to take ${lower(t.who)}.`);
+      if (outOf(doc).has(keyOf(who.user, who.ch))) return no("You’ve left the scene, so you can’t step in front of anything till the fight’s over.");
       if (rootOf(t) !== "Body") return no(`Nobody can intercept what’s at ${atRoot(t)}. It’s inside their head.`);
       if (t.at.user === who.user && t.at.ch === who.ch) return no("That one’s aimed at you already.");
       if (t.ans) return no(`${t.ans.name} answered ${lower(t.who)} already.`);
@@ -954,17 +1077,15 @@ export function apply(doc, op, who, roster, now, { phoneNow = null, server = fal
         const t = a.k === "join" ? round.tele.find((x) => x.id === a.ref) : null;
         if (t?.ans?.with?.some((w) => w.user === who.user && w.ch === who.ch)) return no(`${t.ans.name} answered ${lower(t.who)} with you in it, so it stays.`);
       }
-      // There's no cap on extra actions, but each one bought with Aura costs
-      // more than the one before it this round: 3, then 4, then 5, counted
-      // off this character's record alone, so nobody else's put it up. A new one
-      // has to come with its price, so only one the table had before prices
-      // were kept goes unchecked.
-      const priced = moresOf(round.acts[key]).filter((m) => m.k === "aura").length;
-      if (next.paid.slice(priced).some((p) => p == null)) return no("Your phone’s from before extra actions had a price. Reload the page and buy it again.");
-      const wrong = priceWrong(next.paid);
-      if (wrong) return no(wrong);
+      // There's no getting another action. A round from before the new core
+      // keeps the extra ones it had, and a phone can send them back as they
+      // were, but never one more.
+      const had = round.acts[key];
+      const asWas = JSON.stringify(next.more) === JSON.stringify(had?.more ?? []) && JSON.stringify(next.paid) === JSON.stringify(had?.paid ?? []);
+      if (next.more.length && !asWas) return no("There’s no getting another action now. Every die’s an intent, so split your roll to do more. Reload the page for the new rules.");
+      if (added.length && outOf(doc, { skip: round }).has(key)) return no("You’ve left the scene, so you can’t act again till the fight’s over.");
       const sp = spentBy({ ...round, acts: { [key]: next } }, who.user, who.ch);
-      if (sp.used > sp.have) return no(sp.have === 1 ? "You’ve got one action this round. Got another? Say where it came from." : `You’ve got ${sp.have} actions this round, and that’s more.`);
+      if (sp.used > sp.have) return no(sp.have === 1 ? "You’ve got one action this round. Every die’s an intent, so one roll can do it all." : `You’ve got ${sp.have} actions this round, and that’s more.`);
       round.acts[key] = { name: line(who.cname, MAX.name) || "Someone", more: next.more, paid: next.paid, list: [...kept] };
       for (const a of gone) if (a.k === "work") undoWork(doc, round, a);
       for (const a of added) {
@@ -1088,9 +1209,10 @@ export function screenOf(doc, meta = null, reveal = null) {
   // act is how it was rolled, in words: its steps on its Root, or the Root
   // and specialty an answer from before stacking rolled, as it was.
   const answer = (a) => (a ? { k: kOf(a.user, a.ch), name: a.name, act: howOf(a), dice: dice(a), opp: a.opp, won: Boolean(a.won), with: (a.with ?? []).map((w) => w.name) } : null);
-  const defence = (x) => (x ? { on: DEFS.includes(x.on) ? x.on : "", mine: x.mine ?? null, v: x.v, stopped: Boolean(x.stopped) } : null);
+  // What rolled against it, and what getting through cost, in words.
+  const defence = (x) => (x ? { on: onOf(x), mine: x.mine ?? null, v: x.v, stopped: Boolean(x.stopped), cost: costOf(x) } : null);
   const tele = (t) => {
-    const out = { id: t.id, who: t.who, does: t.does, d: t.d, kind: t.kind, root: rootOf(t), one: t.one ?? "", at: atName(t), state: stateOf(t, round), ans: answer(t.ans) };
+    const out = { id: t.id, who: t.who, does: t.does, d: t.d, hits: hitsOf(t), kind: t.kind, root: rootOf(t), one: t.one ?? "", at: atName(t), state: stateOf(t, round), ans: answer(t.ans) };
     if (onScene(t)) {
       const el = findEl(doc, t.at.ref)?.el;
       // What it does if it lands, said the way every phone says it.
@@ -1115,6 +1237,10 @@ export function screenOf(doc, meta = null, reveal = null) {
     events: s.events.map((el) => ({ id: el.id, name: el.name, what: el.what || "", d: el.d, scene: Boolean(el.scene), out: el.out || "", roll: round?.held?.[el.id] ?? null, at: at(el.id, "work"), moved: moved(el.id) })),
     ground: s.ground.map((el) => ({ id: el.id, name: el.name, text: el.text || "", at: at(el.id, "ground") })),
   };
+  // Who's left the scene with a Scar or the Blaze, and the wounds the table's
+  // seen this fight.
+  const gone = outOf(doc);
+  const hurt = woundsOf(doc);
   const people = crew.map((c) => {
     const [user, ch] = String(c.key).split("|");
     const a = round?.acts?.[c.key];
@@ -1136,10 +1262,12 @@ export function screenOf(doc, meta = null, reveal = null) {
       for (const t of round.tele) if (t.icp && t.icp.user === user && t.icp.ch === ch) acts.push({ k: "took", who: t.who, for: t.at.name, free: Boolean(t.icp.free) });
     }
     const spent = round && !round.over ? spentBy(round, user, ch) : null;
-    // Each extra action, in words: what one bought with Aura cost, or where it
-    // came from (the screen says held, hiding and boon its own way).
+    // Each extra action a round from before had, in words: what one bought
+    // with Aura cost, or where it came from (the screen says held, hiding and
+    // boon its own way).
     const more = moresOf(a).map((m) => (m.k === "aura" ? `${m.paid} Aura` : m.k));
-    return { name: c.name, crew: c.crew ?? "", arch: c.arch ?? [], grown: c.grown ?? [], acts, more, left: spent ? Math.max(0, spent.have - spent.used) : null };
+    const o = gone.get(c.key);
+    return { name: c.name, crew: c.crew ?? "", arch: c.arch ?? [], grown: c.grown ?? [], acts, more, left: spent && !o ? Math.max(0, spent.have - spent.used) : null, wounds: (hurt.get(c.key) ?? []).map((r) => WOUNDS[r]), out: o ? o.why : "" };
   });
   const SEAL = /^[a-z0-9-]{0,24}$/;
   const sealOut = (x) => (x && typeof x === "object" && SEAL.test(String(x.c ?? "")) && SEAL.test(String(x.f ?? "")) && SEAL.test(String(x.d ?? "")) ? { c: String(x.c ?? ""), f: String(x.f ?? ""), d: String(x.d ?? "") } : null);
