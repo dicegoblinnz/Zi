@@ -1422,6 +1422,8 @@ button.bd-tok:active { transform: scale(0.97); }
 /* A friend's: answer it for them, put your action in, or take it. */
 .tg-row-do { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .tg-row-do .button { flex: 1 1 9.5rem; }
+/* A wound the table's seen this fight, or leaving the scene, on the GM's crew lines. */
+.tg-chip.is-hurt { color: var(--zd-harm-ink); border-color: color-mix(in srgb, var(--zd-harm) 55%, transparent); }
 .tg-chip.is-mine { margin: 0; padding: 0.2rem 0.5rem; color: var(--gold-ink); border-color: color-mix(in srgb, var(--gold) 60%, transparent); }
 .tg-point .cc-row { margin-bottom: 0; }
 
@@ -1535,6 +1537,7 @@ button.bd-tok:active { transform: scale(0.97); }
 .tg-compose .tg-label + input { margin: 0 0 0.5rem; }
 .tg-known, .tg-verbs { margin: 0 0 1rem; }
 .tg-known small { font-weight: 500; opacity: 0.85; }
+.tg-known [aria-pressed="true"] small { opacity: 1; }
 .tg-targets { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .tg-target { display: flex; align-items: center; gap: 10px; min-height: 56px; padding: 6px 10px; text-align: left; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 2px; }
 .tg-target span { display: flex; flex-direction: column; min-width: 0; }

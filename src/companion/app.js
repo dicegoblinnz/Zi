@@ -205,7 +205,7 @@ const table = makeTable({
   },
   // The live table's answer, a roll at the scene and a roll on a Root open
   // the roll card on the Root picked there (prompt 8).
-  answer: (root, tele) => openAction({ root, tele }),
+  answer: (root, tele, o = {}) => openAction({ root, tele, rid: tele?.rid ?? o.rid ?? null }),
   work: (root, w) => openAction({ root, work: w }),
   defend: (pre) => openDefence(pre),
   signedOut: () => {
@@ -534,21 +534,25 @@ function noteTable(s) {
     const answered = first?.v != null && at0.length > 0 && (first.size === r.tele.d || !first.size);
     // Whoever put their action in, while their steps are still in it.
     const with_ = r.friends.length ? (r.tele.with ?? []).map((w) => ({ user: w.user, ch: w.ch })) : [];
-    table.record(s, r.tele.camp, "a", r.tele.id, answered ? { root: r.groups.main.root, steps: r.total, dice: rolled(), opp: first.v, real: Boolean(r.real), ...(with_.length ? { with: with_ } : {}) } : null);
+    const g = r.groups.main;
+    const bring = Object.keys(g.bring ?? {}).filter((x) => x !== g.root);
+    table.record(s, r.tele.camp, "a", r.tele.id, answered ? { root: g.root, ...(bring.length ? { bring } : {}), steps: Math.max(1, r.total - r.friends.reduce((t, f) => t + (Number(f) || 0), 0)), ...(r.tele.rid ? { rid: r.tele.rid } : {}), dice: rolled(), opp: first.v, real: Boolean(r.real), ...(with_.length ? { with: with_ } : {}) } : null);
   }
   // A roll at a stake or an event on the live table's scene is an action.
   if (r.kind === "action" && r.work) {
     const worked = first?.v != null && at0.length > 0 && (first.size === r.work.d || !first.size);
-    table.noteWork(s, r, worked ? { id: r.work.actId, k: "work", ref: r.work.ref, root: r.groups.main.root, steps: r.total, roll: { dice: rolled(), opp: first.v, real: Boolean(r.real) }, aim: r.work.aim } : null);
+    table.noteWork(s, r, worked ? { id: r.work.actId, k: "work", ref: r.work.ref, root: r.groups.main.root, steps: r.total, ...(r.work.rid ? { rid: r.work.rid } : {}), roll: { dice: rolled(), opp: first.v, real: Boolean(r.real) }, aim: r.work.aim } : null);
   }
   if (r.kind === "defence" && r.camp && r.teles?.some(Boolean)) {
     for (const h of blocks(r)) {
       const id = r.teles[h.j];
       const m = h.pair != null ? r.mine[h.pair] : null;
-      // The live table still names a Root's roll by the track it was (prompt
-      // 6 of notes/core-plan.md reads it as its Root).
-      const on = m?.src === "defend" ? "Defend" : R.TRACK[R.trackAt[m?.root ?? r.incoming[h.j].at]].name;
-      if (id) table.record(s, r.camp, "d", id, { on, stopped: h.by != null, mine: h.mine, v: h.v, paid: r.paid[h.j] || "", real: Boolean(r.real) });
+      // Its Root or Defend, and what got through in numbers: the hits, the
+      // points off each Root, armour's boxes, and a wound or a Scar.
+      const on = m?.src === "defend" ? "Defend" : m?.root ?? r.incoming[h.j].at;
+      const x = r.cost?.[h.j] ?? {};
+      const got = h.by == null ? { hits: h.hits, ...(Object.keys(x.lost ?? {}).length ? { lost: x.lost } : {}), ...(x.box ? { box: x.box } : {}), ...(x.wound ? { wound: x.wound } : {}), ...(x.scar ? { scar: x.scar } : {}) } : {};
+      if (id) table.record(s, r.camp, "d", id, { on, stopped: h.by != null, mine: r.incoming[h.j].nodef ? null : h.mine, v: h.v, paid: r.paid[h.j] || "", real: Boolean(r.real), ...got });
     }
   }
 }
@@ -1392,7 +1396,7 @@ const MAX_FOES = 8;
 const MOST_DICE = 24;
 const SHAPES_SHOWN = 8;
 const freshGroup = (root) => ({ root, bring: {}, awk: {}, count: null, shape: 0 });
-function openAction({ root = null, tele = null, work = null, picks = null, heal = false } = {}) {
+function openAction({ root = null, tele = null, work = null, picks = null, heal = false, rid = null } = {}) {
   const ch = current();
   const c = normal(ch);
   if (!c) return;
@@ -1402,7 +1406,7 @@ function openAction({ root = null, tele = null, work = null, picks = null, heal 
     kind: "action", mode: "build", groups: { main: g }, heal: heal && isA(c, "Healer"),
     friends: (tele?.with ?? []).map((w) => w.steps), handed: 0, conds: new Set(), pool: {}, beyond: false,
     against: first ? [first] : [], aim: {}, fixed: Boolean(first),
-    work, tele, dice: [], foes: [], log: [], pick: null, pads: [], padFoes: [], spinning: false, intents: {}, owns: new Set(),
+    work, tele, rid, dice: [], foes: [], log: [], pick: null, pads: [], padFoes: [], spinning: false, intents: {}, owns: new Set(),
   });
 }
 // A dialog that's open already turns over to the next one.
@@ -1999,8 +2003,8 @@ function openDefence(pre = null) {
   const ch = current();
   const c = normal(ch);
   if (!c) return;
-  const incoming = (pre?.incoming ?? []).map((d, j) => ({ d, at: R.ROOTS.includes(pre?.roots?.[j]) ? pre.roots[j] : "Body", intent: String(pre.intents?.[`d${j}`] ?? "").slice(0, 40), fixed: Boolean(pre?.teles?.[j]), hits: clamp(pre?.hits?.[j] ?? 1, 1, 9) }));
-  const at = incoming[0]?.at ?? "Body";
+  const incoming = (pre?.incoming ?? []).map((d, j) => ({ d, at: R.ROOTS.includes(pre?.roots?.[j]) ? pre.roots[j] : "Body", intent: String(pre.intents?.[`d${j}`] ?? "").slice(0, 40), fixed: Boolean(pre?.teles?.[j]), hits: clamp(pre?.hits?.[j] ?? 1, 1, 9), ...(pre?.nodef?.[j] ? { nodef: true } : {}) }));
+  const at = incoming.find((x) => !x.nodef)?.at ?? incoming[0]?.at ?? "Body";
   const groups = Object.fromEntries([...R.ROOTS.map((root) => [root, freshGroup(root)]), ["defend", freshGroup(at)]]);
   openRoll({ kind: "defence", mode: "build", incoming, add: at, addHits: 1, defend: Boolean(pre?.defend), groups, mine: [], opp: [], assign: [], done: [], paid: [], pick: null, log: [], spinning: false, padOpp: true, swap: null, camp: pre?.camp ?? null, teles: pre?.teles ?? [], from: pre?.from ?? {}, intents: {}, owns: new Set() });
 }
@@ -2009,7 +2013,7 @@ function openDefence(pre = null) {
 // Defend's Root on top when it was your action, each with what's brought in
 // and woken, and what it all costs.
 function defencePool(c, s, r) {
-  const keys = [...R.ROOTS.filter((root) => r.incoming.some((x) => x.at === root)), ...(r.defend ? ["defend"] : [])];
+  const keys = [...R.ROOTS.filter((root) => r.incoming.some((x) => x.at === root && !x.nodef)), ...(r.defend ? ["defend"] : [])];
   const groups = keys.map((key) => {
     const g = r.groups[key];
     const k = R.countRoll(c, s, asRoll(g));
@@ -2035,7 +2039,8 @@ const vulnsOn = (s) => s.conditions.filter((x) => x.kind === "against" && /\bvul
 
 const valOf = (m) => m.nat + m.plus;
 // Can this die stop that telegraph? A Root's roll only stops what's at it.
-const fits = (m, tele) => (m.src === "root" ? m.root === tele.at : true);
+// One whose answer lost landed then and there, so nothing rolls against it.
+const fits = (m, tele) => !tele.nodef && (m.src === "root" ? m.root === tele.at : true);
 // Each of your dice stops one telegraph. The phone matches them up so the
 // most get stopped: the lowest telegraph takes the lowest roll that can stop
 // it, a Root's own die before Defend's on a tie, since Defend's can go
@@ -2074,6 +2079,8 @@ function blocks(r) {
     return { j, size: x.d, at: x.at, v: r.opp[j], pair, mine, by, intent: x.intent, hits: by == null ? x.hits + (r.vulns?.length ?? 0) : 0 };
   });
 }
+// How many Scars each Root has, to tell when a hit's left one.
+const scarCount = (s) => Object.fromEntries(R.ROOTS.map((k) => [k, Array.isArray(s.scars?.[k]) ? s.scars[k].length : 0]));
 const hitsLeft = (r, h) => Math.max(0, h.hits - (r.done[h.j] ?? 0));
 const paying = (r) => r.done.some(Boolean);
 
@@ -2225,7 +2232,7 @@ function defenceResult(c, s, ch) {
     const swapBtn = m && !paying(r) ? `<button type="button" class="button sm" data-act="d-swap" data-j="${h.j}"${pressed(r.swap === h.j)}>${r.swap === h.j ? "Swap with…" : "Swap"}</button>` : "";
     return `<li class="cc-hit is-${stopped ? "stopped" : "through"}"><div class="cc-hit-in">${kitDie(h.size, { own: "them", face: spin ? null : h.v, spin, label: spin ? `Their d${h.size}, rolling` : `Their d${h.size} ${AT[h.at]} came up ${h.v}` })}
       <div><p><b>Their d${h.size}</b> <small>${AT[h.at]}${h.intent ? `, ${esc(h.intent)}` : ""}</small></p>
-      ${spin ? "" : `<p>${stopped ? `Stopped by ${by}.` : `It got through${m ? `: ${by} against its ${h.v}` : ""}.`}</p>`}</div>${spin ? "" : swapBtn}</div>
+      ${spin ? "" : `<p>${stopped ? `Stopped by ${by}.` : r.incoming[h.j]?.nodef ? "The answer to it lost, so it landed then and there." : `It got through${m ? `: ${by} against its ${h.v}` : ""}.`}</p>`}</div>${spin ? "" : swapBtn}</div>
       ${spin || stopped || picking ? "" : payView(h, r, s, c)}</li>`;
   };
   const pushes = pushesOf(c, true);
@@ -3640,6 +3647,9 @@ const ACT = {
       const h = r ? blocks(r)[j] : null;
       if (!h || h.by != null || !hitsLeft(r, h) || s.out || s.blaze) return;
       const root = h.at;
+      // What it cost in numbers, for the live table: the state before, and
+      // after, below.
+      const was = { pts: { ...s.pts }, wound: { ...s.wound }, scars: scarCount(s), blaze: s.blaze };
       const add = (said, n = 1) => {
         r.done[j] = (r.done[j] ?? 0) + n;
         r.paid[j] = (r.paid[j] ? `${r.paid[j]}, ${said}` : cap(said)).slice(0, 80);
@@ -3686,6 +3696,16 @@ const ACT = {
         if (r.done[j]) return;
         add("something else, the GM’s call", hitsLeft(r, h));
       }
+      const x = (r.cost ??= [])[j] ??= { lost: {}, box: 0, wound: "", scar: "" };
+      for (const k of R.ROOTS) {
+        const n = was.pts[k] - s.pts[k];
+        if (n > 0) x.lost[k] = (x.lost[k] ?? 0) + n;
+        if (s.wound[k] && !was.wound[k]) x.wound = k;
+      }
+      if (what === "box") x.box += 1;
+      const now = scarCount(s);
+      const scarred = R.ROOTS.find((k) => now[k] > was.scars[k]) ?? (s.blaze && s.blaze !== was.blaze ? s.blaze : "");
+      if (scarred) x.scar = scarred;
     }, { say: false });
   },
   "d-go": () => defenceGo(false),

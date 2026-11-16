@@ -3,7 +3,7 @@
 //
 //   npm run build && node tests/check-accounts.mjs
 //   SHOTS=folder node tests/check-accounts.mjs   (and screenshots of the campaign screens)
-//   ZI_UPTO=6c node tests/check-accounts.mjs     (parts 1 to 6c only, or 6d, 9b, 9c, 9d, 9e, 9f, 9g, 9h, 9i or 9j)
+//   ZI_UPTO=6c node tests/check-accounts.mjs     (parts 1 to 6c only, or 6d, 6e, 9b, 9c, 9d, 9e, 9f, 9g, 9h, 9i or 9j)
 //
 // The site's Worker runs here in workerd (Miniflare) with its own D1, built the
 // way a deploy builds it, with every migration applied in order. Google and
@@ -58,11 +58,11 @@
 //    table, Zed's Night's is empty, Kai's Dorrie there sees no telegraphs,
 //    and a socket from another site is turned away. The round's screens pass
 //    axe at 390, in both themes.
-//    6b plays the Copper Baths' scene on the round: Bram puts three things of
-//    his that fit into whoever answers the attendant, one explained for 1
-//    Aura, Vesk answers it on her Body with his three steps in it, then buys
-//    an extra action for 3 Aura (the next one's 4, with no cap) and takes
-//    Locked off Dace's satchel on her Body. 6c telegraphs at it:
+//    6b plays the Copper Baths' scene on the round: Bram puts his Body into
+//    whoever answers the attendant, with Ring the bell, for no Aura, and Vesk
+//    answers it on her Body with his in it. There's no buying another action:
+//    a die of the same roll takes Locked off Dace's satchel, the same action,
+//    and a Move on top's turned down. 6c telegraphs at it:
 //    Mo sends Dace at the deal straight from the place's own telegraphs, the
 //    pipes at everyone in the hot room and a runner at the scene clock. Bram
 //    gets out of the hot room and Mo's card says so. Sam answers the runner
@@ -80,6 +80,11 @@
 //    brings it back. A socket from another site and twenty guessed codes are
 //    turned away. Parts 8, 9 and 11 check it never gets the faction turn, a
 //    page's note, telegraphs or Secret, or anyone who's left.
+//    6e is hits, wounds and Scars on the new core: Mo telegraphs a deadly
+//    knight at Vesk, 2 hits a die, face up on her phone and the TV. It gets
+//    through, her last point of Body and Bloodied, on Mo's page, his crew
+//    lines and the TV. Bram's Scarred and leaves the scene, so Mo can't aim
+//    at him and his phone says so, till the fight's over and he's back.
 // 7. The world: the faction board. Mo opens Tuesday Lair's World screen from
 //    its page and brings in Brinewake's board, four cards matching the
 //    chapter, then the Steeplands with the Vane Estate's whole card. The
@@ -1221,8 +1226,8 @@ try {
   // Roots, and the roll card takes the d10.
   await kai.page.click('.tg-play li.tg [data-do="answer"]');
   await kai.page.waitForSelector(".tg-roots");
-  same(await kai.page.$$eval('.tg-roots [data-do="with"]', (els) => els.map((e) => [e.dataset.r, e.querySelector(".tg-rootn").textContent, e.querySelector(".tile-says").textContent])), [["Body", "8", "what your hands and feet do"], ["Mind", "4", "what goes on in your head"], ["Soul", "0", "who you are"]], "her three Roots to pick from, with what each one's for");
-  has(await kai.page.textContent("#cc-dialog .tg-pick"), "Lose and it lands now, with no defence.", "what losing does, on the card");
+  same(await kai.page.$$eval('.tg-roots [data-do="with"]', (els) => els.map((e) => [e.dataset.r, e.querySelector(".tg-rootn").textContent, e.querySelector(".tile-says").textContent])), [["Body", "11", "what your hands and feet do"], ["Mind", "5", "what goes on in your head"], ["Soul", "0", "who you are"]], "her three Roots to pick from, with what each one's for");
+  has(await kai.page.textContent("#cc-dialog .tg-pick"), "Lose and it lands now, with no defence: a hit at your Body.", "what losing does, on the card");
   same(/specialt/i.test(await kai.page.$eval("#cc-dialog .tg-pick", (el) => {
     const c = el.cloneNode(true);
     for (const d of c.querySelectorAll("details")) d.remove();
@@ -1242,8 +1247,8 @@ try {
   await kai.page.waitForSelector("#cc-dialog .tg-verdict");
   has(await kai.page.textContent("#cc-dialog .tg-verdict"), "Stopped. It never lands.", "her 5 beats its 4");
   sentAt = Date.now();
-  await until(async () => (await cardText(mo.page, "The left Warden")).includes("Stopped. Vesk answered it with 8 steps on Body: 5 against its 4."), "Kai's answer on Mo's page, as its steps on her Body", 4000);
-  same(await teleOf("The left Warden").then((t) => [t?.ans?.root, t?.ans?.steps, "act" in (t?.ans ?? {})]), ["Body", 8, false], "the table has her Root and steps, and no specialty");
+  await until(async () => (await cardText(mo.page, "The left Warden")).includes("Stopped. Vesk answered it with 11 steps on Body: 5 against its 4."), "Kai's answer on Mo's page, as its steps on her Body", 4000);
+  same(await teleOf("The left Warden").then((t) => [t?.ans?.root, t?.ans?.steps, "act" in (t?.ans ?? {}), /^[A-Za-z0-9_-]{6,32}$/.test(t?.ans?.rid ?? "")]), ["Body", 11, false, true], "the table has her Root and steps, no specialty, and the roll it was");
   const mAt = Date.now() - sentAt;
   yes(mAt < 4000, `Mo sees it ${mAt}ms after she rolled, not 20 seconds`);
   same((await teleOf("The left Warden"))?.ans?.won, true, "the table has it stopped");
@@ -1271,7 +1276,7 @@ try {
   await sam.page.click('#cc-dialog [data-act="pad"][data-k="f0"][data-v="6"]');
   await sam.page.click('#cc-dialog [data-act="pad-done"]');
   await sam.page.waitForSelector("#cc-dialog .tg-verdict");
-  has(await sam.page.textContent("#cc-dialog .tg-verdict"), "It lands now, and there’s no defence against it.", "his 3 doesn't beat its 6");
+  has(await sam.page.textContent("#cc-dialog .tg-verdict"), "It lands now, with no defence: a hit at your Body.", "his 3 doesn't beat its 6");
   has(await sam.page.textContent("#cc-dialog .tg-verdict"), "It goes up to Mo when you’ve got a signal.", "and it waits for a signal");
   await sam.page.waitForTimeout(1500);
   same((await teleOf("The brute"))?.ans ?? null, null, "nothing's reached the table yet");
@@ -1280,7 +1285,7 @@ try {
   await shot(sam.page, "tele-offline");
   await sam.context.setOffline(false);
   await until(async () => (await teleOf("The brute"))?.ans?.real === true, "Sam's answer reaching the table once he's back", 10000);
-  await until(async () => (await cardText(mo.page, "The brute")).includes("It landed then and there. Bram’s 7 steps on Body came up 3 against its 6"), "and Mo's page", 4000);
+  await until(async () => (await cardText(mo.page, "The brute")).includes("It landed then and there. Bram’s 9 steps on Body came up 3 against its 6, so it hit Bram with no defence. That’s a hit at Bram’s Body."), "and Mo's page", 4000);
   has(await cardText(mo.page, "The brute"), "real dice", "marked as real dice");
 
   // Mid-round, Mo sends the maid's fear at Vesk, a d4.
@@ -1294,7 +1299,8 @@ try {
   await mo.page.click('.tg-verbs [data-v="Frighten"]');
   await mo.page.click('#cc-dialog [data-do="save"]');
   await until(async () => (await cardText(kai.page, "The maid")).includes("Frighten Vesk"), "the maid on Vesk's play screen", 4000);
-  has(await cardText(kai.page, "The maid"), "At Vesk’s Mind, against their Confidence", "at her Mind, against her Confidence");
+  has(await cardText(kai.page, "The maid"), "At Vesk’s Mind", "at her Mind");
+  same(/Confidence|Stamina|Resolve/.test(await cardText(kai.page, "The maid")), false, "with no track against it");
   // One sent at Bram by mistake comes back with a second tap, and Sam's told.
   await mo.page.click('.tg-sec [data-do="compose"]');
   await mo.page.waitForSelector(".tg-compose");
@@ -1326,14 +1332,14 @@ try {
   await kai.page.evaluate(() => window.ziCompanion.setDice([2, 3]));
   await kai.page.click('#cc-dialog [data-act="d-go"]');
   await kai.page.waitForFunction(() => /It got through/.test(document.querySelector("#cc-dialog li.cc-hit")?.textContent ?? ""));
-  has(await kai.page.textContent("#cc-dialog li.cc-hit"), "It got through: your Confidence’s 2 against its 3.", "her 2 doesn't stop its 3");
+  has(await kai.page.textContent("#cc-dialog li.cc-hit"), "It got through: your Mind’s 2 against its 3.", "her 2 doesn't stop its 3");
   await kai.page.click('#cc-dialog [data-act="d-pay"][data-what="hit"]');
-  await until(async () => (await cardText(mo.page, "The maid")).includes("It got through. Vesk’s Confidence came up 2 against its 3."), "what got through, on Mo's page", 4000);
-  same((await teleOf("The maid"))?.def?.on, "Confidence", "the table has her Confidence as the track that rolled against it");
-  await until(async () => (await cardText(mo.page, "The maid")).includes("Confidence down to d10"), "and what it cost", 4000);
+  await until(async () => (await cardText(mo.page, "The maid")).includes("It got through. Vesk’s Mind came up 2 against its 3."), "what got through, on Mo's page", 4000);
+  same((await teleOf("The maid"))?.def?.on, "Mind", "the table has her Mind as the Root that rolled against it");
+  await until(async () => (await cardText(mo.page, "The maid")).includes("1 hit: a point off Mind"), "and what it cost", 4000);
   // Kai's Undo takes it back off Mo's page: first the cost, then the roll.
   await kai.page.click('#cc-dialog .dlg-foot [data-act="undo"]');
-  await until(async () => !(await cardText(mo.page, "The maid")).includes("Confidence down"), "the cost undone on Mo's page", 4000);
+  await until(async () => !(await cardText(mo.page, "The maid")).includes("a point off Mind"), "the cost undone on Mo's page", 4000);
   await kai.page.click('#cc-dialog .dlg-foot [data-act="undo"]');
   await until(async () => (await cardText(mo.page, "The maid")).includes("It landed. Vesk rolls When it lands next."), "the roll undone on Mo's page", 4000);
   await kai.page.click("#cc-dialog .cc-x");
@@ -1476,36 +1482,39 @@ try {
   has(await text(kai.page, ".tg-yours"), "Your action’s still yours.", "and it didn't cost Vesk her action");
 
   // Bram puts his action into whoever answers the attendant, and it's spent:
-  // a tap on each thing of his that fits getting between her and Vesk, a step
-  // each, and one of them he'll have to explain, for 1 Aura.
+  // his Body, all 9 of it, with *Ring the bell* fitting his hammer, 2 more,
+  // and it costs no Aura.
   await row(sam.page, "The attendant").locator('[data-do="join"]').click();
-  await sam.page.waitForSelector('#cc-dialog [data-do="jthing"]');
+  await sam.page.waitForSelector('#cc-dialog [data-do="jroot"]');
   has(await text(sam.page, "#cc-dialog"), "It’s a combo: one roll between you.", "putting your action in says it's a combo");
-  same(await sam.page.$$eval('#cc-dialog .tg-pick h3.tg-h3', (els) => els.map((e) => e.textContent)), ["Titles and permissions", "Archetypes and abilities", "Attuned", "What you carry"], "everything on his sheet, in the sheet's groups");
-  yes(await sam.page.isDisabled('#cc-dialog [data-do="jput"]'), "nothing goes in till he's tapped what fits");
-  for (const thing of ["The wall that held the harbour gate", "guard one person", "Guardian"]) await sam.page.click(`#cc-dialog [data-do="jthing"]:has-text("${thing}")`);
-  await sam.page.click('#cc-dialog [data-do="jexp"][data-d="1"]');
-  same(await text(sam.page, '#cc-dialog [data-do="jput"]'), "Put 3 steps in for 1 Aura", "three things that fit, one to explain");
+  same(await sam.page.$$eval('#cc-dialog [data-do="jroot"]', (els) => els.map((e) => [e.dataset.r, e.querySelector(".tg-rootn").textContent])), [["Body", "9"], ["Mind", "3"], ["Soul", "4"]], "his three Roots to bring");
+  yes(await sam.page.isDisabled('#cc-dialog [data-do="jput"]'), "nothing goes in till he's picked a Root");
+  await sam.page.click('#cc-dialog [data-do="jroot"][data-r="Body"]');
+  same(await text(sam.page, '#cc-dialog [data-do="jput"]'), "Put your Body in, 9 steps", "his Body, all of it");
+  await sam.page.click('#cc-dialog [data-do="jawk"]:has-text("Ring the bell")');
+  same(await text(sam.page, '#cc-dialog [data-do="jput"]'), "Put your Body in, 11 steps", "and Ring the bell's 2 more");
   if (SHOTS) await sam.page.waitForTimeout(400);
   await shot(sam.page, "scene-join");
   await axe(sam.page, "putting your action in");
   const bAura = (await stateIn(sam.page, "bram-ssssss")).aura;
   await sam.page.click('#cc-dialog [data-do="jput"]');
   await sam.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
-  same((await stateIn(sam.page, "bram-ssssss")).aura, bAura - 1, "explaining one of them cost him 1 Aura");
+  same((await stateIn(sam.page, "bram-ssssss")).aura, bAura, "it cost him no Aura");
   has(await text(sam.page, ".tg-yours"), "Your action’s spent this round.", "Bram's action's spent");
-  has(await text(sam.page, ".tg-yours"), "3 steps into whoever answers the attendant", "and his phone says on what");
+  has(await text(sam.page, ".tg-yours"), "11 steps on Body into whoever answers the attendant", "and his phone says on what");
   same(await row(sam.page, "The attendant").locator(".tg-chip.is-mine").count(), 1, "the attendant's row says he's in on it");
   same(await sam.page.$$eval('.tg-play [data-do="answer"], .tg-play [data-do="join"], .tg-play [data-do="else"], .tg-play [data-do="work"]', (els) => els.length), 0, "and there's nothing left to spend it on");
   await until(async () => (await cardText(mo.page, "The attendant")).includes("Bram’s put an action into whoever answers it."), "Mo's page has Bram in on it", 4000);
-  await until(async () => (await text(mo.page, ".tg-crew")).includes("3 steps into whoever answers the attendant"), "and so do the crew's lines", 4000);
+  await until(async () => (await text(mo.page, ".tg-crew")).includes("11 steps on Body into whoever answers the attendant"), "and so do the crew's lines", 4000);
+  const bJoin = (await tableOf(tuesday.id))?.rounds?.at(-1)?.acts?.[`${samId}|bram-ssssss`]?.list?.[0];
+  same([bJoin?.root, bJoin?.steps, "paid" in (bJoin ?? {})], ["Body", 11, false], "the table has his Root and steps, and nothing paid");
   // A second phone of Sam's can't spend it again.
   const bathMan = await teleOf("A bath-man");
   const again = await got(sam.page, "POST", `/api/campaigns/${tuesday.id}/table`, { dev: "sams-tablet-0001", now: Date.now(), ops: [{ n: 1, o: "answer", ch: "bram-ssssss", id: bathMan.id, a: { root: "Body", steps: 9, dice: [{ size: 12, total: 7, out: "beat" }, { size: 6, total: 2, out: "under" }], opp: 3, real: false } }] });
   has(again.json?.no?.[0]?.why, "You’ve spent your action this round", "the table won't take a second action from another phone");
 
   // Kai looks at Something else, then answers the attendant on her Body with
-  // Bram's three steps in it, a combo.
+  // Bram's Body in it, a combo.
   await kai.page.click('.tg-yours [data-do="else"]');
   await kai.page.waitForSelector("#cc-dialog .tg-else");
   has(await text(kai.page, "#cc-dialog .tg-else"), "Work Dace’s satchel", "the scene's in Something else");
@@ -1516,16 +1525,16 @@ try {
   await kai.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
   await kai.page.click('.tg-play li.tg:has(h3:text-is("The attendant")) [data-do="answer"]');
   await kai.page.waitForSelector(".tg-roots");
-  has(await text(kai.page, "#cc-dialog .tg-pick"), "Bram’s in on it, so 3 more steps go into your roll as a combo.", "the answer says Bram's in on it");
+  has(await text(kai.page, "#cc-dialog .tg-pick"), "Bram’s in on it, so 11 more steps go into your roll as a combo.", "the answer says Bram's in on it");
   await kai.page.click('.tg-roots [data-do="with"][data-r="Body"]');
   await kai.page.waitForSelector('#cc-dialog .cc-foe .zd-die[data-d=\"6\"]');
   has(await text(kai.page, "#cc-dialog"), "Friend 1’s steps", "Bram's steps are in the roll");
-  has(await text(kai.page, "#cc-dialog .cc-dice"), "11 steps", "her Body, and Bram's three");
   const comboAura = (await stateIn(kai.page, "vesk-aaaaaa")).aura;
-  await kai.page.evaluate(() => window.ziCompanion.setDice([9, 1, 4]));
+  // 22 steps are three d12s and a d8, against the attendant's d6.
+  await kai.page.evaluate(() => window.ziCompanion.setDice([9, 1, 4, 3, 6]));
   await kai.page.click('#cc-dialog [data-act="go"]');
   await kai.page.waitForSelector("#cc-dialog .tg-verdict");
-  has(await text(kai.page, "#cc-dialog .tg-verdict"), "Stopped. It never lands.", "her d12's 9 beats its 4");
+  has(await text(kai.page, "#cc-dialog .tg-verdict"), "Stopped. It never lands.", "her d12's 9 beats its 6");
   await until(async () => (await teleOf("The attendant"))?.ans?.with?.[0]?.ch === "bram-ssssss", "the table has Bram in Vesk's answer", 4000);
   same((await stateIn(kai.page, "vesk-aaaaaa")).aura, comboAura + 1, "Vesk gets the Aura for the win, since she rolled");
   await until(async () => (await text(sam.page, ".tg-yours")).includes("In on the attendant with Vesk: stopped"), "and his phone says how it went", 4000);
@@ -1534,38 +1543,25 @@ try {
   has(await text(kai.page, ".tg-yours"), "Your action’s spent this round.", "Vesk's action's spent on it");
   same(await kai.page.$$eval('.tg-play [data-do="answer"], .tg-play [data-do="join"]', (els) => els.length), 0, "so she can't answer anything else");
 
-  // 3 Aura for another, the first she's bought this round, on Dace's
-  // satchel: her Body takes Locked.
-  const vNow = (await stateIn(kai.page, "vesk-aaaaaa")).aura;
-  await kai.page.click(".tg-more > summary");
-  same(await text(kai.page, '.tg-more [data-do="more"][data-k="aura"]'), "3 Aura", "the first extra action's 3 Aura");
-  has(await kai.page.textContent(".tg-more .tip-card"), "then 4, then 5", "and why, behind its question bubble");
-  await kai.page.click('.tg-more [data-do="more"][data-k="aura"]');
-  await until(async () => (await text(kai.page, ".tg-yours")).includes("One more action to spend this round."), "an extra action for 3 Aura");
-  same((await stateIn(kai.page, "vesk-aaaaaa")).aura, vNow - 3, "that cost her 3 Aura");
-  same(await text(kai.page, '.tg-more [data-do="more"][data-k="aura"]'), "4 Aura", "and the next one's 4, since there's no cap");
-  await until(async () => (await tableOf(tuesday.id))?.rounds?.at(-1)?.acts?.[`${kaiId}|vesk-aaaaaa`]?.paid?.join() === "3", "the table has what it cost", 4000);
-  same(await text(sam.page, '.tg-more [data-do="more"][data-k="aura"]'), "3 Aura", "while Bram's first is still 3, since each player's extra actions are their own");
-  if (!(await kai.page.$eval(".tg-scenefold", (el) => el.open))) await kai.page.click(".tg-scenefold > summary");
-  await piece(kai.page, "Dace’s satchel").locator('[data-do="work"]').click();
-  await kai.page.waitForSelector('#cc-dialog [data-do="wwith"]');
-  same(await kai.page.$eval('#cc-dialog [data-do="aim"][data-v="Locked"]', (el) => el.getAttribute("aria-pressed")), "true", "going for Locked first");
-  if (SHOTS) await kai.page.waitForTimeout(400);
-  await shot(kai.page, "scene-work");
-  await axe(kai.page, "working a stake");
-  await kai.page.click('#cc-dialog [data-do="wwith"][data-r="Body"]');
-  await kai.page.waitForSelector('#cc-dialog .cc-foe .zd-die[data-d=\"6\"]');
-  await kai.page.evaluate(() => window.ziCompanion.setDice([7, 1, 3]));
-  await kai.page.click('#cc-dialog [data-act="go"]');
-  await kai.page.waitForSelector("#cc-dialog .tg-verdict");
-  has(await text(kai.page, "#cc-dialog .tg-verdict"), "You beat it. Locked’s gone.", "7 against its 3");
+  // There's no getting another action: every die's an intent, and her one
+  // roll's dice can go at more than one thing. A die of the same roll at
+  // Dace's satchel, sent from her tablet, is the same action, and takes
+  // Locked. Anything else is a second action, and turned down.
+  same(await kai.page.$$eval(".tg-more", (els) => els.length), 0, "there's nowhere to buy another action");
+  same(await kai.page.$$eval('.tg-play [data-do="answer"], .tg-play [data-do="join"], .tg-play [data-do="else"]', (els) => els.length), 0, "or anything left to spend one on");
+  const rid = (await teleOf("The attendant"))?.ans?.rid;
+  yes(/^[A-Za-z0-9_-]{6,32}$/.test(rid ?? ""), "her answer says the roll it was");
+  const satchel = (await sceneOf()).stakes[1];
+  const move = await got(kai.page, "POST", `/api/campaigns/${tuesday.id}/table`, { dev: "kais-tablet-0001", now: Date.now(), ops: [{ n: 1, o: "acts", round: (await tableOf(tuesday.id)).rounds.at(-1).id, ch: "vesk-aaaaaa", x: { more: ["aura"], paid: [3], list: [{ id: "act-vesk-mv1", k: "else", act: "Move", t: Date.now() }] } }] });
+  has(move.json?.no?.[0]?.why, "There’s no getting another action now.", "an extra action for 3 Aura is turned down");
+  const second = await got(kai.page, "POST", `/api/campaigns/${tuesday.id}/table`, { dev: "kais-tablet-0001", now: Date.now(), ops: [{ n: 2, o: "acts", round: (await tableOf(tuesday.id)).rounds.at(-1).id, ch: "vesk-aaaaaa", x: { more: [], list: [{ id: "act-vesk-mv1", k: "else", act: "Move", t: Date.now() }] } }] });
+  has(second.json?.no?.[0]?.why, "You’ve got one action this round.", "and so's a Move, a second action");
+  const same1 = await got(kai.page, "POST", `/api/campaigns/${tuesday.id}/table`, { dev: "kais-tablet-0001", now: Date.now(), ops: [{ n: 3, o: "acts", round: (await tableOf(tuesday.id)).rounds.at(-1).id, ch: "vesk-aaaaaa", x: { more: [], list: [{ id: "act-vesk-sa1", k: "work", ref: satchel.id, root: "Body", steps: 11, rid, t: Date.now(), roll: { dice: [{ size: 8, total: 7 }], opp: 3 }, aim: "Locked" }] } }] });
+  same(same1.json?.no ?? [], [], "while a die of the same roll at the satchel's taken");
   await until(async () => (await sceneOf())?.stakes[1].tags.map((g) => g.gone).join() === "1,0", "Locked gone from the satchel on the table", 4000);
-  await kai.page.click('#cc-dialog .dlg-foot [data-act="close"]');
-  await kai.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
-  has(await text(kai.page, ".tg-yours"), "Working Dace’s satchel with 8 steps on Body: Locked gone", "her phone says what the second one went on");
   await until(async () => (await piece(mo.page, "Dace’s satchel").locator('.sc-tag[aria-pressed="true"]').count()) === 1, "Locked struck off on Mo's page", 4000);
-  await until(async () => (await mo.page.$$eval('.tg-crewlist li:has(b:text-is("Vesk")) .tg-did', (els) => els.map((e) => e.textContent)).catch(() => [])).join(" | ") === "Answering the attendant with 11 steps on Body: stopped | Working Dace’s satchel with 8 steps on Body: Locked gone | Took a bath-man for Bram", "and the crew's lines have all three of Vesk's", 4000);
-  has(await text(mo.page, ".tg-crew"), "An extra action: 3 Aura", "with where the extra one came from");
+  await until(async () => (await mo.page.$$eval('.tg-crewlist li:has(b:text-is("Vesk")) .tg-did', (els) => els.map((e) => e.textContent)).catch(() => [])).join(" | ") === "Answering the attendant with 11 steps on Body: stopped | Working Dace’s satchel with 11 steps on Body: Locked gone | Took a bath-man for Bram", "and the crew's lines have all three of Vesk's", 4000);
+  same(/extra action/i.test(await text(mo.page, ".tg-crew")), false, "with no extra actions anywhere");
   await shotsAt(kai.page, "scene-play", ".tg-play");
   await shotsAt(kai.page, "scene-yours", ".tg-yours");
   await axe(kai.page, "the round and the scene on the play screen");
@@ -1704,7 +1700,8 @@ try {
   await kai.page.click('li.tg:has(h3:text-is("The pipes")) [data-do="land"]');
   await kai.page.waitForSelector('#cc-dialog [data-act="d-go"]');
   same(await kai.page.$$eval("#cc-dialog .cc-inc .zd-die", (els) => els.map((el) => el.dataset.d)), ["6"], "the pipes' d6 from round 3, on its own");
-  await kai.page.evaluate(() => window.ziCompanion.setDice([4, 2]));
+  // Her Body's two dice, a 4 and a 1, against the pipes' 2.
+  await kai.page.evaluate(() => window.ziCompanion.setDice([4, 1, 2]));
   await kai.page.click('#cc-dialog [data-act="d-go"]');
   await kai.page.waitForFunction(() => /Stopped by/.test(document.querySelector("#cc-dialog .cc-hits")?.textContent ?? ""));
   await until(async () => (await cardText(mo.page, "The pipes")).includes("Vesk stopped it when it landed: 4 against its 2."), "her 4 stops the pipes, on Mo's page", 4000);
@@ -1713,7 +1710,7 @@ try {
   await kai.page.click('.tile[data-act="defence"]');
   await kai.page.waitForSelector('#cc-dialog [data-act="d-go"]');
   same(await kai.page.$$eval("#cc-dialog .cc-inc .zd-die", (els) => els.map((el) => el.dataset.d)), ["8"], "then the bath-man's d8 from round 2");
-  await kai.page.evaluate(() => window.ziCompanion.setDice([7, 3]));
+  await kai.page.evaluate(() => window.ziCompanion.setDice([7, 3, 5]));
   await kai.page.click('#cc-dialog [data-act="d-go"]');
   await kai.page.waitForFunction(() => /Stopped by/.test(document.querySelector("#cc-dialog .cc-hits")?.textContent ?? ""));
   await until(async () => (await teleOf("A bath-man"))?.def?.stopped === true, "her 7 stops the bath-man, on the table", 4000);
@@ -1766,13 +1763,13 @@ try {
   has(await tvCard("The pipes").locator(".ts-v").textContent(), "Vesk stopped it: 4 against its 2.", "with her roll");
   same([await tvCard("The pipes").locator(".ts-chip:not(.is-out)").allTextContents(), await tvCard("The pipes").locator(".ts-chip.is-out").allTextContents()], [["Vesk"], ["Bram"]], "Vesk in the hot room, and Bram out of it");
   same(await tvCard("A runner").locator(".ts-vw").textContent(), "Landed then and there", "the runner landed then and there");
-  same(await tvCard("A runner").locator(".ts-vl").allTextContents(), ["Bram’s 7 steps on Body came up 1 against its 5.", "The scene clock dropped to d4."], "with Bram's roll and what it did");
+  same(await tvCard("A runner").locator(".ts-vl").allTextContents(), ["Bram’s 9 steps on Body came up 1 against its 5.", "The scene clock dropped to d4."], "with Bram's roll and what it did");
   same(await tvCard("A runner").locator(".ts-vd .zd-die").count(), 2, "and Bram's dice, big");
   same(await text(tv.page, ".ts-scene h2"), "The Copper Baths", "the scene's the Copper Baths");
   same(await tv.page.getAttribute(".ts-clock .zd-die", "data-d"), "2", "with its scene clock on a d2");
   same(await tv.page.locator(".ts-el.is-stake:has(.ts-eln:text-is('The deal')) .zd-tag").allTextContents(), ["Someone Must Agree", "Wanted By Others", "Dace grabs his towel and heads for the changing room"], "and what's in the deal's way, Dace's tag too");
   same(await tv.page.$$eval(".ts-p .ts-pn", (els) => els.map((e) => e.textContent)), ["Vesk", "Bram"], "the crew, in the order they joined");
-  same(await tv.page.locator('.ts-p:has(.ts-pn:text-is("Bram")) .ts-pa li').allTextContents(), ["Answering a runner with 7 steps on Body: it landed"], "and what Bram did this round");
+  same(await tv.page.locator('.ts-p:has(.ts-pn:text-is("Bram")) .ts-pa li').allTextContents(), ["Answering a runner with 9 steps on Body: it landed"], "and what Bram did this round");
   // It only ever has what the crew sees, and none of the table's workings.
   const screenJson = async () => (await got(tv.page, "GET", `/api/screen/${tvCode}`)).json;
   const tvJson = await screenJson();
@@ -1807,7 +1804,7 @@ try {
   await until(async () => (await text(tv.page, ".ts-rhead h2")) === "Round 4", "round 4 on the TV in a second or two", 4000);
   same(await tv.page.$$eval(".ts-tally li", (els) => els.map((e) => e.textContent.trim())), ["1 coming"], "one coming");
   has(await tvCard("Orla Strand").textContent(), "At Vesk", "Orla's at Vesk");
-  has(await tvCard("Orla Strand").textContent(), "At Vesk’s Mind, against their Confidence", "and it's at her Mind, so it's on her Confidence");
+  has(await tvCard("Orla Strand").textContent(), "At Vesk’s Mind", "and it's at her Mind");
   same(await tv.page.locator('.ts-p:has(.ts-pn:text-is("Vesk")) .ts-pl').textContent(), "One action left", "Vesk's still got her action");
   same((await got(kai.page, "POST", `/api/campaigns/${tuesday.id}/table`, { dev: "kais-phone-screen-1", now: Date.now(), ops: [{ n: 1, o: "answer", id: "tele-tv-00001", ch: "vesk-aaaaaa", a: { act: "Talk", steps: 2, dice: [{ size: 6, total: 6 }], opp: 3 } }] })).json?.no, [], "Kai answers it");
   await until(async () => (await tvCard("Orla Strand").locator(".ts-vw").count()) && (await tvCard("Orla Strand").locator(".ts-vw").textContent()) === "Stopped", "Stopped on the TV", 4000);
@@ -1853,6 +1850,80 @@ try {
   same([guesses.slice(0, 20).every((s) => s === 404), guesses[20]], [true, 429], "twenty wrong codes from one address, then it waits");
   await guesser.close();
   if (UPTO === "6d") break rest;
+
+  // ------------------------------------------------------------ 6e. hits, wounds and Scars
+  // On the new core: Mo telegraphs a deadly knight at Vesk, 2 hits a die, and
+  // it's said face up on her phone and the TV. It gets through to her Body:
+  // her last point and Bloodied, said on Mo's page, his crew lines and the
+  // TV. Bram's Scarred and leaves the scene, so Mo can't aim at him and his
+  // phone says he's out, till Mo ends the fight and he's back.
+  console.log("6e. Hits, wounds and Scars");
+  await mo.page.goto(`${BASE}/characters/?camp=${tuesday.id}`);
+  await mo.page.waitForSelector(".tg-sec");
+  await until(async () => Boolean(await mo.page.$(".tg-sec .tg-net.is-live")), "Mo's phone live on the table again");
+  await mo.page.click('.tg-sec [data-do="compose"]');
+  await mo.page.waitForSelector(".tg-compose");
+  await mo.page.click('.tg-target:has-text("Vesk")');
+  await mo.page.click('.tg-size[data-d="12"]');
+  same(await mo.page.$eval('#cc-dialog [data-do="hits"][data-v="1"]', (el) => el.getAttribute("aria-pressed")), "true", "a telegraph's 1 hit a die to start with");
+  await mo.page.click('#cc-dialog [data-do="hits"][data-v="2"]');
+  await mo.page.fill("#tg-who", "The knight");
+  await mo.page.fill("#tg-does", "Cleave Vesk in two");
+  has(await mo.page.textContent(".tg-preview footer"), "At their Body, 2 hits a die", "deadly, said on the card as it'll go out");
+  await axe(mo.page, "a deadly telegraph");
+  await mo.page.click('#cc-dialog [data-do="save"]');
+  await mo.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  await mo.page.click('.tg-sec [data-do="compose"]');
+  await mo.page.waitForSelector(".tg-compose");
+  await mo.page.click('.tg-target:has-text("Bram")');
+  await mo.page.click('.tg-size[data-d="10"]');
+  await mo.page.fill("#tg-who", "The squire");
+  await mo.page.fill("#tg-does", "Run Bram through");
+  await mo.page.click('#cc-dialog [data-do="save"]');
+  await mo.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  await mo.page.click('.tg-sec [data-do="send"]');
+  await until(async () => (await tableOf(tuesday.id))?.rounds?.at(-1)?.tele?.length === 2, "round 5 on the table", 4000);
+  same((await teleOf("The knight"))?.hits, 2, "the table has the knight's 2 hits");
+  await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa`);
+  await until(async () => (await cardText(kai.page, "The knight")).includes("At Vesk’s Body, 2 hits a die"), "Vesk's phone says it's 2 hits a die", 6000);
+  await until(async () => (await tvCard("The knight").count()) && (await tvCard("The knight").textContent()).includes("At Vesk’s Body, 2 hits a die"), "and so does the TV", 4000);
+  const round5 = (await tableOf(tuesday.id)).rounds.at(-1).id;
+  same((await got(mo.page, "POST", `/api/campaigns/${tuesday.id}/table`, { ...mo4, ops: [{ n: 3, o: "end", round: round5 }] })).json?.no, [], "Mo ends round 5");
+  // What got through, as Vesk's and Bram's phones write it on the new core.
+  const knight = await teleOf("The knight");
+  const squire = await teleOf("The squire");
+  same((await got(kai.page, "POST", `/api/campaigns/${tuesday.id}/table`, { dev: "kais-phone-screen-1", now: Date.now(), ops: [{ n: 4, o: "defend", id: knight.id, ch: "vesk-aaaaaa", r: { on: "Body", stopped: false, mine: 3, v: 11, hits: 2, lost: { Body: 1 }, wound: "Body" } }] })).json?.no, [], "the knight gets through Vesk's Body: her last point, and Bloodied");
+  same((await got(sam.page, "POST", `/api/campaigns/${tuesday.id}/table`, { dev: "sams-tablet-0001", now: Date.now(), ops: [{ n: 4, o: "defend", id: squire.id, ch: "bram-ssssss", r: { on: "Body", stopped: false, mine: 2, v: 9, hits: 1, scar: "Body" } }] })).json?.no, [], "and the squire Scars Bram");
+  await until(async () => (await cardText(mo.page, "The knight")).includes("It got through. Vesk’s Body came up 3 against its 11. 2 hits: a point off Body and Bloodied"), "Mo's page says what it cost Vesk", 6000);
+  await until(async () => (await mo.page.$$eval('.tg-crewlist li:has(b:text-is("Vesk")) .tg-chip.is-hurt', (els) => els.map((e) => e.textContent)).catch(() => [])).join() === "Bloodied", "and his crew lines have her Bloodied", 4000);
+  same(await mo.page.$$eval('.tg-crewlist li:has(b:text-is("Bram")) .tg-chip.is-hurt', (els) => els.map((e) => e.textContent)), ["Scarred, and out of the scene"], "and Bram Scarred, and out of the scene");
+  await until(async () => (await tv.page.locator('.ts-p:has(.ts-pn:text-is("Vesk")) .ts-ph').count()) && (await tv.page.locator('.ts-p:has(.ts-pn:text-is("Vesk")) .ts-ph').textContent()) === "Bloodied", "the TV has Vesk Bloodied", 4000);
+  same(await tv.page.locator('.ts-p:has(.ts-pn:text-is("Bram")) .ts-ph').textContent(), "Scarred, and out of the scene", "and Bram out of the scene");
+  has(await tvCard("The knight").locator(".ts-v").textContent(), "2 hits: a point off Body and Bloodied.", "with what the knight cost her on its card");
+  await shot(tv.page, "screen-tv-wounds");
+  // Bram's out, so Mo can't aim at him, and his phone says so.
+  await mo.page.click('.tg-sec [data-do="compose"]');
+  await mo.page.waitForSelector(".tg-compose");
+  yes(await mo.page.isDisabled('.tg-target:has-text("Bram")'), "Bram can't be picked in the composer");
+  has(await text(mo.page, '.tg-target:has-text("Bram")'), "out of the scene", "and it says why");
+  await mo.page.click("#cc-dialog .dlg-head .cc-x");
+  await mo.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  const round6 = { n: 5, o: "round", id: "round-core-006", tele: [{ id: "tele-core-0001", who: "The knight", does: "Swing at Vesk again", d: 12, hits: 2, root: "Body", at: { user: kaiId, ch: "vesk-aaaaaa", arch: ["Shadow", "Shadow"] } }] };
+  same((await got(mo.page, "POST", `/api/campaigns/${tuesday.id}/table`, { ...mo4, ops: [round6] })).json?.no, [], "Mo sends round 6 at Vesk");
+  const atBram = await got(mo.page, "POST", `/api/campaigns/${tuesday.id}/table`, { ...mo4, ops: [{ n: 6, o: "add", tele: { id: "tele-core-0002", who: "The squire", does: "Kick Bram while he's down", d: 6, root: "Body", at: { user: samId, ch: "bram-ssssss" } } }] });
+  has(atBram.json?.no?.[0]?.why, "Bram’s left the scene with a Scar", "and one at Bram's turned down");
+  await sam.page.goto(`${BASE}/characters/?c=bram-ssssss`);
+  await until(async () => (await text(sam.page, ".tg-yours")).includes("You’ve left the scene with a Scar."), "Bram's phone says he's left the scene", 6000);
+  same(await sam.page.$$eval('.tg-play [data-do="answer"], .tg-play [data-do="join"], .tg-play [data-do="icp"], .tg-play [data-do="else"]', (els) => els.length), 0, "with nothing to answer, join or step in front of");
+  await axe(sam.page, "out of the scene");
+  // That fight's over, and Bram's back.
+  same((await got(mo.page, "POST", `/api/campaigns/${tuesday.id}/table`, { ...mo4, ops: [{ n: 7, o: "fight", fight: (await tableOf(tuesday.id)).fight }] })).json?.no, [], "Mo ends the fight");
+  await mo.page.click('.tg-sec [data-do="compose"]');
+  await mo.page.waitForSelector(".tg-compose");
+  same(await mo.page.isDisabled('.tg-target:has-text("Bram")'), false, "and Bram can be aimed at again");
+  await mo.page.click("#cc-dialog .dlg-head .cc-x");
+  await mo.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  if (UPTO === "6e") break rest;
   // ------------------------------------------------------------ 7. the world
   // Mo's Tuesday Lair, with Kai playing Vesk in it, and Zed's Night next door.
   async function checkWorld() {

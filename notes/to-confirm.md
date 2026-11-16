@@ -74,7 +74,7 @@ Built on 16 Nov on `rules/2026-11-16-core-play`: the play screen, When it lands,
 5. **Roll again is a point of Soul**, so it isn't offered when your Soul's on 0, or on a heal.
 6. **When it lands rolls each Root something's at as its own roll**, split its own way, with a Root brought in or an awakening a fold away, and Defend's Root on top. The dice are matched so the most are stopped: the lowest telegraph takes the lowest die that stops it, a Root's own die before Defend's on a tie, since Defend's can go anywhere.
 7. **What gets through is settled a hit at a time.** A telegraph's hits are its own (1, or what a deadly threat's says) and one more for each vulnerability on you. Each hit's a point off its Root, a box of armour there, 2 for 1 on another Root, Toughness or Stand firm. The condition it was going for, or something else the GM names, settles the whole telegraph, and only before any of its hits are settled.
-8. **A telegraph you add by hand gets a Hits choice, 1 to 4**, for a deadly threat. One from the live table takes its hits from the table when prompt 6 sends them.
+8. **A telegraph you add by hand gets a Hits choice, 1 to 4**, for a deadly threat. One from the live table takes its hits from the table.
 9. **Stand firm's two hits**: the first takes its point, the second takes nothing.
 10. **The Blaze is a button on a wounded Root's panel**, with Not yet to back out before the Scar's written. The Scar's form is the same for a Blaze and for the hit that did it. A Root that's 0 to start with can still take a Scar, which locks nothing.
 11. **Out of the scene** after a Scar, no more hits land on you, and New scene brings you back.
@@ -86,10 +86,23 @@ Built on 16 Nov on `rules/2026-11-16-core-play`: the play screen, When it lands,
 17. **A wound clears** with downtime, or with The story clears it on that Root's panel, for when the GM says so.
 18. **Toll sits with the conditions**, with one less and one more on its panel for anything the phone can't see.
 19. **Downtime puts everything back** after its slots, and while its card isn't on the new core yet (prompt 5), the button does just that, everything back with no slots.
-20. **The live table still hears a Root's roll by its old track's name** (Stamina for Body, Confidence for Mind, Resolve for Soul), since the server checks it that way. Prompt 6 reads them as Roots.
+20. **What got through goes to the live table in numbers**, worked out from the character before and after each hit: the hits, the points off each Root (2 for 1 included), armour's boxes, and a wound or a Scar. Something else the GM names goes as the player's words.
 21. **The dice roller's actions are targets now**, since there's one action a round and every die's an intent. A target coming at you says how many hits each that gets through is, 1 to 4, and the result says the hits.
 22. **The learning round's combo** brings Bram's Body as well as his hammer's *Ring the bell*, so it's Wren's 10 and Bram's 11, three d12s and a d6. Isolde's Body is 0, so it's a d2 against the club, 3 times in 16, and the club landing leaves her Bloodied, or 2 points off her Mind.
 23. **The faction turn's reroll in downtime is a point of Soul**, a small change in `turn.js`.
+
+### 6. The live table
+
+Built into the live table, the table screen and the Worker on 16 Nov, on `rules/2026-11-16-core-table`.
+
+1. **One roll's one action, however many things its dice go at.** The table counts an action for each roll, so an answer, a die at a stake and the roll on a Root it came from are all the one action. Defend, putting your action into a friend's answer, using the ground, the Blaze and anything said in words are each the whole action, the way they were.
+2. **Nobody gets another action, from anywhere.** A phone that tries to buy one is told no and gets its Aura back. A round played on stacking keeps the extra actions it had and reads them the way it did.
+3. **Putting your action into a friend's answer brings one Root, all of it, and 2 steps for each of your awakenings that fits**, the way a roll of your own would, and it costs no Aura. You can't bring a second Root into someone else's roll.
+4. **The GM picks a telegraph's hits on her phone, 1 to 4 a die**, and the table holds up to 6. One at a stake, an event or the scene clock has none. A telegraph written on one of her place pages can say its hits after its Root, *Body, 2 hits, Pinned*.
+5. **A lost answer lands on whoever the telegraph was aimed at**, or whoever took it, and their phone takes its hits with no defence. When whoever answered put themselves in the way, the table can't tell, so the GM says who it hit, the way she did.
+6. **A Scar or the Blaze takes them out of the scene till the GM ends the fight** (That fight's over): nothing can be aimed at them, a telegraph at a place goes out without them, and they can't answer, act or step in front of anything. The table only knows a fight, so that's its scene.
+7. **The Blaze is in Something else** for a wounded character, one for each wounded Root, and taking it back takes the Scar back.
+8. **The wounds on the GM's crew lines and the table screen are the ones the table's seen this fight**, from what each When it lands wrote. One from an earlier fight is on the character's sheet, not the table.
 
 ## 14 Nov: stacking
 
