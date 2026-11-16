@@ -109,6 +109,17 @@ Built into the live table, the table screen and the Worker on 16 Nov, on `rules/
 7. **The Blaze is in Something else** for a wounded character, one for each wounded Root, and taking it back takes the Scar back.
 8. **The wounds on the GM's crew lines and the table screen are the ones the table's seen this fight**, from what each When it lands wrote. One from an earlier fight is on the character's sheet, not the table.
 
+### 7. Bringing it together
+
+Made on 16 Nov on `rules/2026-11-16-core`, bringing Magic (07) onto the new core, since it wasn't on anyone's list.
+
+1. **A summoning attunement's souls don't lock a point or add to Aura**, as 03a's Summoner already says, so a starting one's 5 points and nothing else. Calling souls out is Aura spent as part of your action, a d4 of summons for each, as before.
+2. **Catching a soul rolls the Root that fits how you catch it**, with nothing else counted. Sable's catch is her Soul, 7 steps, a d12 and a d2.
+3. **The made-up storm-caller has a Soul of 6** (a d8 for the bolt and a d4 for the line), and the Elementalist's Push and *Sculpt* in Area magic are 1 Aura, as 03a has them.
+4. **Ash and Bram at the gate are 24 steps, four d12s**: his Body and *Ring the bell*, her Soul and *Fire without a word*, one d12 on *Iron* and three on *Barred*, where the best counts. The rest of the example's as it was.
+5. **Isolde's ward against arrows is her Soul, 7 steps, a d8 and a d6**, the same split as Conflict's Wards and blessings.
+6. **The change log's `c-2026-11-16-core` says Magic's on it too**, rather than a new entry, since it follows from that change.
+
 ## 14 Nov: stacking
 
 **Live since 14 Nov**, when you said to make it live. Part 1 of the stacking rework (`notes/stacking-plan.md`), from your 14 Nov chat (`notes/playtest-sheets/2026-11-14-chat-decisions.md`), built by thirteen chats on `rules/2026-11-14-stacking` with the book's core cut under it. These are the calls Claude made writing it down, before any chat built it, and each chat added its own in its subsection below. They're still yours to say yes or no to.

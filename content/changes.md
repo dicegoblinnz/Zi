@@ -61,6 +61,8 @@ Mo's calls in chat, the second part of the rework that comes in parts, after a g
 
 **Everything that put your Resolve up a size gets you a point of Soul back**: a big bite from a Catch or a hostile thread, and straining a bond thread. *Take a breath* is 1 point back on your Mind, as far as half its maximum, rounded up. The conditions that moved a track move a point: a spent *Heartened* gives you a point of Mind back, a spent *Shaken* or a refused *Charmed* is a hit at your Mind, and a spent *Poisoned* has your Body defend as a d2. See [Catches and Trouble](#s-trouble), [Bonds and threads](#s-bonds) and [Conditions to start with](#s-conditions-list).
 
+**Magic's on it too.** A school of magic's a Title, so it puts 5 on your Roots, a magic item's awakening locks a point like any other, and a summoning attunement's souls don't lock a point or put anything on your Aura maximum. See [Magic Is a Permission](#s-magic) and [Summoning](#s-summoning).
+
 **Characters already made keep everything they've got**, recounted: each Title's 3 becomes 5, the 2 more spread the way the 3 were for you to check, every Root starts full, and a track's Scars are Scars on its Root.
 
 ## 14 Nov 2026: Every archetype's Trait, and the Scholar out for now {#c-2026-11-14-traits}
