@@ -1,4 +1,5 @@
-// The character builder on stacking (Mo's 14 Nov rework, prompt 7 of
+// The character builder on the new core (Mo's 16 Nov rework, prompt 5 of
+// notes/core-plan.md, on top of stacking's builder, prompt 7 of
 // notes/stacking-plan.md): the Quick Build from the rules, one step to a
 // screen on a phone held in one hand, with the book's own words for each step
 // behind a question bubble (tip.js). A character's bought with points
@@ -7,9 +8,11 @@
 // whole way, and a tap on it saying what every point went on. A Title, an
 // archetype or an attuned thing is 5 and comes with its one permission,
 // ability or awakening, and every other permission, ability, awakening or
-// item is 1. A Title puts 3 on your Roots, spread in a tap or three (all on
-// one, 2 and 1, or 1 on each), and each permission 1 on the Root it's written
-// with. An archetype shows its mechanic, its Trait and its abilities, and the
+// item is 1. A Title puts 5 on your Roots, spread with a tap on a Root (All
+// on puts the 5 on one, and + takes a point off the biggest of the others
+// once all 5 are on), and each permission 1 on the Root it's written with. A
+// Root's number is its dice, its points to take hits with and its points to
+// spend. Each awakening says the Root it fits, and locks a point of it. An archetype shows its mechanic, its Trait and its abilities, and the
 // player picks the one it comes with. There are no specialties. At least one
 // Title, one archetype and one attuned thing is recommended, and that's a
 // nudge. It warns but never blocks, bar one thing: a Title holds six
@@ -24,9 +27,11 @@
 // Changing a saved character opens on one page too, with everything on their
 // sheet and whatever they grew in downtime (foldGrown), and so does rebuilding
 // one built before Roots (fromBefore). One built before stacking keeps
-// everything, even past 35: a Title that was on one Root has all 3 on it for
+// everything, even past 35: a Title that was on one Root has all 5 on it for
 // the player to spread how they like, its specialties go, and its archetypes
-// keep every ability they had.
+// keep every ability they had. One built on stacking has each Title's 3 made
+// 5 the way they were spread (R.toFive), flagged for the player to check, and
+// each awakening on its biggest Root till they say.
 
 import { diceLabel, stepsToDice } from "./dice.js";
 import * as R from "./roots.js";
@@ -59,43 +64,45 @@ const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (ch) => `&#${ch.charCodeA
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 const both = (list) => (list.length > 1 ? `${list.slice(0, -1).join(", ")} and ${list[list.length - 1]}` : list[0] ?? "");
 const pts = (n) => `${n} point${n === 1 ? "" : "s"}`;
-const TRACK_OF = { Body: "Stamina", Mind: "Confidence", Soul: "Resolve" };
 
 // ---------------------------------------------------------------- the build
 //
-//   { v: 4, start, archs: [name], have: [[ability]], titles: [{ idea, text,
+//   { v: 5, start, archs: [name], have: [[ability]], titles: [{ idea, text,
 //     roots: { Body, Mind, Soul }, perms: [{ text, root }], boons: [{ lever,
 //     name, on }] }], equipment: [{ text, arm, q }], utility: [{ text }],
 //     keepsake: { text }, bag, attuned: [{ name, props, stage, catch, burden,
-//     awk: [{ name, kind, text, kept }] }], threads, connect, aspiration,
+//     awk: [{ name, root, text, kept }] }], threads, connect, aspiration,
 //     name, pronoun, blurb, trouble }
 //
 // start is the points they start on. archs stays a list of names, since the
 // Worker reads it for the crests, and have[i] is the abilities archetype i's
 // got, the one it came with first (null for every ability it has, from
 // before stacking, till the book's to hand to say which). A Title's roots is
-// its 3 Root points, spread. arm is the Root a piece of armour guards ("" when
+// its 5 Root points, spread. An awakening's root is the Root it fits and
+// locks a point of. arm is the Root a piece of armour guards ("" when
 // it isn't armour). kept is on an awakening that was on the sheet already
 // past what its thing's stage holds (a crew sheet, or downtime's Finish
 // anyway), so it stays there.
 // While a change is open, a Title from before stacking says the Root it was
-// all on (from), and the build says it moved onto stacking (stack): neither
-// reaches a saved character.
+// all on (from), a Title from stacking says how its 3 were spread (three),
+// an awakening from before the new core that's on a guessed Root says so
+// (guessed), and the build says it moved onto stacking (stack) or onto the
+// new core (core): none of them reaches a saved character.
 
 const line = () => ({ text: "" });
 const noRoots = () => ({ Body: 0, Mind: 0, Soul: 0 });
 const blankPerm = () => ({ text: "", root: "" });
 const blankTitle = (n = 3) => ({ idea: "", text: "", roots: noRoots(), perms: Array.from({ length: n }, blankPerm), boons: [] });
 const blankKit = () => ({ text: "", arm: "" });
-const blankAwk = (kind = "passive") => ({ name: "", kind, text: "" });
-const blankThing = () => ({ name: "", props: "", stage: "Awakened", catch: "", burden: "", awk: [blankAwk(), blankAwk("active")] });
+const blankAwk = () => ({ name: "", root: "", text: "" });
+const blankThing = () => ({ name: "", props: "", stage: "Awakened", catch: "", burden: "", awk: [blankAwk(), blankAwk()] });
 // A thread is a bond thread or a hostile thread (threads.js). Whose is set
 // when it's in a crewmate's words, and strained only when a crew sheet says
 // so: what happens in play is kept in the character's state.
 const blankThread = (kind = "bond") => ({ person: "", text: "", kind, whose: "" });
 export function blankBuild() {
   return {
-    v: 4,
+    v: 5,
     start: START,
     archs: ["", ""],
     have: [[], []],
@@ -125,7 +132,7 @@ const atLeast = (arr, n, make) => {
   return arr;
 };
 const sumOf = (roots) => ROOTS.reduce((t, r) => t + (roots?.[r] ?? 0), 0);
-// A Title's spread: whole numbers, never more than its 3 in all.
+// A Title's spread: whole numbers, never more than its 5 in all.
 function fixRoots(x) {
   const out = noRoots();
   let left = R.TITLE_ROOTS;
@@ -167,7 +174,7 @@ const from = (x) => (typeof x?.from === "string" && x.from ? { from: x.from.slic
 const fixLine = (x) => ({ text: str(x?.text), ...was(x) });
 const fixPerm = (x) => ({ text: str(x?.text, 120), root: rootOf(x?.root), ...from(x) });
 const fixBoon = (x) => ({ lever: str(x?.lever, 40), name: str(x?.name, 40), on: str(x?.on, 60) });
-const fixAwk = (x) => ({ name: str(x?.name, 80), kind: x?.kind === "active" ? "active" : "passive", text: str(x?.text, 240), ...(x?.kept ? { kept: true } : {}) });
+const fixAwk = (x) => ({ name: str(x?.name, 80), root: rootOf(x?.root), text: str(x?.text, 240), ...(x?.kept ? { kept: true } : {}), ...(x?.guessed && rootOf(x?.root) ? { guessed: true } : {}) });
 // B is the builder's data from the book, for an archetype's abilities. A new
 // character's draft (fresh) from before stacking picks its abilities again,
 // where a saved one keeps them all.
@@ -179,6 +186,10 @@ export function normalBuild(raw, B = null, { fresh = false } = {}) {
   // A build from before stacking: a Title on one Root, specialties, and an
   // archetype with every ability it had.
   const before = r.v != null && Number(r.v) < 4;
+  // A build from stacking (v 4): each Title spread 3, and awakenings with no
+  // Root. A new character's draft from then is still a draft, so it's moved
+  // across the same way, and just says nothing about it.
+  const stacked = r.v != null && Number(r.v) < 5;
   b.start = Math.min(MAX_START, Math.max(START, int(r.start, START)));
   const archs = list(r.archs, MAX_ARCHS).map((a) => str(typeof a === "string" ? a : a?.name, 24));
   if (archs.length) {
@@ -201,10 +212,17 @@ export function normalBuild(raw, B = null, { fresh = false } = {}) {
       const one = rootOf(x?.root);
       const spread = Boolean(x?.roots && typeof x.roots === "object");
       const t = { idea: str(x?.idea, 40), text: str(x?.text ?? x?.name, 120), roots: spread ? fixRoots(x.roots) : one ? { ...noRoots(), [one]: R.TITLE_ROOTS } : noRoots(), perms: boons.length || perms.length ? perms : [blankPerm()], boons };
-      // From before stacking it was all on one Root, so all 3 are on it,
+      // From before stacking it was all on one Root, so all 5 are on it,
       // for the player to spread how they like.
       const was1 = rootOf(x?.from) || (!spread && one ? one : "");
       if (was1 && t.roots[was1] === R.TITLE_ROOTS) t.from = was1;
+      // From stacking its 3 are made 5 the way they were spread, and it says
+      // how they were (three) till it's saved, for the player to check.
+      else if (x?.three && typeof x.three === "object" && sumOf(fixRoots(x.three)) === R.OLD_TITLE_ROOTS) t.three = fixRoots(x.three);
+      else if (stacked && spread && sumOf(t.roots) === R.OLD_TITLE_ROOTS) {
+        t.three = t.roots;
+        t.roots = R.toFive(t.roots, t.perms.filter((p) => p.text.trim()));
+      }
       return t;
     });
   }
@@ -226,6 +244,12 @@ export function normalBuild(raw, B = null, { fresh = false } = {}) {
       awk: atLeast(list(x?.awk ?? x?.awakenings, 6).map(fixAwk), 1, blankAwk),
     }));
     if (!b.attuned.length) b.attuned = [blankThing()];
+    // An awakening from before the new core hasn't got a Root, so it's on
+    // their biggest till they say, the way roots.js reads it.
+    if (stacked) {
+      const big = bigOf(b);
+      for (const a of b.attuned) for (const w of a.awk) if (awkIn(w) && !w.root) Object.assign(w, { root: big, guessed: true });
+    }
   }
   if (Array.isArray(r.threads)) b.threads = r.threads.slice(0, MAX_THREADS).map((t) => ({ person: str(t?.person, 120), text: str(t?.text, 200), kind: kindOf(t), whose: str(t?.whose, 40), ...(t?.strained ? { strained: true } : {}), ...was(t) }));
   b.connect = (Array.isArray(r.connect) ? r.connect : []).slice(0, 12).map((a) => str(a, 200));
@@ -233,13 +257,25 @@ export function normalBuild(raw, B = null, { fresh = false } = {}) {
   b.pronoun = ["her", "him", "them"].includes(r.pronoun) ? r.pronoun : "them";
   b.trouble = (Array.isArray(r.trouble) ? r.trouble : []).filter((x) => typeof x === "string").slice(0, 12).map((x) => str(x, 120));
   if (r.stack === true || (before && !fresh)) b.stack = true;
+  if (r.core === true || (stacked && !fresh && !before && !b.stack)) b.core = true;
   return b;
 }
+// Their biggest Root, the first on a tie, the way roots.js picks it.
+const bigOf = (b) => {
+  const { roots } = rootsOf(b);
+  return [...ROOTS].sort((x, y) => roots[y] - roots[x])[0];
+};
 // What's saved: the build without what only matters while it's open.
 function forSave(b) {
   const out = JSON.parse(JSON.stringify(b));
   delete out.stack;
-  for (const t of out.titles) delete t.from;
+  delete out.core;
+  out.v = 5;
+  for (const t of out.titles) {
+    delete t.from;
+    delete t.three;
+  }
+  for (const a of out.attuned) for (const w of a.awk) delete w.guessed;
   return out;
 }
 
@@ -269,11 +305,12 @@ export function keepAttuned(b) {
   return b;
 }
 
-// The numbers on the sheet: Aura's 5, and 2 for each attuned thing and each
-// Aura Boon, the stride's 3, and the utility items you can carry.
+// The numbers on the sheet: Aura's 5, and 2 for each Aura Boon (attuned
+// things don't touch it any more), the stride's 3, and the utility items you
+// can carry.
 export function numbersOf(b) {
   const n = (lever) => b.titles.reduce((t, x) => t + x.boons.filter((y) => y.lever === lever).length, 0);
-  return { aura: R.BASE_AURA + R.ATTUNED_AURA * b.attuned.filter(thingIn).length + 2 * n("Aura"), stride: 3 + 2 * n("Stride"), track: 12, utility: 3 + n("Kit") };
+  return { aura: R.BASE_AURA + 2 * n("Aura"), stride: 3 + 2 * n("Stride"), utility: 3 + n("Kit") };
 }
 
 // What a build costs, the way costOf() counts a sheet: only what goes on it,
@@ -319,19 +356,24 @@ export function sheetOf(ch, B) {
   return sheet;
 }
 
-function makeSheet(ch, b, B) {
+function makeSheet(ch, b, B, { draft = false } = {}) {
   const ARCH = new Map(B.archetypes.map((a) => [a.name, a]));
   const IDEA = new Map(B.ideas.map((x) => [x.id, x]));
   const n = numbersOf(b);
   // A Title from before stacking that's still all on the Root it had goes on
   // the sheet with that Root, so roots.js knows its spread is the player's to
-  // choose (fromRoot). Once a change is saved, it's a spread like any other.
+  // choose (fromRoot), and one from stacking goes on spread 3 the way it was,
+  // so roots.js makes it 5 the same way and says so (fromThree). Once a
+  // change is saved, it's a spread like any other, and the sheet says it's on
+  // the new core (core), so a Title the player's left at 3 stays at 3.
+  // A draft's the build as it stands on the screen, so it's on the new core.
+  const three = !draft && b.titles.some((t) => titleIn(t) && t.three);
   const titles = b.titles.filter(titleIn).map((t) => ({
-    text: titleName(t), name: titleName(t), ...(t.from && t.roots[t.from] === R.TITLE_ROOTS ? { root: t.from } : { roots: { ...t.roots } }),
+    text: titleName(t), name: titleName(t), ...(t.from && t.roots[t.from] === R.TITLE_ROOTS ? { root: t.from } : t.three && three ? { roots: { ...t.three } } : { roots: { ...t.roots } }),
     permissions: t.perms.filter((p) => p.text.trim()).map((p) => ({ text: p.text.trim(), root: p.root })),
     boons: t.boons.map((x) => ({ lever: x.lever, name: x.name.trim(), on: x.on.trim() })),
   }));
-  const archetypes = b.archs.map((a, i) => ({ name: a.trim(), i })).filter((a) => a.name).map(({ name, i }) => ({ name, id: ARCH.get(name)?.id ?? null, home: ARCH.get(name)?.home ?? null, ...(Array.isArray(b.have[i]) ? { have: [...b.have[i]] } : {}) }));
+  const archetypes = b.archs.map((a, i) => ({ name: a.trim(), i })).filter((a) => a.name).map(({ name, i }) => ({ name, id: ARCH.get(name)?.id ?? null, ...(Array.isArray(b.have[i]) ? { have: [...b.have[i]] } : {}) }));
   const kit = b.equipment.filter((e) => e.text.trim());
   const qualities = B.qualities ?? [];
   const armour = kit.filter((e) => e.arm).map((e) => {
@@ -342,7 +384,9 @@ function makeSheet(ch, b, B) {
   });
   const attuned = b.attuned.filter(thingIn).map((a) => ({
     name: thingName(a), props: a.props.trim() || null, stage: a.stage || "Awakened", catch: a.catch.trim() || null, burden: a.burden.trim() || null,
-    awakenings: a.awk.map((w, j) => ({ w, j })).filter(({ w, j }) => awkIn(w) && counts(a, j)).map(({ w }) => ({ name: w.name.trim() || "An awakening", kind: w.kind, text: w.text.trim() })),
+    // An awakening on a Root the player hasn't said goes on with none, and
+    // roots.js puts it on their biggest, guessed.
+    awakenings: a.awk.map((w, j) => ({ w, j })).filter(({ w, j }) => awkIn(w) && counts(a, j)).map(({ w }) => ({ name: w.name.trim() || "An awakening", root: w.guessed ? "" : w.root, text: w.text.trim() })),
   }));
   // Each person's one bond, with every thread with them under it, however
   // the name was typed. Each thread says bond or hostile, and whose it is when
@@ -357,7 +401,7 @@ function makeSheet(ch, b, B) {
   const plays = [...new Set(b.titles.map((t) => IDEA.get(t.idea)?.playsLike).filter(Boolean))];
   const names = [...new Set(archetypes.map((a) => a.name))];
   return {
-    id: ch.id, name: ch.name, own: true,
+    id: ch.id, name: ch.name, own: true, ...(three ? {} : { core: true }),
     title: titles[0]?.text ?? "",
     blurb: b.blurb.trim() || (plays.length ? `${cap(plays.join(", and "))}.` : ""),
     hash: ch.hash,
@@ -367,7 +411,7 @@ function makeSheet(ch, b, B) {
     archetypes, titles, roots: rootsOf(b).roots,
     carry: { equipment: kit.map((e) => e.text.trim()), utility: b.utility.slice(0, n.utility).map((x) => x.text.trim()).filter(Boolean), keepsake: b.keepsake.text.trim() || null, bag: { name: b.bagName || "a bag", max: 10, items: bagOf(b).slice(0, 10) } },
     armour, attuned,
-    numbers: { aura: n.aura, stride: 3, strideNote: null, stamina: { die: 12, note: null }, confidence: { die: 12, note: null }, resolve: { die: 12, note: null } },
+    numbers: { aura: n.aura, stride: 3, strideNote: null },
     threads,
     crewQs: B.connect.map((q, i) => ({ q, a: (b.connect[i] ?? "").trim() })).filter((x) => x.a),
     aspiration: { text: b.aspiration.trim(), die: 2 },
@@ -429,7 +473,7 @@ export function checksOf(b, B, { changing = false } = {}) {
     }
     if (!t.text.trim()) out.push({ step: 1, t: i, text: `${which} hasn’t got a name.` });
     const sum = sumOf(t.roots);
-    if (sum < R.TITLE_ROOTS) out.push({ step: 1, t: i, text: sum ? `${which} has ${sum} of its 3 Root points on your Roots. Put the last ${R.TITLE_ROOTS - sum === 1 ? "one" : "two"} on one.` : `${which}’s 3 Root points aren’t on your Roots yet.` });
+    if (sum < R.TITLE_ROOTS) out.push({ step: 1, t: i, text: sum ? `${which} has ${sum} of its 5 Root points on your Roots. Put the last ${R.TITLE_ROOTS - sum === 1 ? "one" : R.TITLE_ROOTS - sum} where it lives.` : `${which}’s 5 Root points aren’t on your Roots yet.` });
     const perms = t.perms.filter((x) => x.text.trim());
     if (!perms.length && !t.boons.length) out.push({ step: 1, t: i, text: `${which} hasn’t got its permission yet. It comes with one.` });
     for (const x of perms) {
@@ -452,6 +496,7 @@ export function checksOf(b, B, { changing = false } = {}) {
     if (!a.name.trim()) out.push({ step: 3, kit: "a", text: "Your attuned thing needs a name." });
     if (!filled.length) out.push({ step: 3, kit: "a", text: `${name} needs the awakening it comes with.` });
     for (const [w] of filled) if (!w.name.trim() || !w.text.trim()) out.push({ step: 3, kit: "a", text: `An awakening on ${a.name.trim() || "your attuned thing"} needs ${!w.name.trim() ? "its name" : "what it does"}.` });
+    for (const [w] of filled) if (!w.root) out.push({ step: 3, kit: "a", text: `${w.name.trim() ? `“${w.name.trim()}”` : `An awakening on ${a.name.trim() || "your attuned thing"}`} needs the Root it fits, the one it locks a point of.` });
     const r = roomOf(a);
     const over = filled.filter(([, j]) => !counts(a, j));
     if (over.some(([, j]) => j >= r.all)) out.push({ step: 3, kit: "a", text: `${name} holds ${r.all} at ${r.stage}, so the rest stay off the sheet until it goes up a stage.` });
@@ -467,6 +512,14 @@ export function checksOf(b, B, { changing = false } = {}) {
     if (armour.some((e) => tierOf(e) > 2)) out.push({ step: 3, kit: "e", text: `${qname(3)} armour comes from play. What you start with is ${qname(1)}, and one piece can be ${qname(2)}.` });
     else if (better.length > 1) out.push({ step: 3, kit: "e", text: `You’ve got ${better.length} ${qname(2)} pieces. What you start with is ${qname(1)}, and one piece can be ${qname(2)}.` });
   }
+  // An awakening needs a point of its Root to lock, or it does nothing.
+  const { roots } = rootsOf(b);
+  const lock = { Body: 0, Mind: 0, Soul: 0 };
+  for (const a of att) a.awk.forEach((w, j) => {
+    if (!awkIn(w) || !w.root || !counts(a, j)) return;
+    lock[w.root] += 1;
+    if (lock[w.root] > roots[w.root]) out.push({ step: 3, kit: "a", text: `“${w.name.trim() || "An awakening"}” locks a point of your ${w.root}, and ${roots[w.root] ? `it hasn’t got another free` : "it’s got none"}, so it does nothing till it has.` });
+  });
   if (b.utility.slice(n.utility).some((u) => u.text.trim())) out.push({ step: 3, kit: "u", text: `You can carry ${n.utility} utility items, so the last one won’t go on the sheet.` });
   if (bagOf(b).length > 10) out.push({ step: 3, kit: "u", text: `Your bag holds 10, so the last ${bagOf(b).length - 10} won’t go in.` });
   if (!changing && !b.keepsake.text.trim()) out.push({ step: 3, kit: "k", text: "You haven’t got a keepsake yet. It’s free." });
@@ -492,16 +545,16 @@ export function guessFor(text, root = "") {
   const r = MINDISH.test(words) ? "Mind" : SOULISH.test(words) ? "Soul" : root === "Soul" && !/^(fight|shoot|climb|run|move|lift|hold|guard|carry|ride|sail|swim|leap|slip|pick|fix|build|take|make|mix|stitch|live|track)\b/i.test(words) ? "Soul" : "Body";
   return { root: r };
 }
-// A Title's likely spread from its permissions' Roots: all 3 on one when
-// they're all on one, 2 and 1 across two, and 1 on each across three.
+// A Title's likely spread from its permissions' Roots: all 5 on one when
+// they're all on one, 3 and 2 across two, and 2, 2 and 1 across three, the
+// way the 3 used to lean, made 5 the way a saved Title is (R.toFive).
 export function spreadFor(roots) {
   const n = noRoots();
   for (const r of roots) if (ROOTS.includes(r)) n[r] += 1;
   const by = ROOTS.filter((r) => n[r]).sort((a, z) => n[z] - n[a]);
   if (!by.length) return noRoots();
-  if (by.length === 1) return { ...noRoots(), [by[0]]: 3 };
-  if (by.length === 2) return { ...noRoots(), [by[0]]: 2, [by[1]]: 1 };
-  return { Body: 1, Mind: 1, Soul: 1 };
+  const three = by.length === 1 ? { ...noRoots(), [by[0]]: 3 } : by.length === 2 ? { ...noRoots(), [by[0]]: 2, [by[1]]: 1 } : { Body: 1, Mind: 1, Soul: 1 };
+  return R.toFive(three, roots.filter((r) => ROOTS.includes(r)).map((root) => ({ root })));
 }
 
 // ---------------------------------------------------------------- downtime's growth
@@ -564,7 +617,7 @@ export function foldGrown(raw, grown, B) {
       if (words(g.catch, 120)) a.catch = words(g.catch, 120);
       if (words(g.burden, 120)) a.burden = words(g.burden, 120);
       if (a.awk.length < 6) {
-        const w = { name: words(g.name, 80), kind: g.kind === "active" ? "active" : "passive", text: words(g.text, 240) };
+        const w = { name: words(g.name, 80), root: rootOf(g.root), text: words(g.text, 240) };
         a.awk.push(w);
         onSheet.add(w);
       }
@@ -580,11 +633,14 @@ export function foldGrown(raw, grown, B) {
       if (person && text) b.threads.push({ person, text: str(text, 200), kind: g.kind === "hostile" ? "hostile" : "bond", whose: "" });
     } else if (g.k === "title") {
       if (!text || b.titles.length >= MAX_TITLES) continue;
-      // A Title from before stacking had one Root, and all 3 go on it.
+      // A Title from before stacking had one Root, and all 5 go on it. One
+      // grown on stacking was spread 3, so it's made 5 the way it was, for
+      // the player to check, the way roots.js reads it.
       const spread = g.roots && typeof g.roots === "object";
       const roots = spread ? fixRoots(g.roots) : root ? { ...noRoots(), [root]: R.TITLE_ROOTS } : noRoots();
       const p = g.perm && typeof g.perm === "object" && words(g.perm.text, 120) ? { text: words(g.perm.text, 120), root: rootOf(g.perm.root) } : blankPerm();
-      b.titles.push({ idea: "", text, roots, perms: [p], boons: [], ...(!spread && root ? { from: root } : {}) });
+      const three = spread && sumOf(roots) === R.OLD_TITLE_ROOTS;
+      b.titles.push({ idea: "", text, roots: three ? R.toFive(roots, p.text ? [p] : []) : roots, perms: [p], boons: [], ...(!spread && root ? { from: root } : {}), ...(three ? { three: roots } : {}) });
     } else if (g.k === "arch") {
       const arch = words(g.arch, 24);
       if (!arch || b.archs.length >= MAX_ARCHS) continue;
@@ -596,7 +652,7 @@ export function foldGrown(raw, grown, B) {
     } else if (g.k === "attune") {
       const name = words(g.name, 80);
       if (!name || b.attuned.length >= MAX_ATTUNED) continue;
-      const w = g.awk && typeof g.awk === "object" && words(g.awk.name, 80) ? [{ name: words(g.awk.name, 80), kind: g.awk.kind === "active" ? "active" : "passive", text: words(g.awk.text, 240) }] : [];
+      const w = g.awk && typeof g.awk === "object" && words(g.awk.name, 80) ? [{ name: words(g.awk.name, 80), root: rootOf(g.awk.root), text: words(g.awk.text, 240) }] : [];
       for (const x of w) onSheet.add(x);
       b.attuned.push({ name, props: "", stage: "Awakened", catch: "", burden: "", awk: w });
     }
@@ -610,6 +666,10 @@ export function foldGrown(raw, grown, B) {
     atLeast(a.awk, 1, blankAwk);
   }
   for (const t of b.titles) if (!t.perms.length && !t.boons.length) t.perms.push(blankPerm());
+  // An awakening grown before the new core hasn't got a Root, so it's on
+  // their biggest till they say, the way roots.js reads it.
+  const big = bigOf(b);
+  for (const a of b.attuned) for (const w of a.awk) if (awkIn(w) && !w.root) Object.assign(w, { root: big, guessed: true });
   return normalBuild(b, B);
 }
 
@@ -618,7 +678,7 @@ export function foldGrown(raw, grown, B) {
 // A character built on the phone before the Roots change (8 Nov 2026), rebuilt
 // on stacking: their Titles and permissions, each permission with its Root
 // guessed from its words or the set action it was on (it says which), and
-// each Title's 3 Root points spread the way its permissions lean, for the
+// each Title's 5 Root points spread the way its permissions lean, for the
 // player to check, the archetypes their Titles had with every ability, what
 // they carry with their armour on their Body, their attuned things with each
 // old permission an awakening, as Coin and Kit's did, and their threads,
@@ -665,8 +725,11 @@ export function fromBefore(old, B = null) {
   if (things.length) {
     b.attuned = things.map((a) => ({
       name: s(a?.name, 80), props: "", stage: R.STAGES.includes(a?.stage) ? a.stage : "Awakened", catch: str(a?.catch, 120), burden: str(a?.burden, 120),
-      awk: atLeast(list(a?.perms, 6).filter((p) => s(p)).map((p) => ({ name: s(p, 80), kind: "passive", text: "+1 on one die of every roll you make with it, for each Aura powering it", ...(p?.kept ? { kept: true } : {}) })), 1, blankAwk),
+      awk: atLeast(list(a?.perms, 6).filter((p) => s(p)).map((p) => ({ name: s(p, 80), root: "", text: "2 steps on every roll you make with it", ...(p?.kept ? { kept: true } : {}) })), 1, blankAwk),
     }));
+    // Each one's on their biggest Root till they say.
+    const big = bigOf(b);
+    for (const a of b.attuned) for (const w of a.awk) if (awkIn(w)) Object.assign(w, { root: big, guessed: true });
   }
   if (Array.isArray(r.threads)) b.threads = r.threads.slice(0, MAX_THREADS).map((t) => ({ person: str(t?.person, 120), text: str(t?.text, 200), kind: kindOf(t), whose: str(t?.whose, 40), ...(t?.strained ? { strained: true } : {}) }));
   b.connect = (Array.isArray(r.connect) ? r.connect : []).slice(0, 12).map((a) => str(a, 200));
@@ -741,13 +804,31 @@ const PRICE = { Awakened: "a Catch", Tempered: "a Burden", Perfected: "a Burden 
 // A Boon that's on something says what: a piece of armour, a condition, or
 // which of climbing, swimming and rough ground.
 const BOON_ON = { Armour: ["Which piece", "your worn leathers"], Conditions: ["Which condition", "Frightened"], "Getting around": ["Climbing, swimming or rough ground", "climbing"] };
-// Where a Title's 3 Root points go: all on one, 2 and 1, or 1 on each.
-const SHAPES = [["one", "All 3 on one"], ["two", "2 and 1"], ["each", "1 on each"]];
-const shapeIs = (roots) => (ROOTS.some((r) => roots[r] === 3) ? "one" : ROOTS.some((r) => roots[r] === 2) ? "two" : ROOTS.every((r) => roots[r] === 1) ? "each" : "");
+// Where a Title's 5 Root points go, a tap at a time: All on puts all 5 on
+// one Root, + puts one more on a Root, and once all 5 are on, it takes that
+// one off the biggest of the others (the last of them on a tie, so Body keeps
+// its points longest), and − takes one off. So 3 on Mind and 2 on Body is
+// All on Mind and + on Body twice. Downtime spreads a new Title the same way.
+export function nudgeSpread(roots, r, how, total = R.TITLE_ROOTS) {
+  const out = Object.fromEntries(ROOTS.map((x) => [x, Math.max(0, int(roots?.[x], 0))]));
+  if (!ROOTS.includes(r)) return out;
+  if (how === "all") return { ...noRoots(), [r]: total };
+  if (how === "down") {
+    if (out[r] > 0) out[r] -= 1;
+    return out;
+  }
+  if (out[r] >= total) return out;
+  if (sumOf(out) >= total) {
+    const from = ROOTS.filter((x) => x !== r && out[x] > 0).sort((a, z) => out[z] - out[a] || ROOTS.indexOf(z) - ROOTS.indexOf(a))[0];
+    if (!from) return out;
+    out[from] -= 1;
+  }
+  out[r] += 1;
+  return out;
+}
 const spreadSays = (roots) => ROOTS.filter((r) => roots[r]).map((r) => `${r} ${roots[r]}`).join(", ");
 // The groups of what a character's points went on.
 const SPENT = [["Titles", ["title", "perm", "boon"]], ["Archetypes", ["arch", "ability"]], ["Attuned", ["attuned", "awk"]], ["What you carry", ["item"]]];
-const KINDS = [["title", "Titles"], ["perm", "Permissions"], ["arch", "Archetypes"], ["ability", "Abilities"], ["attuned", "Attuned"], ["awk", "Awakenings"], ["item", "What you carry"]];
 // A link inside a card would be a link inside a button, so cards keep the words only.
 const unlink = (html) => String(html ?? "").replace(/<a [^>]*>|<\/a>/g, "");
 
@@ -893,16 +974,23 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     const x = b();
     const [, their, theyre] = PRO[x.pronoun] ?? PRO.them;
     const name = esc(x.name || "They");
-    if (meta.before) return `<div class="cc-note is-gold" role="status"><p>${name} ${theyre === "they’re" ? "were" : "was"} built before the Roots change, so here’s everything that comes across. ${tip("bd-before", [`Each Title’s 3 Root points are spread the way its permissions lean, and each permission’s Root is a guess from its words or the set action it was on (it says which), so check them.`, `${cap(their)} archetypes keep every ability, ${their} attuned things’ permissions are awakenings now, and traits have gone from the rules. Save it and ${theyre} back in play, with ${their} threads, Aspiration and notes as they were.`], "Rebuilding on Roots")}</p></div>`;
+    if (meta.before) return `<div class="cc-note is-gold" role="status"><p>${name} ${theyre === "they’re" ? "were" : "was"} built before the Roots change, so here’s everything that comes across. ${tip("bd-before", [`Each Title’s 5 Root points are spread the way its permissions lean, and each permission’s Root is a guess from its words or the set action it was on (it says which), so check them.`, `${cap(their)} archetypes keep every ability, ${their} attuned things’ permissions are awakenings now, each on ${their} biggest Root till you say, and traits have gone from the rules. Save it and ${theyre} back in play, with ${their} threads, Aspiration and notes as they were.`], "Rebuilding on Roots")}</p></div>`;
     if (x.stack) {
       const left = pointsOf(x).left;
       const spread = x.titles.filter((t) => t.from).length;
-      const asks = [spread ? `${spread === 1 ? "a Title that was" : "each Title that was"} on one Root has all 3 on it, so spread ${spread === 1 ? "it" : "them"} how you like` : "", left > 0 ? `${spread ? "and " : ""}you’ve got ${pts(left)} to spend` : ""].filter(Boolean);
-      return `<div class="cc-note is-gold" role="status"><p>${name} keeps everything since the stacking change.${asks.length ? ` ${cap(asks.join(", "))}.` : ""} ${tip("bd-stacked", ["Every thing on your sheet that fits is a step on a roll now, and specialties have gone. A Title puts 3 on your Roots, spread however you like, and a permission puts 1 on its Root, so your Roots are counted again.", `${cap(their)} archetypes keep every ability they had, and nothing comes off for being past 35.`], "What changed")}</p></div>`;
+      const asks = [spread ? `${spread === 1 ? "a Title that was" : "each Title that was"} on one Root has all 5 on it, so spread ${spread === 1 ? "it" : "them"} how you like` : "", left > 0 ? `${spread ? "and " : ""}you’ve got ${pts(left)} to spend` : ""].filter(Boolean);
+      return `<div class="cc-note is-gold" role="status"><p>${name} keeps everything since the stacking change.${asks.length ? ` ${cap(asks.join(", "))}.` : ""} ${tip("bd-stacked", ["Specialties have gone. A Title puts 5 on your Roots, spread however you like, and a permission puts 1 on its Root, so your Roots are counted again. Each awakening says the Root it locks a point of.", `${cap(their)} archetypes keep every ability they had, and nothing comes off for being past 35.`], "What changed")}</p></div>`;
+    }
+    if (x.core) {
+      const left = pointsOf(x).left;
+      const fives = x.titles.filter((t) => t.three).length;
+      const guessed = x.attuned.some((a) => a.awk.some((w) => w.guessed));
+      const asks = [fives ? `check where ${fives === 1 ? "a Title’s" : "each Title’s"} 2 more Root points went` : "", guessed ? `say which Root each awakening fits` : "", left > 0 ? `you’ve got ${pts(left)} to spend` : ""].filter(Boolean);
+      return `<div class="cc-note is-gold" role="status"><p>${name} keeps everything on the new core.${asks.length ? ` ${cap(both(asks))}.` : ""} ${tip("bd-core", ["A Title puts 5 on your Roots now, so each one’s 3 went to 5, spread the way the 3 were, as near as it goes. Each awakening locks a point of the Root it fits, and it’s on your biggest till you say.", `A Root’s number is its dice, the points it takes hits with and the points you spend. Attuned things don’t touch your Aura any more, and the tracks have gone. Save it and ${theyre} back in play.`], "The new core")}</p></div>`;
     }
     if (!meta.crew) return "";
     const crewName = esc(x.name || meta.crew);
-    return `<div class="cc-note" role="status"><p>${crewName}’s sheet comes straight off the chapter for now. Save a change here and ${theyre} your own. ${tip("bd-crew", [`When the rules change, ${their} sheet changes too, till a change is saved here. Then ${their} sheet stops following the chapter, and ${their} tracks, Aura and everything else in play stay as they are.`], "Making them your own")}</p></div>`;
+    return `<div class="cc-note" role="status"><p>${crewName}’s sheet comes straight off the chapter for now. Save a change here and ${theyre} your own. ${tip("bd-crew", [`When the rules change, ${their} sheet changes too, till a change is saved here. Then ${their} sheet stops following the chapter, and ${their} points, Aura and everything else in play stay as they are.`], "Making them your own")}</p></div>`;
   }
 
   const topbar = () => `<div class="cc-topbar">${backLink()}<div class="cc-tools">${tools()}</div></div>`;
@@ -1054,18 +1142,18 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     const abil = (ab) => {
       const k = have.indexOf(ab.name);
       const say = k === 0 ? "Comes with it" : k > 0 ? "1 point" : twin.has(ab.name) ? `On your other ${esc(a.name)}` : "";
-      return card(`bd-abil${twin.has(ab.name) && k < 0 ? " is-twin" : ""}`, `data-b="abil" data-t="${i}" data-v="${esc(ab.name)}"`, k >= 0, `<b>${esc(ab.name)} <small>1 ${esc(ab.cost || a.home || "")}</small></b><span class="bd-for">${unlink(ab.html ?? esc(ab.text))}</span>${say ? `<span class="bd-badge">${say}</span>` : ""}`);
+      return card(`bd-abil${twin.has(ab.name) && k < 0 ? " is-twin" : ""}`, `data-b="abil" data-t="${i}" data-v="${esc(ab.name)}"`, k >= 0, `<b>${esc(ab.name)} <small>${Math.max(1, Number(ab.cost) || 1)} Aura</small></b><span class="bd-for">${unlink(ab.html ?? esc(ab.text))}</span>${say ? `<span class="bd-badge">${say}</span>` : ""}`);
     };
     const cost = have.length ? `${have.length} of ${a.abilities.length}, ${pts(4 + have.length)} with the archetype` : "pick the one it comes with";
     return `<div class="bd-arch-what">
       <p class="bd-label">Its mechanic</p><p class="bd-mech">${a.summary}</p>
       ${trait.name ? `<p class="bd-label">Its Trait <small>always true of you</small></p><p class="bd-mech"><b>${esc(trait.name)}.</b> ${trait.html}</p>` : ""}
-      ${asked(`Its abilities <small>${cost}</small>`, `bd-ab-${i}`, [`An archetype’s ${pts(5)}, and it comes with one ability, your pick, Push included. The first you pick is the one it comes with, and each one after that is a point, up to six.`, `You pay for an ability out of your tracks when you use it: 1 of its home track, ${esc(a.home ?? "")}, or 2 from your other two.`], "Abilities", ` id="bd-ab-${i}-l"`)}
+      ${asked(`Its abilities <small>${cost}</small>`, `bd-ab-${i}`, [`An archetype’s ${pts(5)}, and it comes with one ability, your pick, Push included. The first you pick is the one it comes with, and each one after that is a point, up to six.`, `An ability costs Aura each time you use it, 1 unless it says.`], "Abilities", ` id="bd-ab-${i}-l"`)}
       <div class="bd-abils" role="group" aria-labelledby="bd-ab-${i}-l">${a.abilities.map(abil).join("")}</div>
       <p class="cc-small">${link(a.id, `The ${esc(a.name)} in full`)}</p></div>`;
   }
 
-  // Step 2: name each Title, put its 3 Root points on your Roots, and write
+  // Step 2: name each Title, put its 5 Root points on your Roots, and write
   // its permissions, each with its Root, three to start and six slots at
   // most, two of which can be a Boon.
   function stepTitles() {
@@ -1090,18 +1178,17 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       ${shownIdeas.length ? cards : `<p class="cc-lead">None of the ideas lists your archetypes, so write your own Title, or look through every idea.</p>`}
       ${archs.length ? `<div class="cc-row"><button type="button" class="button sm" data-act="b" data-b="ideas" data-t="${i}"${pressed(all)}>${all ? "Just the ones that suit your archetypes" : "Every Title idea"}</button></div>` : ""}</details>`;
   }
-  // Where a Title's 3 Root points go, in a tap or three: all on one, 2 and 1,
-  // or 1 on each, and then the Root or Roots.
-  const shapeNow = (t, i) => (sumOf(t.roots) === R.TITLE_ROOTS ? shapeIs(t.roots) : d.deep[`shape${i}`] || shapeIs(t.roots) || "one");
+  // Where a Title's 5 Root points go: All on for one Root in a tap, and a
+  // stepper on each Root (nudgeSpread).
   function spreadView(t, i) {
-    const shape = shapeNow(t, i);
-    const at = (n) => ROOTS.find((r) => t.roots[r] === n) ?? "";
-    const row = (n, label) => `<div class="bd-spread-row"><span class="bd-spread-k" aria-hidden="true">${label}</span>${rootChips(`data-b="spread" data-t="${i}" data-n="${n}"`, at(n), `${label}: which Root`)}</div>`;
+    const sum = sumOf(t.roots);
     const was1 = t.from ? `<p class="cc-note is-gold bd-was" role="status">It was all on your ${t.from}, so it still is. Spread it how you like.</p>` : "";
-    return `${asked(`Its 3 Root points <small>${sumOf(t.roots) ? esc(spreadSays(t.roots)) : "Body, Mind or Soul"}</small>`, `bd-spread-${i}`, ["A Title puts 3 on your Roots, spread however you like: all 3 on one, 2 on one and 1 on another, or 1 on each. Put them where the Title lives.", "Body’s what your hands and feet do, Mind’s what goes on in your head, and Soul’s who you are and how you carry yourself."], "Spreading a Title", ` id="bd-spread-${i}-l"`)}
-      ${was1}<div class="bd-spread" role="group" aria-labelledby="bd-spread-${i}-l">
-      <div class="cc-chips" role="group" aria-label="How they’re spread">${SHAPES.map(([v, label]) => chip(label, `data-b="shape" data-t="${i}" data-v="${v}"`, shape === v, "sm")).join("")}</div>
-      ${shape === "one" ? row(3, "All 3 on") : shape === "two" ? `${row(2, "2 on")}${row(1, "1 on")}` : ""}</div>`;
+    const was3 = t.three ? `<p class="cc-note is-gold bd-was" role="status">It was ${esc(spreadSays(t.three))}, so its 5 are spread the same way. Change it if you like.</p>` : "";
+    const step = (r) => `<div class="cc-stepper bd-spread-row"><span>${r}</span><span class="cc-step"><button type="button" class="cc-stepbtn" data-act="b" data-b="snudge" data-t="${i}" data-v="${r}" data-n="-1" aria-label="${r}: one less"${t.roots[r] > 0 ? "" : " disabled"}>−</button><output aria-live="off">${t.roots[r]}</output><button type="button" class="cc-stepbtn" data-act="b" data-b="snudge" data-t="${i}" data-v="${r}" data-n="1" aria-label="${r}: one more${sum >= R.TITLE_ROOTS ? ", off the biggest of the others" : ""}"${t.roots[r] >= R.TITLE_ROOTS ? " disabled" : ""}>+</button></span></div>`;
+    return `${asked(`Its 5 Root points <small>${sum ? `${esc(spreadSays(t.roots))}${sum < R.TITLE_ROOTS ? `, ${R.TITLE_ROOTS - sum} to go` : ""}` : "Body, Mind or Soul"}</small>`, `bd-spread-${i}`, ["A Title puts 5 on your Roots, spread however you like. Put them where the Title lives.", "All on puts all 5 on one Root. Then + moves one more onto a Root, off the biggest of the others, so 3 on your Mind and 2 on your Body is All on Mind and + on Body twice.", "Body’s what your hands and feet do, Mind’s what goes on in your head, and Soul’s who you are and how you carry yourself."], "Spreading a Title", ` id="bd-spread-${i}-l"`)}
+      ${was1}${was3}<div class="bd-spread" role="group" aria-labelledby="bd-spread-${i}-l">
+      <div class="cc-chips" role="group" aria-label="All 5 on one Root">${ROOTS.map((r) => chip(`All on ${r}`, `data-b="sall" data-t="${i}" data-v="${r}"`, t.roots[r] === R.TITLE_ROOTS, "sm")).join("")}</div>
+      ${ROOTS.map(step).join("")}</div>`;
   }
   function permRow(t, i, p, j) {
     const says = j === 0 ? "comes with the Title" : "1 point";
@@ -1155,21 +1242,23 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     return `<div class="bd-tiles${rail ? ' bd-rail" tabindex="0"' : ' bd-grid"'} role="list" aria-label="Your Roots">${ROOTS.map((r) => tile(`root:${r}`, r, roots[r])).join("")}</div>`;
   }
   // The sheet the build makes, for everything on it that can be a step.
-  const draftSheet = () => R.rootsSheet(makeSheet({ id: "draft", name: b().name || "Draft", hash: "own" }, b(), B), [], B);
-  // Step 3: what the Roots add up to, where each one comes from, and every
-  // other thing on the sheet, each a step on a roll it fits.
+  const draftSheet = () => R.rootsSheet(makeSheet({ id: "draft", name: b().name || "Draft", hash: "own" }, b(), B, { draft: true }), [], B);
+  // Step 3: what the Roots add up to and where each one comes from, what
+  // each holds once its awakenings have locked their points, and the
+  // awakenings, the one thing besides a Root that's steps on a roll.
   function stepRoots() {
     const { roots, from: whence } = rootsOf(b());
-    const row = (name, n, ways) => `<li><span class="bd-num-text"><span class="k">${esc(name)}</span> <b>${n}</b>${ways.length ? ` <small>${esc(both(ways))}</small>` : ""}</span>${n ? kitDie(stepsToDice(n)[0], { hide: true, bare: true }) : ""}</li>`;
-    const things = R.thingsOf(draftSheet());
-    const groups = KINDS.map(([kind, label]) => {
-      const these = things.filter((x) => x.kind === kind);
-      return these.length ? `<li><span class="k">${label}</span> ${these.map((x) => `<span class="bd-thing">${kind === "title" || kind === "perm" ? `<em>${esc(x.name)}</em>` : esc(x.name)}</span>`).join(" ")}</li>` : "";
-    }).join("");
+    const c = draftSheet();
+    const locks = R.lockedOf(c);
+    const wakes = R.awakeningsOf(c);
+    const holds = (r) => (locks[r] ? `, holds ${roots[r] - locks[r]}` : "");
+    const row = (name, n, ways) => `<li><span class="bd-num-text"><span class="k">${esc(name)}</span> <b>${n}</b>${holds(name)}${ways.length ? ` <small>${esc(both(ways))}</small>` : ""}</span>${n ? kitDie(stepsToDice(n)[0], { hide: true, bare: true }) : ""}</li>`;
+    const awk = wakes.map((w) => `<li><span class="k">${esc(w.root ?? "")}</span> <span class="bd-thing">${esc(w.name)}</span> <small>${w.works ? "locks a point of it" : `nothing to lock on your ${esc(w.root ?? "")}, so it does nothing yet`}</small></li>`).join("");
+    const zero = ROOTS.filter((r) => !roots[r] && sumOf(roots));
     return `${rootTiles()}
-      <h2>Your Roots</h2><ul class="bd-nums bd-from-list">${ROOTS.map((r) => row(r, roots[r], whence[r])).join("")}</ul>
-      <h2><span>Everything else, a step each</span> ${tip("bd-roll", ["A roll’s one Root that fits how you’re doing it, and 1 step for every thing on your sheet that fits what you’re doing: each Title, permission, archetype, ability, attuned thing, awakening and item you’re using.", "Plainly fits is free, and each one you have to explain is 1 Aura. Every roll’s at least 1 step, a d2.", link("s-roots", "Roots in the rules")], "How a roll adds up")}</h2><p class="cc-lead">${things.length ? `${things.length} thing${things.length === 1 ? "" : "s"} on your sheet, each a step on a roll it fits.` : "They show up here as they go on your sheet."}</p>
-      ${groups ? `<ul class="bd-things">${groups}</ul>` : ""}`;
+      <h2><span>Your Roots</span> ${tip("bd-roll", ["A Root’s number is three things at once: the dice it rolls, the points it takes hits with, and the points you spend from it. Body 8 rolls a d12 and a d4, and takes 8 hits before it’s wounded.", "A roll’s one Root at full, the one that fits how you’re doing it. Bring another in with a permission that explains it, for a point of that Root or 3 Aura, and all of it goes on too.", link("s-roots", "Roots in the rules")], "What a Root is")}</h2><ul class="bd-nums bd-from-list">${ROOTS.map((r) => row(r, roots[r], whence[r])).join("")}</ul>
+      ${zero.length ? `<p class="cc-small">${both(zero)} at 0 has no points, so the first hit there wounds you, unless you take it on another Root for 2.</p>` : ""}
+      ${awk ? `<h2><span>Your awakenings</span> ${tip("bd-wake", ["Each one locks a point of its Root while it’s attuned, so the Root holds a point less, but its dice don’t shrink. It’s 2 steps on any roll it fits, and 2 more for each Aura you put in it."], "Awakenings on a roll")}</h2><ul class="bd-things">${awk}</ul>` : ""}`;
   }
 
   // Step 4: what you carry, picked from cards a part at a time, the attuned
@@ -1193,7 +1282,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     // A piece of equipment can be armour on the Root it guards, and armour
     // picks its quality, with the boxes each one gives it.
     const quality = (i, item) => `<div class="bd-quality" role="group" aria-labelledby="bd-q-${i}"><p class="bd-label" id="bd-q-${i}">How good is it? <small>a box for every hit it can take for you</small></p><div class="cc-chips">${(B.qualities ?? []).map((q) => chip(`<span>${esc(q.name)}</span>${kitBoxes(0, q.boxes, { label: `${q.boxes} ${q.boxes === 1 ? "box" : "boxes"}` })}`, `data-b="quality" data-i="${i}" data-v="${q.tier}"`, tierOf(item) === q.tier, "bd-qual")).join("")}</div></div>`;
-    const armOf = (i, item) => `<div class="bd-arm" role="group" aria-labelledby="bd-arm-${i}"><p class="bd-label" id="bd-arm-${i}">Is it armour? <small>${item.arm ? `on your ${item.arm}, for your ${TRACK_OF[item.arm]}` : "on the Root it guards"}</small></p><div class="cc-chips">${chip("No", `data-b="arm" data-i="${i}" data-v=""`, !item.arm, "sm")}${ROOTS.map((r) => chip(r, `data-b="arm" data-i="${i}" data-v="${r}"`, item.arm === r, "sm")).join("")}</div></div>`;
+    const armOf = (i, item) => `<div class="bd-arm" role="group" aria-labelledby="bd-arm-${i}"><p class="bd-label" id="bd-arm-${i}">Is it armour? <small>${item.arm ? `on your ${item.arm}, a box for a hit there` : "on the Root it guards"}</small></p><div class="cc-chips">${chip("No", `data-b="arm" data-i="${i}" data-v=""`, !item.arm, "sm")}${ROOTS.map((r) => chip(r, `data-b="arm" data-i="${i}" data-v="${r}"`, item.arm === r, "sm")).join("")}</div></div>`;
     const slot = (kind, i, label) => {
       const ref = `${kind}${i}`;
       const item = kind === "e" ? x.equipment[i] : x.utility[i];
@@ -1207,17 +1296,20 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     const yours = (i, a) => `<div class="bd-namepick">${things.length ? `<p class="bd-label">Or one of the things you carry</p>${pick(i, a, things)}` : ""}<p class="bd-label">Or a signature thing</p>${pick(i, a, group("Signature").filter((v) => !things.includes(v)))}</div>`;
     const catches = (i, a) => `<div class="bd-items is-wide bd-catches">${B.catches.map((c) => card("bd-item", `data-b="fill" data-p="a${i}.catch" data-v="${esc(c.name)}"`, a.catch.trim() === c.name, `<b>${esc(c.name)}</b><span class="bd-for">${esc(c.text)}</span>`)).join("")}</div>`;
     const drop = (i) => (canDrop("att") ? `<div class="cc-row">${dropBtn("att", i, "Take it off")}</div>` : "");
+    // An awakening: its name, the Root it fits (which it locks a point of),
+    // and what it does.
+    const bare = (label) => label.replace(/ ?<small>[\s\S]*<\/small>/, "");
     const awkRow = (a, i, w, j, label) => `<div class="bd-awk">${field(`a${i}.w${j}.name`, label, w.name, { max: 80, ph: j ? "Hit anything I can see" : "Anywhere I can throw a hook" })}
-      <div class="cc-chips" role="group" aria-label="${esc(`${label.replace(/ ?<small>[\s\S]*<\/small>/, "")}: passive or active`)}">${chip("Passive <small>you power it</small>", `data-b="awkkind" data-i="${i}" data-j="${j}" data-v="passive"`, w.kind === "passive", "sm")}${chip("Active <small>it spends Aura</small>", `data-b="awkkind" data-i="${i}" data-j="${j}" data-v="active"`, w.kind === "active", "sm")}</div>
-      ${field(`a${i}.w${j}.text`, `<span class="sr-only">${label.replace(/ ?<small>[\s\S]*<\/small>/, "")}: </span>What it does`, w.text, { max: 240, ph: w.kind === "passive" ? "+1 on one die of every roll you make with it, for each Aura powering it" : "1 Aura and … Each Aura more …" })}</div>`;
-    const awkTip = (i) => tip(`bd-awk-${i}`, ["An awakening’s something the thing itself does, written the way you’d write a permission, and it’s a step on any roll it fits.", "A passive one’s powered: while you’re acting, put Aura into it, free and no action. That Aura comes off what you’ve got and off your maximum till the scene ends, up to 2, and it works for as much as is powering it.", "An active one spends its Aura when you use it, as part of your action. Spend more for more: another target, further, bigger."], "Awakenings");
+      <p class="bd-label" id="bd-awr-${i}-${j}">The Root it fits <small>${w.root ? `it locks a point of your ${w.root}${w.guessed ? ", till you say" : ""}` : "it locks a point of it"}</small></p><div class="cc-chips bd-roots" role="group" aria-labelledby="bd-awr-${i}-${j}">${ROOTS.map((r) => chip(r, `data-b="awkroot" data-i="${i}" data-j="${j}" data-v="${r}" aria-label="${esc(`${bare(label)}: ${r}`)}"`, w.root === r && !w.guessed, "sm")).join("")}</div>
+      ${field(`a${i}.w${j}.text`, `<span class="sr-only">${bare(label)}: </span>What it does`, w.text, { max: 240, ph: "2 steps on every roll I make with it" })}</div>`;
+    const awkTip = (i) => tip(`bd-awk-${i}`, ["An awakening’s something the thing itself does, written the way you’d write a permission, with the Root it fits.", "It locks a point of that Root for as long as it’s attuned, so you hold a point less there, but you still roll all of it. It’s 2 steps on any roll it fits, and each Aura you put in it as you roll is 2 more.", link("s-attunement", "Attunement")], "Awakenings");
     // The Quick Build's: Awakened, one awakening, and a second with a Catch.
     const quick = (a, i) => `<fieldset class="bd-box bd-att"><legend>${x.attuned.length > 1 ? `Attuned thing ${i + 1}` : "Your attuned thing"} <small>${pts(5)}</small></legend>
       ${field(`a${i}.name`, "What it is", a.name, { max: 80, ph: "a grappling line" })}${yours(i, a)}
       <div class="bd-ask"><p class="bd-label">Its awakening <small>it comes with one</small></p>${awkTip(i)}</div>
       ${awkRow(a, i, a.awk[0], 0, "Its awakening")}
       ${field(`a${i}.catch`, "Its Catch, if you’d like a second awakening, free", a.catch, { max: 60, ph: "Wanted" })}${catches(i, a)}
-      ${a.catch.trim() || awkIn(a.awk[1] ?? blankAwk()) ? awkRow(a, i, a.awk[1] ?? blankAwk("active"), 1, "Its second awakening") : ""}${drop(i)}</fieldset>`;
+      ${a.catch.trim() || awkIn(a.awk[1] ?? blankAwk()) ? awkRow(a, i, a.awk[1] ?? blankAwk(), 1, "Its second awakening") : ""}${drop(i)}</fieldset>`;
     // A saved character's, at any stage, with up to six awakenings.
     const grown = (a, i) => {
       const r = roomOf(a);
@@ -1236,10 +1328,10 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     // A part's heading: its section's named by the words in it, and the rest's behind its ?.
     const head2 = (id, title, words, label, small = "") => `<h2><span id="${id}">${title}</span>${small ? ` <small>${small}</small>` : ""} ${tip(`${id}-t`, words, label)}</h2>`;
     const parts = {
-      a: `<section class="bd-carry" aria-labelledby="bd-at">${head2("bd-at", changing() ? "Attuned things" : "Attune something", ["An attuned thing’s bound to you, and it grows with you. It’s 5 points, and it comes with one awakening. It puts 2 on your Aura maximum, and that’s all the Aura it gets you, since powering it eats some of it back.", "It’s an item, so it’s a step on any roll it fits, and it doesn’t count towards what you carry. It can’t be broken.", "Give it a Catch, trouble the GM can run with, and it gets a second awakening, free. That’s all an Awakened thing holds, so the rest come as it grows.", link("s-attunement", "Attunement")], "Attunement")}
+      a: `<section class="bd-carry" aria-labelledby="bd-at">${head2("bd-at", changing() ? "Attuned things" : "Attune something", ["An attuned thing’s bound to you, and it grows with you. It’s 5 points, and it comes with one awakening, which locks a point of the Root it fits. It doesn’t touch your Aura.", "It doesn’t count towards what you carry, and it can’t be broken.", "Give it a Catch, trouble the GM can run with, and it gets a second awakening, free. That’s all an Awakened thing holds, so the rest come as it grows.", link("s-attunement", "Attunement")], "Attunement")}
         ${x.attuned.map((a, i) => (changing() ? grown(a, i) : quick(a, i))).join("")}
         ${x.attuned.length < MAX_ATTUNED ? `<div class="cc-row"><button type="button" class="button" data-act="b" data-b="addatt">${x.attuned.length ? "Attune another thing" : "Attune something"}</button><span class="bd-cost">${pts(5)}</span></div>` : ""}</section>`,
-      e: `<section class="bd-carry" aria-labelledby="bd-eq">${head2("bd-eq", "3 equipment", [`What you wear or wield, a point each. Armour goes on the Root it guards: plate, leathers and a shield on your Body, clothes that fit the scene on your Mind, a holy symbol or a ward on your Soul. ${changing() ? "Each piece is Common, Fine or Masterwork, with a box for every hit it can take for you." : "Each piece is Common, with a box for a hit it can take for you, and one can be Fine, with two."}`, "Each piece is an item too, so it’s a step on a roll it fits.", link("s-armour", "Armour")], "Equipment", "1 point each")}
+      e: `<section class="bd-carry" aria-labelledby="bd-eq">${head2("bd-eq", "3 equipment", [`What you wear or wield, a point each. Armour goes on the Root it guards: plate, leathers and a shield on your Body, clothes that fit the scene on your Mind, a holy symbol or a ward on your Soul. ${changing() ? "Each piece is Common, Fine or Masterwork, with a box for every hit it can take for you instead of a point." : "Each piece is Common, with a box for a hit it can take for you instead of a point, and one can be Fine, with two."}`, "A plain item does what it is. It’s never a step or a Root.", link("s-armour", "Armour")], "Equipment", "1 point each")}
         ${x.equipment.map((e, i) => slot("e", i, "Equipment")).join("")}
         ${offer("e", "Weapons", plain(group("Weapons")))}${offer("e", "Armour and wearables", plain(group("Armour & wearables")))}</section>`,
       u: `<section class="bd-carry" aria-labelledby="bd-ut">${head2("bd-ut", `${n.utility} utility items`, ["Tools and things you use up, a point each. Each one’s a step on a roll you use it in, when it fits, and something you use up is crossed off once it’s used.", "Your bag holds 10 more, a point each. Nothing in it can be used till you’ve pulled it out, and that takes your action."], "Utility items", "1 point each")}
@@ -1328,9 +1420,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     const said = (lever) => boons.filter((y) => y.lever === lever).map((y) => y.name.trim() || `the ${lever} Boon`);
     const num = (k, v, note, piece = "", cls = "") => `<li${cls ? ` class="${cls}"` : ""}><span class="bd-num-text"><span class="k">${k}</span> <b>${v}</b>${note ? ` <small>(${esc(note)})</small>` : ""}</span>${piece}</li>`;
     const go = (c) => (c.step == null ? "" : `<button type="button" class="button sm" data-act="b" data-b="go" data-s="${c.step}"${c.t != null ? ` data-t="${c.t}"` : ""}${c.a != null ? ` data-a="${c.a}"` : ""}${c.kit ? ` data-k="${c.kit}"` : ""}>${d.page ? STEPS[c.step].name : `Step ${c.step + 1}`}</button>`);
-    const track = (name) => kitDie(12, { hide: true, bare: true, label: `${name} starts at d12` });
-    const things = x.attuned.filter(thingIn).length;
-    const auraNote = [things ? `5, and ${2 * things} for ${things === 1 ? "your attuned thing" : `${things} attuned things`}` : "", ...said("Aura")].filter(Boolean);
+    const auraNote = said("Aura");
     return `<fieldset class="bd-box"><legend>Who they are</legend>
         ${field("name", "Name", x.name, { max: 40 })}
         <p class="bd-label" id="bd-pro">Call them</p><div class="cc-chips" role="group" aria-labelledby="bd-pro">${[["her", "she, her"], ["him", "he, him"], ["them", "they, them"]].map(([v, l]) => chip(l, `data-b="pronoun" data-v="${v}"`, x.pronoun === v)).join("")}</div>
@@ -1341,8 +1431,8 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       <h2>Your numbers</h2><ul class="bd-nums">
         ${num("Aura", n.aura, auraNote.length ? both(auraNote) : null, kitAura(n.aura, n.aura), "is-wide")}
         ${num("Stride", n.stride, said("Stride").length ? both(said("Stride")) : null)}
-        ${num("Stamina", "d12", "your Body", track("Stamina"))}${num("Confidence", "d12", "your Mind", track("Confidence"))}${num("Resolve", "d12", "your Soul", track("Resolve"))}</ul>
-      <h2>Your Roots</h2>${rootTiles()}
+      </ul>
+      <h2><span>Your Roots</span> <small>every one full to start</small></h2>${rootTiles()}
       ${boons.length ? `<h2>Your Boons</h2><ul class="cc-list">${boons.map((y) => `<li class="cc-item"><p><b>${esc(y.name.trim() || y.lever)}</b>${y.name.trim() ? ` <small>${esc(y.lever)}</small>` : ""} ${esc(BOON.get(y.lever)?.text ?? "")}${y.on.trim() ? ` (${esc(y.on.trim())})` : ""}</p></li>`).join("")}</ul>` : ""}
       ${trouble.length || x.trouble.length || changing() ? `<h2><span>Trouble that follows you</span> ${tip("bd-trouble", ["If you like. Let it cause real trouble and you take 1 Aura."], "Trouble")}</h2>${trouble.length || x.trouble.length ? `<div class="cc-chips">${[...new Set([...trouble, ...x.trouble])].map((t) => chip(`<em>${esc(t)}</em>`, `data-b="trouble" data-v="${esc(t)}"`, x.trouble.includes(t))).join("")}</div>` : ""}
         <div class="cc-form">${field("newtrouble", "Or write your own", "", { max: 120, ph: "owes the wrong people" })}<button type="button" class="button" data-act="b" data-b="addtrouble">Add it</button></div>` : ""}
@@ -1456,32 +1546,13 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     if (!changing() && hostile && bonds < 3 && !x.threads.some((t) => t.kind !== "hostile" && !t.person.trim() && !t.text.trim()) && x.threads.length < MAX_THREADS) x.threads.push(blankThread());
   }
 
-  // A Title's spread, a tap at a time. A shape picked keeps what fits it: all
-  // 3 on one keeps the Root with the most, and 2 and 1 keeps the 2.
-  function setShape(t, i, v) {
-    d.deep[`shape${i}`] = v;
-    const top = ROOTS.reduce((best, r) => (t.roots[r] > (t.roots[best] ?? 0) ? r : best), "");
-    if (v === "each") t.roots = { Body: 1, Mind: 1, Soul: 1 };
-    else if (v === "one") t.roots = top && t.roots[top] >= 2 ? { ...noRoots(), [top]: 3 } : noRoots();
-    else if (v === "two") t.roots = top && t.roots[top] === 3 ? { ...noRoots(), [top]: 2 } : top && t.roots[top] === 2 ? t.roots : noRoots();
-    delete t.from;
-  }
-  function setSpread(t, i, n, r) {
+  // A Title's spread, a tap at a time. Once it's changed it's the player's
+  // own, so it stops saying where it came from.
+  function setSpread(t, r, how) {
     if (!ROOTS.includes(r)) return;
-    if (n === 3) t.roots = { ...noRoots(), [r]: 3 };
-    else {
-      // 2 and 1: the Root picked takes this one, and if it had the other,
-      // they swap.
-      const other = n === 2 ? 1 : 2;
-      const old = ROOTS.find((x) => t.roots[x] === n) ?? "";
-      const out = noRoots();
-      for (const x of ROOTS) if (t.roots[x] === other && x !== r) out[x] = other;
-      if (t.roots[r] === other && old) out[old] = other;
-      out[r] = n;
-      t.roots = out;
-    }
-    d.deep[`shape${i}`] = n === 3 ? "one" : "two";
+    t.roots = nudgeSpread(t.roots, r, how);
     delete t.from;
+    delete t.three;
   }
 
   const value = (id) => document.getElementById(id)?.value ?? "";
@@ -1649,12 +1720,15 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       t.idea = t.idea === v ? "" : v;
       if (t.idea) d.deep[`idea${i}`] = true;
     } else if (k === "title") x.titles[i].text = v;
-    else if (k === "shape") {
+    else if (k === "sall") {
       const t = x.titles[i];
-      if (t && SHAPES.some(([s]) => s === v)) setShape(t, i, v);
-    } else if (k === "spread") {
+      if (t) setSpread(t, v, "all");
+      then = focusIn(`[data-b="sall"][data-t="${i}"][data-v="${v}"]`);
+    } else if (k === "snudge") {
       const t = x.titles[i];
-      if (t) setSpread(t, i, Number(el.dataset.n), v);
+      const up = Number(el.dataset.n) > 0;
+      if (t) setSpread(t, v, up ? "up" : "down");
+      then = focusIn(`[data-b="snudge"][data-t="${i}"][data-v="${v}"][data-n="${up ? 1 : -1}"]:not(:disabled)`, `[data-b="snudge"][data-t="${i}"][data-v="${v}"]:not(:disabled)`, `[data-b="sall"][data-t="${i}"][data-v="${v}"]`);
     } else if (k === "proot") {
       const p = x.titles[i]?.perms[j];
       if (p) p.root = p.root === v ? "" : rootOf(v);
@@ -1723,7 +1797,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       if (kind === "arch") x.have.splice(i, 1);
       if (kind === "title" || kind === "arch") {
         // The switch and the open pickers follow the ones that are left.
-        const keys = kind === "title" ? ["ideas", "idea", "boon", "shape"] : ["pick"];
+        const keys = kind === "title" ? ["ideas", "idea", "boon"] : ["pick"];
         for (const key of keys) {
           for (let q = i; q < arr.length; q++) d.deep[`${key}${q}`] = d.deep[`${key}${q + 1}`];
           delete d.deep[`${key}${arr.length}`];
@@ -1742,11 +1816,12 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       if (a.awk.length >= 6) return toast("Six awakenings is the most anything holds.", false);
       a.awk.push(blankAwk());
       then = focusIn(`#b-a${i}-w${a.awk.length - 1}-name`);
-    } else if (k === "awkkind") {
+    } else if (k === "awkroot") {
       const a = x.attuned[i];
       if (!a) return;
       atLeast(a.awk, j + 1, blankAwk);
-      a.awk[j].kind = v === "active" ? "active" : "passive";
+      a.awk[j].root = a.awk[j].root === v && !a.awk[j].guessed ? "" : rootOf(v);
+      delete a.awk[j].guessed;
     } else if (k === "stage") {
       if (x.attuned[i] && R.STAGES.includes(v)) x.attuned[i].stage = v;
     } else if (k === "arm") {

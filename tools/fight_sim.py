@@ -1,60 +1,58 @@
 #!/usr/bin/env python3
 """Zi'Dara fight simulator: how long and how dangerous a fight is.
 
-Four of the crew as they start against a boss and its people, the way stage 2
-of notes/roots-plan.md and prompts 11 and 12 of notes/stacking-plan.md set
-the GM's budgets. Run it again whenever the crew, the action economy or the
-Traits change, and move the numbers in Running the Game if they shift. Two
-sets of rules:
+Four of the crew as they start against a boss and its people, where Running
+the Game's budgets come from (stage 2 of notes/roots-plan.md, prompts 11 and
+12 of notes/stacking-plan.md, and prompt 3 of notes/core-plan.md). Run it
+again whenever the crew, the action economy or the Traits change, and move the
+numbers in Running the Game if they shift. Three sets of rules:
 
-  now     Roots as it went live on 10 Nov: a Root and one specialty a roll,
-          Aura 5, 3 Aura an extra action and one action for each archetype,
-          an attuned thing getting Aura its own way, passive awakenings pumped.
-  stack   part 1 of the 14 Nov rework: a Root and everything that fits, Aura 7
-          with one attuned thing, powering off the maximum, extra actions 3, 4,
-          5 with no cap, the crew on 35 points, and the archetypes' Traits.
+  core    part 2 of the rework (16 Nov), the default: a roll is one Root at
+          full, a Root's points are its dice, its health and what you spend,
+          one action a round and every die an intent, Aura 5, defence from the
+          Root, a hit a point, armour first, a wound at 0 and a Scar after it.
+  stack   part 1 (14 Nov): a Root and everything that fits, Aura 7, extra
+          actions 3, 4, 5 with no cap, and the archetypes' Traits.
+  now     Roots as it went live on 10 Nov.
 
-The fight: Redhand (Challenge 6, Armoured x8 first, Feeds x5, Relentless, each
-multiplier times --f), two named threats (Challenge 4, two tags) and three
-mooks (Challenge 3). Three quarters of the round budget goes at the crew's
-tracks, the rest at stakes and clocks that don't hit anyone. Bram intercepts
-and Defends. --policy plain has everyone else hit things; table plays the
-archetypes too (orders with Everyone gets it, the Mark, the Shadow's pool,
-Ash's areas, Knock them flat, ties won for Aura).
+The fight: Redhand (Challenge 6, Armoured first, Feeds, Relentless), two named
+threats (Challenge 4, two tags) and three mooks (Challenge 3). Three quarters
+of the round budget goes at the crew's Roots, the rest at stakes and clocks.
 
-The Traits that change a fight for these four (stack only, since the 10 Nov
-rules had none; --no-traits plays stacking without them):
-  Better Me Than You  the Guardian's 1 Aura for every blow he intercepts.
-                      Played plain it comes in before anyone acts, up to his
-                      maximum, and the rest goes to a friend. Played hard he
-                      steps in on his own turn, so it can go past his maximum
-                      and buy actions.
-  Good Hunting        the Hunter's 1 Aura for every die a friend wins against
-                      the creature she's Marked, going at it or stopping it.
-                      Only when she's marked it, so only played hard.
-  Where It's Needed   the Leader's steps moved between the crew's rolls each
-                      round, up to one for each of them standing, from where a
-                      step's worth least to where it's worth most, played hard.
-Any Shadow Will Do, Eye of the Storm and I Know a Guy change nothing the sim
-plays (it always lets Vesk hide, nobody's areas catch a friend, and how much
-a contact helps is the GM's call). Dorrie and Isolde stay out, as before.
+On the new core (CoreFight) Bram, Vesk, Wren and Ash are as 03b has them.
+Played plain they roll their Root at the threats. Played hard (--policy table)
+they bring a Root in when a permission explains it (Bram's Mind, Wren's Mind,
+Ash's Mind, for 3 Aura or a point they can spare), put Aura on their
+awakenings, win ties, and play the archetypes: Bram intercepts while his Body
+can take it, Pushes a defence die and stands firm, Vesk hides and strikes with
+her pool, Wren marks Redhand, Ash's area takes the people, and Better Me Than
+You and Good Hunting pay. A Root that's 0 takes its wound before 2 for 1,
+since the wound costs nothing in the scene. The GM (--gm) either spreads it,
+a die at each Body and the rest round the Roots (even), or puts the first die
+at each Body and two in three of the rest on the Body that's hurting most
+(hard, the default, the big fight). A fight's length is in minutes, from what
+a round takes at the table (MIN_TELE, MIN_GO and MIN_LAND, a guess to check
+against a timed round).
 
-  python3 tools/fight_sim.py                         today against stacking, Even
-  python3 tools/fight_sim.py --rules stack --f 3 --budget 44 --policy table
-  python3 tools/fight_sim.py --find                  the multiplier stacking needs
-                                                     to last as long as today
-  python3 tools/fight_sim.py --find --picks 4        and what each pick each needs
-                                                     on top, for the threat budget
+On 16 Nov (3,000 fights a setting): crews land 2.6 wins a round played plain
+and 3.7 played hard, a third of what they did on stacking, so multipliers come
+down about six times, to a Challenge less 2. Redhand at Armoured x4, Feeds x3,
+at Hard (72, three quarters of the crew's 64 Root points and half again) runs
+57 minutes plain and 40 hard, 5.7 and 4.0 rounds, and the first Bloodied lands
+in 95% and 37% of fights, round 2 and 3 at the median. At Even (48) hardly
+anyone's Bloodied, and the first wound's a Soul at 0, Vesk's or Wren's, in
+round 1 or 2. With the round budget kept at three quarters of the crew's
+points as they grow (a pick's about 2 points on the Root they fight with), the
+first Bloodied stays at round 2 to 4 at the median, though in fewer fights,
+and four picks need from nothing to half again on Redhand's multipliers (they're
+whole numbers, so it moves in jumps), so the threat budget's their Root points
+added up, which puts an eighth on for each pick.
 
---find halves its way to the multiplier that makes a stacking fight last as
-long as one on the 10 Nov rules, played plain and played hard, then for each
-pick the multiplier that keeps it that long, against none. On 14 Nov, with the
-Traits (3,000 fights a try): plain needs x2.9 (x2.7 without them) and hard
-x5.4 (x4.1), and each pick each needs 1.40, 1.88, 2.52 and 3.14 times none
-played plain, 1.34, 1.80, 2.36 and 2.98 played hard (--seed 2 lands within
-0.05 of every one). At x3 a fight runs 4.4
-rounds plain and 2.6 hard, against 4.4 and 3.3 on 10 Nov, and x5 only gets a
-hard one to 3.2 while a plain one goes to 6.5.
+  python3 tools/fight_sim.py                         the big fight on the new core
+  python3 tools/fight_sim.py --gm even               the same at Even
+  python3 tools/fight_sim.py --find --picks 4        the factor a 45-minute fight
+                                                     needs, and each pick against none
+  python3 tools/fight_sim.py --rules stack --find    the 14 Nov numbers, as they were
 """
 import random
 from functools import lru_cache
@@ -223,9 +221,11 @@ class Threat:
         return False
 
 
-def encounter(k, f=1.0):
-    """A boss and its people. Each of the boss's multipliers is f times what it is now, plus k."""
-    boss = Threat("boss", 12, [[int(round(8 * f)) + k, True], [int(round(5 * f)) + k, False], [1, False]], 3, ["Body", "Body", "Mind", "Soul"], boss=True)
+def encounter(k, f=1.0, mults=None):
+    """A boss and its people. Each of the boss's multipliers is f times what it is now, plus k,
+    or mults, his Armoured and Feeds as they're written."""
+    a, b = mults or (int(round(8 * f)) + k, int(round(5 * f)) + k)
+    boss = Threat("boss", 12, [[a, True], [b, False], [1, False]], 3, ["Body", "Body", "Mind", "Soul"], boss=True)
     people = [Threat("named1", 8, [[1, False], [1, False]], 2, ["Body", "Mind"]),
               Threat("named2", 8, [[1, False], [1, False]], 2, ["Body", "Mind"]),
               Threat("mook1", 6, [], 1, ["Body"]),
@@ -821,6 +821,548 @@ class Fight:
                     wins=self.wins, actions=self.actions)
 
 
+
+# ================================================================ the new core (16 Nov)
+#
+# Part 2 of the rework (notes/core-plan.md): a roll is one Root at full, and a
+# Root's points are its dice, its health and what you spend. One action a
+# round, every die an intent, no extra actions, Aura 5. Defence is the Root a
+# telegraph's at, rolled at full and split to meet what's landing, each die
+# stopping one it meets or beats. A hit's a point off that Root, armour ticks a
+# box first, 2 for 1 moves it to another Root with the points, a hit at 0
+# wounds it (Bloodied, Frayed, Hollow) and a hit at 0 on a wounded Root is a
+# Scar, and they leave the scene. Bringing a Root in is a permission and a
+# point of it or 3 Aura, and an awakening is 2 steps on a roll it fits and 2
+# more for each Aura.
+#
+# What a round takes at the table (MIN_*), so a fight's length comes out in
+# minutes: the GM saying each telegraph and putting its die out, each player's
+# go (a Root, maybe one brought in, the split, the roll, what each die did),
+# and each telegraph that lands being rolled against and paid for. They're a
+# guess, so time a round at the table and move them.
+
+MIN_TELE = 0.25   # minutes for the GM to say a telegraph and put its die out
+MIN_GO = 1.0      # minutes for a player's go
+MIN_LAND = 0.25   # minutes for a telegraph that lands, rolled against and paid for
+WOUND = {"Body": "Bloodied", "Mind": "Frayed", "Soul": "Hollow"}
+
+
+def core_sheet(name):
+    """The crew on the new core, from 03b and notes/core-plan.md. roots are
+    the dice (and the maximum), locked what their awakenings lock, attack the
+    Root and the steps their awakenings put on a fighting roll, awk the Aura a
+    step-pair goes on, bring the Root a permission of theirs brings in on it
+    and the permission, and armour their boxes on each Root."""
+    if name == "Bram":
+        # hammer: Ring the bell; a swing to knock them down adds Knock them flat
+        return dict(arch=["Guardian", "Leader"], roots={"Body": 9, "Mind": 3, "Soul": 4}, locked={"Body": 2},
+                    attack=("Body", 2), knock=2, bring=("Mind", "spot who's in charge"),
+                    armour={"Body": 3}, melee=True, awk=True)
+    if name == "Vesk":
+        # her hook's no use in a straight fight
+        return dict(arch=["Shadow", "Shadow"], roots={"Body": 11, "Mind": 5, "Soul": 0}, locked={"Body": 1},
+                    attack=("Body", 0), bring=None, armour={"Body": 1}, melee=True, awk=False)
+    if name == "Wren":
+        # Long shot (Hit anything I can see adds only past cover and range)
+        return dict(arch=["Hunter", "Hunter"], roots={"Body": 8, "Mind": 8, "Soul": 0}, locked={"Body": 2},
+                    attack=("Body", 2), bring=("Mind", "know a beast's habits"),
+                    armour={}, melee=False, awk=True)
+    if name == "Ash":
+        return dict(arch=["Elementalist", "Face"], roots={"Body": 0, "Mind": 5, "Soul": 11}, locked={"Soul": 1},
+                    attack=("Soul", 2), bring=("Mind", "feel every flame in a room"),
+                    armour={}, melee=False, awk=True)
+    raise KeyError(name)
+
+
+class CoreChar:
+    # An average pick: a Title's 6 points, about half on the Root they fight
+    # with, an attuned thing's 2 steps on a roll it fits (and a point locked),
+    # or an archetype's abilities, which put nothing on a roll. That's about 2
+    # on the Root they fight with, dice and points both.
+    PICK = 2
+
+    def __init__(self, name, picks=0):
+        self.name = name
+        self.s = core_sheet(name)
+        self.roots = dict(self.s["roots"])
+        root, _ = self.s["attack"]
+        self.roots[root] += self.PICK * picks
+        self.cap = {r: self.roots[r] - self.s["locked"].get(r, 0) for r in ROOTS}
+        self.pts = dict(self.cap)
+        self.wound = {r: False for r in ROOTS}
+        self.armour = dict(self.s["armour"])
+        self.max = 5
+        self.aura = 5
+        self.due = 0
+        self.out = False
+        self.scar = None
+        self.hidden = False
+        self.pool = []
+        self.sf = 0          # Stand firm: hits left in its pair
+        self.lost = 0        # points lost to hits
+        self.hits = 0
+        self.defending = False
+
+    def steps(self, root):
+        return max(1, self.roots[root])
+
+
+def shape(S, n_targets, D):
+    """S steps as dice to go at n_targets things defending on a dD: the
+    build that wins most, as Fight's build() does."""
+    return [die_of(s) for s, _ in build(max(1, S), max(-(-S // 6), n_targets), (D,))]
+
+
+def shape_defence(S, teles):
+    """S steps split to meet the telegraph dice landing on a Root: as many dice
+    as there are telegraphs, or fewer when that stops more. Each die's at most
+    a d12 (6 steps), so past 6 a step a telegraph, it splits further."""
+    S = max(1, S)
+    teles = sorted(teles, reverse=True)
+    best, best_v = None, -1.0
+    lo = -(-S // 6)
+    for n in range(lo, max(lo, min(S, len(teles))) + 1):
+        steps = [S // n + (1 if i < S % n else 0) for i in range(n)]
+        if max(steps) > 6:
+            continue
+        dice = sorted((2 * s for s in steps), reverse=True)
+        v = sum(pstop(d, T) for d, T in zip(dice, teles))
+        if v > best_v + 1e-12:
+            best, best_v = dice, v
+    if best is None:
+        best = [12] * (S // 6) + ([2 * (S % 6)] if S % 6 else [])
+    return best
+
+
+class CoreFight:
+    def __init__(self, names, R, f=1.0, policy="plain", rng=None, picks=0, deadly=1, focus=False, mults=None):
+        self.focus = focus
+        self.policy = policy
+        self.plain = policy == "plain"
+        self.rng = rng or random.Random()
+        self.crew = [CoreChar(n, picks) for n in names]
+        self.R = R
+        self.f = f
+        self.deadly = deadly
+        self.boss, self.people = encounter(0, f, mults)
+        self.threats = [self.boss] + self.people
+        has = lambda arch: next((c for c in self.crew if arch in c.s["arch"]), None)
+        self.guardian, self.hunter = has("Guardian"), has("Hunter")
+        self.round = 0
+        self.minutes = 0.0
+        self.wins = 0
+        self.first_wound = None
+        self.first_bloodied = None
+        self.wounds = 0
+        self.scars = 0
+
+    def r(self, d):
+        return self.rng.randint(1, d) if d > 0 else 0
+
+    def living(self):
+        return [t for t in self.threats if t.alive]
+
+    def standing(self):
+        return [c for c in self.crew if not c.out]
+
+    def defence(self, t):
+        if t.defroll is None:
+            t.defroll = self.r(t.die)
+        return t.defroll
+
+    def targets(self):
+        ppl = sorted([t for t in self.people if t.alive], key=lambda t: t.left())
+        seq = []
+        for t in ppl:
+            seq += [t] * t.left()
+        if self.boss.alive:
+            seq.append(self.boss)
+        return seq
+
+    def gain(self, c, n, acting=False):
+        """Aura: past the maximum only while acting; otherwise the spare goes to a friend."""
+        c.aura += n
+        if acting or c.aura <= c.max:
+            return
+        spare, c.aura = c.aura - c.max, c.max
+        for f in sorted(self.standing(), key=lambda f: f.aura):
+            if f is c or spare <= 0:
+                continue
+            g = min(max(0, f.max - f.aura), spare)
+            f.aura += g
+            spare -= g
+
+    # ---- the GM telegraphs (as Fight does, at the crew's Roots)
+    def telegraph(self):
+        budget = int(round(self.R * AT_TRACKS))
+        teles, used, count = [], {}, {}
+        crew = self.standing()
+        if not crew:
+            return teles
+        order = crew[:]
+        self.rng.shuffle(order)
+
+        def pick(c, root):
+            for t in sorted(self.living(), key=lambda t: -t.die):
+                if count.get(id(t), 0) >= t.cap or (id(t), id(c)) in used or root not in t.roots:
+                    continue
+                return t
+            return None
+
+        def add(t, c, root, die):
+            hits = self.deadly if (t is not None and t.boss) else 1
+            teles.append([t, c, root, die, hits])
+            if t is not None:
+                used[(id(t), id(c))] = True
+                count[id(t)] = count.get(id(t), 0) + 1
+
+        for c in order:
+            if budget < 2:
+                break
+            t = pick(c, "Body")
+            die = min(t.die if t else 8, 2 * budget)
+            add(t, c, "Body", die)
+            budget -= die // 2
+        cycle, i = ["Mind", "Soul", "Body"], 0
+        while budget >= 2:
+            root = cycle[i % 3]
+            i += 1
+            if self.focus and i % 3:
+                # pressing: two in three of the rest go at the Body that's hurting most
+                # (one that's 0 behind a Guardian is no use, since he'd take it)
+                root = "Body"
+                guarded = self.guardian is not None and not self.guardian.out
+                pool = [c for c in crew if not (guarded and c is not self.guardian and c.pts["Body"] == 0)] or crew
+                c = min(pool, key=lambda c: (c.pts["Body"] + c.armour.get("Body", 0), self.rng.random()))
+            else:
+                c = sorted(crew, key=lambda c: (sum(1 for x in teles if x[1] is c and x[2] == root), self.rng.random()))[0]
+            t = pick(c, root)
+            die = min(t.die if t else 8, 2 * budget)
+            add(t, c, root, die)
+            budget -= die // 2
+        return teles
+
+    # ---- going at threats
+    def one_die(self, c, d, t, vuln=0):
+        if not t.alive:
+            return 0
+        D = self.defence(t)
+        raw = self.r(d)
+        won = raw > D
+        if not won and raw == D and not self.plain and c.aura >= 1:
+            c.aura -= 1
+            won = True
+        if raw == d:
+            self.gain(c, 1, True)
+        if won:
+            self.gain(c, 1, True)
+            h = self.hunter
+            if h is not None and h is not c and not h.out and t.marked:
+                self.gain(h, 1)        # Good Hunting
+            t.tick(1 + vuln)
+            self.wins += 1
+            return 1
+        return 0
+
+    def roll_at(self, c, S, melee, extra=(), area=False):
+        """Shape S steps at the threats and throw them. Returns wins."""
+        seq = self.targets()
+        if not seq:
+            return 0
+        wins = 0
+        if area and len(self.living()) >= 2:
+            # one die's the area (a d4), the biggest goes at everyone in it, the rest at the boss
+            a = self.r(4)
+            if a == 4:
+                self.gain(c, 1, True)
+            reach = 2 if a <= 2 else (4 if a <= 5 else 99)
+            dice = shape(S - 2, 1, 12)
+            intent = dice[0]
+            v = self.r(intent)
+            if v == intent:
+                self.gain(c, 1, True)
+            caught = sorted(self.living(), key=lambda t: (t.boss, t.left()))[:reach]
+            won = False
+            for t in caught:
+                D = self.defence(t)
+                if v > D:
+                    won = True
+                    t.tick(1 + self.vuln(t, melee))
+                    self.wins += 1
+                    wins += 1
+            if won:
+                self.gain(c, 1, True)
+            for d in dice[1:]:
+                t = self.boss if self.boss.alive else (self.living() or [None])[0]
+                if t is None:
+                    break
+                wins += self.one_die(c, d, t, self.vuln(t, melee))
+            return wins
+        D = max(t.die for t in seq)
+        for d in list(shape(S, 1, D)) + list(extra):
+            seq = self.targets()
+            if not seq:
+                break
+            t = seq[0]
+            wins += self.one_die(c, d, t, self.vuln(t, melee))
+        if self.boss.alive and self.boss.marked and seq and seq[0] is self.boss:
+            wins += self.one_die(c, self.boss.marked, self.boss, self.vuln(self.boss, melee))
+        return wins
+
+    def vuln(self, t, melee):
+        return 1 if (t.prone and melee) else 0
+
+    def spend_for_roll(self, c, S):
+        """Hard play: bring a Root in when a permission explains it (3 Aura, or
+        a point when that Root's got 3 or more to spare), then put spare Aura on
+        an awakening, keeping 1 for a tie."""
+        if self.plain:
+            return S
+        b = c.s["bring"]
+        if b:
+            root = b[0]
+            if c.aura >= 3:
+                c.aura -= 3
+                S += c.steps(root)
+            elif c.pts[root] >= 3:
+                c.pts[root] -= 1
+                S += c.steps(root)
+        if c.s["awk"]:
+            while c.aura >= 2:
+                c.aura -= 1
+                S += 2
+        return S
+
+    # ---- a player's go
+    def turn(self, c, teles):
+        c.aura += c.due
+        c.due = 0
+        root, awk = c.s["attack"]
+        n = c.name
+        if c.defending:
+            return
+        if not self.living():
+            return
+        if n == "Vesk" and not self.plain:
+            if not c.hidden:
+                watcher = max(self.living(), key=lambda t: t.die)
+                D = self.defence(watcher)
+                S = self.spend_for_roll(c, c.steps("Body"))
+                dice = shape(S, 1, watcher.die)
+                ok = False
+                for d in dice:
+                    raw = self.r(d)
+                    if raw == d:
+                        self.gain(c, 1, True)
+                    if raw > D:
+                        ok = True
+                        self.gain(c, 1, True)
+                if ok:
+                    c.hidden, c.pool = True, dice
+                return
+            c.hidden = False
+            pool, c.pool = c.pool, []
+            S = self.spend_for_roll(c, c.steps(root))
+            self.roll_at(c, S, True, extra=pool)
+            return
+        if n == "Wren" and not self.plain and self.boss.alive and self.boss.marked < 8:
+            S = self.spend_for_roll(c, c.steps(root) + awk)
+            D = self.defence(self.boss)
+            best = 0
+            for d in shape(S, 1, 12):
+                raw = self.r(d)
+                if raw == d:
+                    self.gain(c, 1, True)
+                if raw > D:
+                    self.gain(c, 1, True)
+                    best = max(best, d)
+            if best:
+                self.boss.marked = best
+            return
+        S = c.steps(root) + awk
+        knock = (not self.plain) and n == "Bram" and self.boss.alive
+        if knock:
+            S += c.s["knock"]
+        S = self.spend_for_roll(c, S)
+        before = self.wins
+        area = (not self.plain) and "Elementalist" in c.s["arch"]
+        self.roll_at(c, S, c.s["melee"], area=area)
+        if knock and self.wins > before and self.boss.prone_set != self.round:
+            self.boss.prone = 8
+            self.boss.prone_set = self.round
+
+    # ---- what lands
+    def hit(self, c, root, n=1):
+        for _ in range(n):
+            if c.out:
+                return
+            c.hits += 1
+            if c.sf == 1 and root == "Body":
+                c.sf = 0
+                continue
+            if c.sf == 2 and root == "Body":
+                c.sf = 1
+            if c.armour.get(root, 0) > 0:
+                c.armour[root] -= 1
+                continue
+            if c.pts[root] > 0:
+                c.pts[root] -= 1
+                c.lost += 1
+                continue
+            # At 0 the wound comes first: it costs nothing in the scene, where 2 for 1
+            # costs 2 points somewhere else. Once it's wounded, 2 for 1 keeps them in.
+            other = max((r for r in ROOTS if r != root), key=lambda r: c.pts[r])
+            if c.wound[root] and c.pts[other] >= 2:
+                c.pts[other] -= 2      # 2 for 1
+                c.lost += 2
+                continue
+            if not c.wound[root]:
+                c.wound[root] = True
+                self.wounds += 1
+                if self.first_wound is None:
+                    self.first_wound = self.round
+                if root == "Body" and self.first_bloodied is None:
+                    self.first_bloodied = self.round
+                continue
+            c.out = True
+            self.scars += 1
+            return
+
+    def land(self, teles):
+        lands = 0
+        for c in self.standing():
+            for root in ROOTS:
+                mine = [x for x in teles if x[1] is c and x[2] == root and (x[0] is None or x[0].alive)]
+                if not mine:
+                    continue
+                lands += len(mine)
+                rolls = sorted((self.r(x[3]), x[4]) for x in mine)
+                dd = shape_defence(c.steps(root), [x[3] for x in mine])
+                if c.defending and root == "Body":
+                    dd += shape_defence(c.steps("Body"), [x[3] for x in mine])
+                mine_rolls = []
+                for d in dd:
+                    v = self.r(d)
+                    if v == d:
+                        self.gain(c, 1)
+                    mine_rolls.append((v, d))
+                avail = sorted(v for v, _ in mine_rolls)
+                through = []
+                for tv, h in sorted(rolls, key=lambda p: (-p[1], p[0])):
+                    k = next((i for i, v in enumerate(avail) if v >= tv), None)
+                    if k is None and not self.plain and c is self.guardian and c.aura >= 1:
+                        # his Push: +2 on a die that's 1 or 2 short
+                        k = next((i for i, v in enumerate(avail) if v + 2 >= tv), None)
+                        if k is not None:
+                            c.aura -= 1
+                    if k is None:
+                        through.append(h)
+                    else:
+                        avail.pop(k)
+                        self.gain(c, 1)
+                if (not self.plain and c is self.guardian and root == "Body" and len(through) >= 2
+                        and c.aura >= 1 and c.armour.get("Body", 0) == 0):
+                    c.aura -= 1
+                    c.sf = 2                   # Stand firm
+                for h in through:
+                    self.hit(c, root, h)
+                    if c.out:
+                        break
+                if c.out:
+                    break
+        return lands
+
+    def play_round(self):
+        self.round += 1
+        for t in self.threats:
+            t.defroll = None
+        teles = self.telegraph()
+        stakes = int(round(self.R * (1 - AT_TRACKS) / 4))    # the rest of the budget, at stakes and clocks, about a d8 each
+        g = self.guardian
+        if g is not None and not g.out:
+            took = 0
+            for x in teles:
+                if x[2] != "Body" or x[1] is g:
+                    continue
+                friend = x[1]
+                # plain: only for a friend whose Body can't take it; hard: while his Body's got the points
+                if friend.pts["Body"] == 0 or (not self.plain and g.pts["Body"] >= 4 and friend.pts["Body"] < g.pts["Body"]):
+                    x[1] = g
+                    took += 1
+            if took:
+                if self.plain:
+                    self.gain(g, took)          # Better Me Than You, before he's acting
+                else:
+                    g.due += took               # stepping in on his own go
+            g.defending = sum(1 for x in teles if x[1] is g and x[2] == "Body") >= 2
+        for c in self.standing():
+            if c is not g:
+                c.defending = False
+        order = sorted(self.standing(), key=lambda c: 0 if c is g else 1)
+        for c in order:
+            if not self.living():
+                break
+            self.turn(c, teles)
+            if c.aura > c.max:
+                c.aura = c.max
+        goes = len(self.standing())
+        lands = self.land(teles) if self.living() else 0
+        self.minutes += MIN_TELE * (len(teles) + stakes) + MIN_GO * goes + MIN_LAND * lands
+        for t in self.threats:
+            if t.prone:
+                t.prone = smaller(t.prone)
+            if t.marked:
+                t.marked = smaller(t.marked)
+
+    def play(self, cap=30):
+        while self.living() and self.standing() and self.round < cap:
+            self.play_round()
+        n = len(self.crew)
+        return dict(rounds=self.round, minutes=self.minutes, won=not self.living(),
+                    first_wound=self.first_wound, first_bloodied=self.first_bloodied,
+                    wounds=self.wounds, scars=self.scars,
+                    lost=sum(c.lost for c in self.crew) / n,
+                    left=sum(sum(c.pts.values()) for c in self.crew) / sum(sum(c.cap.values()) for c in self.crew),
+                    wins=self.wins)
+
+
+def run_core(R, f=1.0, policy="plain", n=3000, seed=1, picks=0, deadly=1, focus=False, mults=None, names=("Bram", "Vesk", "Wren", "Ash")):
+    rng = random.Random(seed)
+    res = [CoreFight(list(names), R, f, policy, rng, picks, deadly, focus, mults).play() for _ in range(n)]
+    out = {k: sum(r[k] for r in res) / n for k in ("rounds", "minutes", "wounds", "scars", "lost", "left", "wins")}
+    out["won"] = sum(1 for r in res if r["won"]) / n
+    for k in ("first_wound", "first_bloodied"):
+        got = sorted(r[k] for r in res if r[k] is not None)
+        out[k + "_any"] = len(got) / n
+        out[k + "_median"] = got[len(got) // 2] if got else None
+        out[k + "_mean"] = sum(got) / len(got) if got else None
+    out["any_scar"] = sum(1 for r in res if r["scars"]) / n
+    out["wins_per_round"] = out["wins"] / out["rounds"]
+    return out
+
+
+def find_core_f(target, R, policy, picks=0, n=3000, seed=1, deadly=1, focus=False, lo=0.1, hi=30.0, steps=16):
+    """The boss multipliers' factor that makes a fight on the new core last
+    target minutes, by halving on the same dice."""
+    for _ in range(steps):
+        mid = (lo + hi) / 2
+        if run_core(R, mid, policy, n, seed, picks, deadly, focus)["minutes"] < target:
+            lo = mid
+        else:
+            hi = mid
+    return (lo + hi) / 2
+
+
+def say_core(policy, R, f, o, picks=0):
+    fb = o["first_bloodied_median"]
+    return ("core  %-5s budget %d (%.1f a player), Redhand x%.2g (Armoured x%d), %s"
+            "%.1f rounds, %.0f minutes, crew wins %.1f a round; "
+            "first wound in %.0f%% (median round %s), first Bloodied in %.0f%% (median round %s, mean %.1f), "
+            "a Scar in %.0f%%, %.1f points lost each, %.0f%% of points left"
+            % (policy, R, R / 4, f, int(round(8 * f)), "%d picks, " % picks if picks else "", o["rounds"], o["minutes"],
+               o["wins_per_round"], 100 * o["first_wound_any"], o["first_wound_median"],
+               100 * o["first_bloodied_any"], fb, o["first_bloodied_mean"] or 0, 100 * o["any_scar"], o["lost"], 100 * o["left"]))
+
 def run(rules, names, R, k=0, n=3000, seed=1, traits=None, plain=False, policy=None, f=1.0, picks=0, sheets=None):
     rng = random.Random(seed)
     res = [Fight(rules, names, R, k, traits, rng, plain, policy, f, picks, sheets).play() for _ in range(n)]
@@ -856,19 +1398,45 @@ def say(rules, policy, R, f, o, picks=0):
 def main():
     import argparse
     ap = argparse.ArgumentParser(description="Zi'Dara fight simulator")
-    ap.add_argument("--rules", choices=("now", "stack"))
-    ap.add_argument("--policy", choices=("plain", "table"), help="plain (the default) or table; --find does both")
-    ap.add_argument("--budget", type=int, help="round budget for four players (40, or 44 for --find)")
-    ap.add_argument("--f", type=float, default=1.0, help="boss multipliers times this")
+    ap.add_argument("--rules", choices=("now", "stack", "core"), default="core",
+                    help="core (16 Nov, the default), stack (14 Nov) or now (10 Nov)")
+    ap.add_argument("--policy", choices=("plain", "table"), help="plain or table (hard); without it, both")
+    ap.add_argument("--gm", choices=("even", "hard"), default="hard",
+                    help="core: even spreads it, a die at each Body and the rest round the Roots; "
+                         "hard piles two in three of the rest on the Body that's hurting most")
+    ap.add_argument("--budget", type=int, help="round budget for four players (core: 72 at hard, 48 at even)")
+    ap.add_argument("--mults", default="4,3", help="core: Redhand's Armoured and Feeds (4,3)")
+    ap.add_argument("--deadly", type=int, default=1, help="core: hits on each of Redhand's dice that get through")
+    ap.add_argument("--minutes", type=float, default=45, help="core --find: how long the fight should run")
+    ap.add_argument("--f", type=float, default=1.0, help="boss multipliers times this (now, stack)")
     ap.add_argument("--picks", type=int, default=0, help="new Titles, archetypes or attuned things each (--find: up to this many)")
     ap.add_argument("--n", type=int, default=3000, help="fights")
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--no-traits", action="store_true", help="play stacking without the archetypes' Traits")
     ap.add_argument("--find", action="store_true",
-                    help="the boss multipliers' factor stacking needs to last as long as a fight on the 10 Nov rules, "
-                         "and what each pick each needs on top")
+                    help="core: the factor on Redhand's multipliers (x8 and x5 at 1) that makes the fight last "
+                         "--minutes, and for each pick what it needs against none. now/stack: as on 14 Nov")
     a = ap.parse_args()
     crew = ["Bram", "Vesk", "Wren", "Ash"]
+    if a.rules == "core":
+        hard = a.gm == "hard"
+        R = a.budget or (72 if hard else 48)
+        mults = tuple(int(x) for x in a.mults.split(","))
+        for policy in [a.policy] if a.policy else ["plain", "table"]:
+            if a.find:
+                f0 = None
+                for picks in range(a.picks + 1):
+                    # the round budget grows with the crew's points, 16 each and a pick's 2
+                    Rk = int(round(R * (16 + CoreChar.PICK * picks) / 16))
+                    f = find_core_f(a.minutes, Rk, policy, picks, a.n, a.seed, a.deadly, hard)
+                    o = run_core(Rk, f, policy, a.n, a.seed, picks, a.deadly, hard)
+                    f0 = f0 or f
+                    print(a.gm + " " + say_core(policy, Rk, f, o, picks) + ("" if picks == 0 else ", %.2f times none" % (f / f0)))
+            else:
+                o = run_core(R, 1.0, policy, a.n, a.seed, a.picks, a.deadly, hard, mults)
+                print(a.gm + " " + say_core(policy, R, 1.0, o, a.picks).replace(
+                    "Redhand x1 (Armoured x8)", "Redhand Armoured x%d, Feeds x%d" % mults))
+        return
     traits = False if a.no_traits else None
     if a.find:
         R = a.budget or 44
@@ -877,8 +1445,6 @@ def main():
             print(say("now", policy, 40, 1.0, base))
             f0 = None
             for picks in range(a.picks + 1):
-                # Picks are measured against a fight with none, the way the
-                # threat budget grows them.
                 target = base["rounds"] if picks == 0 else first["rounds"]
                 f = find_f(target, crew, R, policy, picks, a.n, a.seed, traits)
                 o = run("stack", crew, R, n=a.n, seed=a.seed, policy=policy, f=f, picks=picks, traits=traits)
@@ -887,10 +1453,8 @@ def main():
                 print(say("stack", policy, R, f, o, picks) + ("" if picks == 0 else ", %.2f times none" % (f / f0)))
         return
     policy = a.policy or "plain"
-    rows = [(a.rules, a.budget or 40, a.f)] if a.rules else [("now", 40, 1.0), ("stack", 40, 1.0), ("stack", 44, 3.0)]
-    for rules, R, f in rows:
-        o = run(rules, crew, R, n=a.n, seed=a.seed, policy=policy, f=f, picks=a.picks, traits=traits)
-        print(say(rules, policy, R, f, o, a.picks))
+    o = run(a.rules, crew, a.budget or 40, n=a.n, seed=a.seed, policy=policy, f=a.f, picks=a.picks, traits=traits)
+    print(say(a.rules, policy, a.budget or 40, a.f, o, a.picks))
 
 
 if __name__ == "__main__":

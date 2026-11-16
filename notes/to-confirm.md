@@ -63,6 +63,23 @@ Written into 03, 03a, 03b and 18 on 16 Nov, with the crew in `notes/core-plan.md
 20. **Items are never steps on their own.** A weapon, armour or anything you carry does what it is. What changes a roll says so: a *Charge* weapon, a purse of gold, a smoke bomb, and the Warrior's *Second Skin*, which puts 1 step a piece of armour on the roll when it lands.
 21. **The *Slow* Catch's awakenings take a round to wake**, where they took two actions.
 
+### 3. The GM's side and the rest of the book
+
+Written into Running the Game, A Full Fight, the rest of the book, Appendices A (bar the character sheet), B and C, the index, the Learn deck and `c-2026-11-16-budgets` on 16 Nov, on `rules/2026-11-16-core-gm`, from `tools/fight_sim.py` on the new core.
+
+1. **A round's about 10 minutes at Hard**, so a 45-minute fight is four or five rounds. The sim times a round at 15 seconds for each telegraph the GM says, a minute for each player's go and 15 seconds for each telegraph that lands (`MIN_*` at the top of the core part). That's a guess, and the budgets lean on it, so time a round at the table and tell me.
+2. **Multipliers start at a threat's Challenge less 2**, where they started at four times it. One action and one Root a roll lands about a third of the wins stacking did, three or four a round for four of them, so Redhand's *Armoured ×4 (first)* and *Feeds ×3*, a dragon's *Hide ×5*, the dark paladin's *Plate Armour ×4* and *Shield ×3*, Forms bosses ×3 and ×2, and the fully woken Warden ×4. Played plain the sim wanted a touch less and played hard a touch more.
+3. **The threat budget's the crew's Roots added up**, 64 for a starting four, where it was 15 a character and a third more for every pick. Roots are what hits and what takes hits now, so it's the honest count, and it's on every sheet. Archetypes and attuned things put nothing on it, though they still make a crew better, so the book says to go by what you see once they've got a lot of them. In the sim each pick needed from nothing to an eighth more on the multipliers, as long as the round budget grew too.
+4. **The round budget's three quarters of the threat budget**, 48 for a starting four, 12 a player where it was 11, and it grows with their Roots. Without it growing, a crew with two new Titles each was hardly ever hurt.
+5. **At Hard the GM piles it on whoever's hurting.** Spread evenly (a die at each Body and the rest round the Roots, the book's Even), almost nobody's Bloodied in a 45-minute fight: 1% of fights. With the first die at each Body and two in three of the rest at the Body that's lowest, the first Bloodied lands in round 2 played plain (95% of fights) and round 3 played hard (37%). So the book says the fight of the session should see someone Bloodied in round 3 or 4, ease off if it's sooner and pile on if nobody's hurt by round 5.
+6. **Vesk's and Wren's Soul at 0 are Hollow in round 1 or 2 of most fights**, whenever anything's aimed at their Soul and gets through their d2. Spread evenly, the first wound in a fight is one of theirs 88% of the time. It's the plan's open question for you (whether any of the four with a Root at 0 should put a point there), and the sim says it matters.
+7. **A Root at 0 takes the wound before 2 for 1**, the way the sim plays it and A Full Fight and Vesk's career show it, since the wound costs nothing in the scene and 2 for 1 costs 2 points somewhere else. It's the player's call each time.
+8. ***Deadly* is a tag**, in How it comes at you: every die of it that gets through is 2 hits, and *Deadly (3)* is 3. A telegraph costs its steps once for every hit, the way it costs them once for every target.
+9. **The *Healers* crew asset is a second rest**, once a session between two scenes: one Root each, rolled unsplit, and it gives no Toll. It was a track up a size each.
+10. **A Full Fight keeps its story.** Isolde's one roll studies the Warden twice and wards Vesk, with her Soul brought in on *draw a ward the dead can't cross* for 3 Aura. The sigil and the canvases are combos, each helper bringing their Root and any awakening that fits (Vesk's hook on the haul), the way Conflict's own combo does. Dorrie gives up a quick heal on Bram for the butler, since there's no extra action to do both. Isolde's coat is for a hearing, so it doesn't fit the vault and the portrait takes a point of her Mind.
+11. **Vesk's career on the new core:** her third Title is Mind 3 and Body 2, her picks' awakenings lock two points of her Body and one of her Mind, her Scar locks another of her Body, and she ends on Body 13 and Mind 8, holding 9 and 7. *Through the ward* just does what it did for 1 Aura, as prompt 2's call 2 has it. She's still 47 points.
+12. **Running the Game's GM side:** a big bite or a strained bond thread with one of her people is a point of Soul back (Wren's Soul is 0, so she'd take the Aura), *Catches and Resolve at the Table* is *Catches and Trouble at the Table* (same id), and a player arguing a permission brings a Root in still pays the point or the 3 Aura, and pushing it further is going beyond.
+
 ### 4. The play screen and the roller
 
 Built on 16 Nov on `rules/2026-11-16-core-play`: the play screen, When it lands, a heal, the end of a scene, the dice roller and the learning round on the new core.
@@ -90,6 +107,22 @@ Built on 16 Nov on `rules/2026-11-16-core-play`: the play screen, When it lands,
 21. **The dice roller's actions are targets now**, since there's one action a round and every die's an intent. A target coming at you says how many hits each that gets through is, 1 to 4, and the result says the hits.
 22. **The learning round's combo** brings Bram's Body as well as his hammer's *Ring the bell*, so it's Wren's 10 and Bram's 11, three d12s and a d6. Isolde's Body is 0, so it's a d2 against the club, 3 times in 16, and the club landing leaves her Bloodied, or 2 points off her Mind.
 23. **The faction turn's reroll in downtime is a point of Soul**, a small change in `turn.js`.
+
+### 5. The builder, downtime and print
+
+Built into the builder, downtime, print and the paper sheets on 16 Nov, on `rules/2026-11-16-core-build`.
+
+1. **Spreading a Title's 5 is All on and a stepper on each Root.** All on Body puts all 5 there in a tap, and + on another Root moves one there off the biggest of the others, so Mind 3 and Body 2 is All on Mind and + on Body twice. − takes one off and leaves it to place. Downtime's new Title from an Aspiration spreads the same way.
+2. **A character built on stacking has each Title's 3 made 5 the way they were spread**, the same thing a saved sheet gets, and Change says what each one was till it's saved. Each awakening of theirs sits on their biggest Root till they pick one. Saving it puts it on the new core for good.
+3. **The builder warns on an awakening with no Root**, and on one whose Root hasn't got a point free to lock, since it'd do nothing. It never blocks.
+4. **Downtime puts everything back first, then what it grows lands on a full character.** A new permission's point is there to spend at the next session, and a new awakening's lock comes off what that Root holds. A point of Soul paid to roll again comes off after, so it's still spent when the next session starts, as 12 has Isolde.
+5. **A roll at your Aspiration in downtime is the Root that fits, at full, and that's all.** You can't bring a second Root in there, since there's no Aura in downtime and the chapter says to roll the Root that fits. Say if you'd like a point of the Root brought in to do it.
+6. **Mend is its own choice** where Recover was, for something broken or armour with boxes ticked.
+7. **The paper sheet's Roots** each have their number and the dice it rolls, where it came from, what's locked, what it holds, a big box for the points it has now, a tick for its wound by name, two lines for Scars and two for armour. Toll sits beside Aura and stride at the top, where extra actions were, and the Scars section beside conditions is now Getting it back, the two rests and a heal in a few words. Two Scar lines a Root, six in all, was what fit the page. A third goes in Notes.
+8. **Print writes what a Root holds less what's locked**, and when it's wounded, Notes say what it heals to till downtime, so the box isn't halved and unhalved in pencil.
+9. **An ability prints its cost only when it's more than 1 Aura**, and the archetype cards say an ability's 1 Aura unless its line says more. Isolde's three Oracle abilities wouldn't fit their six lines with "(1 Aura)" on each.
+10. **The player reference's second page opens on a Root's points**, drawn: full, a hit, at 0, wounded at 0, the three wounds by name and what Toll takes off a heal, its words checked against Appendix D's.
+11. **A random character's attuned thing has to fit their Roots.** If its awakening's Root is at 0, another of the book's things that fits takes its place, with the same Catch, so it still costs 35.
 
 ### 6. The live table
 
