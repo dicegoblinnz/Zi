@@ -118,7 +118,9 @@ export function toFive(spread, perms = []) {
 }
 
 // Count the Roots: each Title's spread, and 1 for every permission on its
-// Root. Nothing else adds to a Root.
+// Root. Nothing else adds to a Root, and none's ever less than ROOT_MIN (Mo,
+// 16 Nov: "minimum root is 1 always"), so one with nothing on it is 1.
+export const ROOT_MIN = 1;
 export function countRoots(titles) {
   const roots = zero();
   for (const t of titles ?? []) {
@@ -126,6 +128,7 @@ export function countRoots(titles) {
     for (const r of ROOTS) roots[r] += spread[r];
     for (const p of t?.permissions ?? []) if (ROOTS.includes(p?.root)) roots[p.root] += 1;
   }
+  for (const r of ROOTS) roots[r] = Math.max(ROOT_MIN, roots[r]);
   return { roots };
 }
 
@@ -668,9 +671,9 @@ export function healBy(c, s, rolled, spread = null, { other = false, ease = 0, b
 export const restOf = (c, s) => ROOTS.filter((r) => (c.roots?.[r] ?? 0) > 0 && (s.pts?.[r] ?? 0) < capOf(c, s, r));
 // The end of a scene: each Root gets back what it rolled (rolls is
 // { Body, Mind, Soul }, each Root's dice unsplit added up), and 2 more for
-// each Recovery Boon, up to what it can hold, Toll drops by 1, and anyone
-// who left the scene is back for the next.
-export function sceneEnd(c, s, rolls = {}) {
+// each Recovery Boon, up to what it can hold, Toll drops by 1 (2 for a crew
+// with the Healers asset), and anyone who left the scene is back for the next.
+export function sceneEnd(c, s, rolls = {}, { healers = false } = {}) {
   const more = restBonus(c);
   const healed = zero();
   for (const r of ROOTS) {
@@ -680,9 +683,17 @@ export function sceneEnd(c, s, rolls = {}) {
     healed[r] = Math.max(0, to - s.pts[r]);
     s.pts[r] = Math.max(s.pts[r], to);
   }
-  s.toll = Math.max(0, int(s.toll, 0) - 1);
+  s.toll = Math.max(0, int(s.toll, 0) - (healers ? 2 : 1));
   delete s.out;
   return { healed, toll: s.toll };
+}
+// The Healers crew asset clears one wound on one of the crew, free, once
+// between downtimes: no action, no roll and nothing spent. Whether the crew's
+// used it since the last downtime is the party sheet's to keep, not this.
+export function clearWound(s, root) {
+  if (!ROOTS.includes(root) || !s.wound?.[root]) return false;
+  s.wound[root] = false;
+  return true;
 }
 // Downtime puts everything back: wounds and Toll clear, and every Root's
 // full. Scars stay.

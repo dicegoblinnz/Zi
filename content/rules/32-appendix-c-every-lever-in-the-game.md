@@ -121,10 +121,10 @@ How a strained thread plays out at the table, from both sides, is in [Playing th
 | **Toll** | Every heal from someone or something else is 1 Toll, and a heal loses 5 for each Toll the patient's already got, never below 0. It drops by 1 at the end of each scene and clears in downtime. A quick heal and a rest never give it. |
 | **Ease the Toll** | The Healer's *Good Hands*, and an attuned thing like the Surgeon's Casebook (*What worked*): a heal ignores a step of Toll. A flat bonus, like Sister Hale's Thimble's 3, goes on before the Toll comes off. |
 | **Heal yourself** | The Regen Boon: at the end of each round, roll the Root that's lost most, unsplit, and a top face on any of its dice puts a point back. |
-| **Between scenes** | The *Healers* crew asset: once a session, everyone in the crew rolls one Root unsplit and gets back what it rolls, a second rest that gives no Toll. |
+| **Between scenes** | The *Healers* crew asset: Toll drops by 2 at the end of each scene, not 1, and once between downtimes one wound on one of the crew clears, free. |
 | **Heal in downtime** | Downtime puts everything back: every Root on its maximum, wounds and Toll gone. |
 | **As far as it goes** | Nothing goes past a Root's maximum, or past half of it, rounded up, while it's wounded, and nothing heals a Scar. |
-| **A wound** | A hit on a Root with no points left: **Bloodied** (Body), **Frayed** (Mind) or **Hollow** (Soul), one each. Your dice don't change. Downtime or a story moment clears it. |
+| **A wound** | A hit on a Root with no points left: **Bloodied** (Body), **Frayed** (Mind) or **Hollow** (Soul), one each. Your dice don't change. Downtime or a story moment clears it, and so does *Healers*, once between downtimes. |
 | **Blaze** | While you're wounded, on your turn: take the Scar, declare something extraordinary, and it happens, no roll, then leave the scene. From your first Blaze, you can choose to die. |
 | **A Scar** | A hit on a wounded Root with no points left, and you leave the scene. It's a Catch on that Root and locks a point of it for good. A Scar that locks a Root's last point is your last scene. The Healer's *Pull them back* (1 Aura) keeps someone in the scene when they take one. The GM can take a Scar away when the story's earned it. |
 

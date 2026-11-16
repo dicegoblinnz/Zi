@@ -150,7 +150,9 @@ function crewSheet(name, titleText, body, block, ctx) {
   }
   if (!titles.length) warn("there are no Titles");
 
-  // The Roots line has to be what the Titles and permissions put on each Root.
+  // The Roots line has to be what the Titles and permissions put on each Root,
+  // and none's ever less than 1.
+  for (const r of ROOT_NAMES) roots[r] = Math.max(1, roots[r]);
   const said = (text) => new Map(dots(dropStop(text ?? "")).map((seg) => {
     const m = seg.match(/^(.+?) (\d+)$/);
     if (!m) warn(`can't read "${seg}": it's a name and its steps`);

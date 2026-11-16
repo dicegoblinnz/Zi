@@ -39,9 +39,10 @@ and 3.7 played hard, a third of what they did on stacking, so multipliers come
 down about six times, to a Challenge less 2. Redhand at Armoured x4, Feeds x3,
 at Hard (72, three quarters of the crew's 64 Root points and half again) runs
 57 minutes plain and 40 hard, 5.7 and 4.0 rounds, and the first Bloodied lands
-in 95% and 37% of fights, round 2 and 3 at the median. At Even (48) hardly
-anyone's Bloodied, and the first wound's a Soul at 0, Vesk's or Wren's, in
-round 1 or 2. With the round budget kept at three quarters of the crew's
+in 93% and 36% of fights, round 3 at the median. At Even (48) hardly anyone's
+Bloodied, and about a fight in three or two sees a wound, round 3 or 4 at the
+median. That's with no Root less than 1 (Mo, 16 Nov), so Vesk's and Wren's
+Souls and Ash's Body are 1, and the Guardian covers a friend on 1 or 0 Body. With the round budget kept at three quarters of the crew's
 points as they grow (a pick's about 2 points on the Root they fight with), the
 first Bloodied stays at round 2 to 4 at the median, though in fewer fights,
 and four picks need from nothing to half again on Redhand's multipliers (they're
@@ -860,15 +861,15 @@ def core_sheet(name):
                     armour={"Body": 3}, melee=True, awk=True)
     if name == "Vesk":
         # her hook's no use in a straight fight
-        return dict(arch=["Shadow", "Shadow"], roots={"Body": 11, "Mind": 5, "Soul": 0}, locked={"Body": 1},
+        return dict(arch=["Shadow", "Shadow"], roots={"Body": 11, "Mind": 5, "Soul": 1}, locked={"Body": 1},
                     attack=("Body", 0), bring=None, armour={"Body": 1}, melee=True, awk=False)
     if name == "Wren":
         # Long shot (Hit anything I can see adds only past cover and range)
-        return dict(arch=["Hunter", "Hunter"], roots={"Body": 8, "Mind": 8, "Soul": 0}, locked={"Body": 2},
+        return dict(arch=["Hunter", "Hunter"], roots={"Body": 8, "Mind": 8, "Soul": 1}, locked={"Body": 2},
                     attack=("Body", 2), bring=("Mind", "know a beast's habits"),
                     armour={}, melee=False, awk=True)
     if name == "Ash":
-        return dict(arch=["Elementalist", "Face"], roots={"Body": 0, "Mind": 5, "Soul": 11}, locked={"Soul": 1},
+        return dict(arch=["Elementalist", "Face"], roots={"Body": 1, "Mind": 5, "Soul": 11}, locked={"Soul": 1},
                     attack=("Soul", 2), bring=("Mind", "feel every flame in a room"),
                     armour={}, melee=False, awk=True)
     raise KeyError(name)
@@ -1029,10 +1030,10 @@ class CoreFight:
             i += 1
             if self.focus and i % 3:
                 # pressing: two in three of the rest go at the Body that's hurting most
-                # (one that's 0 behind a Guardian is no use, since he'd take it)
+                # (one that's on 1 or 0 behind a Guardian is no use, since he'd take it)
                 root = "Body"
                 guarded = self.guardian is not None and not self.guardian.out
-                pool = [c for c in crew if not (guarded and c is not self.guardian and c.pts["Body"] == 0)] or crew
+                pool = [c for c in crew if not (guarded and c is not self.guardian and c.pts["Body"] <= 1)] or crew
                 c = min(pool, key=lambda c: (c.pts["Body"] + c.armour.get("Body", 0), self.rng.random()))
             else:
                 c = sorted(crew, key=lambda c: (sum(1 for x in teles if x[1] is c and x[2] == root), self.rng.random()))[0]
@@ -1285,8 +1286,8 @@ class CoreFight:
                 if x[2] != "Body" or x[1] is g:
                     continue
                 friend = x[1]
-                # plain: only for a friend whose Body can't take it; hard: while his Body's got the points
-                if friend.pts["Body"] == 0 or (not self.plain and g.pts["Body"] >= 4 and friend.pts["Body"] < g.pts["Body"]):
+                # plain: only for a friend whose Body can't take two; hard: while his Body's got the points
+                if friend.pts["Body"] <= 1 or (not self.plain and g.pts["Body"] >= 4 and friend.pts["Body"] < g.pts["Body"]):
                     x[1] = g
                     took += 1
             if took:

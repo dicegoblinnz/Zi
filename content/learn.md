@@ -51,7 +51,7 @@ Bram's chasing a smuggler down the quay, his Body, 9 steps. He bellows at the do
 ::::
 
 ::::card[Steps into dice]{#l-dice teaches=steps-into-dice}
-Your die is your steps × 2, up to a d12, so 1 step's a d2, 4 steps a d8 and 6 steps a d12. Every 6 steps gives you another d12, and whatever's left over makes one more die. No die you build is ever bigger than a d12, so getting stronger means throwing more dice. Every roll's at least 1 step, a d2, even with a Root that's 0.
+Your die is your steps × 2, up to a d12, so 1 step's a d2, 4 steps a d8 and 6 steps a d12. Every 6 steps gives you another d12, and whatever's left over makes one more die. No die you build is ever bigger than a d12, so getting stronger means throwing more dice. No Root's less than 1, so every roll's at least 1 step, a d2.
 
 :::example
 Wren's shot from cover is her Body and *Long shot*, 10 steps, a d12 and a d8. When Bram [barks an order](#leading-and-inspiring) and hands her 4 steps, it's 14, two d12s and a d4.
@@ -230,7 +230,7 @@ The GM puts a Warden's spear at Isolde's Body on the table, a d10, and the maid 
 A **telegraph** is the GM saying out loud what's about to happen, before anything's rolled: what it's doing, who or what it's aimed at, and how hard, in dice, and how many hits when it's more than one. At one of you, it says which Root: blows at your Body, fear and lies at your Mind, despair and curses at your Soul. A threat aims one die at each of you. Running doesn't dodge one, so to stop it, [answer it](#s-answering).
 
 :::example
-"The brute's going to bring his club down on Isolde. That's a d8 at her Body." Her Body's 0, so it'd leave her Bloodied, and Wren and Bram talk about answering it before anyone rolls.
+"The brute's going to bring his club down on Isolde. That's a d8 at her Body." Her Body's only 1, so the next after it would Bloody her. Wren and Bram talk about answering it before anyone rolls.
 :::
 ::::
 
@@ -270,7 +270,7 @@ Bram Defends behind his shield. When they land, his Body's 9 steps roll as a d12
 When a telegraph's aimed at a friend's Body and they're within your stride, you can **intercept** it for 1 Aura and no action. Take as many of the dice aimed at them as you like, and they come at your Body instead. It's 1 Aura for each friend, and a Guardian does it for free. Nobody can step in front of what's at a friend's Mind or Soul.
 
 :::example
-The brute's club is coming down at Isolde, and her Body's 0. Vesk's right beside her, so she pays 1 Aura and takes it. Her Body's d12 and d10 roll 9 and 4 against the club's 3, so it's stopped, and the win pays her Aura back.
+The brute's club is coming down at Isolde, and her Body's only 1. Vesk's right beside her, so she pays 1 Aura and takes it. Her Body's d12 and d10 roll 9 and 4 against the club's 3, so it's stopped, and the win pays her Aura back.
 :::
 ::::
 

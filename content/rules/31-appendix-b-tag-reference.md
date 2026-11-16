@@ -317,7 +317,7 @@ Each of these is +1 Power whenever it fits the roll, and its people in a scene c
 
 | Asset | What it does |
 | --- | --- |
-| **Healers** | Once a session, between two scenes, everyone in the crew rests a second time: one Root each, rolled unsplit, and they get back what it rolls. It isn't a heal, so it gives no Toll. |
+| **Healers** | Toll drops by 2 at the end of each scene, not 1. And once between downtimes, one wound on one of the crew clears whenever you like: no action, no roll and nothing spent. |
 | **Relic** | Something old and powerful. Its card says what it does, often through its Secret, and without it, the faction's just another power. |
 | **A Curse on Its Goods** | Anyone who steals from it is *Hexed*, at its Power, at the start of every scene till they give it back. |
 | **A Bound Spirit** | Once a session, ask it about anything that happened inside the walls it haunts, and it tells the truth. |

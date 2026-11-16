@@ -49,16 +49,16 @@ Newest wins. Everything Mo hasn't changed stands: Aspirations, threads and bonds
 
 Everyone keeps both Titles, all six permissions, both archetypes with both their abilities, their attuned thing and everything they carry, so every sheet's still 35 points with the same Points line. Each Title's 5 is its 3 from stacking made 5, the 2 more spread the way the 3 were (`toFive()` in `roots.js`, the same thing a saved character gets), so every Title keeps its feel. Aura's 5. Each awakening locks a point of the Root in its brackets, so a Root holds its number less what's locked, and still rolls all of it. A roll below is the Root at full, and 2 for each awakening that fits.
 
-Four of them have a Root at 0, as they did on stacking: Vesk's and Wren's Soul, and Isolde's and Ash's Body. On the new core that's no health there, so the first hit at it wounds them, unless they take it on another Root for 2 points. That's how they were spread, so it's kept, and it's Mo's call whether any of them should put a point there instead.
+Four of them have nothing built on one Root, as they did on stacking: Vesk's and Wren's Soul, and Isolde's and Ash's Body. Since Mo's 16 Nov call no Root's ever less than 1, so each of those is 1: a d2, and a single point to lose before the next hit wounds it (`ROOT_MIN` in `roots.js`).
 
 | Who | Titles | Roots | Locked | Holds | Total |
 | --- | --- | --- | --- | --- | --- |
-| Vesk | *The best cat burglar in the city* (Body 5) · *Raised by the Guild* (Mind 3, Body 2) | Body 11 · Mind 5 · Soul 0 | 1 Body (her hook) | Body 10 · Mind 5 · Soul 0 | 15 |
+| Vesk | *The best cat burglar in the city* (Body 5) · *Raised by the Guild* (Mind 3, Body 2) | Body 11 · Mind 5 · Soul 1 | 1 Body (her hook) | Body 10 · Mind 5 · Soul 1 | 16 |
 | Bram | *The wall that held the harbour gate* (Body 5) · *A sergeant who lost his stripes* (Soul 3, Mind 2) | Body 9 · Mind 3 · Soul 4 | 2 Body (his hammer) | Body 7 · Mind 3 · Soul 4 | 14 |
 | Dorrie | *The voice that talked a duke out of his own house* (Soul 5) · *The woman with a hundred names* (Mind 3, Body 2) | Body 3 · Mind 7 · Soul 6 | 1 Mind (her pin) | Body 3 · Mind 6 · Soul 6 | 15 |
-| Isolde | *The last student of a dead order* (Soul 5) · *A scholar of forbidden texts* (Mind 5) | Body 0 · Mind 9 · Soul 7 | 1 Soul (her chalk) | Body 0 · Mind 9 · Soul 6 | 15 |
-| Wren | *The hunter who has never lost a trail* (Mind 5) · *An outrider from the border war* (Body 5) | Body 8 · Mind 8 · Soul 0 | 2 Body (her bow) | Body 6 · Mind 8 · Soul 0 | 14 |
-| Ash | *The last fire-speaker of the Ember Court* (Soul 5) · *The Court's runaway heir* (Mind 3, Soul 2) | Body 0 · Mind 5 · Soul 11 | 1 Soul (her stone) | Body 0 · Mind 5 · Soul 10 | 15 |
+| Isolde | *The last student of a dead order* (Soul 5) · *A scholar of forbidden texts* (Mind 5) | Body 1 · Mind 9 · Soul 7 | 1 Soul (her chalk) | Body 1 · Mind 9 · Soul 6 | 16 |
+| Wren | *The hunter who has never lost a trail* (Mind 5) · *An outrider from the border war* (Body 5) | Body 8 · Mind 8 · Soul 1 | 2 Body (her bow) | Body 6 · Mind 8 · Soul 1 | 15 |
+| Ash | *The last fire-speaker of the Ember Court* (Soul 5) · *The Court's runaway heir* (Mind 3, Soul 2) | Body 1 · Mind 5 · Soul 11 | 1 Soul (her stone) | Body 1 · Mind 5 · Soul 10 | 16 |
 
 Their awakenings, each 2 steps on a roll it fits and 2 more for each Aura:
 
@@ -179,7 +179,7 @@ Landed 16 Nov from `rules/2026-11-16-core-rules`. Its calls are under 1. The rul
 - **One small change in prompt 4's part of the checks**: part 3 of `tests/check-companion.mjs` looks for *Your Points* on the Rules tab where it looked for *The Tracks*.
 - **Checks**: `tests/check-site.mjs` and `tests/check-world-engine.mjs` pass. `tests/check-companion.mjs` fails one thing only, the Learn deck behind this change (25 cards, `checked: 2026-11-14`), which is prompt 3's to check and set. The site's search check looks for *Stamina*, which only the change log will say once the whole book's moved, so prompt 7 might give it *Bloodied* instead.
 
-The crew in every example are moved across by this plan's rule for saved characters, each Title's 2 more spread the way its 3 were: **Vesk** Body 11 · Mind 5 · Soul 0, **Dorrie** Body 3 · Mind 7 · Soul 6, **Bram** Body 9 · Mind 3 · Soul 4, **Isolde** Body 0 · Mind 9 · Soul 7, **Wren** Body 8 · Mind 8 · Soul 0 and **Ash** Body 0 · Mind 5 · Soul 11, each awakening locking a point of the Root it's on (Vesk's Body 10, Bram's 7, Wren's 6, Isolde's Soul 6 and Ash's 10 as their maximums, and Dorrie's pin on her Mind). If prompt 2's crew comes out different, prompt 7 brings the examples into line.
+The crew in every example are moved across by this plan's rule for saved characters, each Title's 2 more spread the way its 3 were: **Vesk** Body 11 · Mind 5 · Soul 1, **Dorrie** Body 3 · Mind 7 · Soul 6, **Bram** Body 9 · Mind 3 · Soul 4, **Isolde** Body 1 · Mind 9 · Soul 7, **Wren** Body 8 · Mind 8 · Soul 1 and **Ash** Body 1 · Mind 5 · Soul 11, each awakening locking a point of the Root it's on (Vesk's Body 10, Bram's 7, Wren's 6, Isolde's Soul 6 and Ash's 10 as their maximums, and Dorrie's pin on her Mind). If prompt 2's crew comes out different, prompt 7 brings the examples into line.
 
 For the prompts after this one:
 
@@ -219,11 +219,14 @@ What the other prompts need from it:
 Built 16 Nov on `rules/2026-11-16-core-gm`. Its calls are under 3 in `notes/to-confirm.md`'s 16 Nov section.
 
 - **`tools/fight_sim.py`** has the new core as its default (`CoreFight`, `run_core()`, `find_core_f()`): Bram, Vesk, Wren and Ash off 03b, defence from the Root split to meet what lands, hits as points, armour first, a wound at 0 and a Scar after it, played plain and hard, with the GM spreading it (`--gm even`) or piling on the lowest Body (`--gm hard`, the default), and a fight's length in minutes from `MIN_TELE`, `MIN_GO` and `MIN_LAND`. Stacking and 10 Nov stay as `--rules stack` and `--rules now`. Its top has the numbers.
-- **The numbers:** a crew lands 2.6 wins a round played plain and 3.7 hard. Redhand at *Armoured ×4*, *Feeds ×3* at Hard (72) runs 57 minutes plain and 40 hard (5.7 and 4.0 rounds), first Bloodied in round 2 and 3 at the median. So multipliers start at a Challenge less 2, the threat budget's the crew's Roots added up (64), the round budget's three quarters of it (48, Hard 72), and at Hard the GM piles on whoever's hurting.
+- **The numbers:** a crew lands 2.6 wins a round played plain and 3.7 hard. Redhand at *Armoured ×4*, *Feeds ×3* at Hard (72) runs 57 minutes plain and 40 hard (5.7 and 4.0 rounds), first Bloodied in round 2 and 3 at the median (round 3 for both since the floor of 1). So multipliers start at a Challenge less 2, the threat budget's the crew's Roots added up (64), the round budget's three quarters of it (48, Hard 72), and at Hard the GM piles on whoever's hurting.
 - **Running the Game (19)**: the budgets, multipliers and the rest on points, wounds and Aura abilities. **Conflict's A Full Fight** on the new core. **01, 04, 14, 15, 16, 17, 20, 22, 28**, Appendix A's party and faction sheets, **B** (with *Deadly*), **C** rewritten, Appendix D's budget bullets, the **index**, the **Learn deck** (all 40 cards, `checked: 2026-11-16`) and **`c-2026-11-16-budgets`**, with a Since 16 Nov note on each budget in `c-2026-11-14-budgets`.
+
+**Mo's calls after it (16 Nov, `c-2026-11-16-floor`):** no Root's ever less than 1, a floor, so a Root nothing's built is 1 (`ROOT_MIN` in `roots.js`, used by `countRoots()`, the builder's `rootsOf()`, `ways.js` and the build's `crewFrom()`), and the *Healers* crew asset drops Toll by 2 at the end of a scene and clears one wound on one of the crew free once between downtimes (`sceneEnd(c, s, rolls, { healers: true })` and `clearWound()` in `roots.js`). The sim gives the same budgets with the floor (Hard 57 and 40 minutes, first Bloodied round 3), once its Guardian covers a friend on 1 Body as well as 0. The threat budget counts a Root that's only 1 as 0.
 
 What the other prompts need from it:
 
+- **4:** the play screen's New scene passes `{ healers: true }` to `R.sceneEnd()` when the campaign's party sheet has *Healers*, and the free wound clear is a tap on a wounded Root, kept on the party sheet as used till the next downtime.
 - **6:** a telegraph from a *Deadly* threat is 2 hits or more, and costs its steps once for each hit.
 - **7:** Chapter 07, Magic, still has stacking's words (9 retired-word lines). The site's search check looks for *Stamina*. Prompt 5 landed before this one, so the sheets were built again on both.
 

@@ -117,7 +117,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Reputation](#s-party-faction)** | What the city says about the crew, in one line. A step on any crew roll it fits. One for every Goal done. |
 | **[Resource](#s-wealth)** | A permission on a faction's card for where its money comes from, like *Silver Mine*. Each one pays for one asset every downtime, and an extra one, paying for nothing, hires another faction, buys something or goes in a trade. |
 | **[Rest](#s-healing)** | At the end of every scene: roll each Root below its maximum, unsplit, and get back what you roll. |
-| **[Root](#s-roots)** | Body, Mind or Soul. Every roll's one of them, rolled at full. Each Title puts 5 on your Roots, spread however you like, and each permission 1 on its Root. A Root's number is its dice and its points. |
+| **[Root](#s-roots)** | Body, Mind or Soul. Every roll's one of them, rolled at full. Each Title puts 5 on your Roots, spread however you like, and each permission 1 on its Root, and none's less than 1. A Root's number is its dice and its points. |
 | **[Round](#s-round)** | The GM telegraphs, everyone takes one action, the round ends. |
 | **[Round budget](#s-budget)** | What the GM telegraphs with each round, worked out for each player. A Breather's about half, and Hard's about half again. |
 | **[Scar](#s-blaze)** | A hit on a wounded Root with no points left, or the Scar you take when you Blaze. You leave the scene, and it's a Catch on that Root that locks a point of it for good. A Scar that locks a Root's last point is your last. |

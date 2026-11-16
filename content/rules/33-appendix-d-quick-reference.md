@@ -63,14 +63,14 @@ updated: 2026-11-16
 
 ## Your points {#s-qr-tracks}
 
--   **A Root's number is its points:** its dice, what it can take, and what you spend. Each awakening locks a point of the Root it fits, and each Scar locks one for good, so what's left is its maximum. Locked points are still dice. A new character starts full.
+-   **A Root's number is its points:** its dice, what it can take, and what you spend. No Root's less than 1. Each awakening locks a point of the Root it fits, and each Scar locks one for good, so what's left is its maximum. Locked points are still dice. A new character starts full.
 -   **Hits:** every telegraph die that gets through is a hit, and a hit's 1 point off its Root. A vulnerability's one more hit, and a deadly threat's telegraph says how many. **2 for 1:** take a hit on another Root instead, for 2 points of it, if it's got them.
 -   **Spending:** a point of the Root you bring in, or a point of Soul to roll again. You can't spend what you haven't got, so pushing never hurts you, and spending to 0 only leaves you exposed.
 -   **Wounds:** a hit on a Root with no points left wounds it, **Bloodied** (Body), **Frayed** (Mind) or **Hollow** (Soul), one each. A wounded Root heals only to half its maximum, rounded up, till downtime or a story moment clears it. Damage carries on past 0.
 -   **Scar:** a hit on a wounded Root with no points left. You leave the scene, and it's a Catch on that Root that locks a point of it for good. A Scar that locks a Root's last point is your last: die or retire, your call.
 -   **Blaze:** while you're wounded, on your turn, take the Scar, declare something extraordinary and it happens, no roll, then leave the scene. From your first Blaze, you can choose to die.
 -   **They come back:** at the end of every scene, roll each Root below its maximum, unsplit, and get back what you roll. Downtime puts everything back, wounds and Toll included. A big bite from a Catch or a hostile thread, or straining a bond thread, gets you a point of Soul back.
--   **Heal** (the Healer's): an action, rolled unsplit, and the patient gets back what it rolls, spread across their Roots. It reaches one person. **Toll:** every heal from someone or something else is 1 Toll, and a heal loses 5 for each Toll they've already got, never below 0. It drops by 1 at the end of each scene, and downtime clears it. **Quick heal**, for anyone: 1 Aura and your action, 1 point back on one Root, no roll and no Toll.
+-   **Heal** (the Healer's): an action, rolled unsplit, and the patient gets back what it rolls, spread across their Roots. It reaches one person. **Toll:** every heal from someone or something else is 1 Toll, and a heal loses 5 for each Toll they've already got, never below 0. It drops by 1 at the end of each scene (2 with *Healers*), and downtime clears it. **Quick heal**, for anyone: 1 Aura and your action, 1 point back on one Root, no roll and no Toll.
 
 ## Study {#study}
 
@@ -104,7 +104,7 @@ A hit, a point off the Root it's at · a box on your armour on that Root instead
 -   A win: strip a tag, or tick one off its multiplier · take it down · a condition · move it · learn something · stop a telegraph. An opening: one win ends a Mook or Named, and a Boss loses two whole tags (only its weak point ends it).
 -   **Vulnerabilities:** each one that fits a win that strips a tag or lands a hit adds one more tick, and you choose where it goes: the same tag, or another one the hit could reach, so one vulnerability can strip two plain tags. On you, it's one more hit. The same one never counts twice. *Prone* and *Exposed* are vulnerabilities, and a hidden one's a hidden tag.
 -   **Forms:** when a form's last keeps-it-going tag goes, it changes. It takes 3 to 5 tags from its Forms list, and its multipliers come back on whichever of them matter most. Its weak point ends it in any form.
--   **Threat budget:** the crew's Roots added up, so 64 for a starting four (16 each), and 6 more for every new Title. It sizes multipliers and how long a scene runs. Multipliers are built for 64, so multiply each one by the threat budget and divide by 64, and a threat's Challenge less 2 is a good start for your own. A crew of four lands three or four wins a round.
+-   **Threat budget:** the crew's Roots added up, a Root nothing's built counting 0, so 64 for a starting four (16 each), and 6 more for every new Title. It sizes multipliers and how long a scene runs. Multipliers are built for 64, so multiply each one by the threat budget and divide by 64, and a threat's Challenge less 2 is a good start for your own. A crew of four lands three or four wins a round.
 -   **Round budget:** three quarters of the threat budget in steps of telegraphs a round, so 48 for a starting four, and one die at each of the crew from each threat. A Breather's about half, and Hard's about half again, with more piled on whoever's hurting. A telegraph costs its die's steps, once for each target and once for each hit, and says Body, Mind or Soul.
 -   **The fight of the session:** about 45 minutes at Hard, four or five rounds, with the first of the crew Bloodied in round 3 or 4.
 

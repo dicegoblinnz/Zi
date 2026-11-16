@@ -43,7 +43,7 @@ The character sheet is one A4 sheet, printed back to back. The front's for play 
 -   Notes (four lines: whatever your archetype's holding, like a Shadow's pool or a Shifter's animal tags, trouble that follows you, and anything that won't fit)
 :::
 
-Vesk's front says Body 11, with 5 from her first Title, 2 from her second and 4 from her permissions, so she rolls a d12 and a d10. Her hook's awakening locks 1, so her Body holds 10, and that's what she writes in her points when a scene starts. Mind's 5, with 3 from her second Title and 2 from her permissions, and Soul's 0. Turn it over and her first Title's spread is Body 5, her second's is Mind 3 and Body 2, and every permission has its Root ringed beside it, so you can always see where a number came from.
+Vesk's front says Body 11, with 5 from her first Title, 2 from her second and 4 from her permissions, so she rolls a d12 and a d10. Her hook's awakening locks 1, so her Body holds 10, and that's what she writes in her points when a scene starts. Mind's 5, with 3 from her second Title and 2 from her permissions, and Soul's 1, since no Root's less than that. Turn it over and her first Title's spread is Body 5, her second's is Mind 3 and Body 2, and every permission has its Root ringed beside it, so you can always see where a number came from.
 
 Title cards don't have a Catch line. Your Catches live on your attuned things and in your Scars, both on the front.
 

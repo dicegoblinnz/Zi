@@ -119,7 +119,7 @@ When a Catch bites big, because it changes the scene or costs them something the
 :::example[Wren's longbow]
 Wren's longbow is attuned, and its Catch is *Wanted*. The crew's crossing the market, and Wren's player lets it bite: a woman in a hunter's cloak stops dead and stares at the bow. The GM runs with it. The woman knows that bow, and she's following them. Now there's a new problem in the scene with a name and a reason, and Wren takes 1 Aura.
 
-If Wren's player had said the woman shouts for the watch and the market turns into a chase, that'd change the scene, so it'd be a big bite and a point of Soul. Wren's Soul is 0, though, so there's nothing for it to come back to, and she'd take the Aura.
+If Wren's player had said the woman shouts for the watch and the market turns into a chase, that'd change the scene, so it'd be a big bite and a point of Soul. Wren's Soul's full at 1, though, so there's nothing for it to come back to, and she'd take the Aura.
 :::
 
 -   **Give 1 Aura when a great setup doesn't land.** There's an example in [Consequences and Failure](#s-gm-consequences).
@@ -290,7 +290,7 @@ Most threats need nothing but Challenge and tags. A few deserve a rule of their 
 Your **threat budget** says how much your threats can take, and how long a scene's going to run.
 
 :::rule
-**Threat budget: the crew's Roots, added up.** Add every character's Body, Mind and Soul together. A starting character's got 16, two Titles at 5 and six permissions at 1, so a starting crew of four is **64**. Every new Title puts 6 more on someone's Roots, and every new permission 1, so it grows as they do.
+**Threat budget: the crew's Roots, added up.** Add every character's Body, Mind and Soul together, and count a Root that's only 1 because nothing's built it as 0. A starting character's got 16, two Titles at 5 and six permissions at 1, so a starting crew of four is **64**. Every new Title puts 6 more on someone's Roots, and every new permission 1, so it grows as they do.
 :::
 
 | New Titles each | A character | Four characters | Multipliers |
@@ -373,7 +373,7 @@ Let the threat's tags tell you what it does. *Reach* pins from a distance, *Call
 
 Fear, lies and pressure are telegraphs like any attack, aimed at someone's Mind: *the brute roars at Bram, a d8 at his Mind.* Bram can answer it, or let it ride on his Mind, and there's no other roll for fear. His shield won't stop it when he Defends, because how he's defending doesn't fit it, and nobody can [intercept](#s-intercept) it for him, because it's inside his head. That's the [Bard](#a-bard)'s job: a Bard's song can stand between the whole crew and the fear. Despair, temptation, curses and anything trying to take someone over work the same way, at their Soul, and their Soul rolls against them.
 
-It's worth going after their Mind and their Soul as well as their Body. A crew built for blows isn't built for words: Bram's plate does nothing for his Mind, and his Mind's only 3, so it rolls a d6 and it's got 3 points to lose. Every point you take off it is a point he can't spend bringing his Mind in, and once it's 0, the next lie that gets through leaves him Frayed. Vesk's and Wren's Souls are 0, so a curse that gets through to them wounds them straight away.
+It's worth going after their Mind and their Soul as well as their Body. A crew built for blows isn't built for words: Bram's plate does nothing for his Mind, and his Mind's only 3, so it rolls a d6 and it's got 3 points to lose. Every point you take off it is a point he can't spend bringing his Mind in, and once it's 0, the next lie that gets through leaves him Frayed. Vesk's and Wren's Souls are 1, so one curse that gets through takes their only point, and the next leaves them Hollow.
 
 Say the brute roars at Bram's Mind, a d8, and nobody answers it. At the end of the round his Mind rolls its d6, a 3, against the roar's 6, so it gets through, and he's on 2. Next round the brute roars again and the captain sneers at him too, a d8 and a d6, both at his Mind. His Mind's 3 steps make a d4 and a d2 to meet them, so one of them's likely through whatever it rolls, unless somebody sings, or he takes it on his Soul, 2 for 1.
 
@@ -471,7 +471,7 @@ When the rules don't say, find the nearest rule. Most questions come down to one
 
 | The situation | The ruling |
 | --- | --- |
-| No Root fits, or the one that does is 0. | Every roll's at least 1 step: a d2. They can still bring another Root in, if a permission explains it. |
+| No Root fits, or the one that does is 1. | Every Root's at least 1 step: a d2. They can still bring another Root in, if a permission explains it. |
 | How hard is it? Nothing's fighting back. | A Challenge. 2: easy for a pro. 3: it takes care. 4: hard. 5: very hard. 6: the best in the world might fail. A tag for each thing that makes it worse. |
 | The whole crew does the same thing. | It's a [combo](#s-teamwork): one of them rolls, on their Root, and everyone who put an action in brings the Root that fits how they're helping, all of it. Nobody pays Aura for the combo. |
 | Two things in one action. | Split the dice. Every die's an intent, and they can split them any way they like. Nobody gets another go this round. |

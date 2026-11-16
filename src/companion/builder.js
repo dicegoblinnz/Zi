@@ -329,6 +329,8 @@ export function pointsOf(b, n = numbersOf(b)) {
   return { start: b.start, spent, left: b.start - spent, lines };
 }
 
+// What a Root nothing's built says it came from.
+const FLOOR_SAID = "1, the least a Root can be";
 // The Roots a build adds up to, the way Roots has it, with where each one
 // comes from.
 export function rootsOf(b) {
@@ -339,6 +341,7 @@ export function rootsOf(b) {
     for (const r of ROOTS) if (t.roots[r]) from[r].push(`${t.roots[r]} from your ${ord(i)} Title`);
     for (const p of t.permissions) if (p.root) from[p.root].push(`“${p.text}”`);
   });
+  for (const r of ROOTS) if (!from[r].length) from[r].push(FLOOR_SAID);
   return { roots, from };
 }
 
@@ -1254,10 +1257,11 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     const holds = (r) => (locks[r] ? `, holds ${roots[r] - locks[r]}` : "");
     const row = (name, n, ways) => `<li><span class="bd-num-text"><span class="k">${esc(name)}</span> <b>${n}</b>${holds(name)}${ways.length ? ` <small>${esc(both(ways))}</small>` : ""}</span>${n ? kitDie(stepsToDice(n)[0], { hide: true, bare: true }) : ""}</li>`;
     const awk = wakes.map((w) => `<li><span class="k">${esc(w.root ?? "")}</span> <span class="bd-thing">${esc(w.name)}</span> <small>${w.works ? "locks a point of it" : `nothing to lock on your ${esc(w.root ?? "")}, so it does nothing yet`}</small></li>`).join("");
-    const zero = ROOTS.filter((r) => !roots[r] && sumOf(roots));
+    // A Root nothing's built is 1, the least a Root can be (R.ROOT_MIN).
+    const floor = ROOTS.filter((r) => (whence[r] ?? []).length === 1 && whence[r][0] === FLOOR_SAID && sumOf(roots) > ROOTS.length);
     return `${rootTiles()}
       <h2><span>Your Roots</span> ${tip("bd-roll", ["A Root’s number is three things at once: the dice it rolls, the points it takes hits with, and the points you spend from it. Body 8 rolls a d12 and a d4, and takes 8 hits before it’s wounded.", "A roll’s one Root at full, the one that fits how you’re doing it. Bring another in with a permission that explains it, for a point of that Root or 3 Aura, and all of it goes on too.", link("s-roots", "Roots in the rules")], "What a Root is")}</h2><ul class="bd-nums bd-from-list">${ROOTS.map((r) => row(r, roots[r], whence[r])).join("")}</ul>
-      ${zero.length ? `<p class="cc-small">${both(zero)} at 0 has no points, so the first hit there wounds you, unless you take it on another Root for 2.</p>` : ""}
+      ${floor.length ? `<p class="cc-small">${both(floor)} ${floor.length > 1 ? "are" : "is"} 1, the least a Root can be: a d2, and one point to lose before the next hit wounds it. The first point you put there leaves it on 1.</p>` : ""}
       ${awk ? `<h2><span>Your awakenings</span> ${tip("bd-wake", ["Each one locks a point of its Root while it’s attuned, so the Root holds a point less, but its dice don’t shrink. It’s 2 steps on any roll it fits, and 2 more for each Aura you put in it."], "Awakenings on a roll")}</h2><ul class="bd-things">${awk}</ul>` : ""}`;
   }
 

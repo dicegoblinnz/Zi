@@ -1138,7 +1138,7 @@ function rootFrom(c, root, whose = "your") {
   const n = c.titles.map((t, i) => [t.roots?.[root] ?? 0, i]).filter(([v]) => v > 0);
   const titles = n.map(([v, i], k) => `${v} from ${whose} ${(ORD[i] ?? "next").toLowerCase()}${k ? "" : " Title"}`);
   const perms = c.titles.flatMap((t) => t.permissions.filter((p) => p.root === root).map((p) => `<em>${esc(p.text)}</em>`));
-  return [...titles, ...perms].join(", ") || "nothing yet";
+  return [...titles, ...perms].join(", ") || "1, the least a Root can be";
 }
 // What each thing carried says on its own line.
 const ROOM = { equipment: 3, utility: 3 };

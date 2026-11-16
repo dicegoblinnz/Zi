@@ -4,7 +4,7 @@
 // player can change anything before saving, and the builder's warnings still
 // apply. A blank sheet is just blankBuild() on one page.
 import { blankBuild, guessFor, keepAttuned, normalBuild, pointsOf, spreadFor, ARMOUR } from "./builder.js";
-import { MAX_PERMS, ROOTS, spreadOf, specKey } from "./roots.js";
+import { MAX_PERMS, ROOTS, ROOT_MIN, spreadOf, specKey } from "./roots.js";
 import { START } from "./points.js";
 
 // A thread in someone else's words says whose ("Dorrie’s"). It's theirs to
@@ -202,6 +202,7 @@ export function randomBuild(B, crew, rand = Math.random) {
   // same.
   const roots = { Body: 0, Mind: 0, Soul: 0 };
   for (const t of b.titles) for (const r of ROOTS) roots[r] += (t.roots[r] ?? 0) + t.perms.filter((p) => p.root === r).length;
+  for (const r of ROOTS) roots[r] = Math.max(ROOT_MIN, roots[r]);
   const fitsRoots = (list) => {
     const lock = { Body: 0, Mind: 0, Soul: 0 };
     return list.every((w) => ROOTS.includes(w.root) && ++lock[w.root] <= roots[w.root]);

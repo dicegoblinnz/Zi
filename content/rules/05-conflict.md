@@ -188,7 +188,7 @@ When a telegraph's aimed at a friend's Body and they're within your stride, you 
 -   **A summon intercepts for free**, and every hit that gets through knocks a size off it (see [Summoning](#s-summoning)).
 
 :::example[Intercepting]
-The brute's club is coming down at Isolde's Body again, a d8, and her Body's 0, so if it gets through she's Bloodied. Vesk's right beside her, so she spends 1 Aura and intercepts it. It doesn't take her action, so she can still go at the brute with her knife. At the end of the round the club comes at Vesk, and she rolls her Body, a d12 and a d10: 9 against the club's 3, so it's stopped, and she gets her Aura back.
+The brute's club is coming down at Isolde's Body, a d8, and her Body's only 1, so if it gets through she's on 0 and the next one Bloodies her. Vesk's right beside her, so she spends 1 Aura and intercepts it. It doesn't take her action, so she can still go at the brute with her knife. At the end of the round the club comes at Vesk, and she rolls her Body, a d12 and a d10: 9 against the club's 3, so it's stopped, and she gets her Aura back.
 :::
 
 There's a Burden for it in [Boons and Burdens](#s-boons): you can't intercept. There's no Boon, because intercepting for free is the Guardian's.
@@ -483,7 +483,7 @@ The Warden's on its back, *Prone*, and Isolde's Study found it's *Dry as Tinder*
 | Mind | **Frayed** |
 | Soul | **Hollow** |
 
--   **A wounded Root heals only to half its maximum**, rounded up, till the wound's gone. Downtime clears it, and so does a moment in the story that would, when the GM says so.
+-   **A wounded Root heals only to half its maximum**, rounded up, till the wound's gone. Downtime clears it, and so does a moment in the story that would, when the GM says so. A crew with the *Healers* asset clears one free once between downtimes (see [Crew assets](#s-crew-tags)).
 -   **Your dice don't change.** A Bloodied Body still rolls its whole number.
 -   **A hit on a wounded Root with no points left is a Scar**, and you leave the scene.
 
@@ -525,7 +525,7 @@ You don't have to wait for the end of the scene, but only a [Healer](#a-healer) 
 
 -   **Share it out however you like** across their Roots, as far as each one's maximum, or half of it while it's wounded.
 -   **A heal reaches one person**, someone you can reach.
--   **Toll.** Every heal a character takes from someone or something else gives them **1 Toll**, and a heal **loses 5 for each Toll they've already got**, never below 0. So the first heal's whole, the second loses 5, the third 10, and so on. Toll drops by 1 at the end of each scene, and downtime clears it. Resting never gives you Toll, and Toll never touches it.
+-   **Toll.** Every heal a character takes from someone or something else gives them **1 Toll**, and a heal **loses 5 for each Toll they've already got**, never below 0. So the first heal's whole, the second loses 5, the third 10, and so on. Toll drops by 1 at the end of each scene, or 2 for a crew with the *Healers* asset, and downtime clears it. Resting never gives you Toll, and Toll never touches it.
 -   **Ready for it.** Some healers come prepared. A Healer's Trait and some attuned things ignore a step of Toll, and some attuned things put a bonus on every heal roll, added to what you roll before the Toll comes off (see [Healer](#a-healer) and [Attunement](#s-attunement)).
 -   **Top faces still pay.** A heal roll's top faces give you Aura like any die's, but what it heals never does.
 
@@ -589,7 +589,7 @@ The corridor's thirty feet of polished marble, lit by candles in iron brackets. 
 **Telegraphs:** three quarters of a starting crew's 64 points is 48, but the Wardens are only half-woken, so the GM runs it as a breather, about half that: 24.
 :::
 
-That's four keeps-it-going tags each, so grinding a Warden down will take four wins. The crew doesn't know yet that there's a faster way. Everyone's on full points, which for Vesk is 10 of her Body's 11 and for Bram 7 of his 9, since their awakenings lock the rest, and Isolde's Body is 0. Bram's wearing Fine plate and a Common shield, three boxes on his Body, and Vesk's got her Common worn leathers, one box on hers. Everyone's got 5 Aura, and it'll come and go all fight.
+That's four keeps-it-going tags each, so grinding a Warden down will take four wins. The crew doesn't know yet that there's a faster way. Everyone's on full points, which for Vesk is 10 of her Body's 11 and for Bram 7 of his 9, since their awakenings lock the rest, and Isolde's Body is only 1. Bram's wearing Fine plate and a Common shield, three boxes on his Body, and Vesk's got her Common worn leathers, one box on hers. Everyone's got 5 Aura, and it'll come and go all fight.
 
 ### Round 1: The telegraph {#round-1-the-telegraph}
 
@@ -599,7 +599,7 @@ That's four keeps-it-going tags each, so grinding a Warden down will take four w
 
 That's 5 + 4 + 5 + 5 + 2 = 21 steps, a breather for four players, and it's five telegraphs against four actions. The sweep at Vesk's a glancing blow as it goes past, so the GM makes it smaller than it could be.
 
-**Bram** goes first. Isolde's Body is 0, so if that spear gets through she's Bloodied straight away, and Bram's a [Guardian](#a-guardian).
+**Bram** goes first. Isolde's Body is only 1, so if that spear gets through, the next thing at her Body leaves her Bloodied, and Bram's a [Guardian](#a-guardian).
 
 :::example
 **Bram:** Isolde's right beside me, well inside my stride, so I'm intercepting that spear. And I'm Defending.

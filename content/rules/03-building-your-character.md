@@ -200,7 +200,7 @@ A few to start from, sorted by what they're for. The [Title ideas](#s-title-idea
 
 ## Step 4: Roots {#s-step-roots}
 
-Now add them up. **Each Root is what your Titles put on it, and 1 for every permission on it.** Write your three Roots. Nothing else goes in.
+Now add them up. **Each Root is what your Titles put on it, and 1 for every permission on it.** Write your three Roots. Nothing else goes in, and one that comes to 0 is 1, since no Root's ever less than that. So Vesk's Soul is 1, and the first point she ever puts there leaves it on 1, while the second makes it 2.
 
 That number does three jobs at once. It's **the steps you roll**, since a roll's one Root at full, so a Body of 9 is a d12 and a d6. It's **your health** there: every hit that gets through to it takes a point, and once it's got none left, the next one wounds it. And it's **what you spend** to bring it into a roll. So the stronger you get, the harder you are to put down.
 
@@ -506,7 +506,7 @@ A hostile thread goes the other way. It's strained because they've done right by
 It never stops you working together in the moment. You still combo and still intercept for each other.
 
 :::example[Vesk and Bram]
-Vesk's bond thread with Bram is *He once carried me out of a fire. I have never said thank you.* She's halfway up a wall with the watch coming and yells for him to haul her up again, so she strains it. Her Soul's 0, so there's no point for her to get back, but she needs him, and that's what a strain's for. Bram's player says he's starting to feel like her ladder, and she can fix it by saying thank you. It was their only thread, so none are whole now, and he's cold with her until she makes it right. At the bar afterwards she finally says it. The thread's mended, and she rewrites it now that it's said.
+Vesk's bond thread with Bram is *He once carried me out of a fire. I have never said thank you.* She's halfway up a wall with the watch coming and yells for him to haul her up again, so she strains it. Her Soul's full at 1, so there's no point for her to get back, but she needs him, and that's what a strain's for. Bram's player says he's starting to feel like her ladder, and she can fix it by saying thank you. It was their only thread, so none are whole now, and he's cold with her until she makes it right. At the bar afterwards she finally says it. The thread's mended, and she rewrites it now that it's said.
 :::
 
 ## Step 8: Connect {#s-connect}
@@ -623,7 +623,7 @@ A **Boon** is a permanent upgrade, like shrugging off the first hit each scene o
 A **Burden** is a permanent cost, and it only ever comes on an attuned thing. Titles never take them. A Burden's worth two awakenings on that thing, or a Boon for you, and a thing can't take one before it's Tempered (see [Attunement](#s-attunement)).
 
 -   **Give them names from the story:** *Iron Lungs* (the first hit you take each scene doesn't take a point), *Bad Knee* (stride −2).
--   **A Burden is always on**, and it's got to cost you something you actually use. A Burden on something you haven't got, like locking a point of a Root that's 0, doesn't count.
+-   **A Burden is always on**, and it's got to cost you something you actually use. A Burden on something you haven't got doesn't count.
 -   **You can take the same Boon more than once.**
 
 | Lever | Boon | Burden |
@@ -689,7 +689,7 @@ He adds them up:
 | Mind | 5: 3 from her second Title, and two permissions |
 | Soul | 0 |
 
-So sneaking across a roof is her Body, 11 steps, a d12 and a d10. When she gets into hiding, those dice go in her shadow pool. Her Soul's 0, so a roll on it is a d2, and anything that gets through to her Soul wounds her straight away, unless she takes it on her Body for 2 points. The player's happy with that. She's a loner.
+So sneaking across a roof is her Body, 11 steps, a d12 and a d10. When she gets into hiding, those dice go in her shadow pool. Her Soul's 1, so a roll on it is a d2, and it's got a single point to lose. The first thing that gets through to her Soul takes it, and the next wounds her, unless she takes it on her Body for 2 points. The player's happy with that. She's a loner.
 
 ### Step 5: What she carries {#step-4-items-three}
 
@@ -712,7 +712,7 @@ He could give the line its Catch now for a second awakening, free, but there's n
 
 ### Step 7: Numbers and bonds {#step-6-bonds}
 
-She starts with the usual numbers: Aura 5, and every Root full but the point her hook locks, so that's 10 on her Body and 5 on her Mind, and her Soul's 0. Her stride's 3, and her worn leathers are her only armour.
+She starts with the usual numbers: Aura 5, and every Root full but the point her hook locks, so that's 10 on her Body and 5 on her Mind, and 1 on her Soul. Her stride's 3, and her worn leathers are her only armour.
 
 Her threads cost nothing, and they come from her answers to the crew questions, so he writes them in the next step.
 
@@ -752,7 +752,7 @@ That's six threads on five bonds. Both of Dorrie's go under her name, on the one
 
 **Permissions:** *move unseen* (Body), *run the rooftops* (Body), *pick a mechanical lock* (Body) on her first Title · *know how a lock's built* (Mind), *fight dirty with a knife* (Body), *find a buyer for anything* (Mind) on her second.
 
-**Roots:** Body 11 · Mind 5 · Soul 0.
+**Roots:** Body 11 · Mind 5 · Soul 1.
 
 **Carries:** Common worn leathers (Body, 1 box), a knife, soft-soled boots (equipment, 3 of 3) · a purse of gold, a smoke bomb, a perfect set of picks (utility, 3 of 3) · the first coin she ever stole (keepsake) · an empty bag (0 of 10).
 

@@ -1120,12 +1120,12 @@ if (part("1e")) {
   // way its 3 were on stacking, everything else as it was on 35 points, Aura
   // 5, and each awakening locking a point of the Root in its brackets.
   const PLAN = {
-    vesk: { Body: 11, Mind: 5, Soul: 0 },
+    vesk: { Body: 11, Mind: 5, Soul: 1 },
     bram: { Body: 9, Mind: 3, Soul: 4 },
     dorrie: { Body: 3, Mind: 7, Soul: 6 },
-    isolde: { Body: 0, Mind: 9, Soul: 7 },
-    wren: { Body: 8, Mind: 8, Soul: 0 },
-    ash: { Body: 0, Mind: 5, Soul: 11 },
+    isolde: { Body: 1, Mind: 9, Soul: 7 },
+    wren: { Body: 8, Mind: 8, Soul: 1 },
+    ash: { Body: 1, Mind: 5, Soul: 11 },
   };
   const SPREADS = {
     vesk: [{ Body: 5 }, { Mind: 3, Body: 2 }],
@@ -1304,8 +1304,9 @@ if (part("1e")) {
     // A Root at 0 has nothing to lose but its wound.
     const i = sheet("isolde");
     const is = RS.freshCore(i);
-    same([RS.takeHits(i, is, "Body", 1).wound, is.wound.Body], [true, true], "Isolde's Body is 0, so a hit there wounds it straight away");
-    same([RS.takeHits(i, is, "Body", 1).scar, RS.lastScar(i, is, "Body")], [true, false], "and the next is a Scar, though a Root with no points has none for it to lock");
+    same([RS.takeHits(i, is, "Body", 1).wound, is.pts.Body, is.wound.Body], [false, 0, false], "Isolde's Body is 1, never less, so her first hit takes its point and doesn't wound her");
+    same([RS.takeHits(i, is, "Body", 1).wound, is.wound.Body], [true, true], "the next one wounds it");
+    same([RS.takeHits(i, is, "Body", 1).scar, RS.lastScar(i, is, "Body")], [true, true], "and the next is a Scar, which locks her Body's only point, so it's her last scene");
     // The Blaze, while wounded.
     const w = RS.freshCore(sheet("wren"));
     same(RS.canBlaze(w, "Body"), false, "Wren can't Blaze unwounded");
@@ -1327,7 +1328,7 @@ if (part("1e")) {
     const eased = RS.healBy(c, JSON.parse(JSON.stringify(s)), 8, { Body: 7, Mind: 1 }, { other: true, ease: 1 });
     same([eased.amount, eased.healed, eased.toll], [8, { Body: 7, Mind: 1, Soul: 0 }, 2], "a Healer who's come prepared heals her whole 8 through 1 Toll, and it's 2 Toll after");
     const plain = RS.healBy(c, s, 8, null, { other: true });
-    same([plain.amount, s.pts, s.toll], [3, { Body: 6, Mind: 2, Soul: 0 }, 2], "without, it's 8 less 5, going where there's most room");
+    same([plain.amount, s.pts, s.toll], [3, { Body: 6, Mind: 2, Soul: 1 }, 2], "without, it's 8 less 5, going where there's most room");
     same(RS.healBy(c, s, 3, null, { other: true }).amount, 0, "Toll never takes a heal below 0");
     same(RS.healBy(c, RS.freshCore(c), 2, null, { bonus: 3 }).amount, 5, "a flat bonus adds to what it rolls");
     // Wounded, a Root heals to half what it can hold.
@@ -1340,7 +1341,13 @@ if (part("1e")) {
     Object.assign(e.pts, { Body: 4, Mind: 1 });
     e.toll = 2;
     e.out = true;
-    same([RS.sceneEnd(c, e, { Body: 9, Mind: 2 }).healed, e.pts, e.toll, "out" in e], [{ Body: 6, Mind: 2, Soul: 0 }, { Body: 10, Mind: 3, Soul: 0 }, 1, false], "the end of a scene gets back what each Root rolls, Toll drops 1, and she's back for the next");
+    same([RS.sceneEnd(c, e, { Body: 9, Mind: 2 }).healed, e.pts, e.toll, "out" in e], [{ Body: 6, Mind: 2, Soul: 0 }, { Body: 10, Mind: 3, Soul: 1 }, 1, false], "the end of a scene gets back what each Root rolls, Toll drops 1, and she's back for the next");
+    const hl = RS.freshCore(c);
+    hl.toll = 3;
+    RS.sceneEnd(c, hl, {}, { healers: true });
+    same(hl.toll, 1, "a crew with Healers drops 2 Toll at the end of a scene");
+    hl.wound.Mind = true;
+    same([RS.clearWound(hl, "Mind"), hl.wound.Mind, RS.clearWound(hl, "Body")], [true, false, false], "Healers clear a wound free, and there's nothing to clear on a Root that isn't wounded");
     same(RS.restOf(c, RS.freshCore(c)), [], "a full character rolls nothing at the end of a scene");
     const rb = sheet("vesk", [{ k: "boon", t: 0, lever: "Recovery", name: "", on: "", drop: [1, 2] }]);
     const rs = RS.freshCore(rb);
@@ -1350,7 +1357,7 @@ if (part("1e")) {
     Object.assign(d, { pts: { Body: 0, Mind: 0, Soul: 0 }, wound: { Body: true, Mind: false, Soul: false }, toll: 3 });
     d.scars.Body = ["a burn"];
     RS.downtimeRest(c, d);
-    same([d.pts, d.wound.Body, d.toll, d.scars.Body.length], [{ Body: 9, Mind: 5, Soul: 0 }, false, 0, 1], "downtime puts everything back but the Scar, which keeps its point");
+    same([d.pts, d.wound.Body, d.toll, d.scars.Body.length], [{ Body: 9, Mind: 5, Soul: 1 }, false, 0, 1], "downtime puts everything back but the Scar, which keeps its point");
   });
 
   // Saves from before: stacking (v3), Roots (v2) and before Roots, all onto
@@ -1358,7 +1365,7 @@ if (part("1e")) {
   tryIt("saves from before", () => {
     const grown = [{ k: "perm", t: 0, text: "climb a sheer wall", root: "Body", spec: "Climbing" }];
     const c = sheet("vesk", grown);
-    same(c.roots, { Body: 12, Mind: 5, Soul: 0 }, "Vesk with a permission she grew in downtime");
+    same(c.roots, { Body: 12, Mind: 5, Soul: 1 }, "Vesk with a permission she grew in downtime");
     const raw = {
       v: 3, aura: 7, acting: false, tracks: { stamina: 8, confidence: 12, resolve: 10 }, bought: 2, power: { "0|Anywhere I can throw a hook": 2 },
       scars: { stamina: ["a burn across her back"], confidence: [], resolve: [] }, blaze: null, dead: false, stacked: true,
@@ -1369,7 +1376,7 @@ if (part("1e")) {
     const s = RS.normalCore(JSON.parse(JSON.stringify(raw)), c);
     same(s.v, 4, "a save from stacking is on v4");
     same(["tracks", "power", "bought", "stacked", "store"].filter((k) => k in s), [], "the tracks, powering and extra actions are gone");
-    same([s.scars, RS.lockedOf(c, s).Body, s.pts, s.wound, s.toll], [{ Body: ["a burn across her back"], Mind: [], Soul: [] }, 2, { Body: 10, Mind: 5, Soul: 0 }, { Body: false, Mind: false, Soul: false }, 0], "her Stamina's Scar is on her Body, locking a point, and every Root's full");
+    same([s.scars, RS.lockedOf(c, s).Body, s.pts, s.wound, s.toll], [{ Body: ["a burn across her back"], Mind: [], Soul: [] }, 2, { Body: 10, Mind: 5, Soul: 1 }, { Body: false, Mind: false, Soul: false }, 0], "her Stamina's Scar is on her Body, locking a point, and every Root's full");
     same([s.conditions.map((x) => x.name), s.threads, s.crossed, s.picked.map((p) => p.name), s.asp, s.notes, s.tele, s.grown.length], [["Burning"], raw.threads, raw.crossed, ["a lantern"], 4, raw.notes, raw.tele, 1], "she keeps her play");
     same([s.aura, s.core, s.choose], [5, true, []], "her Aura's inside the new maximum, she's told once, and there's nothing for her player to choose");
     same(RS.normalCore(JSON.parse(JSON.stringify(s)), c).core, true, "and it stays till she's seen it");
@@ -1442,7 +1449,7 @@ if (part("1e")) {
     same([real.crew.length, real.said], [6, []], "the chapter's six crew sheets read with nothing wrong");
     same(real.crew.every((c) => c.core === true), true, "every crew sheet says it's on the new core");
     const BROKEN = [
-      ["a Roots line that doesn't add up", "**Roots:** Body 11 · Mind 5 · Soul 0.", "**Roots:** Body 12 · Mind 5 · Soul 0."],
+      ["a Roots line that doesn't add up", "**Roots:** Body 11 · Mind 5 · Soul 1.", "**Roots:** Body 12 · Mind 5 · Soul 1."],
       ["a Title spread to 6", "*Raised by the Guild* (Mind 3, Body 2)", "*Raised by the Guild* (Mind 3, Body 3)"],
       ["a Title spread to 3, the old way", "*Raised by the Guild* (Mind 3, Body 2)", "*Raised by the Guild* (Mind 2, Body 1)"],
       ["a Title with no spread", "*Raised by the Guild* (Mind 3, Body 2)", "*Raised by the Guild* (Mind)"],
@@ -1453,11 +1460,11 @@ if (part("1e")) {
       ["Aura that isn't 5", "**Numbers:** Aura 5 · Stride 3.\n\n**Threads:** Dorrie: *We have", "**Numbers:** Aura 7 · Stride 3.\n\n**Threads:** Dorrie: *We have"],
       ["a track back in the numbers", "**Numbers:** Aura 5 · Stride 3.\n\n**Threads:** Dorrie: *We have", "**Numbers:** Aura 5 · Stamina d12 · Stride 3.\n\n**Threads:** Dorrie: *We have"],
       ["a specialty back on a permission", "*move unseen* (Body)", "*move unseen* (Body, Stealth)"],
-      ["a Specialties line", "**Roots:** Body 11 · Mind 5 · Soul 0.", "**Roots:** Body 11 · Mind 5 · Soul 0.\n\n**Specialties:** Locks 4."],
+      ["a Specialties line", "**Roots:** Body 11 · Mind 5 · Soul 1.", "**Roots:** Body 11 · Mind 5 · Soul 1.\n\n**Specialties:** Locks 4."],
       ["an attuned thing's own way to Aura", "**Attuned (Awakened):** A grappling line.", "**Attuned (Awakened):** A grappling line.\n\n**Its Aura:** 1 the first time each scene she gets somewhere nobody else could follow."],
       ["a bag that says it holds more than it lists", "her hunter's pack, with a coil of rope (1 of 10)", "her hunter's pack, with a coil of rope (2 of 10)"],
       ["an awakening with no Root, the old way", "*Anywhere I can throw a hook* (Body):", "*Anywhere I can throw a hook* (passive):"],
-      ["an awakening locking a point its Root hasn't got", "*A circle anywhere I can kneel* (Soul):", "*A circle anywhere I can kneel* (Body):"],
+      ["awakenings locking points their Root hasn't got", "*Long shot* (Body): 2 steps on every roll she makes with it, and 2 more for each Aura · *Hit anything I can see* (Body):", "*Long shot* (Soul): 2 steps on every roll she makes with it, and 2 more for each Aura · *Hit anything I can see* (Soul):"],
     ];
     for (const [what, from, to] of BROKEN) {
       if (!text.includes(from)) {
@@ -1522,7 +1529,7 @@ if (part("1f")) {
       same(got[`root_${lower(r)}_dice`], crew.roots[r] ? diceLabel(stepsToDice(crew.roots[r])) : "nothing", `${who}'s ${r}'s dice`);
       crew.titles.forEach((t, i) => same(got[`root_${lower(r)}_title_${i + 1}`], box(t.roots[r]), `${who}'s ${r} from Title ${i + 1}`));
       same(got[`root_${lower(r)}_permissions`], box(perms), `${who}'s ${r} from permissions`);
-      same(crew.titles.reduce((n, t) => n + t.roots[r], 0) + perms, crew.roots[r], `${who}'s ${r}, added up from where it came from`);
+      same(Math.max(1, crew.titles.reduce((n, t) => n + t.roots[r], 0) + perms), crew.roots[r], `${who}'s ${r}, added up from where it came from, and never less than 1`);
       // Each awakening locks a point of its Root, and a fresh character's full.
       same([got[`root_${lower(r)}_locked`], got[`root_${lower(r)}_holds`], got[`root_${lower(r)}_now`], got[`root_${lower(r)}_wound`]], [box(locked[r]), String(crew.roots[r] - locked[r]), String(crew.roots[r] - locked[r]), false], `${who}'s ${r}: locked, holds, now and no wound`);
     }
@@ -1603,7 +1610,7 @@ if (part("1f")) {
     s.pool = [8, 4];
     const { got } = await print("Vesk", c, s, { goal: { text: "Get the Vane collection out of the city", die: 4 } });
     const want = [["aura_now", "4"], ["aura_max", "5"], ["toll", "2"], ["root_body", "11"], ["root_body_dice", "d12 + d10"], ["root_body_locked", "2"], ["root_body_holds", "9"], ["root_body_now", "0"], ["root_body_wound", true], ["root_body_scar_1", "a burn across the back"], ["root_body_scar_2", ""],
-      ["root_mind_now", "3"], ["root_mind_wound", false], ["root_soul", "0"], ["root_soul_dice", "nothing"],
+      ["root_mind_now", "3"], ["root_mind_wound", false], ["root_soul", "1"], ["root_soul_dice", "d2"],
       ["condition_1", "Burning"], ["condition_1_die", "d6"], ["utility_2", "a smoke bomb (used)"], ["party_goal", "Get the Vane collection out of the city"], ["party_goal_die", "d4"],
       ["attune_1_awakening_1_root", "body"], ["bond_1_thread_1_strained", true], ["bond_1_thread_1_snapped", false], ["root_body_armour_1", "Common worn leathers"]];
     for (const [name, value] of want) same(got[name], value, `${name} on Vesk part way through a scene`);
@@ -2697,7 +2704,7 @@ if (part("5")) {
   same(nums, ROOTS.map((r) => [r, want.roots[r]]), "the built Vesk's Roots");
   has(await page.textContent(".bd-from-list"), "5 from your first Title, “move unseen”, “run the rooftops”, “pick a mechanical lock”, 2 from your second Title and “fight dirty with a knife”", "where her Body comes from");
   same(await page.$$eval(".tile[data-s], .bd-specs3, [data-b='pspec']", (els) => els.length), 0, "no specialties anywhere");
-  has(await page.textContent(".bd-body"), "Soul at 0 has no points, so the first hit there wounds you", "her Soul at 0 said for what it means");
+  has(await page.textContent(".bd-body"), "Soul is 1, the least a Root can be: a d2, and one point to lose", "her Soul at 1, the least it can be, said for what it means");
   await next("What you carry");
   // What she carries, a part at a time, her attuned thing first: her
   // grappling line, 5 points, with the awakening it comes with on the Root it
@@ -2800,7 +2807,7 @@ if (part("5")) {
   same(changed.length, 1, "changing her doesn't make a second Vesk");
   const now = sheetFor(changed[0]);
   same([now.titles[0].permissions.length, now.titles[0].boons.map((x) => [x.lever, x.name]), now.armour.map((a) => [a.name, a.quality, a.boxes]), now.points.spent], [4, [["Toughness", "Iron Lungs"]], [["worn leathers", "Common", 1], ["shield", "Masterwork", 3]], 38], "her Boon, her fourth permission and her Masterwork shield");
-  same(now.roots, { Body: 12, Mind: 5, Soul: 0 }, "her Body 1 more for her new permission, and nothing for the Boon");
+  same(now.roots, { Body: 12, Mind: 5, Soul: 1 }, "her Body 1 more for her new permission, and nothing for the Boon");
 
   // A blank character saves too: the builder warns, and never blocks, and
   // the recommendation's only a nudge. Leaving keeps the draft, and the list
@@ -2822,7 +2829,7 @@ if (part("5")) {
   await b('[data-b="save"]');
   await playing(page);
   const kaia = (await savedAll(page)).at(-1);
-  same([kaia.name, kaia.build.start, sheetFor(kaia).roots, sheetFor(kaia).points], ["Kaia", 36, { Body: 0, Mind: 0, Soul: 0 }, { start: 36, spent: 0 }], "a blank character saved, on 36 points");
+  same([kaia.name, kaia.build.start, sheetFor(kaia).roots, sheetFor(kaia).points], ["Kaia", 36, { Body: 1, Mind: 1, Soul: 1 }, { start: 36, spent: 0 }], "a blank character saved, on 36 points");
 
   // Every step at 320 wide, dark then light, with axe.
   await page.setViewportSize({ width: 320, height: 720 });
@@ -3000,7 +3007,7 @@ if (part("5c")) {
     same([nb.v, nb.have, nb.titles.map((t) => [t.roots, t.from]), nb.stack, nb.attuned[0].awk.map((w) => [w.root, w.guessed])], [5, [["Push"], ["Vanish"]], [[{ Body: 5, Mind: 0, Soul: 0 }, "Body"], [{ Body: 0, Mind: 5, Soul: 0 }, "Mind"]], true, [["Body", true]]], "a build from before stacking: each Title's 5 on its old Root, Shadow's abilities dealt between her two, and her hook on her biggest Root till she says");
     same(JSON.stringify(nb).match(/spec|order|"aura"/g), null, "its specialties and its thing's own Aura gone");
     const old = rootsSheet(sheetOf({ id: "5c-old", name: "Vesk", build: OLD }, BUILD), [], BUILD);
-    same([old.roots, old.points, old.numbers.aura, RS.choicesOf(old)], [{ Body: 9, Mind: 7, Soul: 0 }, { start: 35, spent: 34 }, 5, [{ k: "spread", t: 0, root: "Body" }, { k: "spread", t: 1, root: "Mind" }, { k: "lock", a: 0, name: "Anywhere I can throw a hook", root: "Body" }, { k: "points", left: 1 }]], "her Roots recounted, her points, Aura 5, and what's hers to choose");
+    same([old.roots, old.points, old.numbers.aura, RS.choicesOf(old)], [{ Body: 9, Mind: 7, Soul: 1 }, { start: 35, spent: 34 }, 5, [{ k: "spread", t: 0, root: "Body" }, { k: "spread", t: 1, root: "Mind" }, { k: "lock", a: 0, name: "Anywhere I can throw a hook", root: "Body" }, { k: "points", left: 1 }]], "her Roots recounted, her points, Aura 5, and what's hers to choose");
     same(checksOf(nb, BUILD, { changing: true }).map((x) => x.text), ["You’ve got a point left to spend."], "a saved character only told about the point she's got left");
     // Grown past 35, it keeps everything, and nothing's flagged.
     const grown = foldGrown(OLD, [{ k: "perm", t: 0, text: "slip a grip", root: "Body", spec: "Stealth" }, { k: "title", text: "The woman who has never been seen", root: "Body", specs: ["Hiding"], perm: { text: "vanish in a crowd", root: "Body", spec: "Hiding" } }, { k: "arch", arch: "Hunter" }], BUILD);
@@ -3011,7 +3018,7 @@ if (part("5c")) {
     const st = normalBuild(STACKED, BUILD);
     same([st.v, st.core, st.titles.map((t) => [t.roots, t.three]), st.attuned[0].awk[0].root], [5, true, [[{ Body: 5, Mind: 0, Soul: 0 }, { Body: 3, Mind: 0, Soul: 0 }], [{ Body: 2, Mind: 3, Soul: 0 }, { Body: 1, Mind: 2, Soul: 0 }]], "Body"], "a build from stacking: each Title's 3 made 5 the way it was spread, saying what it was");
     const stSheet = rootsSheet(sheetOf({ id: "5c-stacked", name: "Vesk", build: STACKED }, BUILD), [], BUILD);
-    same([stSheet.roots, stSheet.core, RS.choicesOf(stSheet).map((x) => x.k)], [{ Body: 11, Mind: 5, Soul: 0 }, undefined, ["five", "five", "lock", "points"]], "its sheet the chapter's Vesk, with each Title's 5 and her hook for her to check");
+    same([stSheet.roots, stSheet.core, RS.choicesOf(stSheet).map((x) => x.k)], [{ Body: 11, Mind: 5, Soul: 1 }, undefined, ["five", "five", "lock", "points"]], "its sheet the chapter's Vesk, with each Title's 5 and her hook for her to check");
     // From before Roots: each Title's spread the way its permissions lean.
     const tam = normalBuild({ v: 2, titles: [{ arch: "Warrior", text: "The best blade on the docks", perms: [{ text: "fight with a sword", on: ["Fight"] }, { text: "read a fighter’s style", on: ["Study"] }] }], actions: ["Fight", "Study"], equipment: [], utility: [], attuned: [], threads: [] }, BUILD);
     same([tam.titles[0].roots, tam.titles[0].perms.map((p) => p.root), tam.have], [{ Body: 3, Mind: 2, Soul: 0 }, ["Body", "Mind"], [BUILD.archetypes.find((a) => a.name === "Warrior").abilities.map((x) => x.name)]], "a Title from before Roots spread the way its permissions lean, its archetype with every ability");
@@ -3112,7 +3119,7 @@ if (part("5c")) {
   await page.click('.bd-foot button[data-b="save"]');
   await playing(page);
   const tam = (await savedAll(page)).find((c) => c.id === "own-old");
-  same([tam.build.v, [3, 4].includes(tam.state.v), "before" in tam.state, tam.state.notes, sheetFor(tam).roots], [5, true, false, "Owes Dorrie", { Body: 6, Mind: 0, Soul: 0 }], "Tamsin saved on the new core, her Body 6 and her notes kept");
+  same([tam.build.v, [3, 4].includes(tam.state.v), "before" in tam.state, tam.state.notes, sheetFor(tam).roots], [5, true, false, "Owes Dorrie", { Body: 6, Mind: 1, Soul: 1 }], "Tamsin saved on the new core, her Body 6 and her notes kept");
   same(sheetFor(tam).threads.find((p) => p.person === "Dorrie")?.threads[0]?.text, "She owes me.", "her hostile thread with Dorrie kept");
   console.log("ways in: Bram and a random one saved, a draft binned on a second tap, Vesk your own with her play kept, one from before stacking asked only what's hers, and Tamsin rebuilt");
   await context.close();

@@ -1226,7 +1226,7 @@ try {
   // Roots, and the roll card takes the d10.
   await kai.page.click('.tg-play li.tg [data-do="answer"]');
   await kai.page.waitForSelector(".tg-roots");
-  same(await kai.page.$$eval('.tg-roots [data-do="with"]', (els) => els.map((e) => [e.dataset.r, e.querySelector(".tg-rootn").textContent, e.querySelector(".tile-says").textContent])), [["Body", "11", "what your hands and feet do"], ["Mind", "5", "what goes on in your head"], ["Soul", "0", "who you are"]], "her three Roots to pick from, with what each one's for");
+  same(await kai.page.$$eval('.tg-roots [data-do="with"]', (els) => els.map((e) => [e.dataset.r, e.querySelector(".tg-rootn").textContent, e.querySelector(".tile-says").textContent])), [["Body", "11", "what your hands and feet do"], ["Mind", "5", "what goes on in your head"], ["Soul", "1", "who you are"]], "her three Roots to pick from, with what each one's for");
   has(await kai.page.textContent("#cc-dialog .tg-pick"), "Lose and it lands now, with no defence: a hit at your Body.", "what losing does, on the card");
   same(/specialt/i.test(await kai.page.$eval("#cc-dialog .tg-pick", (el) => {
     const c = el.cloneNode(true);

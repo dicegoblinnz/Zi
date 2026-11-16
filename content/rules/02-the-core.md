@@ -18,7 +18,7 @@ At the end of the day the question is simple: **did you succeed?** You roll agai
 
 ## Roots {#s-roots}
 
-You've got three Roots, and every roll starts from one of them. Your Titles and permissions build them: **a Title puts 5 on your Roots**, spread however you like, and **a permission puts 1 on its Root**. Nothing else adds to a Root.
+You've got three Roots, and every roll starts from one of them. Your Titles and permissions build them: **a Title puts 5 on your Roots**, spread however you like, and **a permission puts 1 on its Root**. Nothing else adds to a Root, and **no Root's ever less than 1**, so one you've built nothing on is 1.
 
 | Root | What it is | What it's for |
 | --- | --- | --- |
@@ -54,9 +54,9 @@ The rest of your sheet doesn't touch your Roots, and it isn't counted on a roll 
 | --- | --- | --- |
 | Body | 5 from her first Title, 2 from her second, *move unseen*, *run the rooftops*, *pick a mechanical lock*, *fight dirty with a knife* | 11 |
 | Mind | 3 from her second Title, *know how a lock's built*, *find a buyer for anything* | 5 |
-| Soul | nothing yet | 0 |
+| Soul | nothing yet, and no Root's less than 1 | 1 |
 
-So picking a lock is her Body, 11 steps, a d12 and a d10, and so is climbing, sneaking and knife work. Working out how a vault door's built before she touches it is her Mind, 5 steps, a d10. Her Soul's 0, so a rousing speech would be a d2, and that's fine. When she's at the vault door itself, *know how a lock's built* brings her Mind in for a point of it, and that's 16 steps, two d12s and a d8.
+So picking a lock is her Body, 11 steps, a d12 and a d10, and so is climbing, sneaking and knife work. Working out how a vault door's built before she touches it is her Mind, 5 steps, a d10. Her Soul's 1, so a rousing speech would be a d2, and that's fine. When she's at the vault door itself, *know how a lock's built* brings her Mind in for a point of it, and that's 16 steps, two d12s and a d8.
 
 ## Steps and Dice {#s-building-die}
 
@@ -108,7 +108,7 @@ Your die is your steps × 2, up to a d12. Every six steps gives you another d12,
 **No die you build is ever bigger than a d12.** A gifted beginner can build a d12 on a good day, and so can a master. The difference is how many of them you throw, and rolls get big when you bring Roots in: Vesk at the vault door with her Body and her Mind is two d12s and a d8 before she's put a single Aura in. In Zi'Dara, getting stronger means throwing more dice.
 :::
 
-**A Root of 0?** You can still have a go. Every roll's at least 1 step, a d2. It's a long shot, but long shots do land.
+**A Root of 1?** You can still have a go. It's 1 step, a d2. It's a long shot, but long shots do land.
 
 ## Bringing In a Root {#s-bring}
 
@@ -248,7 +248,7 @@ Anything that works on its own, like a summoned beast or a raised servant acting
 :::example[Aura at one table]
 **Spent:** Wren's shooting from the gallery at the archer and the two men beside him. That's her Body, 8 steps, and her longbow's *Long shot* fits, 2 more. She's on 5, and she puts 2 into the bow for 4 steps more, so it's 14 steps, two d12s and a d4, and she's on 3.
 
-**Past her maximum:** All three of her dice win, and one lands on its top face, so she's on 7 while she's acting. The brute's club is coming at Isolde beside her, and Isolde's Body is 0, so Wren pays 1 to intercept it and she's on 6. When she's done for the round, the 1 over her maximum is gone.
+**Past her maximum:** All three of her dice win, and one lands on its top face, so she's on 7 while she's acting. The brute's club is coming at Isolde beside her, and Isolde's Body is only 1, so Wren pays 1 to intercept it and she's on 6. When she's done for the round, the 1 over her maximum is gone.
 
 **Got back:** Crossing the market, Vesk's player says a watch sergeant knows her face from the posters. The GM has him shout for the watch, and Vesk takes 1 Aura.
 :::
@@ -261,7 +261,7 @@ Your Roots are what keep you standing. **A Root's got as many points as its numb
 -   **You spend them to push.** Bringing a Root in costs a point of it, and rolling again after a miss costs a point of Soul. You can't spend points you haven't got.
 -   **Your dice never shrink.** Spent, lost or locked, a Root's still its whole number on a roll. Vesk on 2 points of Body still rolls 11 steps, a d12 and a d10.
 -   **Locked points.** Each awakening locks a point of the Root it fits for as long as it's attuned, and each Scar locks one for good. A locked point's still dice, but it's not a point you can have. What's left is that Root's **maximum**. Vesk's grappling line locks a point of her Body, so her Body's 11 and its maximum's 10.
--   **At 0 you're exposed.** The next hit on a Root with no points left wounds it (see [Wounds, Scars and the Blaze](#s-blaze)). A Root that's 0 to start with has nothing to lose, so its first hit wounds it: a curse that gets through to Vesk's Soul leaves her Hollow straight away.
+-   **At 0 you're exposed.** The next hit on a Root with no points left wounds it (see [Wounds, Scars and the Blaze](#s-blaze)). A Root of 1 has a single point to lose: a curse that gets through to Vesk's Soul takes it, and the next one leaves her Hollow.
 -   **They come back.** At the end of every scene, roll each Root that's below its maximum, unsplit, and get back what you roll. Downtime puts them all back (see [Healing](#s-healing)).
 
 :::rule

@@ -5,6 +5,12 @@ updated: 2026-11-16
 ---
 This is the record of every rules change since the 2 Oct 2026 book, newest first. Each entry's date is the day the change went to the table. When a later change replaces an earlier one, the earlier entry says so. The rules chapters always show the game as it is now, so if you only want to play, read those and skip this.
 
+## 16 Nov 2026: No Root less than 1, and the Healers {#c-2026-11-16-floor}
+
+**No Root's ever less than 1.** A Root you've built nothing on is 1: a d2 on a roll, and a single point to lose before the next hit wounds it. It replaces a Root of 0, whose first hit wounded it straight away. Vesk's and Wren's Souls and Isolde's and Ash's Bodies are 1 now. The threat budget still counts what Titles and permissions built, so a Root that's only 1 counts 0 there. See [Roots](#s-roots).
+
+**The *Healers* crew asset** does two things. Toll drops by 2 at the end of each scene, not 1. And once between downtimes, one wound on one of the crew clears whenever you like, with no action, no roll and nothing spent. It replaces a second rest once a session. See [Crew assets](#s-crew-tags).
+
 ## 16 Nov 2026: The GM's budgets, for the new core {#c-2026-11-16-budgets}
 
 To go with [The new core](#c-2026-11-16-core). With one action each and one Root a roll, a crew lands about a third of the wins it did on stacking, three or four a round between four of them, and every point on their Roots is a hit they can take, so the numbers that keep a fight going and the ones that press the crew both moved.
@@ -22,8 +28,6 @@ To go with [The new core](#c-2026-11-16-core). With one action each and one Root
 **How long a scene runs** is everything standing in the crew's way divided by the wins they land a round, about one for each of them. It replaces all the actions they take, bought ones included. See [How long a scene runs](#s-size-scene).
 
 **A new tag, *Deadly*:** every die of it that gets through is 2 hits, or more, and its telegraphs say so. See [How it comes at you](#how-it-comes-at-you) and [Building a threat](#building-a-threat).
-
-**The *Healers* crew asset** is a second rest, once a session: one Root each, rolled unsplit, and no Toll. It replaces a track up a size each. See [Crew assets](#s-crew-tags).
 
 The book's examples are on the new core too: [A Full Fight](#s-fight), [Vesk, Session 1 to 20](#vesk-session-1-to-20) and every lever in [Appendix C](#appendix-levers).
 

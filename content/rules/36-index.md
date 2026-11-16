@@ -115,6 +115,7 @@ updated: 2026-11-14
 ## H {#h}
 
 -   **Healer** — [Healer](#a-healer)
+-   **Healers** (crew asset) — [Crew assets](#s-crew-tags), [Healing](#s-healing)
 -   **Healing** — [Healing](#s-healing), [Healer](#a-healer), [Appendix C](#s-levers-hurt)
 -   **Helmets** — [Armour](#s-armour), [Quality](#s-armour-quality)
 -   **Hidden tag** — [Hidden tags and weak points](#s-hidden)

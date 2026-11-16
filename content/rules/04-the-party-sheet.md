@@ -136,7 +136,7 @@ Here are twelve to pick from. There are plenty more in [Appendix B](#faction-str
 | **A Ship** | The crew's own ship. A voyage on it needs no Supplies clock, and while nothing's paying for it, it stays tied up in harbour. |
 | **Smugglers' Roads** | A journey on the crew's own roads starts with its first stage already behind it. |
 | **A Workshop** | Once a downtime, mend a broken item, or a piece of armour with boxes ticked, without spending a slot. |
-| **Healers** | Once a session, between two scenes, everyone in the crew rests a second time: one Root each, rolled unsplit, and they get back what it rolls. It isn't a heal, so it gives no Toll. |
+| **Healers** | Toll drops by 2 at the end of each scene, not 1. And once between downtimes, one wound on one of the crew clears whenever you like: no action, no roll and nothing spent. |
 | **Old Debts** | Once a session, someone the crew once helped turns up and does one thing for them. |
 
 ### Extra Resources {#s-crew-wealth}

@@ -107,7 +107,7 @@ Here's what growth actually looks like.
 
 **Archetypes:** Shadow (*Push*) · Shadow (*Vanish*), so her Push is +3.
 
-**Roots:** Body 11 · Mind 5 · Soul 0. Her hook locks a point of her Body, so she can hold 10.
+**Roots:** Body 11 · Mind 5 · Soul 1. Her hook locks a point of her Body, so she can hold 10.
 
 **Attuned:** Her grappling line, Awakened, with *Anywhere I can throw a hook* (Body).
 
@@ -141,7 +141,7 @@ Here's what growth actually looks like.
 
 **Archetypes:** Shadow (*Push*) · Shadow (*Vanish*), so her Push is +3.
 
-**Roots:** Body 13 · Mind 8 · Soul 0. Her awakenings and her Scar lock 4 of her Body and 1 of her Mind, so she can hold Body 9 and Mind 7.
+**Roots:** Body 13 · Mind 8 · Soul 1. Her awakenings and her Scar lock 4 of her Body and 1 of her Mind, so she can hold Body 9 and Mind 7.
 
 **Carries:** Common worn leathers, a knife, soft-soled boots · a purse of gold, a smoke bomb · the first coin she ever stole (keepsake) · her bag.
 

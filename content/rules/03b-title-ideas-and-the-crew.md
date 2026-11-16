@@ -507,7 +507,7 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Second Title:** *Raised by the Guild* (Mind 3, Body 2). Permissions: *know how a lock's built* (Mind), *fight dirty with a knife* (Body), *find a buyer for anything* (Mind).
 
-**Roots:** Body 11 · Mind 5 · Soul 0.
+**Roots:** Body 11 · Mind 5 · Soul 1.
 
 **Archetypes:** [Shadow](#a-shadow) (*Push*) · [Shadow](#a-shadow) (*Vanish*).
 
@@ -609,7 +609,7 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Second Title:** *A scholar of forbidden texts* (Mind 5). Permissions: *know the history of anything old* (Mind), *find what I need in any library* (Mind), *read dead languages* (Mind).
 
-**Roots:** Body 0 · Mind 9 · Soul 7.
+**Roots:** Body 1 · Mind 9 · Soul 7.
 
 **Archetypes:** [Oracle](#a-oracle) (*Push*, *Hold it*) · [Oracle](#a-oracle) (*Foretold*).
 
@@ -643,7 +643,7 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Second Title:** *An outrider from the border war* (Body 5). Permissions: *scout ahead of an army* (Body), *ride hard over rough country* (Body), *read the land for an ambush* (Mind).
 
-**Roots:** Body 8 · Mind 8 · Soul 0.
+**Roots:** Body 8 · Mind 8 · Soul 1.
 
 **Archetypes:** [Hunter](#a-hunter) (*Push*) · [Hunter](#a-hunter) (*Mark the pack*).
 
@@ -675,7 +675,7 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Second Title:** *The Court's runaway heir* (Mind 3, Soul 2). Permissions: *know the old courts' history* (Mind), *carry myself like royalty* (Soul), *command a room* (Soul).
 
-**Roots:** Body 0 · Mind 5 · Soul 11.
+**Roots:** Body 1 · Mind 5 · Soul 11.
 
 **Archetypes:** [Elementalist](#a-elementalist) (*Push*, *Sculpt*) · [Face](#a-face) (*Push*, *Turn them*).
 
