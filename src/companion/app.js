@@ -858,7 +858,7 @@ function panelView(key, c, s) {
     return `<p><b>${root} ${ptsSaid(c, s, root)}.</b> ${n ? `It rolls ${steps(n)}, ${diceLabel(stepsToDice(n))}, however many points it’s got left.` : "It’s 0, so it rolls a d2, and its first hit wounds it."}${s.wound[root] ? ` You’re <b>${R.WOUNDS[root]}</b>${n ? `, so it heals only to ${cap} till downtime or a moment in the story clears it` : " till downtime or a moment in the story clears it"}.` : ""}${locked.length ? ` ${andList(locked)} lock${locked.length === 1 && !s.scars[root].length ? "s" : ""} ${R.lockedOf(c, s)[root] === 1 ? "a point" : `${R.lockedOf(c, s)[root]} points`} of it.` : ""} ${tip(`pa-${root}`, [n ? `A ${root} of ${n} is ${n} steps of dice, ${n} points to take hits with, and ${n} to spend pushing yourself, less what’s locked.` : `A ${root} of 0 rolls a d2, and it’s got no points, so its first hit wounds it, unless you take it on another Root for 2 points.`, `A hit that gets through takes a point. A hit on it at 0 wounds it, and a hit on it wounded at 0 is a Scar, and you leave the scene.`, "Pushing never hurts you: you can’t spend points you haven’t got.", link("s-tracks", "Your points in the rules")], `How your ${root} works`)}</p>
       <div class="cc-row"><button type="button" class="button" data-act="hit" data-r="${root}"${off(s.out || s.blaze)}>A hit gets through</button>${others.map((x) => `<button type="button" class="button" data-act="hit" data-r="${root}" data-on="${x}"${off(s.out || s.blaze)}>Take it on your ${x}: 2 points</button>`).join("")}</div>
       <div class="cc-row"><button type="button" class="button" data-act="spend" data-r="${root}"${off(s.pts[root] < 1)}>Spend a point</button><button type="button" class="button" data-act="back" data-r="${root}"${off(s.pts[root] >= cap)}>A point back</button><button type="button" class="button" data-act="healin"${off(!R.ROOTS.some((x) => s.pts[x] < R.capOf(c, s, x)))}>A heal</button>${root === "Mind" ? `<button type="button" class="button" data-act="breath"${off(s.pts.Mind >= Math.ceil(cap / 2))}>Take a breath: a point back, up to ${Math.ceil(cap / 2)}</button>` : ""}</div>
-      ${s.wound[root] ? `<div class="cc-row"><button type="button" class="button" data-act="blaze" data-r="${root}"${off(!R.canBlaze(s, root))}>Take the Blaze</button><button type="button" class="button" data-act="unwound" data-r="${root}">The story clears it</button>${tip(`pa-blaze-${root}`, ["While you’re wounded you can go out on your own terms: take the Scar, say something extraordinary and it happens, no roll, then leave the scene. It’s your action.", "From your very first Blaze, you can choose for your character to die instead.", link("s-blaze", "Wounds, Scars and the Blaze in the rules")], "The Blaze")}</div>` : ""}
+      ${s.wound[root] ? `<div class="cc-row"><button type="button" class="button" data-act="blaze" data-r="${root}"${off(!R.canBlaze(s, root))}>Take the Blaze</button><button type="button" class="button" data-act="unwound" data-r="${root}">The story clears it</button>${tip(`pa-blaze-${root}`, ["A moment in the story clears a wound when the GM says so, and a crew with the Healers asset clears one free, once between downtimes.", "While you’re wounded you can go out on your own terms: take the Scar, say something extraordinary and it happens, no roll, then leave the scene. It’s your action.", "From your very first Blaze, you can choose for your character to die instead.", link("s-blaze", "Wounds, Scars and the Blaze in the rules")], "The Blaze")}</div>` : ""}
       ${regen}
       ${pieces.length ? `<h3 class="cc-h3">Armour on your ${root} ${tip(`pa-arm-${root}`, [`Offer it when a hit gets through to your ${root}, and tick a box instead of losing a point.`, "Its last box breaks it, till it’s mended in downtime."], "How armour’s boxes work")}</h3><ul class="cc-things">${armour}</ul>` : ""}
       ${s.scars[root].length ? `<h3 class="cc-h3">Scars</h3><ul class="cc-list">${scars}</ul>` : ""}`;
@@ -1963,7 +1963,7 @@ function healView(c, s) {
     <button type="button" class="cc-x" data-act="close" aria-label="Close">${ICON.close}</button></div>
   <div class="dlg-body">
     <div class="cc-stepper"><span>What it heals <small>what was rolled, and any bonus</small></span>${stepper("hamount", r.amount, 0, 99, "What it heals")}</div>
-    <div class="cc-chips"><button type="button" class="cc-chipbtn" data-act="hother" data-v="1"${pressed(r.other)}>From someone or something else</button><button type="button" class="cc-chipbtn" data-act="hother" data-v="0"${pressed(!r.other)}>My own</button>${tip("hl-toll", ["Every heal you take from someone or something else is 1 more Toll, and a heal loses 5 for each Toll you’ve already got.", "Toll drops by 1 at the end of each scene, and downtime clears it.", link("s-healing", "Healing in the rules")], "Toll")}</div>
+    <div class="cc-chips"><button type="button" class="cc-chipbtn" data-act="hother" data-v="1"${pressed(r.other)}>From someone or something else</button><button type="button" class="cc-chipbtn" data-act="hother" data-v="0"${pressed(!r.other)}>My own</button>${tip("hl-toll", ["Every heal you take from someone or something else is 1 more Toll, and a heal loses 5 for each Toll you’ve already got.", "Toll drops by 1 at the end of each scene, or 2 with your crew’s Healers, and downtime clears it.", link("s-healing", "Healing in the rules")], "Toll")}</div>
     ${s.toll ? `<button type="button" class="cc-line" data-act="hease"${pressed(r.ease > 0)}><span class="tick" aria-hidden="true"></span><span>Their heals ignore a step of Toll <small>a Healer’s Trait, or an attuned thing that says so</small></span></button>` : ""}
     ${p.toll || p.left ? `<p class="cc-small">${p.toll ? `${r.amount}, less ${R.TOLL_STEP * p.toll} for ${p.toll} Toll, is ${p.net}. ` : ""}${p.left ? `${p.left} won’t fit anywhere, so it’s lost.` : ""}</p>` : ""}
     ${R.ROOTS.filter((x) => c.roots[x] > 0).map(row).join("")}
@@ -2287,7 +2287,8 @@ function abilityView(c, s) {
 
 // At the end of every scene you rest: roll each Root that's below what it can
 // hold, unsplit (Body 8 is a d12 and a d4), and get back what you roll, as
-// far as it can hold, half while it's wounded. Toll drops by 1. Then Aura's
+// far as it can hold, half while it's wounded. Toll drops by 1, or 2 with
+// the crew's Healers. Then Aura's
 // full and conditions end.
 const sceneSaid = (c, s) => `New scene. Aura ${s.aura}, ${glancePts(c, s)}.`;
 function newScene() {
@@ -2298,7 +2299,7 @@ function newScene() {
   const list = R.restOf(c, s);
   if (!list.length) return change("starting a new scene", (st, cc) => {
     const was = st.toll;
-    R.sceneEnd(cc, st, {});
+    R.sceneEnd(cc, st, {}, { healers: party.healers(ch) });
     endScene(st, cc);
     return `${sceneSaid(cc, st)}${was ? ` Your Toll’s ${st.toll}.` : ""}`;
   });
@@ -2331,7 +2332,7 @@ function restView(c, s) {
     return `${head}<div class="dlg-body">
       <p>Roll each Root that’s below what it can hold, unsplit, and get back what you roll${more ? `, and ${more} more each with your Recovery Boon` : ""}. ${ruleTip("s-healing", "How resting works", "rs-how")}</p>
       ${r.list.map((x) => `<p class="cc-dice">${liveDice(x.dice.map((d) => [d.size, "you"]))}<span>Your ${x.root}, ${s.pts[x.root]} of ${R.capOf(c, s, x.root)}${s.wound[x.root] ? `, ${R.WOUNDS[x.root]}` : ""}</span></p>`).join("")}
-      <p class="cc-small">Then it’s a new scene: Aura full, conditions gone${s.toll ? `, and your Toll drops to ${s.toll - 1}` : ""}.</p></div>
+      <p class="cc-small">Then it’s a new scene: Aura full, conditions gone${s.toll ? `, and your Toll drops to ${Math.max(0, s.toll - (party.healers(current()) ? 2 : 1))}${party.healers(current()) ? ", with your crew’s Healers" : ""}` : ""}.</p></div>
     <div class="dlg-foot"><button type="button" class="button primary" data-act="rest-go">Roll</button><button type="button" class="button" data-act="rest-real">Roll real dice</button></div>`;
   }
   const spin = r.spinning;
@@ -2351,7 +2352,7 @@ function finishRest() {
   const last = undo[undo.length - 1];
   change("starting a new scene", (s, c) => {
     const rolls = Object.fromEntries(r.list.map((x) => [x.root, x.dice.reduce((t, d) => t + d.nat, 0)]));
-    const h = R.sceneEnd(c, s, rolls);
+    const h = R.sceneEnd(c, s, rolls, { healers: party.healers(ch) });
     endScene(s, c);
     const ups = R.ROOTS.filter((x) => h.healed[x]);
     message = `${sceneSaid(c, s)} ${ups.length ? `You rested: ${andList(ups.map((x) => `your ${x} got ${h.healed[x]} back`))}.` : "Nothing more fitted this time."}`;
@@ -3171,7 +3172,8 @@ const ACT = {
     delete s.blazing;
     return "Not yet, then.";
   }),
-  // A moment in the story clears a wound, when the GM says so.
+  // A moment in the story clears a wound, when the GM says so, and so does
+  // the crew's Healers asset once between downtimes.
   unwound: (el) => change("a wound clearing", (s, c) => {
     const r = el.dataset.r;
     if (!s.wound[r]) return "";

@@ -845,6 +845,12 @@ export function makeParty(d) {
       return id ? docOf(id).goal : null;
     },
     goalIn: (id) => docOf(id).goal,
+    // Whether the campaign a character plays in has the Healers crew asset
+    // counting: Toll drops 2 at the end of a scene, not 1.
+    healers(ch) {
+      const id = campOf(ch);
+      return Boolean(id) && docOf(id).assets.some((a) => !a.off && /\bhealers\b/i.test(String(a.text ?? "").replace(/[*_]/g, "")));
+    },
     // For the faction turn (turn.js): the sheet as this phone has it, and a
     // change to it from there.
     docIn: (id) => docOf(id),

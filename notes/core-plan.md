@@ -226,7 +226,7 @@ Built 16 Nov on `rules/2026-11-16-core-gm`. Its calls are under 3 in `notes/to-c
 
 What the other prompts need from it:
 
-- **4:** the play screen's New scene passes `{ healers: true }` to `R.sceneEnd()` when the campaign's party sheet has *Healers*, and the free wound clear is a tap on a wounded Root, kept on the party sheet as used till the next downtime.
+- **4 (done in the merge):** the play screen's New scene passes `{ healers: party.healers(ch) }` to `R.sceneEnd()`, true when the campaign's party sheet has *Healers* counting. The free wound clear is the wound's own The story clears it, whose bubble says so. Nothing keeps count of it on the party sheet yet: the table keeps it to once between downtimes.
 - **6:** a telegraph from a *Deadly* threat is 2 hits or more, and costs its steps once for each hit.
 - **7:** Chapter 07, Magic, still has stacking's words (9 retired-word lines). The site's search check looks for *Stamina*. Prompt 5 landed before this one, so the sheets were built again on both.
 

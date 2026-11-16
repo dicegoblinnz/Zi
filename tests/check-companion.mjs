@@ -1907,7 +1907,7 @@ function tableOf(page) {
 // awakening and Aura on it, her Mind brought in on a permission and paid
 // for, a split, a roll that pays Aura and a point of Mind, Again, a reload
 // and no signal, a tie, two guards at once, her Shadow's Push in Aura and her
-// shadow pool, and no Roll again with no Soul to pay it.
+// shadow pool, and Roll again on the 1 point of Soul she always has.
 if (part("3")) {
   const { context, page } = await phone();
   const t = tableOf(page);
@@ -1919,9 +1919,9 @@ if (part("3")) {
   const tileOf = (r) => page.$eval(rootTile(r), (el) => `${el.querySelector(".tile-steps").textContent} · ${el.querySelector(".tile-die").textContent}`);
   const HOOK = "awk|0|Anywhere I can throw a hook";
   const BUILT = "perm|1|0"; // know how a lock's built, on her Mind
-  same([await tileOf("Body"), await tileOf("Mind"), await tileOf("Soul")], ["11 steps · d12 + d10", "5 steps · d10", "nothing yet · a d2"], "her three Roots as tiles");
-  same([...(await t.all()), await t.aura()], ["10/10", "5/5", "0/0", "5/5"], "her points and Aura to start with");
-  same(await t.mood("Soul"), "exposed", "her Soul at 0, exposed");
+  same([await tileOf("Body"), await tileOf("Mind"), await tileOf("Soul")], ["11 steps · d12 + d10", "5 steps · d10", "1 step · d2"], "her three Roots as tiles, her Soul 1, the least a Root can be");
+  same([...(await t.all()), await t.aura()], ["10/10", "5/5", "1/1", "5/5"], "her points and Aura to start with");
+  same(await t.mood("Soul"), "", "her Soul at 1, with a point to lose, so not exposed");
   same(await page.$$eval(".tile-again", (els) => els.length), 0, "no Again till she's rolled");
 
   // Her lock in one tap: her Body at full, and nothing to pay.
@@ -1971,10 +1971,10 @@ if (part("3")) {
   await t.rolled();
   same(await t.outs(), ["Beat it", "Under", "Under"], "her three d12s against the guard's 7");
   has(await page.textContent("#cc-dialog .cc-topnote"), "One die won and a top face, so 2 Aura. You’re on 7 while you’re acting, past your 5.", "Aura for a win and a top face, past her 5 while she's acting");
-  same(await page.$$eval('#cc-dialog button[data-act="reroll"]', (els) => els.length), 0, "no Roll again with no Soul to pay for it");
+  same(await page.$$eval('#cc-dialog button[data-act="reroll"]', (els) => els.length), 1, "Roll again, for the one point of Soul she's got");
   has(await page.textContent("#cc-dialog .cc-left"), "Mind 4/5", "a point of Mind paid");
   await t.done();
-  same([...(await t.all()), await t.aura()], ["10/10", "4/5", "0/0", "7/5"], "her points and Aura after the roll");
+  same([...(await t.all()), await t.aura()], ["10/10", "4/5", "1/1", "7/5"], "her points and Aura after the roll");
   has(await page.textContent(".tile-again"), "Body, with Mind and Anywhere I can throw a hook", "Again names it");
   has(await page.textContent(".tile-again"), "18 steps, 3d12, a point of Mind", "Again's steps and what it costs");
   // Finishing acting drops what's over her maximum.
@@ -1993,7 +1993,7 @@ if (part("3")) {
   await context.setOffline(true);
   await page.reload();
   await page.waitForSelector(".tile[data-r]");
-  same([...(await t.all()), await t.aura()], ["10/10", "4/5", "0/0", "5/5"], "her points after a reload, offline");
+  same([...(await t.all()), await t.aura()], ["10/10", "4/5", "1/1", "5/5"], "her points after a reload, offline");
   has(await page.textContent(".tile-again"), "18 steps", "Again after a reload, offline");
   await page.click('.cc-tabs a[data-t="rules"]');
   has(await page.textContent(".cc-rules"), "Your Points", "the rules on tap, offline");
@@ -2270,8 +2270,14 @@ if (part("4")) {
   await t.done();
   same(await t.pts("Mind"), "6/6", "her Mind untouched");
 
-  // Isolde's Body is 0: the club leaves her Bloodied, and she Blazes and dies.
+  // Isolde's Body is 1: the first club takes its point, the next leaves her
+  // Bloodied, and she Blazes and dies.
   await play(page, "isolde", "Isolde");
+  await t.lands([[8, "Body"]], { dice: [1, 6] });
+  has(await page.textContent("#cc-dialog .cc-hits"), "Your Body takes it: 1 to 0", "the first hit on her Body takes its one point");
+  await t.pay("hit");
+  await t.done();
+  same(await t.mood("Body"), "exposed", "Isolde on 0 Body, exposed");
   await t.lands([[8, "Body"]], { dice: [1, 6] });
   has(await page.textContent("#cc-dialog .cc-hits"), "Your Body takes it: you’re Bloodied", "a hit on her Body at 0 wounds it");
   await t.pay("hit");
@@ -2280,7 +2286,8 @@ if (part("4")) {
   await t.panel("Body");
   await page.click('#cc-panel button[data-act="blaze"]');
   has(await page.textContent('form[data-form="scar"]'), "You Blaze, on your Body.", "her Blaze");
-  await page.click('form[data-form="scar"] button[data-act="die"]');
+  has(await page.textContent('form[data-form="scar"]'), "This Scar would lock your Body’s last point", "her Scar would lock her Body's only point, so it's her last scene");
+  await page.click('form[data-form="scar"] button[data-act="die"]:not([data-how])');
   has(await page.textContent("#app"), "Isolde died in play.", "Isolde choosing to die");
   console.log("points: Vesk to a Scar and back, heals with Toll, a breath, Dorrie's court clothes, and Isolde's Blaze");
   await context.close();
@@ -2312,7 +2319,7 @@ if (part("4b")) {
   await page.waitForSelector(".tile[data-r]");
   has(await page.textContent(".cc-moved"), "Vesk’s on the new core.", "the note that she's moved onto the new core");
   has(await page.textContent(".cc-moved"), "The Scar’s on the Root its track was for.", "and where her Scar went");
-  same(await t.all(), ["9/9", "5/5", "0/0"], "every Root full, her Scar locking a point of her Body");
+  same(await t.all(), ["9/9", "5/5", "1/1"], "every Root full, her Scar locking a point of her Body");
   same(await page.$$eval(".cc-stat.t-body .zd-scars i.on", (els) => els.length), 1, "her old Scar on her Body");
   has(await page.textContent(".cc-stat.t-cond"), "Burning", "her conditions kept");
   same(await t.aura(), "4/5", "her Aura kept, inside her 5");
@@ -2946,9 +2953,9 @@ if (part("6")) {
   // Saved by the play screen as it is now, her state's read the way it moves
   // onto the new core: every Root full, and her Stamina's Scar on her Body.
   want(f, [["name", "Vesk"], ["pronouns", "she, her"], ["aura_now", "4"], ["aura_max", "5"], ["toll", ""], ["stride", "3"],
-    ["root_body_now", "9"], ["root_body_holds", "9"], ["root_body_locked", "2"], ["root_body_wound", false], ["root_body_scar_1", "a burn across the back"], ["root_mind_now", "5"], ["root_soul_now", "0"],
+    ["root_body_now", "9"], ["root_body_holds", "9"], ["root_body_locked", "2"], ["root_body_wound", false], ["root_body_scar_1", "a burn across the back"], ["root_mind_now", "5"], ["root_soul_now", "1"],
     ["root_body_armour_1", "Common worn leathers"], ["root_body_armour_1_box_1", false],
-    ["root_body", "11"], ["root_body_dice", "d12 + d10"], ["root_body_title_1", "5"], ["root_body_title_2", "2"], ["root_body_permissions", "4"], ["root_mind", "5"], ["root_mind_title_1", ""], ["root_mind_title_2", "3"], ["root_mind_permissions", "2"], ["root_soul", "0"], ["root_soul_permissions", ""],
+    ["root_body", "11"], ["root_body_dice", "d12 + d10"], ["root_body_title_1", "5"], ["root_body_title_2", "2"], ["root_body_permissions", "4"], ["root_mind", "5"], ["root_mind_title_1", ""], ["root_mind_title_2", "3"], ["root_mind_permissions", "2"], ["root_soul", "1"], ["root_soul_permissions", ""],
     ["points_spent", "35"], ["points_start", "35"], ["points_banked", ""],
     ["aspiration", "Own the score of a lifetime"], ["aspiration_die", "d2"],
     ["equipment_1", "Common worn leathers"], ["equipment_2", "a knife"], ["utility_2", "a smoke bomb (used)"], ["keepsake", "the first coin she ever stole"],
@@ -3014,9 +3021,9 @@ if (part("7")) {
   same(await page.evaluate(() => document.activeElement?.id), "ln-h", "focus at the start of the round");
   has(await card(page), "The brute swings his club at Isolde’s Body. That’s a d8", "the club's telegraph, at her Body");
   has(await card(page), "Isolde rolls her Body against it", "her Body when it lands");
-  same(isolde.roots.Body, 0, "Isolde's Body is 0");
+  same(isolde.roots.Body, 1, "Isolde's Body is 1, the least a Root can be");
   has(await page.textContent("#tip-ln-ride"), "a d2 against a d8 stops it 3 times in 16", "her Body's d2 against the club, ties hers");
-  has(await page.textContent("#tip-ln-ride"), "she’d be Bloodied straight away", "and Bloodied if it gets through");
+  has(await page.textContent("#tip-ln-ride"), "If it gets through, it’s a hit, a point off her Body.", "and a point off her Body if it gets through");
   has(await card(page), "Bram’s a Guardian, so he could intercept it for free", "Bram's free intercept");
   // What isn't the lesson is behind question bubbles: the odds open with a tap
   // and go again with Esc.
@@ -3073,8 +3080,7 @@ if (part("7")) {
   await page.click('button[data-do="again"]');
   await round(page, [3, 2, 1, 1, 7], true);
   has(await card(page), "The brute’s 7 beats your best, a 3, so the club lands on Isolde at once", "real dice that lose");
-  has(await card(page), "Isolde’s Body is 0, so there’s nothing there to lose, and she’s Bloodied", "the club leaving her Bloodied");
-  has(await card(page), "She could take it on her Mind instead, 2 of her 9 points", "or 2 for 1 on her Mind");
+  has(await card(page), "Isolde’s Body drops from 1 to 0, so the next hit there leaves her Bloodied", "the club taking her one point of Body");
   has(await card(page), "her coat with silver thread is on her Mind", "her armour on her Mind, so it can't take a blow at her Body");
   has(await card(page), "there’s no Aura in it", "no Aura for dice that lost");
   await page.click('button[data-do="next"]');
@@ -3228,7 +3234,7 @@ if (part("7b")) {
     const top = await page.$eval(".cc-roots .tile[data-r]", (el) => Math.round(el.getBoundingClientRect().top + scrollY));
     if (top > 420) note(`the first Root starts ${top}px down at 390 by 844, ${theme}`);
     same(await page.$$eval(".cc-roots .tile .tile-dice .zd-die", (els) => els.map((e) => e.dataset.d)), ["12", "10", "10", "2"], `Vesk's Roots drawn as the dice they roll, ${theme}`);
-    same(await page.$$eval(".cc-track .is-trk .cc-pips", (els) => els.map((e) => e.querySelectorAll("i.on").length)), [10, 5, 0], `her points as pips, ${theme}`);
+    same(await page.$$eval(".cc-track .is-trk .cc-pips", (els) => els.map((e) => e.querySelectorAll("i.on").length)), [10, 5, 1], `her points as pips, ${theme}`);
     const wide = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
     if (wide > 0) note(`the play screen scrolls sideways by ${wide}px, ${theme}`);
     const small = await page.$$eval(".cc-roots .tile, .cc-more .tile, .cc-stat, .cc-tabs a, .cc-play button, .cc-abilities button, .cc-attune button", (els) => els.filter((e) => e.getBoundingClientRect().height < 44).length);
@@ -3267,9 +3273,9 @@ if (part("7b")) {
     const tall = await page.evaluate(() => document.documentElement.scrollHeight / innerHeight);
     if (tall > 2) note(`the Sheet tab runs ${tall.toFixed(1)} screens with its folds shut, ${theme}`);
     same(await page.$$eval("details.cc-fold[open]", (els) => els.length), 0, `the Sheet tab's folds shut to start, ${theme}`);
-    same(await page.$$eval(".cc-fold-g .cc-gl", (els) => els.slice(0, 3).map((e) => e.textContent.replace(/\s+/g, " ").trim())), ["Body 10/10", "Mind 4/5", "Soul 0/0"], `her Roots at a glance, ${theme}`);
+    same(await page.$$eval(".cc-fold-g .cc-gl", (els) => els.slice(0, 3).map((e) => e.textContent.replace(/\s+/g, " ").trim())), ["Body 10/10", "Mind 4/5", "Soul 1/1"], `her Roots at a glance, ${theme}`);
     await page.click('details[data-open="sh-roots"] > summary');
-    same(await page.$$eval('details[data-open="sh-roots"] .cc-from', (els) => els.map((e) => e.textContent)), ["5 from your first Title, 2 from your second, move unseen, run the rooftops, pick a mechanical lock, fight dirty with a knife", "3 from your second Title, know how a lock’s built, find a buyer for anything", "nothing yet"], `where each Root came from, ${theme}`);
+    same(await page.$$eval('details[data-open="sh-roots"] .cc-from', (els) => els.map((e) => e.textContent)), ["5 from your first Title, 2 from your second, move unseen, run the rooftops, pick a mechanical lock, fight dirty with a knife", "3 from your second Title, know how a lock’s built, find a buyer for anything", "1, the least a Root can be"], `where each Root came from, ${theme}`);
     await page.$$eval("details.cc-fold", (els) => els.forEach((d) => (d.open = true)));
     await axe(`the Sheet tab, ${theme}`);
     await shot(page, `one-hand-${theme}`);
@@ -3576,7 +3582,7 @@ if (part("8")) {
     const tap = (data) => D.act({ dataset: data }, d, c, s);
     const type = (where, f, value) => D.input({ dataset: { dt: String(where), f }, value }, d);
     const card = () => D.view(c, s, ch, d).replace(/<[^>]*>/g, "").replace(/\s+/g, " ");
-    has(card(), "Every downtime starts with everything back, free: Mind 2 to 9, Soul 3 to 6, Frayed gone and 2 Toll gone", "everything back, said on the card");
+    has(card(), "Every downtime starts with everything back, free: Body 0 to 1, Mind 2 to 9, Soul 3 to 6, Frayed gone and 2 Toll gone", "everything back, said on the card");
     same(card().includes("6 sizes back"), false, "no slot to recover in");
     tap({ do: "pick", s: "0", v: "asp" });
     tap({ do: "set", s: "0", f: "root", v: "Mind" });
@@ -3593,7 +3599,7 @@ if (part("8")) {
     tap({ do: "set", s: "1", f: "root", v: "Mind" });
     same(D.warnings(d, c, s), [], "nothing to flag on her week");
     const said = D.apply(s, c, d);
-    same([s.pts, s.wound, s.toll, s.asp, s.grown.at(-1)], [{ Body: 0, Mind: 10, Soul: 5 }, { Body: false, Mind: false, Soul: false }, 0, 8, { k: "perm", t: 0, text: "read how a spirit’s been bound", root: "Mind" }], "everything back, her new point on her Mind, and a point of Soul down for rolling again");
+    same([s.pts, s.wound, s.toll, s.asp, s.grown.at(-1)], [{ Body: 1, Mind: 10, Soul: 5 }, { Body: false, Mind: false, Soul: false }, 0, 8, { k: "perm", t: 0, text: "read how a spirit’s been bound", root: "Mind" }], "everything back, her new point on her Mind, and a point of Soul down for rolling again");
     has(said.join(". "), "You paid a point of Soul to roll again", "what she paid, said");
     // A new Title from an Aspiration past d12 spreads 5, a tap at a time.
     const d2 = D.start({ id: "isolde-title" });
@@ -3615,7 +3621,7 @@ if (part("8")) {
     D.apply(s, cNow, d2);
     same(s.grown.at(-1), { k: "title", text: "Keeper of the last library", roots: { Body: 0, Mind: 3, Soul: 2 }, perm: { text: "find any book in a library", root: "Mind" } }, "her new Title spread Mind 3 and Soul 2, with its permission");
     const grownSheet = rootsSheet(book.crew.find((x) => x.id === "isolde"), s.grown, BUILD);
-    same([grownSheet.roots, s.pts], [{ Body: 0, Mind: 14, Soul: 9 }, { Body: 0, Mind: 14, Soul: 8 }], "her Roots with the new Title, and every Root full on it");
+    same([grownSheet.roots, s.pts], [{ Body: 1, Mind: 14, Soul: 9 }, { Body: 1, Mind: 14, Soul: 8 }], "her Roots with the new Title, and every Root full on it");
   }
 
   const { context, page } = await phone();
@@ -3635,7 +3641,7 @@ if (part("8")) {
   const base = rootsSheet(book.crew.find((c) => c.id === "vesk"), [], BUILD);
   const week = async () => {
     await page.click('button[data-act="downtime"]');
-    has(await t.body(), "Every downtime starts with everything back, free: Body 4 to 10 and Mind 3 to 5", "everything back, free");
+    has(await t.body(), "Every downtime starts with everything back, free: Body 4 to 10, Mind 3 to 5 and Soul 0 to 1", "everything back, free");
     // Vesk's Shadows have both their abilities, so there's none to buy, and
     // there's no slot to recover in.
     same(await page.$$eval('#cc-dialog button[data-do="pick"][data-v="ability"], #cc-dialog button[data-do="pick"][data-v="heal"]', (els) => els.length), 0, "no ability to buy when every one's had, and no Recover slot");
@@ -3649,7 +3655,7 @@ if (part("8")) {
   await week();
   await shot(page, "8-downtime");
   await t.finish();
-  same(await tracksOf(), [11, 5, 0], "every Root full, her Body with her new permission in it");
+  same(await tracksOf(), [11, 5, 1], "every Root full, her Body with her new permission in it");
   same(sheetFor(await me()).roots, { ...base.roots, Body: base.roots.Body + 1 }, "her new permission 1 more on her Body");
   same(sheetFor(await me()).titles[0].permissions.map((p) => [p.text, p.root]).at(-1), ["slip through any crowd", "Body"], "on her first Title");
   await page.click('button[data-act="undo"]');
@@ -3771,10 +3777,13 @@ if (part("9")) {
       { k: "awk", a: 0, name: "Another awakening", root: "Mind", text: "1 Aura and it does something", catch: "Loud" },
     ];
     const c = rootsSheet(base, grown, BUILD);
-    const roots = { ...c0.roots };
+    // What the Titles and permissions built, before the floor of 1.
+    const built = (r) => c0.titles.reduce((n, t) => n + (t.roots?.[r] ?? 0) + (t.permissions ?? []).filter((p) => p.root === r).length, 0);
+    const roots = Object.fromEntries(["Body", "Mind", "Soul"].map((r) => [r, built(r)]));
     roots[root] += 1;
     roots.Mind += 2;
     roots.Soul += 4;
+    for (const r of Object.keys(roots)) roots[r] = Math.max(1, roots[r]);
     same(c.roots, roots, `${base.name}'s Roots with a permission and a new Title spread Mind 2 and Soul 3`);
     same("specialties" in c, false, `${base.name} with no specialties`);
     same([c.titles.length, c.archetypes.length, c.archetypes.at(-1).have, c.attuned.length, c.attuned[0].awakenings.length, c.numbers.aura, c.attuned.at(-1).awakenings.map((w) => w.root)], [c0.titles.length + 1, c0.archetypes.length + 1, ["Pull them back"], c0.attuned.length + 1, c0.attuned[0].awakenings.length + 1, c0.numbers.aura, ["Mind"]], `${base.name}'s Titles, archetypes with the one ability, a new attuned thing with no Aura of its own, and awakenings on their Roots`);
