@@ -63,6 +63,19 @@ Written into 03, 03a, 03b and 18 on 16 Nov, with the crew in `notes/core-plan.md
 20. **Items are never steps on their own.** A weapon, armour or anything you carry does what it is. What changes a roll says so: a *Charge* weapon, a purse of gold, a smoke bomb, and the Warrior's *Second Skin*, which puts 1 step a piece of armour on the roll when it lands.
 21. **The *Slow* Catch's awakenings take a round to wake**, where they took two actions.
 
+### 6. The live table
+
+Built into the live table, the table screen and the Worker on 16 Nov, on `rules/2026-11-16-core-table`.
+
+1. **One roll's one action, however many things its dice go at.** The table counts an action for each roll, so an answer, a die at a stake and the roll on a Root it came from are all the one action. Defend, putting your action into a friend's answer, using the ground, the Blaze and anything said in words are each the whole action, the way they were.
+2. **Nobody gets another action, from anywhere.** A phone that tries to buy one is told no and gets its Aura back. A round played on stacking keeps the extra actions it had and reads them the way it did.
+3. **Putting your action into a friend's answer brings one Root, all of it, and 2 steps for each of your awakenings that fits**, the way a roll of your own would, and it costs no Aura. You can't bring a second Root into someone else's roll.
+4. **The GM picks a telegraph's hits on her phone, 1 to 4 a die**, and the table holds up to 6. One at a stake, an event or the scene clock has none. A telegraph written on one of her place pages can say its hits after its Root, *Body, 2 hits, Pinned*.
+5. **A lost answer lands on whoever the telegraph was aimed at**, or whoever took it, and their phone takes its hits with no defence. When whoever answered put themselves in the way, the table can't tell, so the GM says who it hit, the way she did.
+6. **A Scar or the Blaze takes them out of the scene till the GM ends the fight** (That fight's over): nothing can be aimed at them, a telegraph at a place goes out without them, and they can't answer, act or step in front of anything. The table only knows a fight, so that's its scene.
+7. **The Blaze is in Something else** for a wounded character, one for each wounded Root, and taking it back takes the Scar back.
+8. **The wounds on the GM's crew lines and the table screen are the ones the table's seen this fight**, from what each When it lands wrote. One from an earlier fight is on the character's sheet, not the table.
+
 ## 14 Nov: stacking
 
 **Live since 14 Nov**, when you said to make it live. Part 1 of the stacking rework (`notes/stacking-plan.md`), from your 14 Nov chat (`notes/playtest-sheets/2026-11-14-chat-decisions.md`), built by thirteen chats on `rules/2026-11-14-stacking` with the book's core cut under it. These are the calls Claude made writing it down, before any chat built it, and each chat added its own in its subsection below. They're still yours to say yes or no to.
