@@ -4,6 +4,8 @@ Mo's 16 Nov rework, part 2 of the rework that comes in parts, settled after a ga
 
 Several chats build it at once, one prompt each, the way part 1 was built (`notes/stacking-plan.md`), and every chat reads this plan first. Each one owns its own files, works on its own branch, and lands back into `rules/2026-11-16-core`. Nothing merges to `main` till Mo says, because the live companion has to keep working for his four campaigns.
 
+**Live since 16 Nov.** Mo said to make it live, and `rules/2026-11-16-core` went onto `main` whole. Where it's got to is at the foot of this plan.
+
 ## Why
 
 - Rolls still took 1 to 2 minutes on stacking (15 Nov), and finding what fits was the worst of it. Now there's nothing to find: pick Body, Mind or Soul and roll it.
@@ -306,3 +308,7 @@ Run 16 Nov on `rules/2026-11-16-core`, once prompt 4 had landed. Its calls are u
 - **The Preview:** https://rules-2026-11-16-core-zidara.storyforgenz.workers.dev (the `zidara` Worker's build passed, and `zi`'s fails on a new branch as it always has).
 
 **Ready for `main`** once Mo's played it on the Preview and said yes, with the crew's numbers and the 16 Nov calls in `notes/to-confirm.md` his to check. `main` has nothing this branch hasn't, so it goes straight on.
+
+### Live
+
+Live on 16 Nov, when Mo said to make it live. `main` had nothing the branch hadn't, so the branch went on as it stood, Mo's answers on the play screen and the party sheet included. The site built clean first, with `tests/check-site.mjs`, `tests/check-companion.mjs`, `tests/check-accounts.mjs` and `tests/check-world-engine.mjs` all passing whole, and there was no new migration for the live database. The crew's numbers and the 16 Nov calls in `notes/to-confirm.md` are still Mo's to check at the table.
