@@ -457,8 +457,10 @@ const tableOf = (env, id) => env.TABLE.getByName(`table:${id}`);
 // Everyone in the campaign who's playing someone, in the order they joined:
 // who they are and who they play, and for the table screen's crests, who
 // their character started as from the book (or "own"), the archetypes on
-// their own build and the ones they've grown in downtime. Extra actions have
-// had no cap since stacking (14 Nov 2026), so nothing here counts them.
+// their own build and the ones they've grown in downtime. There's one action
+// a round on the new core (16 Nov 2026), and what the table needs about who's
+// wounded or left the scene is on the table itself, so nothing here reads a
+// character's Roots.
 async function rosterOf(env, id) {
   const { results } = await env.DB.prepare(`SELECT m.userId AS user, u.name, m.characterId AS ch, json_extract(ch.data, '$.name') AS cname,
       json_extract(ch.data, '$.crew') AS crew,
