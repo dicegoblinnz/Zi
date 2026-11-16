@@ -41,10 +41,9 @@ const PAGES = [
     ],
   },
   {
-    title: "The tracks, defence and threats",
-    short: "Tracks and threats",
+    title: "Your points, defence and threats",
+    short: "Points and threats",
     blocks: [
-      { panel: "tracks", ids: ["s-qr-tracks"] },
       { flow: [{ id: "s-qr-tracks" }, { id: "telegraphs-and-defence" }, { id: "consequences-the-gm-names-one" }, { id: "conditions" }, { id: "s-qr-threats", drop: ["**Round budget:**", "**Threat budget:**"] }] },
     ],
   },

@@ -1,9 +1,45 @@
 ---
 title: "What's Changed"
 id: changes
-updated: 2026-11-14
+updated: 2026-11-16
 ---
 This is the record of every rules change since the 2 Oct 2026 book, newest first. Each entry's date is the day the change went to the table. When a later change replaces an earlier one, the earlier entry says so. The rules chapters always show the game as it is now, so if you only want to play, read those and skip this.
+
+## 16 Nov 2026: The new core, a Root at full and points that are your health {#c-2026-11-16-core}
+
+Mo's calls in chat, the second part of the rework that comes in parts, after a game designers meetup on 15 Nov.
+
+**A roll's one Root, rolled at full.** Pick Body, Mind or Soul for how you're doing it, and roll all of it. Nothing else on your sheet is counted: not your Titles, permissions, archetypes, abilities or items. Points you've spent, lost or locked never make the dice smaller. It replaces a Root and a step for every thing on your sheet that fits, 1 Aura for each one you had to explain, and bringing in the ground, a tag or a Catch as a step. See [How a roll adds up](#how-permissions-stack) and [Steps and Dice](#s-building-die).
+
+**A Title puts 5 on your Roots**, spread however you like, and the permission it comes with is 1 more, so it's 6 in all. A permission's still 1 on its Root, and it's what lets you bring a Root in, never a step. It replaces a Title's 3. See [Roots](#s-roots) and [Titles and Permissions](#s-permissions).
+
+**Bring in a second Root** when a permission explains how it gets in on what you're doing, for 1 point of that Root or 3 Aura, and all of it goes on the roll. You can bring both in, each paid on its own, on any roll, your defence included. See [Bringing In a Root](#s-bring).
+
+**A Root's points are its dice, its health and what you spend.** Body 8 is 8 steps of dice, 8 points to lose to hits and 8 to spend. Pushing never hurts you: you can't spend points you haven't got, and spending to 0 only leaves you exposed. Rolling again after a miss is a point of Soul. It replaces Stamina, Confidence and Resolve, the three tracks at d12, and rolling again for 1 Resolve. See [Your Points](#s-tracks).
+
+**Splitting has no limit.** Split your dice however you like, as long as they add up to your steps. It replaces one split for each action in the roll. See [Splitting](#s-splitting).
+
+**One action a round, and every die's an intent**, so one roll can answer a telegraph, go at a threat and get you across the room. Answering and moving take dice, not a whole action. There are no extra actions: none bought with Aura, none for holding your action and none for coming out of hiding, and outside a round it's one roll for each go. A spent *Unseen* or *Rallied* brings a Root in free instead. It replaces extra actions at 3, then 4, then 5 Aura, Move and answering as whole actions, and two actions when you can take your time. See [Your Action](#s-actions), [Doing more in a round](#s-extra-actions) and [Movement and Range](#s-movement).
+
+**Aura's maximum is 5**, full every scene, and it pays for bringing a Root in (3), abilities (1 a go), 2 more steps on an awakening (1 each), going beyond, a tie, an intercept and a quick heal. It replaces 2 more on your maximum for each attuned thing, powering passive awakenings, and paying to bring something in or explain it. See [Aura](#s-aura).
+
+**Attuned things lock a point.** Each awakening locks a point of the Root it fits for as long as it's attuned, and it's 2 steps on a roll it fits, 2 more for every Aura you put in it. It replaces powering a passive awakening, and each attuned thing's 2 on your Aura maximum. See [Attunement](#s-attunement).
+
+**Abilities cost Aura**, 1 each time you use one. It replaces 1 from the archetype's home track, or 2 from your other two. See [Abilities](#s-abilities).
+
+**Defence is the Root.** When telegraphs land, roll the Root they're at, at full, split how you like, and each die stops one it meets or beats. Your defence doesn't shrink as you're hurt. Defending puts a Root on top. It replaces rolling your tracks, and a Root and everything that fits for a Defend. See [When It Lands](#s-defending) and [Defend](#s-defend).
+
+**A hit takes 1 point** from its Root, and 2 for 1 takes it on another Root instead, for 2 points of that one. A vulnerability's one more hit, and a deadly threat's telegraph says how many it is. It replaces a size off a track, and 2 for 1 from your other two tracks. See [Hits and Consequences](#s-consequences) and [Vulnerabilities](#s-vulnerable).
+
+**Wounds, Scars and the Blaze.** A hit on a Root with no points left wounds it, **Bloodied** for your Body, **Frayed** for your Mind and **Hollow** for your Soul, and a wounded Root heals only to half its maximum till downtime or a story moment clears it. A hit on a wounded Root with no points left is a Scar, and you leave the scene. A Scar's a Catch that locks a point of its Root for good. While you're wounded, you can take the Blaze on your turn: the Scar, something extraordinary, then out, or die if you choose. It replaces Blazing at d2 and a Scar locking a track's size. See [Wounds, Scars and the Blaze](#s-blaze).
+
+**Healing and Toll.** At the end of every scene, roll each Root unsplit and get back what you roll, and downtime puts everything back. A Healer's heal is rolled unsplit and gets back what it rolls, spread across the patient's Roots, and every heal from someone or something else gives them 1 Toll, which takes 5 off every heal after it till it drops off, one a scene. A quick heal's 1 point back. Recovery's top faces give Aura, and what's healed never does. It replaces a 4 or more putting a track up a size, a heal die on 4 or more doing the same, and a quick heal's size. See [Healing](#s-healing).
+
+**Downtime puts everything back**, so its Recover slot's gone, and mending is a slot of its own. It replaces every track up a size and 6 sizes back for a slot. See [Your Slots](#your-slots) and [Mend](#recover).
+
+**Everything that put your Resolve up a size gets you a point of Soul back**: a big bite from a Catch or a hostile thread, and straining a bond thread. *Take a breath* is 1 point back on your Mind, as far as half its maximum. See [Catches and Trouble](#s-trouble) and [Bonds and threads](#s-bonds).
+
+**Characters already made keep everything they've got**, recounted: each Title's 3 becomes 5, the 2 more spread the way the 3 were for you to check, every Root starts full, and a track's Scars are Scars on its Root.
 
 ## 14 Nov 2026: Every archetype's Trait, and the Scholar out for now {#c-2026-11-14-traits}
 
@@ -35,15 +71,15 @@ To go with [Stacking, and 35 points to start](#c-2026-11-14-stacking). With ever
 
 Mo's calls in chat, the first part of a rework that comes in parts.
 
-**A roll's one Root and every thing on your sheet that fits.** Each Title, permission, archetype, ability, attuned thing, awakening and item you're using that fits what you're doing is a step, and an archetype you've taken twice is two. Plainly fits is free, and each one you have to explain is 1 Aura. Boons don't add steps. It replaces a Root and one specialty plus the items you were using, and making a case for a specialty. See [How it adds up](#how-permissions-stack) and [Steps and Dice](#s-building-die).
+**A roll's one Root and every thing on your sheet that fits.** Each Title, permission, archetype, ability, attuned thing, awakening and item you're using that fits what you're doing is a step, and an archetype you've taken twice is two. Plainly fits is free, and each one you have to explain is 1 Aura. Boons don't add steps. It replaces a Root and one specialty plus the items you were using, and making a case for a specialty. (Since 16 Nov a roll's one Root at full, and nothing else on your sheet is counted.) See [How it adds up](#how-permissions-stack) and [Steps and Dice](#s-building-die).
 
-**Specialties are gone, and Titles and permissions build your Roots.** A Title puts 3 on your Roots, spread however you like, and a permission puts 1 on its Root. Nothing else adds to a Root. It replaces a Title's 1 on a Root and 1 on each of three specialties, and a permission's 1 on a Root and 1 on a specialty. See [Roots](#s-roots) and [Titles and Permissions](#s-permissions).
+**Specialties are gone, and Titles and permissions build your Roots.** A Title puts 3 on your Roots, spread however you like, and a permission puts 1 on its Root. Nothing else adds to a Root. It replaces a Title's 1 on a Root and 1 on each of three specialties, and a permission's 1 on a Root and 1 on a specialty. (Since 16 Nov a Title puts 5 on your Roots.) See [Roots](#s-roots) and [Titles and Permissions](#s-permissions).
 
-**Extra actions cost 3 Aura, then 4, then 5**, and so on, back to 3 each round, with no cap. Holding, coming out of hiding and the Extra action Boon don't put the price up. It replaces 3 Aura each, up to one action a round for each archetype. See [Extra actions](#s-extra-actions).
+**Extra actions cost 3 Aura, then 4, then 5**, and so on, back to 3 each round, with no cap. Holding, coming out of hiding and the Extra action Boon don't put the price up. It replaces 3 Aura each, up to one action a round for each archetype. (Since 16 Nov there are no extra actions.) See [Extra actions](#s-extra-actions).
 
-**In a combo, each friend brings every thing on their sheet that fits**, 1 each, and a split, on the roller's Root. Your own extra action in the same roll is 1 step and a split, and a bond thread lends one thing off a friend's sheet for 1 Aura and a step. It replaces every action bringing a specialty, and borrowing a specialty. See [Working Together](#s-teamwork) and [Bonds and threads](#s-bonds).
+**In a combo, each friend brings every thing on their sheet that fits**, 1 each, and a split, on the roller's Root. Your own extra action in the same roll is 1 step and a split, and a bond thread lends one thing off a friend's sheet for 1 Aura and a step. It replaces every action bringing a specialty, and borrowing a specialty. (Since 16 Nov each action in a combo brings its Root.) See [Working Together](#s-teamwork) and [Bonds and threads](#s-bonds).
 
-**Each attuned thing puts 2 on your Aura maximum**, so one takes you from 5 to 7, and it doesn't get you Aura its own way any more. A passive awakening's powered: while you're acting, the Aura comes off what you've got and off your maximum till the scene ends, up to 2 in each, and it works for as much as is powering it. It replaces pumping Aura into it, and its own way to Aura. See [Attunement](#s-attunement) and [Aura](#s-aura).
+**Each attuned thing puts 2 on your Aura maximum**, so one takes you from 5 to 7, and it doesn't get you Aura its own way any more. A passive awakening's powered: while you're acting, the Aura comes off what you've got and off your maximum till the scene ends, up to 2 in each, and it works for as much as is powering it. It replaces pumping Aura into it, and its own way to Aura. (Since 16 Nov each awakening locks a point of a Root instead, and nothing's powered.) See [Attunement](#s-attunement) and [Aura](#s-aura).
 
 **Every archetype comes with its mechanic, a Trait that's always on, and one ability**, your pick off its list, and more abilities are bought. Archetypes don't cap your actions any more. It replaces having every ability as soon as you took the archetype. See [How Archetypes Work](#s-how-archetypes) and [Abilities](#s-abilities).
 
@@ -114,13 +150,13 @@ Mo's calls in chat, after four weeks of playtests.
 
 **A specialty you have to make a case for is 1 Aura**, and so's going beyond, which was 1 Resolve. (Since 14 Nov it's 1 Aura for each thing on your sheet you have to explain.) See [Going Beyond](#s-going-beyond).
 
-**Three tracks, all starting at d12: Stamina for Body, Confidence for Mind and Resolve for Soul.** Every hit that gets through to a Root drops its track a size, and a hit at d2 is a Blaze. A Scar locks the track's smallest size for good. The tracks are your defence when the telegraphs land, and they pay for your archetype's abilities. At the end of every scene each one comes up a size on a 4 or more, every downtime starts with them all up a size, and a slot in downtime puts 6 sizes back. Nobody Blazes on purpose. This replaces the wound die, Hurts, Confidence starting each scene on d6 and swinging, shaken and fired up, and Resolve as points. See [The Tracks](#s-tracks), [When It Lands](#s-defending), [When a Track Runs Out](#s-blaze) and [Healing](#s-healing).
+**Three tracks, all starting at d12: Stamina for Body, Confidence for Mind and Resolve for Soul.** Every hit that gets through to a Root drops its track a size, and a hit at d2 is a Blaze. A Scar locks the track's smallest size for good. The tracks are your defence when the telegraphs land, and they pay for your archetype's abilities. At the end of every scene each one comes up a size on a 4 or more, every downtime starts with them all up a size, and a slot in downtime puts 6 sizes back. Nobody Blazes on purpose. This replaces the wound die, Hurts, Confidence starting each scene on d6 and swinging, shaken and fired up, and Resolve as points. (Since 16 Nov there are no tracks: a Root's points are its health, with wounds and Toll.) See [The Tracks](#s-tracks), [When It Lands](#s-defending), [When a Track Runs Out](#s-blaze) and [Healing](#s-healing).
 
-**Telegraphs say Body, Mind or Soul.** Defend's a Root and a specialty rolled with your tracks (a Root and everything that fits since 14 Nov), armour sits on a Root, intercepting's only for blows at a friend's Body, and 2 for 1 pays two sizes from your other tracks to keep the one that was hit where it is. See [Telegraphs](#s-telegraphs), [Defend](#s-defend), [Intercept](#s-intercept), [Consequences](#s-consequences) and [Armour](#s-armour).
+**Telegraphs say Body, Mind or Soul.** Defend's a Root and a specialty rolled with your tracks (a Root and everything that fits since 14 Nov), armour sits on a Root, intercepting's only for blows at a friend's Body, and 2 for 1 pays two sizes from your other tracks to keep the one that was hit where it is. (Since 16 Nov the Root a telegraph's at rolls against it, and 2 for 1 is 2 points of another Root.) See [Telegraphs](#s-telegraphs), [Defend](#s-defend), [Intercept](#s-intercept), [Consequences](#s-consequences) and [Armour](#s-armour).
 
-**Aura's the one thing you spend.** Every die of yours that wins pays 1, and so does every top face, your defence included. It can go past 5 while you're acting and drops back once you're done. 3 Aura buys an extra action, and you can have one action a round for each archetype you've got. (Since 14 Nov there's no cap, and they cost 3, then 4, then 5.) Rolling again costs 1 Resolve. See [Aura](#s-aura) and [Extra actions](#s-extra-actions).
+**Aura's the one thing you spend.** Every die of yours that wins pays 1, and so does every top face, your defence included. It can go past 5 while you're acting and drops back once you're done. 3 Aura buys an extra action, and you can have one action a round for each archetype you've got. (Since 14 Nov there's no cap, and they cost 3, then 4, then 5. Since 16 Nov there are none.) Rolling again costs 1 Resolve. (Since 16 Nov it's a point of Soul.) See [Aura](#s-aura) and [Extra actions](#s-extra-actions).
 
-**Archetypes are their own pick**, two to start, and they don't come with your Titles any more. Each one has a home track, and its abilities cost 1 from it or 2 from your other two, and stack. This replaces archetypes' Aura and Resolve spends. (Since 14 Nov each archetype comes with a Trait and one ability, and more are bought.) The [Gambler](#a-gambler)'s new: once a round, flip any die you can see after it lands. See [How Archetypes Work](#s-how-archetypes) and [Abilities](#s-abilities).
+**Archetypes are their own pick**, two to start, and they don't come with your Titles any more. Each one has a home track, and its abilities cost 1 from it or 2 from your other two, and stack. This replaces archetypes' Aura and Resolve spends. (Since 14 Nov each archetype comes with a Trait and one ability, and more are bought. Since 16 Nov abilities cost Aura.) The [Gambler](#a-gambler)'s new: once a round, flip any die you can see after it lands. See [How Archetypes Work](#s-how-archetypes) and [Abilities](#s-abilities).
 
 **Attuned things have awakenings** instead of permissions. Pump Aura into a passive one and it holds up to 2 and works for as much as it holds, spend Aura on an active one, and it all goes at the end of the scene. Each attuned thing gets you Aura its own way too. (Since 14 Nov it puts 2 on your Aura maximum instead, and a passive awakening's powered off what you've got and your maximum instead of pumped.) Summons are a d4 for each Aura and fade a size every round. See [Attunement](#s-attunement) and [Summoning](#s-summoning).
 

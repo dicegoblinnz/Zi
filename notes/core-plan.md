@@ -122,3 +122,25 @@ A chat changes only its own files, its own parts of `tests/` and its own blocks 
 ### 0. Write it down
 
 Written 16 Nov: the decisions, this plan, the calls and the line in CLAUDE.md, on `rules/2026-11-16-core` off `main`. Prompts 1 and 2 can start.
+
+### 1. The rules
+
+Landed 16 Nov from `rules/2026-11-16-core-rules`. Its calls are under 1. The rules in `notes/to-confirm.md`'s 16 Nov section.
+
+- **The Core (02)** on the new core: Roots (Title 5, permission 1), a Root's number as its dice, points and spend, How a roll adds up (a Root at full, a Root brought in, an awakening's 2 and 2 more an Aura, nothing else), Steps and Dice, a new section **Bringing In a Root** (`#s-bring`), The Roll (a point of Soul to roll again), every die an intent and splitting with no limit, Aura (5, what it buys), **Your Points** (on the old `#s-tracks`, with pushing never hurting you and 2 for 1), Catches (a big bite's a point of Soul), combos (every action brings its Root) and Study (*Foretold* for 1 Aura).
+- **Conflict (05)**, all of it bar A Full Fight, which is still stacking's for prompt 3: one action with an intent on every die, **Doing more in a round** (on the old `#s-extra-actions`), moving and answering as dice, defence from the Root and Defend on top, intercept, **Hits and Consequences** (`#s-consequences`, with deadly threats' hits on their telegraphs), the conditions on points, vulnerabilities as more hits, **Wounds, Scars and the Blaze** (on `#s-blaze`), and Healing with Toll and the quick heal at 1 point.
+- **Downtime (12)**: everything back as it starts, Recover's now **Mend** (on the old `#recover`, which 03 and the companion link to), and a point of Soul to roll again.
+- **Appendix D, the glossary, the change log entry `c-2026-11-16-core`** (with a Since 16 Nov note on each older entry it replaces), and the new retired words in `tools/check_terms.py` (the tracks and their names, extra actions, counting what's on your sheet, bringing something in, Aura from attuned things and powering, a Title's 3, the old healing, and splits by action).
+- **Every id the build, the companion and the Learn deck read survives**, so nothing else had to change to build: `s-tracks`, `s-extra-actions`, `s-blaze`, `s-healing`, `recover`, `how-permissions-stack` and the rest keep their ids on the sections that took their place.
+- **One small change in prompt 5's files**: the player reference's tracks panel is gone from its second page (now *Your points, defence and threats*), since Appendix D's points section can't be drawn as tracks, and the player reference is rebuilt. The character sheet wasn't touched. Prompt 5 redraws it properly.
+
+The crew in every example are moved across by this plan's rule for saved characters, each Title's 2 more spread the way its 3 were: **Vesk** Body 11 · Mind 5 · Soul 0, **Dorrie** Body 3 · Mind 7 · Soul 6, **Bram** Body 9 · Mind 3 · Soul 4, **Isolde** Body 0 · Mind 9 · Soul 7, **Wren** Body 8 · Mind 8 · Soul 0 and **Ash** Body 0 · Mind 5 · Soul 11, each awakening locking a point of the Root it's on (Vesk's Body 10, Bram's 7, Wren's 6, Isolde's Soul 6 and Ash's 10 as their maximums, and Dorrie's pin on her Mind). If prompt 2's crew comes out different, prompt 7 brings the examples into line.
+
+For the prompts after this one:
+
+- **Prompt 2**: Appendix D's archetype lines are the plan's swaps (call 15), and a bond thread's borrow and strain are written as call 7 and 12 say. Your 03, 03a and 18 are the truth for both, so tell prompt 7 where they differ. The Shadow's coming out of hiding and the Extra action Boon have nothing left to give, since no extra actions are left (call 2).
+- **Prompt 3**: Appendix D's *Round budget* and *Threat budget* bullets still have stacking's numbers, and the player reference keeps them out, so move them with Running the Game's. Conflict's Telegraphs and Multipliers and the glossary point at Running the Game and name no numbers. Deadly threats' hits (call 11) want a tag in the Tag Reference and a line in the Threat Builder. The Learn deck's 25 cards on these sections are named by the build.
+- **Prompt 4**: the companion's rules on tap read these sections' new words already, by the same ids.
+- **Prompt 5**: redraw the player reference's second page for points, wounds and Toll.
+
+Prompts 3 to 6 can start once prompt 2 has landed too.
