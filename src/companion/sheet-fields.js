@@ -14,20 +14,18 @@
 export const ROWS = {
   titles: 6, perms: 6,
   archetypes: 3, abilities: 6,
-  attuned: 2, awakenings: 6, powering: 2,
+  attuned: 2, awakenings: 6,
   armour: 2, boxes: 3,
-  conditions: 4, scars: 5,
+  conditions: 4, scars: 2,
   bonds: 4, threads: 3,
   equipment: 3, utility: 3, bag: 10,
   notes: 4,
 };
 export const ROOTS = ["body", "mind", "soul"];
-export const TRACKS = ["stamina", "confidence", "resolve"];
+// Each Root's wound, by its name on the paper.
+export const WOUNDS = { body: "Bloodied", mind: "Frayed", soul: "Hollow" };
 export const DICE = ["d2", "d4", "d6", "d8", "d10", "d12"];
-// The sizes a Scar can lock on a track, from the bottom up.
-export const LOCKS = [2, 4, 6, 8, 10];
 export const STAGES = ["awakened", "tempered", "perfected"];
-export const WAKES = ["passive", "active"];
 export const THREADS = ["bond", "hostile"];
 
 const range = (n) => Array.from({ length: n }, (_, i) => i + 1);
@@ -38,27 +36,28 @@ export function sheetFields() {
   const check = (name) => out.push({ name, kind: "check" });
   const radio = (name, values) => out.push({ name, kind: "radio", values });
 
-  // The front: who, Aura and stride, each Root with where it comes from and
-  // its track, conditions, Scars, the Aspiration, the Party Goal, points,
-  // what you carry and your attuned things.
-  for (const f of ["name", "pronouns", "player", "aura_now", "aura_max", "aura_powering", "stride"]) text(f);
-  ROOTS.forEach((r, k) => {
-    text(`root_${r}`);
+  // The front: who, Aura, Toll and stride, then each Root (on the new core,
+  // 16 Nov 2026): its number and its dice, where its points came from, what
+  // it holds once its awakenings and Scars have locked theirs, the points it
+  // has now, its wound, its Scars and its armour. Then conditions, the
+  // Aspiration, the Party Goal, points, what you carry and your attuned
+  // things, each awakening with the Root it locks.
+  for (const f of ["name", "pronouns", "player", "aura_now", "aura_max", "toll", "stride"]) text(f);
+  for (const r of ROOTS) {
+    for (const f of ["", "_dice"]) text(`root_${r}${f}`);
     for (const i of range(ROWS.titles)) text(`root_${r}_title_${i}`);
-    text(`root_${r}_permissions`);
-    const t = TRACKS[k];
-    radio(t, DICE);
-    for (const d of LOCKS) check(`${t}_scar_${d}`);
+    for (const f of ["permissions", "locked", "holds", "now"]) text(`root_${r}_${f}`);
+    check(`root_${r}_wound`);
+    for (const i of range(ROWS.scars)) text(`root_${r}_scar_${i}`);
     for (const i of range(ROWS.armour)) {
-      text(`${t}_armour_${i}`);
-      for (const j of range(ROWS.boxes)) check(`${t}_armour_${i}_box_${j}`);
+      text(`root_${r}_armour_${i}`);
+      for (const j of range(ROWS.boxes)) check(`root_${r}_armour_${i}_box_${j}`);
     }
-  });
+  }
   for (const i of range(ROWS.conditions)) {
     text(`condition_${i}`);
     radio(`condition_${i}_die`, DICE);
   }
-  for (const i of range(ROWS.scars)) text(`scar_${i}`);
   text("aspiration");
   radio("aspiration_die", DICE);
   text("party_goal");
@@ -74,8 +73,7 @@ export function sheetFields() {
     for (const f of ["catch", "burden"]) text(`attune_${a}_${f}`);
     for (const i of range(ROWS.awakenings)) {
       text(`attune_${a}_awakening_${i}`);
-      radio(`attune_${a}_awakening_${i}_kind`, WAKES);
-      for (const j of range(ROWS.powering)) check(`attune_${a}_awakening_${i}_aura_${j}`);
+      radio(`attune_${a}_awakening_${i}_root`, ROOTS);
     }
   }
 
@@ -92,7 +90,6 @@ export function sheetFields() {
   }
   for (const a of range(ROWS.archetypes)) {
     text(`archetype_${a}`);
-    radio(`archetype_${a}_track`, TRACKS);
     for (const f of ["mechanic", "mechanic_more", "trait", "trait_more"]) text(`archetype_${a}_${f}`);
     for (const k of range(ROWS.abilities)) text(`archetype_${a}_ability_${k}`);
   }

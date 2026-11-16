@@ -224,9 +224,25 @@ Built 16 Nov on `rules/2026-11-16-core-gm`. Its calls are under 3 in `notes/to-c
 
 What the other prompts need from it:
 
-- **5:** Appendix A's *The character sheet* section still describes the paper sheet and the player reference on stacking (its paragraph on the reference's four pages, Aura less powering, extra actions, tracks, home tracks), since it's yours. The player reference's budgets come off Appendix D, which has the new ones.
 - **6:** a telegraph from a *Deadly* threat is 2 hits or more, and costs its steps once for each hit.
-- **7:** Chapter 07, Magic, still has stacking's words (9 retired-word lines), and so does Appendix A's character sheet till 5 lands. The site's search check looks for *Stamina*.
+- **7:** Chapter 07, Magic, still has stacking's words (9 retired-word lines). The site's search check looks for *Stamina*. Prompt 5 landed before this one, so the sheets were built again on both.
+
+### 5. The builder, downtime and print
+
+Built 16 Nov on `rules/2026-11-16-core-build` and landed. Its calls are in `notes/to-confirm.md` under 16 Nov, 5.
+
+- **The builder (`builder.js`, build `v: 5`):** a Title spreads 5 with All on and a stepper on each Root (`nudgeSpread()`, exported, which downtime uses too), each awakening picks the Root it fits (`awk: [{ name, root, text }]`, no passive or active), and the sheet it makes says `core: true`. Aura's 5 and 2 for each Aura Boon, with no tracks on the numbers. The Roots step says what each Root holds once its awakenings have locked their points, a Root at 0, and the awakenings, in place of everything that was a step. A build from stacking (`v: 4`) has each Title's 3 made 5 (`R.toFive()`, `three` on the Title till it's saved, and the sheet goes out spread 3 without `core`, so `roots.js` flags it `five` the same way) and each awakening on their biggest Root (`guessed`), with a note in Change, and one from before stacking or before Roots spreads 5 (`spreadFor()`). `checksOf()` warns on an awakening with no Root and one with no point to lock.
+- **The other ways in (`ways.js`):** `fromCrew()` carries each awakening's Root, and `randomBuild()` spreads 5 and swaps the attuned thing for one of the book's that fits their Roots when its awakening's Root is at 0. 1000 of 1000 pass every check on 35.
+- **Downtime (`downtime.js`):** everything back first (`R.downtimeRest()`), said on the card (Mind 2 to 9, Frayed gone, 2 Toll gone), no Recover slot (Mend's its own), the Aspiration rolled on a Root at full, rolling again a point of Soul, a new Title spreading 5, and an awakening, a new one or an Aspiration's attuned thing's, with its Root. What it grows lands on a full character (`R.capOf()` on the sheet with it grown), then the Soul paid comes off.
+- **Print and the paper (`print.js`, `sheet-fields.js`, `scripts/sheets/`):** each Root's number, dice, where it came from, what's locked, what it holds, the points it has now, its wound by name, two Scar lines and two armour lines; Toll beside Aura and stride; Getting it back beside conditions; each awakening rings B, M or S; no home track; an ability says its cost only past 1 Aura. Print reads any state as `normalCore()` moves it, so a stacking state prints full, its Scars on their Roots. The player reference's second page opens on a Root's points, drawn (`points()` in `player-reference.mjs`, its words checked against Appendix D's Your points). `src/pages/sheets.astro` says so too, the one file off my list.
+- **Appendix A's The character sheet** on the new core, with Vesk's front and back as examples.
+- **Checks:** `tests/check-companion.mjs` parts 1f (print field by field, a stacking state printed, Vesk Bloodied mid-scene and Rook past the paper's room), 5, 5b and 5c (Vesk built with All on and the steppers, her hook on her Body, a build from stacking made 5), 6, 8 (Isolde's week on the new core with no browser, then Vesk's on the phone), 8b and 9 (the crew growing on the new core, a Title grown on stacking made 5).
+
+For the prompts after this one:
+
+- **4:** the play screen still keeps stacking's state (`v: 3`, tracks), so downtime has a bridge (`onCore()`): on a state with `pts` it's the new core, and on one without, everything back is every track on d12 and rolling again's 1 Resolve. Once the play screen's on `normalCore()`, downtime needs nothing more, but `endScene()` straight after `dt.apply()` in `finishDowntime()` shouldn't roll a scene's recovery on a character downtime's just filled (Toll's 0 already). Part 8's Vesk on the phone expects stacking's words (*Stamina d4 to d12*), so change them to her points when the play screen moves (the no-browser half already plays the new core), and parts 5c and 6 take a state on either.
+- **3:** the player reference's points panel reads Appendix D's Your points for *Hits:*, *Wounds:*, the three wounds, *Scar:*, *Blaze:*, *Toll:*, *a heal loses 5 for each Toll* and *Downtime puts everything back*, and the build stops if they go.
+- **7:** CLAUDE.md's lines on the builder, downtime, print and the paper sheet.
 
 ### 6. The live table
 

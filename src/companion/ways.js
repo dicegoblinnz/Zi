@@ -1,4 +1,5 @@
-// The other ways into the builder on stacking: one of the crew to start from,
+// The other ways into the builder on the new core (each Title spreading 5,
+// each awakening on the Root it locks): one of the crew to start from,
 // or random in one tap. Both make an ordinary build (builder.js), so the
 // player can change anything before saving, and the builder's warnings still
 // apply. A blank sheet is just blankBuild() on one page.
@@ -57,7 +58,7 @@ export function fromCrew(c, B, { keep = false } = {}) {
   const things = Array.isArray(c.attuned) ? c.attuned : c.attuned ? [c.attuned] : [];
   b.attuned = things.map((a) => ({
     name: a.name, props: a.props ?? "", stage: keep ? a.stage || "Awakened" : "Awakened", catch: a.catch ?? "", burden: keep ? a.burden ?? "" : "",
-    awk: (a.awakenings ?? []).slice(0, keep ? 6 : 2).map((w) => ({ name: w.name, kind: w.kind === "active" ? "active" : "passive", text: w.text })),
+    awk: (a.awakenings ?? []).slice(0, keep ? 6 : 2).map((w) => ({ name: w.name, root: ROOTS.includes(w.root) && !w.guessed ? w.root : "", text: w.text })),
   }));
   if (!b.attuned.length) b.attuned = blankBuild().attuned;
   const own = c.threads.flatMap((p) => p.threads.filter((t) => keep || !theirs(t)).map((t) => ({ person: p.person, text: t.text, kind: kindOf(t), whose: keep ? whoseOf(t) : "", ...(keep && t.strained ? { strained: true } : {}) })));
@@ -151,11 +152,11 @@ export function randomBuild(B, crew, rand = Math.random) {
   // awakening, and now and then a Catch for a second.
   const thing = pick(B.things ?? [], rand);
   if (thing) {
-    const first = thing.awakenings.find((w) => w.kind === "passive") ?? thing.awakenings[0];
-    const awk = [{ name: first.name, kind: first.kind, text: first.text }];
+    const first = thing.awakenings[0];
+    const awk = [{ name: first.name, root: first.root ?? "", text: first.text }];
     const second = thing.awakenings.find((w) => w !== first);
     const withCatch = second && rand() < 0.4 ? pick(B.catches ?? [], rand)?.name ?? "" : "";
-    if (withCatch) awk.push({ name: second.name, kind: second.kind, text: second.text });
+    if (withCatch) awk.push({ name: second.name, root: second.root ?? "", text: second.text });
     b.attuned = [{ name: thing.name, props: "", stage: "Awakened", catch: withCatch, burden: "", awk }];
   }
 
@@ -193,6 +194,23 @@ export function randomBuild(B, crew, rand = Math.random) {
     const lean = IDEA_ROOT[t.idea] ?? "Body";
     t.roots = spreadFor([lean, lean, ...t.perms.map((p) => p.root)]);
     delete t.pool;
+  }
+
+  // Each awakening locks a point of its Root, so the attuned thing's has to
+  // fit a Root they've got points on. If it doesn't, another of the book's
+  // things that does takes its place, with the same Catch, so it costs the
+  // same.
+  const roots = { Body: 0, Mind: 0, Soul: 0 };
+  for (const t of b.titles) for (const r of ROOTS) roots[r] += (t.roots[r] ?? 0) + t.perms.filter((p) => p.root === r).length;
+  const fitsRoots = (list) => {
+    const lock = { Body: 0, Mind: 0, Soul: 0 };
+    return list.every((w) => ROOTS.includes(w.root) && ++lock[w.root] <= roots[w.root]);
+  };
+  const a0 = b.attuned[0];
+  if (a0?.name && !fitsRoots(a0.awk)) {
+    const n = a0.awk.length;
+    const other = pick((B.things ?? []).filter((x) => x.awakenings.length >= n && fitsRoots(x.awakenings.slice(0, n))), rand);
+    if (other) b.attuned = [{ ...a0, name: other.name, awk: other.awakenings.slice(0, n).map((w) => ({ name: w.name, root: w.root, text: w.text })) }];
   }
 
   // What they carry with what's left: a weapon, a utility item, maybe plain

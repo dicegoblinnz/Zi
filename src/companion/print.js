@@ -6,11 +6,15 @@
 // sheet's own (src/companion/sheet-fields.js, which the sheet's build draws
 // every one of), and a name the blank sheet hasn't got comes back in missing,
 // so a renamed field never goes quietly. tests/check-companion.mjs reads a
-// printed character back field by field.
+// printed character back field by field. On the new core (16 Nov 2026) the
+// front has each Root's number and dice, what's locked and what it holds,
+// its points now, its wound and its Scars, with Toll and Aura, and each
+// awakening rings the Root it locks.
 import { threadState } from "./threads.js";
 import { nameOf, piecesOf, tickedOf, withQuality } from "./armour.js";
 import * as R from "./roots.js";
 import { ROWS } from "./sheet-fields.js";
+import { diceLabel, stepsToDice } from "./dice.js";
 
 const SHEET = "/sheets/zidara-character-sheet.pdf";
 // A Boon as it's written on the paper.
@@ -18,7 +22,6 @@ const boonLine = (b) => `Boon, ${b.name ? `${b.name} (${b.lever})` : b.lever}${b
 const PRONOUNS = { her: "she, her", him: "he, him", them: "they, them" };
 const TIMES = ["", "", "twice", "three times", "four times"];
 const NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
-const TN = (t) => R.TRACK[t]?.name ?? t;
 const key = (r) => r.toLowerCase();
 
 // Words off the book, which can carry a little HTML or a chapter's *italics*,
@@ -45,7 +48,11 @@ const traitLine = (t) => {
 
 // blank is the sheet's bytes, when they're to hand already (the checks pass
 // them), and otherwise it's fetched, from the service worker when offline.
-export async function fillSheet(ch, c, s, { goal = null, B = null, blank = null } = {}) {
+export async function fillSheet(ch, c, s0, { goal = null, B = null, blank = null } = {}) {
+  // Where they are now, on the new core: a state from before it (the play
+  // screen's, till it's on the new core too) is read the way it'll move
+  // across, every Root full and a track's Scars on its Root.
+  const s = s0?.v === 4 && s0.pts ? s0 : R.normalCore(s0, c);
   const [{ PDFDocument, StandardFonts }, bytes] = await Promise.all([
     import("pdf-lib"),
     blank ?? fetch(SHEET).then((res) => {
@@ -155,7 +162,7 @@ export async function fillSheet(ch, c, s, { goal = null, B = null, blank = null 
     return fits(size);
   };
   // Several things down a card's rows, all at one size: each gets the rows
-  // it needs, at the rows' own size or smaller (down to 6) till they all fit,
+  // it needs, at the rows' own size or smaller (down to 5.5) till they all fit,
   // so a thing with one awakening gets its words in full. When even that's
   // too many, each gets a row and the spare ones go to whichever wraps, first
   // come first served. It hands back each one's first row.
@@ -170,7 +177,7 @@ export async function fillSheet(ch, c, s, { goal = null, B = null, blank = null 
     let size = f0 ? sizeOf(f0) : 8;
     let need = needAt(size);
     const total = (list) => list.reduce((a, b) => a + b, 0);
-    while (total(need) > names.length && size > 6) {
+    while (total(need) > names.length && size > 5.5) {
       size -= 0.5;
       need = needAt(size);
     }
@@ -206,47 +213,55 @@ export async function fillSheet(ch, c, s, { goal = null, B = null, blank = null 
   const them = c.pronoun === "him" ? "him" : c.pronoun === "her" ? "her" : "them";
   const notes = [];
 
-  // The front: who, Aura, what's powering awakenings off its maximum, and
-  // stride, each Root with where its points came from and its track, Scars
-  // and armour, conditions, Scars, the Aspiration and the Party Goal,
-  // points, kit and attuned things.
+  // The front: who, Aura, Toll and stride, each Root with its dice, where
+  // its points came from, what's locked and what it holds, its points now,
+  // its wound, its Scars and its armour, then conditions, the Aspiration and
+  // the Party Goal, points, kit and attuned things.
   put("name", ch.name);
   put("pronouns", PRONOUNS[c.pronoun]);
   put("aura_now", s.aura);
-  put("aura_max", n.aura);
-  num("aura_powering", R.poweredOf(s));
+  put("aura_max", R.auraMax(c, s));
+  num("toll", s.toll);
   put("stride", n.stride);
+  const locked = R.lockedOf(c, s);
   for (const r of R.ROOTS) {
-    put(`root_${key(r)}`, c.roots[r] ?? 0);
-    c.titles.slice(0, ROWS.titles).forEach((t, i) => num(`root_${key(r)}_title_${i + 1}`, t.roots?.[r]));
-    num(`root_${key(r)}_permissions`, c.titles.reduce((k, t) => k + t.permissions.filter((p) => p.root === r).length, 0));
-  }
-  for (const t of R.TRACKS) {
-    ring(t, `d${s.tracks[t]}`);
-    // A Scar locks a track's smallest size, from d2 up.
-    for (let k = 0; k < s.scars[t].length && k < R.MAX_SCARS; k++) tick(`${t}_scar_${2 + 2 * k}`);
+    const at = `root_${key(r)}`;
+    const total = c.roots[r] ?? 0;
+    put(at, total);
+    put(`${at}_dice`, total ? diceLabel(stepsToDice(total)) : "nothing");
+    c.titles.slice(0, ROWS.titles).forEach((t, i) => num(`${at}_title_${i + 1}`, t.roots?.[r]));
+    num(`${at}_permissions`, c.titles.reduce((k, t) => k + t.permissions.filter((p) => p.root === r).length, 0));
+    num(`${at}_locked`, locked[r]);
+    // What it holds, less the half a wound takes, said on Notes.
+    put(`${at}_holds`, Math.max(0, total - locked[r]));
+    put(`${at}_now`, s.pts?.[r] ?? 0);
+    if (s.wound?.[r]) {
+      tick(`${at}_wound`);
+      notes.push(`${R.WOUNDS[r]}: your ${r} heals only to ${R.capOf(c, s, r)} till downtime.`);
+    }
+    // Each Scar's Catch on its line. One that hasn't been written yet still
+    // takes its line.
+    const scars = (s.scars?.[r] ?? []).map((x) => x || "a Scar");
+    scars.slice(0, ROWS.scars).forEach((x, i) => put(`${at}_scar_${i + 1}`, x));
+    if (scars.length > ROWS.scars) notes.push(`More Scars on ${r}: ${scars.slice(ROWS.scars).join(", ")}.`);
     // Each piece of armour on this Root, its boxes ticked on its first line,
     // and a piece that's said when it counts gets the next line too if it's free.
-    const pieces = piecesOf(c).filter((a) => (a.root ?? "Body") === R.TRACK[t].root);
+    const pieces = piecesOf(c).filter((a) => (a.root ?? "Body") === r);
     const shown = pieces.slice(0, ROWS.armour);
-    const rows = Array.from({ length: ROWS.armour }, (_, i) => `${t}_armour_${i + 1}`);
-    share(rows, shown.map((a) => `${withQuality(a.name, a.quality)}${a.when ? `, ${a.when}` : ""}${s.crossed[`equipment|${a.name}`] ? " (broken)" : ""}`)).forEach((r, i) => {
-      for (let j = 1; j <= Math.min(ROWS.boxes, tickedOf(s, shown[i])); j++) tick(`${rows[r]}_box_${j}`);
+    const rows = Array.from({ length: ROWS.armour }, (_, i) => `${at}_armour_${i + 1}`);
+    share(rows, shown.map((a) => `${withQuality(a.name, a.quality)}${a.when ? `, ${a.when}` : ""}${s.crossed[`equipment|${a.name}`] ? " (broken)" : ""}`)).forEach((k, i) => {
+      for (let j = 1; j <= Math.min(ROWS.boxes, tickedOf(s, shown[i])); j++) tick(`${rows[k]}_box_${j}`);
     });
     // A Boon can give a piece more boxes than its line has.
-    for (const a of shown.filter((x) => x.boxes > ROWS.boxes)) notes.push(`Armour on ${R.TRACK[t].root}: ${withQuality(a.name, a.quality)} has ${a.boxes} boxes, ${tickedOf(s, a)} ticked.`);
-    for (const a of pieces.slice(ROWS.armour)) notes.push(`Armour on ${R.TRACK[t].root}: ${withQuality(a.name, a.quality)}, ${tickedOf(s, a)} of ${a.boxes} ${a.boxes === 1 ? "box" : "boxes"} ticked.`);
+    for (const a of shown.filter((x) => x.boxes > ROWS.boxes)) notes.push(`Armour on ${r}: ${withQuality(a.name, a.quality)} has ${a.boxes} boxes, ${tickedOf(s, a)} ticked.`);
+    for (const a of pieces.slice(ROWS.armour)) notes.push(`Armour on ${r}: ${withQuality(a.name, a.quality)}, ${tickedOf(s, a)} of ${a.boxes} ${a.boxes === 1 ? "box" : "boxes"} ticked.`);
   }
+  if (s.blaze) notes.push(`A Scar on your ${s.blaze} waits for its Catch.`);
   s.conditions.slice(0, ROWS.conditions).forEach((x, i) => {
     put(`condition_${i + 1}`, x.name);
     ring(`condition_${i + 1}_die`, `d${x.die}`);
   });
   for (const x of s.conditions.slice(ROWS.conditions)) notes.push(`Condition, ${x.name} (d${x.die}).`);
-  // Each Scar's Catch goes on its line with the track it's on. One that
-  // hasn't been written yet still takes its line.
-  const scars = R.TRACKS.flatMap((t) => s.scars[t].map((x) => `${x || "a Scar"} (${TN(t)})`));
-  scars.slice(0, ROWS.scars).forEach((x, i) => put(`scar_${i + 1}`, x));
-  if (scars.length > ROWS.scars) notes.push(`More Scars: ${scars.slice(ROWS.scars).join(", ")}.`);
   put("aspiration", s.aspText || c.aspiration.text);
   ring("aspiration_die", `d${s.asp}`);
   // In a campaign, the Party Goal's where the party sheet has it.
@@ -271,41 +286,26 @@ export async function fillSheet(ch, c, s, { goal = null, B = null, blank = null 
   if (c.carry.keepsake) put("keepsake", s.crossed[`keepsake|${c.carry.keepsake}`] ? `${c.carry.keepsake} (used)` : c.carry.keepsake);
   lines("bag", kit("bag", c.carry.bag?.items ?? []), ROWS.bag);
 
-  // Each attuned thing, with its awakenings and what's powering each passive
-  // one, ticked beside it and shared across the same awakening taken twice.
-  const power = s.power ?? {};
-  const powering = (i, list) => {
-    const held = {};
-    return list.map((w) => {
-      if (w.kind === "active") return 0;
-      const k = `${i}|${w.name}`;
-      const here = Math.max(0, Math.min(R.HOLDS, (power[k] ?? 0) - (held[k] ?? 0)));
-      held[k] = (held[k] ?? 0) + here;
-      return here;
-    });
-  };
+  // Each attuned thing, with its awakenings and the Root each one locks,
+  // ringed beside it.
   const thingName = (a) => plain(a.props ? `${a.name} (${a.props})` : a.name);
   const wakeLine = (w) => `${plain(w.name)}: ${plain(w.text)}`;
+  const wakeNote = (w) => `${plain(w.name)} (${w.root || "no Root yet"})`;
   c.attuned.slice(0, ROWS.attuned).forEach((a, i) => {
     const at = `attune_${i + 1}`;
     put(`${at}_thing`, thingName(a));
     ring(`${at}_stage`, (a.stage || "Awakened").toLowerCase());
     put(`${at}_catch`, plain(a.catch));
     put(`${at}_burden`, plain(a.burden));
-    const held = powering(i, a.awakenings);
     const shown = a.awakenings.slice(0, ROWS.awakenings);
     const rows = Array.from({ length: ROWS.awakenings }, (_, j) => `${at}_awakening_${j + 1}`);
     share(rows, shown.map(wakeLine)).forEach((r, j) => {
-      const w = shown[j];
-      ring(`${rows[r]}_kind`, w.kind === "active" ? "active" : "passive");
-      for (let k = 1; k <= Math.min(ROWS.powering, held[j]); k++) tick(`${rows[r]}_aura_${k}`);
+      if (R.ROOTS.includes(shown[j].root)) ring(`${rows[r]}_root`, key(shown[j].root));
     });
-    a.awakenings.slice(ROWS.awakenings).forEach((w, j) => notes.push(said(`${thingName(a)}, ${plain(w.name)} (${w.kind}${held[ROWS.awakenings + j] ? `, ${held[ROWS.awakenings + j]} Aura powering it` : ""}): ${plain(w.text)}`)));
+    a.awakenings.slice(ROWS.awakenings).forEach((w) => notes.push(said(`${thingName(a)}, ${wakeNote(w)}: ${plain(w.text)}`)));
   });
-  c.attuned.slice(ROWS.attuned).forEach((a, k) => {
-    const i = ROWS.attuned + k;
-    const held = powering(i, a.awakenings);
-    notes.push(`Attuned, ${thingName(a)}, ${a.stage}${a.catch ? `, its Catch ${plain(a.catch)}` : ""}${a.burden ? `, its Burden ${plain(a.burden)}` : ""}: ${a.awakenings.map((w, j) => `${plain(w.name)} (${w.kind}${held[j] ? `, ${held[j]} Aura powering it` : ""}), ${plain(w.text).replace(/[.]$/, "")}`).join(" · ") || "no awakenings yet"}.`);
+  c.attuned.slice(ROWS.attuned).forEach((a) => {
+    notes.push(`Attuned, ${thingName(a)}, ${a.stage}${a.catch ? `, its Catch ${plain(a.catch)}` : ""}${a.burden ? `, its Burden ${plain(a.burden)}` : ""}: ${a.awakenings.map((w) => `${wakeNote(w)}, ${plain(w.text).replace(/[.]$/, "")}`).join(" · ") || "no awakenings yet"}.`);
   });
 
   // The back: Titles with their spread and each permission's Root, the
@@ -338,12 +338,13 @@ export async function fillSheet(ch, c, s, { goal = null, B = null, blank = null 
     if (over.length) notes.push(said(`On Title ${NUMERALS[i]}: ${over.map((x) => (x.root ? `${x.text} (${x.root})` : x.text)).join(", ")}`));
   });
   c.titles.slice(ROWS.titles).forEach((t, k) => notes.push(said(`Title ${NUMERALS[ROWS.titles + k] ?? ROWS.titles + k + 1}, ${t.text ?? t.name} (${spreadNote(t)}): ${[...t.permissions.map(permWords), ...(t.boons ?? []).map(boonLine)].join(", ") || "no permissions yet"}`)));
-  const ability = (a, x) => `${x.name} (1 ${TN(a.home)}): ${plain(x.text ?? x.html)}`;
+  // An ability's 1 Aura unless it says, the way the card's hint has it, so
+  // only one that costs more says so.
+  const ability = (a, x) => `${x.name}${Number(x.cost) > 1 ? ` (${Number(x.cost)} Aura)` : ""}: ${plain(x.text ?? x.html)}`;
   const archs = R.archetypesOf(c, B);
   archs.slice(0, ROWS.archetypes).forEach((a, i) => {
     const at = `archetype_${i + 1}`;
     put(at, a.times > 1 ? `${a.name}, ${TIMES[a.times] ?? `${a.times} times`}` : a.name);
-    ring(`${at}_track`, a.home);
     flow([`${at}_mechanic`, `${at}_mechanic_more`], plain(a.for || a.summary));
     flow([`${at}_trait`, `${at}_trait_more`], traitLine(a.trait));
     share(Array.from({ length: ROWS.abilities }, (_, j) => `${at}_ability_${j + 1}`), a.abilities.slice(0, ROWS.abilities).map((x) => ability(a, x)));
@@ -351,7 +352,7 @@ export async function fillSheet(ch, c, s, { goal = null, B = null, blank = null 
   });
   for (const a of archs.slice(ROWS.archetypes)) {
     const trait = traitLine(a.trait);
-    notes.push(`Archetype, ${a.times > 1 ? `${a.name}, ${TIMES[a.times] ?? `${a.times} times`}` : a.name} (home ${TN(a.home)})${trait ? `, its Trait ${trait.replace(/\.$/, "")}` : ""}: ${a.abilities.map((x) => x.name).join(", ") || "no abilities yet"}.`);
+    notes.push(`Archetype, ${a.times > 1 ? `${a.name}, ${TIMES[a.times] ?? `${a.times} times`}` : a.name}${trait ? `, its Trait ${trait.replace(/\.$/, "")}` : ""}: ${a.abilities.map((x) => x.name).join(", ") || "no abilities yet"}.`);
   }
 
   // A thread in someone else's words says whose, the way the companion does,
