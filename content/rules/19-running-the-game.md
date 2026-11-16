@@ -259,7 +259,7 @@ One win, one tag is right for most threats. A boss that should last needs more t
 -   **Keep the way in open.** A weak point still ends it, an opening takes two whole tags off a boss, multipliers and all, and Study can find what's under the first one, so a clever crew never has to grind through the lot.
 
 :::example[Making Redhand last]
-Redhand, the boss in [The Threat Builder](#threat-builder), started as three plain tags and a weak point. Against a starting crew of four, he'd often fall in the second round. His Challenge is 6, so his multipliers start at 4, and his armour's what makes him a wall, so it gets that one: *Armoured ×4 (first)*. His feeding's part of him too, but a smaller part, so it's *Feeds ×3*, and *Relentless* stays plain. That's eight wins the long way: four through his armour, one for *Relentless*, and three to stop him feeding. A crew of four lands three or four wins a round, and some of them go on his people, so most crews will spend three or four rounds on him, or one, if they've read Vane's ledger and say his name.
+Redhand, the boss in [The Threat Builder](#threat-builder), started as three plain tags and a weak point. Against a starting crew of four, he'd often fall in the first round. His Challenge is 6, so his multipliers start at 4, and his armour's what makes him a wall, so it gets that one: *Armoured ×4 (first)*. His feeding's part of him too, but a smaller part, so it's *Feeds ×3*, and *Relentless* stays plain. That's eight wins the long way: four through his armour, one for *Relentless*, and three to stop him feeding. A crew of four lands three or four wins a round, so that's two or three rounds on him, longer with his people in the way, or one, if they've read Vane's ledger and say his name.
 :::
 
 ### Hidden tags and weak points {#hidden-tags-and-weak-points}
@@ -296,7 +296,7 @@ Your **threat budget** says how much your threats can take, and how long a scene
 | New Titles each | A character | Four characters | Multipliers |
 | --- | --- | --- | --- |
 | None (a starting crew) | 16 | **64** | As they're written |
-| One | 22 | **88** | Nearly half again |
+| One | 22 | **88** | A bit over a third bigger |
 | Two | 28 | **112** | Three quarters bigger |
 | Three | 34 | **136** | A bit over twice as big |
 
@@ -326,7 +326,7 @@ With four players that's 48 steps: a d10 at each of their Bodies and 28 more for
 -   **Spend it on everything.** Threats, the ground, events, stakes, and anything else you decide the scene needs. A telegraph aimed at a clock or a stake is as good as one aimed at a character, and often better.
 -   **Not all of it at bodies.** One die at each of the crew's Body is a fair round, so at Even, spend the rest on their Mind and their Soul, control, position, stakes, clocks and words.
 -   **At Hard, pile it on.** In the fight of the session, put the first die at each of their Bodies, then two or three more from different threats at whoever's hurting most. That's what wears a Root down to nothing, and getting someone Bloodied in round 3 or 4 is about right.
--   **Count the dice at each Root, not just the steps.** Every die at someone lands unless they stop it, and each of their dice stops one. Their Root splits its whole number to meet what's coming, so more dice at one Root means smaller dice meeting them. A d12 at Bram's Body meets his d12 and his d6, and it probably doesn't get through. Three d6s at his Body are fewer steps, but his 9 split three ways is three d6s, and one of theirs usually gets through. A d6 at his Body and a d6 at his Mind are two different Roots, though, and each gets its own roll.
+-   **Count the dice at each Root, not just the steps.** Every die at someone lands unless they stop it, and each of their dice stops one. Their Root splits its whole number to meet what's coming, so more dice at one Root means smaller dice meeting them. A d12 at Bram's Body meets his d12 and his d6, and it probably doesn't get through. Three d6s at his Body are smaller dice, but his 9 split three ways is three d6s, and one of theirs usually gets through. A d6 at his Body and a d6 at his Mind are two different Roots, though, and each gets its own roll.
 -   **More hits cost more.** A telegraph that's 2 hits, from a deadly threat, costs its steps twice, and 3 hits three times.
 -   **One die at each person.** A threat can telegraph at as many of the crew as the story allows, but it only aims one die at each of them, unless a tag says it can do more, like *Flurry*. To spread them thin, aim at more of them, not more dice at one.
 -   **Answered telegraphs still count.** You spent the pressure, and the crew stopping it is what it was for.

@@ -78,7 +78,7 @@ Picking a lock with all night and nobody around, Vesk's d12 and her d10 can both
 Before you roll, give every die an **intent**: what it's trying to do, and who or what it's aimed at. Whatever you gave the die, that's what happens if it wins. A target rolls its defence once a round, and each of your dice has to beat that one roll. Put more than one die on the same intent and that's **advantage**: your best die counts.
 
 :::example
-Bram and Wren throw three d12s at the guard captain: one to disarm him, one to floor him and one to make him give up. His d10 rolls 6. Theirs come up 9, 4 and 6, so he's disarmed, he keeps his feet, and the tie's his, so he won't give up.
+Bram and Wren go at the guard captain, 17 steps, two d12s and a d10: to disarm him, floor him and make him give up. His d10 rolls 6. Theirs come up 9, 4 and 6, so he's disarmed, he keeps his feet, and the tie's his.
 :::
 ::::
 
