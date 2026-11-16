@@ -5,6 +5,28 @@ updated: 2026-11-16
 ---
 This is the record of every rules change since the 2 Oct 2026 book, newest first. Each entry's date is the day the change went to the table. When a later change replaces an earlier one, the earlier entry says so. The rules chapters always show the game as it is now, so if you only want to play, read those and skip this.
 
+## 16 Nov 2026: The GM's budgets, for the new core {#c-2026-11-16-budgets}
+
+To go with [The new core](#c-2026-11-16-core). With one action each and one Root a roll, a crew lands about a third of the wins it did on stacking, three or four a round between four of them, and every point on their Roots is a hit they can take, so the numbers that keep a fight going and the ones that press the crew both moved.
+
+**Multipliers start at a threat's Challenge less 2**, so Redhand's *Armoured ×4 (first)* and *Feeds ×3* now, eight wins the long way, and a dragon's *Hide ×5*. A boss still takes three or four rounds to bring down the long way. It replaces four times its Challenge, and *Armoured ×24* and *Feeds ×15*. See [Multipliers](#s-tough-gm) and [Building a Threat, Start to Finish](#building-a-threat-start-to-finish).
+
+**The threat budget's the crew's Roots added up**, 16 for a character as they start, so 64 for four, and 6 more on a character for every new Title. Multiply every multiplier by the threat budget and divide by 64. It replaces 15 a character and a third more for every Title, archetype or attuned thing. See [The Threat Budget](#s-threat-budget).
+
+**The round budget's three quarters of the threat budget**, 48 for a starting crew of four, 12 a player, so 24 for a breather and 72 at Hard. It grows as their Roots do. It replaces about 11 steps a player. See [Telegraphs a Round](#s-budget).
+
+**At Hard, pile it on.** The first die at each of the crew's Bodies, then two or three more from different threats at whoever's hurting most. A telegraph that's 2 hits costs its steps twice. See [Spending it](#spending-it).
+
+**The fight of the session runs about 45 minutes**, four or five rounds at Hard, and the first of the crew should be Bloodied in round 3 or 4. Sooner means ease off, and nobody hurt by round 5 means push harder. See [How hard it pushes](#how-hard-it-pushes).
+
+**How long a scene runs** is everything standing in the crew's way divided by the wins they land a round, about one for each of them. It replaces all the actions they take, bought ones included. See [How long a scene runs](#s-size-scene).
+
+**A new tag, *Deadly*:** every die of it that gets through is 2 hits, or more, and its telegraphs say so. See [How it comes at you](#how-it-comes-at-you) and [Building a threat](#building-a-threat).
+
+**The *Healers* crew asset** is a second rest, once a session: one Root each, rolled unsplit, and no Toll. It replaces a track up a size each. See [Crew assets](#s-crew-tags).
+
+The book's examples are on the new core too: [A Full Fight](#s-fight), [Vesk, Session 1 to 20](#vesk-session-1-to-20) and every lever in [Appendix C](#appendix-levers).
+
 ## 16 Nov 2026: The new core, a Root at full and points that are your health {#c-2026-11-16-core}
 
 Mo's calls in chat, the second part of the rework that comes in parts, after a game designers meetup on 15 Nov.
@@ -59,11 +81,11 @@ Mo's calls in chat, part of [Stacking, and 35 points to start](#c-2026-11-14-sta
 
 To go with [Stacking, and 35 points to start](#c-2026-11-14-stacking). With everything that fits stacked, a crew lands about twice the wins a round it did, so the numbers that keep a fight going grew to match.
 
-**Every multiplier's three times what it was**, and four times a threat's Challenge is the place to start, so a boss still takes about four rounds to bring down the long way. Redhand's *Armoured ×24 (first)* and *Feeds ×15* now, forty wins in all, and a crew of four lands about ten a round. It replaces a threat's Challenge plus 2. See [Multipliers](#s-tough-gm) and [Building a Threat, Start to Finish](#building-a-threat-start-to-finish).
+**Every multiplier's three times what it was** (since 16 Nov, a threat's Challenge less 2), and four times a threat's Challenge is the place to start, so a boss still takes about four rounds to bring down the long way. Redhand's *Armoured ×24 (first)* and *Feeds ×15* now, forty wins in all, and a crew of four lands about ten a round. It replaces a threat's Challenge plus 2. See [Multipliers](#s-tough-gm) and [Building a Threat, Start to Finish](#building-a-threat-start-to-finish).
 
-**The threat budget climbs a third on each character's share for every Title, archetype or attuned thing an Aspiration gives them**, on top of the last, since each one's a step on most of their rolls and more wins buy more actions: 15 as they start, 20 with one, 27 with two, 36 with three and 48 with four. Multiply every multiplier by the threat budget and divide by 60, so it's a third bigger at 80, nearly twice as big at 108, and a bit over three times at 192. It replaces about 2.5 a character for each, and 1 more on each multiplier for every 10 over 60. See [The Threat Budget](#s-threat-budget).
+**The threat budget climbs a third on each character's share for every Title, archetype or attuned thing an Aspiration gives them** (since 16 Nov, it's the crew's Roots added up), on top of the last, since each one's a step on most of their rolls and more wins buy more actions: 15 as they start, 20 with one, 27 with two, 36 with three and 48 with four. Multiply every multiplier by the threat budget and divide by 60, so it's a third bigger at 80, nearly twice as big at 108, and a bit over three times at 192. It replaces about 2.5 a character for each, and 1 more on each multiplier for every 10 over 60. See [The Threat Budget](#s-threat-budget).
 
-**The round budget's about 11 steps a round for each player**, so a crew of four is 44 at Even, 22 for a breather and 66 at Hard, since a Defend with everything that fits stacked on it stops more than it did. It replaces about 10. See [Telegraphs a Round](#s-budget).
+**The round budget's about 11 steps a round for each player** (since 16 Nov, three quarters of the threat budget), so a crew of four is 44 at Even, 22 for a breather and 66 at Hard, since a Defend with everything that fits stacked on it stops more than it did. It replaces about 10. See [Telegraphs a Round](#s-budget).
 
 **How long a scene runs** is everything standing in the crew's way divided by all the actions they take a round, counting the ones they buy with Aura, since a stacked roll lands about once an action. It replaces half their actions. See [How long a scene runs](#s-size-scene).
 

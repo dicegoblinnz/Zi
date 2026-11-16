@@ -315,7 +315,7 @@ Say it's two Wardens, each with *Armoured ×2* and three plain tags, and two sta
 Every round you've got a number of steps to telegraph with. That's your **round budget**, and it's what keeps the pressure matched to the crew.
 
 :::rule
-**Round budget: three quarters of the threat budget.** A starting crew of four is 48, 12 steps for each of them, which is a d12 and a d12 each. Every Root rolls at full against what lands on it, split to meet it, so it takes more dice than they've got to get anything through, and every point a Root's got is a hit it can take. Split it into smaller telegraphs at more of the crew to spread them thin.
+**Round budget: three quarters of the threat budget.** A starting crew of four is 48, 12 steps for each of them, which is two d12s each. Every Root rolls at full against what lands on it, split to meet it, so it takes more dice than they've got to get anything through, and every point a Root's got is a hit it can take. Split it into smaller telegraphs at more of the crew to spread them thin.
 :::
 
 With four players that's 48 steps: a d10 at each of their Bodies and 28 more for their Minds and Souls, stakes, clocks and words, or a lot of little ones. It grows with the threat budget, so a crew with more points gets more coming at it. It's a guide, so move it to suit the table: if the crew's walking through everything, push harder, and if they're drowning, ease off.
@@ -330,7 +330,7 @@ With four players that's 48 steps: a d10 at each of their Bodies and 28 more for
 -   **More hits cost more.** A telegraph that's 2 hits, from a deadly threat, costs its steps twice, and 3 hits three times.
 -   **One die at each person.** A threat can telegraph at as many of the crew as the story allows, but it only aims one die at each of them, unless a tag says it can do more, like *Flurry*. To spread them thin, aim at more of them, not more dice at one.
 -   **Answered telegraphs still count.** You spent the pressure, and the crew stopping it is what it was for.
--   **A telegraph at several targets costs its steps once for each target.** *The fire spreads, a d8 at the Body of all three on the stair* is 12 steps. That's nearly a third of a four-player round, so save a telegraph at everyone for the moment it matters.
+-   **A telegraph at several targets costs its steps once for each target.** *The fire spreads, a d8 at the Body of all three on the stair* is 12 steps. That's a quarter of a four-player round, so save a telegraph at everyone for the moment it matters.
 -   **It refills every round.** Unspent steps don't carry over.
 -   **Within the budget, the fiction decides.** A single guard doesn't telegraph six times, but a boss with two blades might telegraph three, at three of them.
 

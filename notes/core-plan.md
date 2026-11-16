@@ -213,3 +213,17 @@ What the other prompts need from it:
 - **5:** the builder spreads `TITLE_ROOTS` (5) already. An awakening needs its `root` carried through the build (`fixAwk()` and `sheetOf()` in `builder.js`, and `fromCrew()` and `randomBuild()` in `ways.js`, which drop it, so a copy of Isolde's chalk locks her Mind, her biggest, till then), and a sheet the builder makes can say `core: true`. Print reads archetypes' `home` and the tracks, so part 1f has 47 checks waiting on it. Downtime's Recover goes to `downtimeRest()`.
 - **6:** `extraCost()` and `EXTRA_AURA` are still there for `table-rules.js` till extra actions go, and `takeHits()` is what When it lands takes.
 - **7:** Chapter 07, Magic, isn't on anyone's list, and its Summoning still has souls on a track size.
+
+### 3. The GM's side and the rest of the book
+
+Built 16 Nov on `rules/2026-11-16-core-gm`. Its calls are under 3 in `notes/to-confirm.md`'s 16 Nov section.
+
+- **`tools/fight_sim.py`** has the new core as its default (`CoreFight`, `run_core()`, `find_core_f()`): Bram, Vesk, Wren and Ash off 03b, defence from the Root split to meet what lands, hits as points, armour first, a wound at 0 and a Scar after it, played plain and hard, with the GM spreading it (`--gm even`) or piling on the lowest Body (`--gm hard`, the default), and a fight's length in minutes from `MIN_TELE`, `MIN_GO` and `MIN_LAND`. Stacking and 10 Nov stay as `--rules stack` and `--rules now`. Its top has the numbers.
+- **The numbers:** a crew lands 2.6 wins a round played plain and 3.7 hard. Redhand at *Armoured ×4*, *Feeds ×3* at Hard (72) runs 57 minutes plain and 40 hard (5.7 and 4.0 rounds), first Bloodied in round 2 and 3 at the median. So multipliers start at a Challenge less 2, the threat budget's the crew's Roots added up (64), the round budget's three quarters of it (48, Hard 72), and at Hard the GM piles on whoever's hurting.
+- **Running the Game (19)**: the budgets, multipliers and the rest on points, wounds and Aura abilities. **Conflict's A Full Fight** on the new core. **01, 04, 14, 15, 16, 17, 20, 22, 28**, Appendix A's party and faction sheets, **B** (with *Deadly*), **C** rewritten, Appendix D's budget bullets, the **index**, the **Learn deck** (all 40 cards, `checked: 2026-11-16`) and **`c-2026-11-16-budgets`**, with a Since 16 Nov note on each budget in `c-2026-11-14-budgets`.
+
+What the other prompts need from it:
+
+- **5:** Appendix A's *The character sheet* section still describes the paper sheet and the player reference on stacking (its paragraph on the reference's four pages, Aura less powering, extra actions, tracks, home tracks), since it's yours. The player reference's budgets come off Appendix D, which has the new ones.
+- **6:** a telegraph from a *Deadly* threat is 2 hits or more, and costs its steps once for each hit.
+- **7:** Chapter 07, Magic, still has stacking's words (9 retired-word lines), and so does Appendix A's character sheet till 5 lands. The site's search check looks for *Stamina*.
