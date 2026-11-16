@@ -68,7 +68,7 @@ If you've got a character in your head already, pick the archetypes that fit how
 | [Hunter](#a-hunter) | Marking a creature, so everyone rolls an extra die against it | [Ranger](#k-ranger) · [Investigator](#k-investigator) |
 | [Illusionist](#a-illusionist) | Illusions the threats believe | [Illusion](#k-illusion) |
 | [Leader](#a-leader) | Handing your steps out to friends | [Captain](#k-captain) · [Courtier](#k-courtier) · [Sailor](#k-sailor) |
-| [Maker](#a-maker) | Tags on an item for the scene, and powering a friend's awakening | [Tinker](#k-artificer) · [Artifice](#k-artifice) |
+| [Maker](#a-maker) | Tags on an item for the scene, and Aura for a friend's awakening | [Tinker](#k-artificer) · [Artifice](#k-artifice) |
 | [Oracle](#a-oracle) | Foresight: swapping the numbers it rolled into anyone's dice | [Divination](#k-divination) · [Warding](#k-wizard) · [Medium](#k-medium) · [Hexer](#k-warlock) · [Scholar](#k-scholar) · [Investigator](#k-investigator) |
 | [Shadow](#a-shadow) | A pool of dice from what you saw while you were hidden | [Rogue](#k-rogue) · [Face](#k-face) · [Streetwise](#k-streetwise) · [Veil](#k-veil) |
 | [Shifter](#a-shifter) | Collecting what animals can do | [Wildcraft](#k-druid) |
@@ -123,7 +123,7 @@ You're at Lord Vane's party, and Vesk needs to get up the stair past the guests 
 
 The Bloodsworn gets more dangerous every time they bleed.
 
-**Every point your Body loses adds 3 steps to an action.** If you lose it as you act, because you spent it, the steps go on that roll. If a hit takes it, they go on your next action. A hit that's two points, because it found a [vulnerability](#s-vulnerable), adds 6.
+**Every point your Body loses adds 3 steps to an action.** If you lose it as you act, because you spent it, the steps go on that roll. If a hit takes it, they go on your next action. Two hits from one die, because it found a [vulnerability](#s-vulnerable), add 6.
 
 :::rule
 **Trait:** *Paid in Blood*. Every point your Body loses gives you 1 Aura, whether a hit took it or you spent it yourself.
@@ -232,7 +232,7 @@ If you're a Teleporter as well, you intercept for every friend within 10 units (
 :::
 
 :::example[Three goblins]
-Three goblins telegraph a d6 each at Vesk, Wren and Isolde, all within Bram's stride, and their chief's got a d8 aimed at Bram himself. He intercepts all three for free, and that's 3 Aura for *Better Me Than You* before anything's rolled. He's Defending, so when they land his Defend's dice go in with his Body's, 9 steps each, and he makes each a d12 and a d6, four dice for four blows. The goblins land 6, 4 and 1 and the chief 7, and Bram rolls 5 and 2 on his d12s and 4 and 3 on his d6s. The 4 holds the goblin's 4, because ties go to him, and the 2 holds the 1. That leaves the 6 and the 7, and his 5 and 3 can't stop either, so he pays 1 Aura for Stand firm, and the two of them take 1 point off his Body between them. Two of his dice won, so that's 2 more Aura. He isn't acting when it comes in, so whatever takes him past his maximum goes to the crew.
+Three goblins telegraph a d6 each at Vesk, Wren and Isolde, all within Bram's stride, and their chief's got a d8 aimed at Bram himself. He intercepts all three for free, and that's 3 Aura for *Better Me Than You* before anything's rolled. He's Defending, so when they land he's got his Body twice over, his Defend's 9 steps and the landing's 9, and he makes each of them a d12 and a d6. That's four dice for four blows. The goblins land 6, 4 and 1 and the chief 7, and Bram rolls 5 and 2 on his d12s and 4 and 3 on his d6s. The 4 holds the goblin's 4, because ties go to him, and the 2 holds the 1. That leaves the 6 and the 7, and his 5 and 3 can't stop either, so he pays 1 Aura for Stand firm, and the two of them take 1 point off his Body between them. Two of his dice won, so that's 2 more Aura. He isn't acting when it comes in, so whatever takes him past his maximum goes to the crew.
 :::
 
 **Title ideas:** [Guardian](#k-guardian) · [Warding](#k-wizard) · [Faith](#k-faith)

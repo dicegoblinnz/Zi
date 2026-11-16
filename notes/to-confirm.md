@@ -39,8 +39,8 @@ Written into 03, 03a, 03b and 18 on 16 Nov, with the crew in `notes/core-plan.md
 16. **A Summoner's souls don't lock points** till the table's worked souls out on this core.
 17. **The Warrior's *Second Skin* is 1 step a piece of armour** on the roll when it lands, when Defend wasn't your action.
 18. **Boons:** Toughness's first hit takes no point, and its Burden locks a point. Recovery's 2 more, or 2 less, on each Root's roll at the end of a scene. Regen rolls the Root that's lost most, and a top face is a point back. Splits goes, since splitting has no limit, and Extra action is Acting, a Burden with no Boon.
-19. **Coin and Kit:** the Surgeon's Casebook eases Toll (*What worked*, in place of *Given an hour*), and Sister Hale's Thimble gives 3 more with every heal. A Burden that locked a track's d2 locks a point of that Root, *Others First* is the Recovery Burden, and the Lookout's Glass's *Eye to the Glass* is *Blinded* that won't fade, in place of a split.
-20. **Items are never steps.** A weapon, armour or anything you carry does what it is, and only Charge, a purse of gold and the smoke bomb say otherwise, because they say so.
+19. **Coin and Kit:** the Surgeon's Casebook eases Toll (*What worked*, in place of *Given an hour*), and Sister Hale's Thimble adds 3 to every heal roll, before Toll comes off it. A Burden that locked a track's d2 locks a point of that Root, *Others First* is the Recovery Burden, and the Lookout's Glass's *Eye to the Glass* is *Blinded* that won't fade, in place of a split.
+20. **Items are never steps on their own.** A weapon, armour or anything you carry does what it is. What changes a roll says so: a *Charge* weapon, a purse of gold, a smoke bomb, and the Warrior's *Second Skin*, which puts 1 step a piece of armour on the roll when it lands.
 21. **The *Slow* Catch's awakenings take a round to wake**, where they took two actions.
 
 ## 14 Nov: stacking

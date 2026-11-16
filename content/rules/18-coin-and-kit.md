@@ -45,7 +45,7 @@ You write one the same way as anything you attune, with a few things to watch.
 -   **A Catch carries one more awakening at Awakened, and a Burden two more at Tempered.** At Perfected it's three more for a Burden and a Catch. A Catch is trouble, and if the GM couldn't run with it at the table, it's too soft, so write another. A Burden comes off the list in [Boons and Burdens](#s-boons) with a name from the story, and it has to cost its owner something they use.
 -   **Weapons keep their properties for free.** A Tempered spear is still *Reach* and *Thrown*, and you don't spend an awakening, a Catch or a Burden on that.
 -   **Attuned armour can't break**, so it hasn't got boxes and it can't take a hit for you. An awakening like *Turn the blow* (Body), 2 steps on your Body when the telegraphs land at it, is how it holds the line, and the same awakening twice is 4. Armour for your Mind does the same on your Mind.
--   **Awakenings that heal.** Only a [Healer](#a-healer) makes a heal roll, so an awakening that fits one is 2 steps on a Healer's heals, like any awakening. A few go further. Sister Hale's Thimble gives 3 more back with every heal, and the Surgeon's Casebook's heals ignore a step of [Toll](#s-healing), the way a Healer who's come prepared does.
+-   **Awakenings that heal.** Only a [Healer](#a-healer) makes a heal roll, so an awakening that fits one is 2 steps on a Healer's heals, like any awakening. A few go further. Sister Hale's Thimble adds 3 to what every heal rolls, before any Toll comes off, and the Surgeon's Casebook's heals ignore a step of [Toll](#s-healing), the way a Healer who's come prepared does.
 
 For Catches, use the [Catch ideas](#catches-12), or write your own in the same shape: a name, and one line for what it means. Here are four more.
 
@@ -114,7 +114,7 @@ They're written out in full, with what tempered each one. Use them as written, o
 :::sheet[Sister Hale's Thimble]
 *A silver thimble worn thin at the tip. Sister Hale sewed shrouds for forty years, and she left it to the one who sat with her at the end.*
 
-**Tempered** *Stitch a wound closed* (Body): every heal you make with it gives 3 more back, and it's 2 steps on a heal roll · *Hidden in a hem* (Body): something small you sew into a hem won't be found by any search.
+**Tempered** *Stitch a wound closed* (Body): add 3 to what every heal you make with it rolls, and it's 2 steps on a heal roll · *Hidden in a hem* (Body): something small you sew into a hem won't be found by any search.
 
 **Burden** *Others First*: each of your Roots gets 2 less back at the end of a scene.
 

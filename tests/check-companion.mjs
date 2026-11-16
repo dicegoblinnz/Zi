@@ -1140,7 +1140,7 @@ if (part("1e")) {
     same(BUILD.things.length, 20, "twenty attuned things in Coin and Kit");
     for (const t of BUILD.things) for (const w of t.awakenings) if (!RS.ROOTS.includes(w.root)) note(`${t.name}'s ${w.name} hasn't got a Root`);
     if (!BUILD.things.some((t) => t.awakenings.some((w) => /\bToll\b/.test(w.text)))) note("no attuned thing in Coin and Kit eases Toll");
-    if (!BUILD.things.some((t) => t.awakenings.some((w) => /\bheal\b[^.]*\b\d+ more\b/.test(w.text)))) note("no attuned thing in Coin and Kit adds a flat bonus to heals");
+    if (!BUILD.things.some((t) => t.awakenings.some((w) => /\badd \d+ to what\b[^.]*\bheal\b/.test(w.text)))) note("no attuned thing in Coin and Kit adds a flat bonus to heals");
   });
 
   // Rolls on the new core: one Root at full, each Root brought in at full,
@@ -1230,6 +1230,9 @@ if (part("1e")) {
     const three = RS.takeHits(c, s, "Body", 3);
     same([three.lost, three.wound, three.scar, s.pts.Body, s.wound.Body, s.blaze], [1, true, true, 0, true, "Body"], "a ×3 hit on Body 1 empties it, then wounds it, then Scars it");
     same(RS.takeHits(c, s, "Mind", 1).lost, 0, "with a Scar waiting for its Catch, nothing more lands");
+    const gone = RS.freshCore(c);
+    gone.out = true;
+    same([RS.takeHits(c, gone, "Body", 1).lost, gone.pts.Body], [0, 7], "and nothing lands on someone who's left the scene");
     same([RS.takeScar(c, s, "Body", "a spear through the shoulder"), s.scars.Body, s.out, s.blaze], [{ last: false }, ["a spear through the shoulder"], true, null], "the Scar's a Catch on his Body, and he leaves the scene");
     same([RS.lockedOf(c, s).Body, RS.capOf(c, s, "Body")], [3, 3], "the Scar locks a point for good, and wounded he can hold half of what's left, rounded up");
     // A Root at 0 has nothing to lose but its wound.

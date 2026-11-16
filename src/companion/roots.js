@@ -583,7 +583,8 @@ export function spendPts(s, root, n = 1) {
 
 // n hits at a Root. Each takes a point, and damage carries past 0: a hit on
 // it at 0 wounds it, and a hit on it wounded at 0 is a Scar, waiting for its
-// Catch (s.blaze), and they're leaving the scene, so the rest do nothing.
+// Catch (s.blaze), and they're leaving the scene, so the rest do nothing,
+// and nothing lands on someone who's left it (s.out).
 // Taken on another Root (on), each hit's 2 points, all of them or none, and
 // only if that Root's got them. It says what happened:
 //   { root, on, lost, wound, scar, ok }
@@ -592,7 +593,7 @@ export function spendPts(s, root, n = 1) {
 export function takeHits(c, s, root, n = 1, { on = null } = {}) {
   const hits = Math.max(0, int(n, 0));
   const out = { root, on: null, lost: 0, wound: false, scar: false, ok: true };
-  if (!ROOTS.includes(root) || !hits || s.blaze) return out;
+  if (!ROOTS.includes(root) || !hits || s.blaze || s.out) return out;
   if (on && on !== root && ROOTS.includes(on)) {
     if ((s.pts?.[on] ?? 0) < 2 * hits) return { ...out, ok: false };
     s.pts[on] -= 2 * hits;

@@ -222,7 +222,7 @@ Two Grows later, Bram's added *fight two at once* and *fight in tight spaces* to
 
 ## Step 5: Items and what you carry {#s-items}
 
-**Plain items are just what they are.** A sword's a sword. Each thing you carry is **a point**, and your keepsake and your bag are free. An item lets you do what it does: a rope lets you climb down a well, and a lantern lets you see what's at the bottom. It never adds to a Root, and it's never steps on a roll, because a roll's your Root.
+**Plain items are just what they are.** A sword's a sword. Each thing you carry is **a point**, and your keepsake and your bag are free. An item lets you do what it does: a rope lets you climb down a well, and a lantern lets you see what's at the bottom. It never adds to a Root, and on its own it's never steps on a roll, because a roll's your Root. The few things that change a roll say so, like a purse of gold, a weapon that's *Charge* or a smoke bomb.
 
 **Armour sits on one of your Roots.** Body armour's worn leathers, a chain shirt, plate, a helmet or a shield. Mind armour's what keeps your head straight while it fits the scene, like court clothes at court or a guard's uniform in the barracks. Soul armour's what holds you together, like a holy symbol or a ward stitched into your coat. Write each piece's quality beside it, Common, Fine or Masterwork, with a box for every hit it can take for you there: 1, 2 or 3. What you start with is Common, and one piece can be Fine, like Bram's plate. How armour works, and breaking it, is in [Armour](#s-armour).
 
@@ -385,7 +385,7 @@ Attuned things are on top of what you carry, so they don't take up your equipmen
 -   **It's 2 steps on any roll it fits.** As you roll, **each Aura you spend on it is 2 more**. Vesk over Lord Vane's roof is her Body's 11 and her hook's 2, 13 steps, and with 2 Aura on it that's 17, two d12s and a d10.
 -   **It does what it says, too.** Wren's *Hit anything I can see* lets her arrows reach anything she can see, the way a permission lets you do something, and it's 2 steps on those shots. Pushing it past what it says is [going beyond](#s-going-beyond), the same as anything else.
 
-**It needs a point to lock.** If the Root it fits hasn't got one free, the awakening does nothing till it has. Attuned things don't touch your Aura, so your maximum's 5 however many you've got.
+**It needs a point to lock.** If the Root it fits hasn't got one free, the awakening does nothing till it has. Attuned things don't touch your Aura, so your maximum's 5 however many you've got, bar a Burden that says otherwise.
 
 -   **Take the same awakening twice** and it locks two points, and it's 4 steps on a roll it fits.
 -   **Only you can spend Aura on it**, or a [Maker](#a-maker) who can touch it.
@@ -595,7 +595,7 @@ Every piece of armour has a **quality**: **Common**, **Fine** or **Masterwork**.
 So the more you wear, the more hits you can take. Bram's plate is Fine and his shield's Common, so that's three hits to his Body between them before they're both gone, and Vesk's Common leathers can take one.
 
 -   **When the last box goes**, it's crossed out until it's mended.
--   **A hit that's two points**, because it found a [vulnerability](#s-vulnerable) or it's from something deadly, is two boxes. Put them on one piece or two, or tick one and take the other point.
+-   **Two hits from one die**, because it found a [vulnerability](#s-vulnerable) or it's from something deadly, are two boxes. Put them on one piece or two, or tick one and take the other point.
 -   **A helmet's armour like any other.** It's Body armour and one of your equipment, and it's got a quality and boxes like the rest.
 -   **What you start with is Common**, and one piece can be Fine. Better comes from play: buy it (see [Upgrading gear](#upgrading-gear)), or take it off someone who won't be needing it.
 -   **Attuned things are magic**, and they can't be broken, so attuned armour hasn't got boxes, and it can't take a hit for you.
