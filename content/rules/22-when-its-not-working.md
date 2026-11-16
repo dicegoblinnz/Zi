@@ -18,8 +18,8 @@ Try ignoring it first: play without it for a session.
 
 ## When Fights Feel Too Easy, or Too Hard {#when-fights-feel-too-easy-or-too-hard}
 
--   **Too easy?** Check the budgets: are you actually spending the [round budget](#s-budget), and are the boss's multipliers as big as it needs, sized to the [threat budget](#s-threat-budget)? Count the dice too: each of the crew's tracks stops one at its Root, so one die at each of them is a fair round, and two at the same Root, from two threats, is a hard one. Are your telegraphs aimed at stakes, clocks, Minds and Souls, or only at the crew's Bodies? Add a stake the crew can't ignore. Look at your threats' [vulnerabilities](#s-vulnerable) as well, because each one lets a single hit strip two tags.
--   **Too hard?** Run the next scene as a breather. Give the boss an obvious weak point. Make sure every threat that matters has something driving it, so fighting isn't the only way through. Check you're not stacking [vulnerabilities](#s-vulnerable) on the crew, because each one adds another size to every hit it fits.
+-   **Too easy?** Check the budgets: are you actually spending the [round budget](#s-budget), and are the boss's multipliers as big as it needs, sized to the [threat budget](#s-threat-budget)? Count the dice too: each die a Root rolls stops one, and it splits its whole number to meet what's coming, so one die at each of them is a fair round, and two or three at the same Root, from different threats, is a hard one. Are your telegraphs aimed at stakes, clocks, Minds and Souls, or only at the crew's Bodies? Add a stake the crew can't ignore. Look at your threats' [vulnerabilities](#s-vulnerable) as well, because each one lets a single hit strip two tags.
+-   **Too hard?** Run the next scene as a breather. Give the boss an obvious weak point. Make sure every threat that matters has something driving it, so fighting isn't the only way through. Check you're not stacking [vulnerabilities](#s-vulnerable) on the crew, because each one adds another hit to every hit it fits.
 -   **Too long?** Count the keeps-it-going tags and their multipliers. Four on every threat is a slog, and so is a multiplier on everything. Cut them, or make them findable.
 
 ## When a Player Is Checked Out {#when-a-player-is-checked-out}
@@ -34,11 +34,11 @@ Go for a hard reset. Kill an NPC, give the crew what they wanted, break the Goal
 
 ## When a Mechanic Is Being Exploited {#when-a-mechanic-is-being-exploited}
 
--   **Make it good fiction.** If the thief rolls a d2 every round just to get Aura back, ask what she's doing with that die. It's always doing something.
+-   **Make it good fiction.** If the thief splits her Body into a pile of d2s every round just to get Aura back, ask what each of them is doing. Every die is an intent, so it's always doing something, and every one that misses is something that didn't happen.
 -   **Make it cost something.** Aim a telegraph at the thing they keep leaning on.
 -   **Talk about it.**
 
-Some things look like exploits and aren't. Farming Aura with small dice is a strategy the game wants you to use. So is straining a bond thread for Resolve, and the thread keeps it honest: pull it again before it's mended and it snaps (see [Playing the strain](#s-playing-the-strain)). Answering a telegraph by taking out its source is the best way to answer it. And finding the weak point in round one and ending the fight is exactly what weak points are for.
+Some things look like exploits and aren't. Farming Aura with small dice is a strategy the game wants you to use. So is straining a bond thread for a point of Soul, and the thread keeps it honest: pull it again before it's mended and it snaps (see [Playing the strain](#s-playing-the-strain)). Answering a telegraph by taking out its source is the best way to answer it. And finding the weak point in round one and ending the fight is exactly what weak points are for.
 
 ## The Last Word {#the-last-word}
 

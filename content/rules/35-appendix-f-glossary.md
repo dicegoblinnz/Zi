@@ -96,7 +96,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Mini faction](#s-mini-factions)** | A faction another one made, up to three each. It does two of the six outcomes and nothing else, and its parent hands it one resource and one asset to start. It sits out the downtime it's made, then acts on its own. |
 | **[Mook](#s-staying)** | Challenge 2 or 3, with none or one tag keeping it going. Falls to one good win. |
 | **[Moving further](#s-movement)** | Putting dice on moving past your stride. They add up, and that's how many more squares you go. |
-| **[Multiplier](#s-tough)** | How many wins a tag takes to strip, like *Armoured ×12*. Every win ticks one off. |
+| **[Multiplier](#s-tough)** | How many wins a tag takes to strip, like *Armoured ×4*. Every win ticks one off. |
 | **[Named](#s-staying)** | Challenge 4 or 5, with two tags keeping it going. |
 | **[Odds](#s-oracle-odds)** | Before an Oracle roll, say how likely it is. Likely: two Boon dice, keep the higher. Unlikely: keep the lower. |
 | **[Opening](#s-win)** | A way to end a Mook or Named threat in one win: its weak point, helplessness, or getting around everything that keeps it going. A Boss only falls to its weak point. Any other opening strips two whole tags. |

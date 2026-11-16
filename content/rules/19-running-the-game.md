@@ -56,11 +56,11 @@ Most things just happen. **Only roll when something pushes back, or when the out
 -   You never take away agency the fiction's given the player.
 -   You never hide how big something is and then act surprised when they lose to it.
 -   You never add a telegraph after the last player has acted, or land one nobody could possibly have answered.
--   You never spend Aura, and you've got no tracks to pay from.
+-   You never spend Aura, and you've got no points to pay from.
 
 ### Reading permissions {#reading-permissions}
 
-Players will ask whether something fits a hundred times a session. Answer fast and be generous. A Root that fits how they're doing it, and everything on their sheet that plainly fits what they're doing, are free. Each thing they have to make a case for costs them 1 Aura, and so does pushing a permission past what it normally does, which is [going beyond](#s-going-beyond). If you catch yourself arguing about whether it fits, take the Aura and move on.
+Players will ask whether something fits a hundred times a session. Answer fast and be generous. Picking the Root that fits how they're doing it is free, and so is anything a permission plainly lets them do. Bringing another Root in needs a permission that explains it, and they pay for it with a point of that Root or 3 Aura (see [Bringing In a Root](#s-bring)), so you never need to haggle over whether it fits: if it's a reach, they've still paid. Pushing a permission past what it normally does is [going beyond](#s-going-beyond), and that's 1 Aura. If you catch yourself arguing about whether it fits, take the price and move on.
 
 Be consistent. If calling up someone a hundred years dead was going beyond for Isolde last week, it's going beyond this week too.
 
@@ -105,25 +105,25 @@ The crew's in the Vane archive looking for a deed, and Dorrie's player asks if a
 
 She shows danger coming: "Keys in the front door. The night clerk's back early. That's a d6, and if nobody deals with it, he sees the light under the door."
 
-Vesk answers it. She pinches out the lamp and steps behind the door. That's her Body, her first Title, *move unseen*, Shadow twice and her soft-soled boots, 13 steps, two d12s and a d2. She rolls 6, 2 and 1, and the clerk's d6 rolls 3. He walks past, humming.
+Vesk answers it. She pinches out the lamp and steps behind the door. That's her Body, 11 steps, a d12 and a d10. She rolls 6 and 2, and the clerk's d6 rolls 3. He walks past, humming.
 
 Then Isolde finds the deed, and the GM makes another move. She reveals something they won't like: it was signed over to the Harbour Guild a week ago.
 :::
 
-## Catches and Resolve at the Table {#s-catches-gm}
+## Catches and Trouble at the Table {#s-catches-gm}
 
 Letting a Catch bite is up to the player. You've got telegraphs, the cost of a miss and every move above to make things go wrong, so leave their Catches to them. That goes for their [Scars](#s-blaze) too, because a Scar's a Catch, and for their hostile [threads](#s-bonds), which bite the same way. When one bites, or a player drops their character in it without a Catch at all, run with it and make it real trouble: a new telegraph, a new stake, or someone who wants something. They take 1 Aura each time, as often as they like.
 
-When a Catch bites big, because it changes the scene or costs them something they wanted, their Resolve comes up a size instead of the Aura. It's their call when.
+When a Catch bites big, because it changes the scene or costs them something they wanted, they get a point of Soul back instead of the Aura. It's their call when.
 
 :::example[Wren's longbow]
 Wren's longbow is attuned, and its Catch is *Wanted*. The crew's crossing the market, and Wren's player lets it bite: a woman in a hunter's cloak stops dead and stares at the bow. The GM runs with it. The woman knows that bow, and she's following them. Now there's a new problem in the scene with a name and a reason, and Wren takes 1 Aura.
 
-If Wren's player had said the woman shouts for the watch and the market turns into a chase, that'd change the scene, so Wren's Resolve could come up a size instead.
+If Wren's player had said the woman shouts for the watch and the market turns into a chase, that'd change the scene, so it'd be a big bite and a point of Soul. Wren's Soul is 0, though, so there's nothing for it to come back to, and she'd take the Aura.
 :::
 
 -   **Give 1 Aura when a great setup doesn't land.** There's an example in [Consequences and Failure](#s-gm-consequences).
--   **Play your NPCs' side of a thread.** When a player strains a bond thread with one of your people, like calling in a favour or using their name, their Resolve comes up a size, and that person feels it. Play it the way [Playing the strain](#s-playing-the-strain) says: the thread gives the reason, so say how it shows and what would make it right, and play that and nothing bigger. They can mend it in downtime or in a scene with that person, but not in the middle of the fight where they strained it, and once it's mended, let it go. A hostile thread works the other way round, and nobody strains it for Resolve. Doing right by that person strains it, and doing it again snaps it, so the grudge is over. Wrong them again before then and it's whole again.
+-   **Play your NPCs' side of a thread.** When a player strains a bond thread with one of your people, like calling in a favour or using their name, they get a point of Soul back, and that person feels it. Play it the way [Playing the strain](#s-playing-the-strain) says: the thread gives the reason, so say how it shows and what would make it right, and play that and nothing bigger. They can mend it in downtime or in a scene with that person, but not in the middle of the fight where they strained it, and once it's mended, let it go. A hostile thread works the other way round, and nobody strains it for Soul. Doing right by that person strains it, and doing it again snaps it, so the grudge is over. Wrong them again before then and it's whole again.
 
 ## Building a Scene {#s-building-scenes}
 
@@ -228,7 +228,7 @@ A good tag tells the table how to deal with it, and a bad one's just a number in
 | --- | --- | --- |
 | *Strong* | *Hits Like a Wagon* | Tells you not to trade blows. Duck, dodge, or put something big between you. |
 | *Hard to Kill* | *Armoured* | Tells you what gets through: a lever, a Piercing bolt, the gap under the arm. |
-| *Scary* | *Fear* | Tells you it goes for Confidence, and that naming it takes some of that away. |
+| *Scary* | *Fear* | Tells you it goes for their Mind, and that naming it takes some of that away. |
 | *Smart* | *Reads a Feint* | Tells you the first trick fails. The second, or an honest move, gets through. |
 | *Loyal* (to nobody) | *Loyal to Lady Ashe* | Tells you who to talk about, and whose betrayal would break him. |
 
@@ -251,7 +251,7 @@ Never count hits. Count the reasons it's still standing. When a player asks "how
 One win, one tag is right for most threats. A boss that should last needs more than that, so give its big tags [multipliers](#s-tough): *Armoured ×12* takes twelve wins to strip, and every win ticks one off. Like any tag, only what fits it ticks it: blades and hammers tick *Natural Armour*, and shaming a captain in front of his men ticks *Commanding Presence*.
 
 -   **Who gets them.** Mostly bosses. A Named threat that should take a while can have one too, and so can a big obstacle: a vault door that's *Reinforced ×12*, a crowd that's *Loyal ×9*, a storm, a fire.
--   **How much.** A multiplier's as big as the creature needs, and where it goes says what the creature is. Four times its Challenge is a good place to start, then go up or down from there: a dragon's hide might be *Hide ×30*, and a dark paladin who's the villain of the whole arc might be *Plate Armour ×21* and *Shield ×15*. They're big because a crew stacking everything that fits lands a lot of wins a round. Keep it in proportion to who they are, and make sure it makes sense. Size them for a starting crew of four, and [The Threat Budget](#s-threat-budget) says how to scale them.
+-   **How much.** A multiplier's as big as the creature needs, and where it goes says what the creature is. Its Challenge less 2 is a good place to start, then go up or down from there: a dragon's hide might be *Hide ×5*, and a dark paladin who's the villain of the whole arc might be *Plate Armour ×4* and *Shield ×3*. Keep them small. Every player gets one action and rolls one Root, so a crew of four lands about three or four wins a round between them, and a ×4 is a round of the whole crew's work. Keep it in proportion to who they are, and make sure it makes sense. Size them for a starting crew of four, and [The Threat Budget](#s-threat-budget) says how to scale them.
 -   **Give it things to tackle.** A multiplier makes a tag last, and its other tags are what make the fight: something to knock out of the air, a shield to break, a shout to stop. Keep a plain tag or two beside the big ones, so a single good win always has something to take.
 -   **First, when it's a shell.** Mark a tag *first* when the story says you can't get at the rest until it's gone: a hide, a shield wall, a crowd of bodyguards. Leave it off when the crew should be able to go round it.
 -   **Say what each tick looks like:** plates cracking off his shoulders, or his men looking at each other. Then say what's left: *"Armoured ×2 left."*
@@ -259,7 +259,7 @@ One win, one tag is right for most threats. A boss that should last needs more t
 -   **Keep the way in open.** A weak point still ends it, an opening takes two whole tags off a boss, multipliers and all, and Study can find what's under the first one, so a clever crew never has to grind through the lot.
 
 :::example[Making Redhand last]
-Redhand, the boss in [The Threat Builder](#threat-builder), started as three plain tags and a weak point. Against a starting crew of four, he'd often fall in the first round. His Challenge is 6, so his multipliers start at 24, and his armour's what makes him a wall, so it gets the big one: *Armoured ×24 (first)*. His feeding's part of him too, but a smaller part, so it's *Feeds ×15*, and *Relentless* stays plain. That's forty wins the long way: twenty-four through his armour, one for *Relentless*, and fifteen to stop him feeding. A crew of four lands about ten wins a round, so most crews will spend about four rounds on him, or one, if they've read Vane's ledger and say his name.
+Redhand, the boss in [The Threat Builder](#threat-builder), started as three plain tags and a weak point. Against a starting crew of four, he'd often fall in the second round. His Challenge is 6, so his multipliers start at 4, and his armour's what makes him a wall, so it gets that one: *Armoured ×4 (first)*. His feeding's part of him too, but a smaller part, so it's *Feeds ×3*, and *Relentless* stays plain. That's eight wins the long way: four through his armour, one for *Relentless*, and three to stop him feeding. A crew of four lands three or four wins a round, and some of them go on his people, so most crews will spend three or four rounds on him, or one, if they've read Vane's ledger and say his name.
 :::
 
 ### Hidden tags and weak points {#hidden-tags-and-weak-points}
@@ -272,14 +272,14 @@ A vulnerability makes a good hidden tag too. Once Study finds that the Warden's 
 
 ### Powers are tags {#powers-are-tags}
 
-Threats never have Aura or tracks, so they don't pay to go beyond, and an area costs them nothing. Fire breathed at three of the crew is just a telegraph at three targets, paid for from your round budget. If a threat can do something impossible, write it as a tag (*Calls the Storm, Walks Through Walls, Wears Your Face*) and telegraph it from the round budget like anything else. The players see it coming, with a die, and they can answer it. Don't let a power skip the telegraph, because then the players don't get to play against it.
+Threats never have Aura or points, so they don't pay to go beyond, and an area costs them nothing. Fire breathed at three of the crew is just a telegraph at three targets, paid for from your round budget. If a threat can do something impossible, write it as a tag (*Calls the Storm, Walks Through Walls, Wears Your Face*) and telegraph it from the round budget like anything else. The players see it coming, with a die, and they can answer it. Don't let a power skip the telegraph, because then the players don't get to play against it.
 
 ### Unique mechanics {#s-unique-threats}
 
 Most threats need nothing but Challenge and tags. A few deserve a rule of their own, written as a tag. I'd use them sparingly. They're what make a threat memorable.
 
 -   **Crumbling.** Instead of stripping tags, every win steps its Challenge down one, and at Challenge 1 it falls. Use it for crowds, walls, swarms and slowly dying things.
--   **Forms.** It's got two or more forms. Strip the last keeps-it-going tag of one and it doesn't fall: it changes. It takes 3 to 5 tags from its Forms list of about ten (more for a bigger change), and the list can bring back tags it had before. Its multipliers come back too, on whichever of its new tags matter most. Because they come back every time, keep them smaller than a one-form boss's: about ×15 for a boss with two forms, and ×12 with three. Its weak point still ends it in any form. Tell the table it's happening, and what it's becoming.
+-   **Forms.** It's got two or more forms. Strip the last keeps-it-going tag of one and it doesn't fall: it changes. It takes 3 to 5 tags from its Forms list of about ten (more for a bigger change), and the list can bring back tags it had before. Its multipliers come back too, on whichever of its new tags matter most. Because they come back every time, keep them smaller than a one-form boss's: about ×3 for a boss with two forms, and ×2 with three. Its weak point still ends it in any form. Tell the table it's happening, and what it's becoming.
 -   **Regrows.** At the end of every round, one stripped tag comes back, unless something the tag names (fire, salt, a word) was used on it this round.
 -   **Split.** It's in several places at once, with its keeps-it-going tags spread across its bodies. Strip them in one place and the others carry on.
 -   **Layered.** The first time it's attacked each round, it rolls one Challenge die for every tag it's got left keeping it going (a tag with a multiplier is one tag), and its best die is the roll that stands. Strip a tag and it rolls one fewer next round. Use it for the enchanted door, the warded vault, or the boss that should feel like a wall. The rule's in [Conflict](#s-layered).
@@ -290,43 +290,44 @@ Most threats need nothing but Challenge and tags. A few deserve a rule of their 
 Your **threat budget** says how much your threats can take, and how long a scene's going to run.
 
 :::rule
-**Threat budget: 15 a character as they start.** A starting crew of four is **60**. Every Title, archetype or attuned thing an Aspiration gives them after that puts a third on each character's share, on top of the last: 20 a character with one, 27 with two, 36 with three and 48 with four. Past four, it's your call.
+**Threat budget: the crew's Roots, added up.** Add every character's Body, Mind and Soul together. A starting character's got 16, two Titles at 5 and six permissions at 1, so a starting crew of four is **64**. Every new Title puts 6 more on someone's Roots, and every new permission 1, so it grows as they do.
 :::
 
-| New picks each | A character | Four characters | Multipliers |
+| New Titles each | A character | Four characters | Multipliers |
 | --- | --- | --- | --- |
-| None (a starting crew) | 15 | **60** | As they're written |
-| One | 20 | **80** | A third bigger |
-| Two | 27 | **108** | Nearly twice as big |
-| Three | 36 | **144** | Nearly two and a half times |
-| Four | 48 | **192** | A bit over three times |
+| None (a starting crew) | 16 | **64** | As they're written |
+| One | 22 | **88** | Nearly half again |
+| Two | 28 | **112** | Three quarters bigger |
+| Three | 34 | **136** | A bit over twice as big |
 
-A threat's [multipliers](#s-tough-gm) are built for a starting crew of four, a threat budget of 60. For a bigger or more experienced crew, multiply each one by the threat budget and divide by 60, to the nearest whole number. Every new thing on their sheets is a step on most of their rolls, and every win's Aura towards another action, so each pick puts more on the crew than the one before. At 80 that's a third more, so Redhand's *Armoured ×24* is *Armoured ×32*, and his *Feeds ×15* is *Feeds ×20*. A smaller crew works the same way: two characters as they start are a threat budget of 30, so every multiplier's halved, and a tag that gets down to ×1 is a plain one.
+A threat's [multipliers](#s-tough-gm) are built for a starting crew of four, a threat budget of 64. For a bigger or more experienced crew, multiply each one by the threat budget and divide by 64, to the nearest whole number. Their Roots are how hard they hit and how much they can take, so a crew with more points needs threats that last longer. At 88, Redhand's *Armoured ×4* is *Armoured ×6*, and his *Feeds ×3* is *Feeds ×4*. A smaller crew works the same way: two characters as they start are a threat budget of 32, so every multiplier's halved, and a tag that gets down to ×1 is a plain one.
 
-It's a guide, so move it to suit the table. If the crew's mixed, add up each character's share: Bram and Dorrie as they started, and Vesk and Isolde with two new picks each, is 15 + 15 + 27 + 27 = 84, so every multiplier's two fifths bigger, and Redhand's *Armoured ×24* is *Armoured ×34*. Past four new picks the crew's growing in ways the ladder doesn't count, like Titles filled to six permissions, Boons and attuned things at Perfected, so go by what you see at the table.
+It's a guide, so move it to suit the table. If the crew's mixed, add up what they've got: Bram and Dorrie as they started, 16 each, and Vesk and Isolde with a new Title and two more permissions each, 24 each, is 80, so every multiplier's a quarter bigger, and Redhand's *Armoured ×4* is *Armoured ×5*. Archetypes, attuned things and Boons don't put anything on their Roots, but they do make the crew better at what it does, so once they've got a lot of them, go by what you see at the table.
 
 ### How long a scene runs {#s-size-scene}
 
-Add up everything standing between the crew and done: every keeps-it-going tag on every threat that has to fall, with a multiplier counting as that many, and every tag in the way of every stake. Anything with none counts as one. Divide that by the actions the crew takes a round, counting the extra ones they buy with Aura, because with everything that fits stacked, an action lands about once. That's roughly how many rounds the scene will take.
+Add up everything standing between the crew and done: every keeps-it-going tag on every threat that has to fall, with a multiplier counting as that many, and every tag in the way of every stake. Anything with none counts as one. Divide that by the wins the crew lands a round. Every player's got one action, and most of them land about one win with it, a bit more when they split well, bring a Root in or play their archetype hard, so a crew of four lands three or four. That's roughly how many rounds the scene will take.
 
-Say it's two Wardens, each with *Armoured ×12* and three plain tags, and two stakes with two tags each. That's 34. Four characters take about ten actions a round between them once the Aura's flowing, so it's three or four rounds, or fewer if they find the weak points. Make one of them a fully woken Warden, with *Armoured ×24*, and it's 46, so more like five. If a scene looks like it'll take eight rounds, it'll drag, so I'd cut something or give it an obvious weak point.
+Say it's two Wardens, each with *Armoured ×2* and three plain tags, and two stakes with two tags each. That's 14, so it's about four rounds, or fewer if they find the weak points. Make one of them a fully woken Warden, with *Armoured ×4*, and it's 16, so more like five. If a scene looks like it'll take eight rounds, it'll drag, so I'd cut something or give it an obvious weak point.
 
 ## Telegraphs a Round {#s-budget}
 
 Every round you've got a number of steps to telegraph with. That's your **round budget**, and it's what keeps the pressure matched to the crew.
 
 :::rule
-**Round budget: about 11 steps a round for each player.** That's a d12 and a d10 each. Every track starts at d12, a d12 stops a lone d10 about six times in ten, and a Defend with everything that fits stacked on it stops a lot more, so it takes that much to need cracking. Split it into smaller telegraphs at more of the crew to spread them thin.
+**Round budget: three quarters of the threat budget.** A starting crew of four is 48, 12 steps for each of them, which is a d12 and a d12 each. Every Root rolls at full against what lands on it, split to meet it, so it takes more dice than they've got to get anything through, and every point a Root's got is a hit it can take. Split it into smaller telegraphs at more of the crew to spread them thin.
 :::
 
-With four players that's 44 steps: a d10 at each of them and 24 more for stakes, clocks and words, or a lot of little ones. It's a guide, so move it to suit the table: if the crew's walking through everything, push harder, and if they're drowning, ease off.
+With four players that's 48 steps: a d10 at each of their Bodies and 28 more for their Minds and Souls, stakes, clocks and words, or a lot of little ones. It grows with the threat budget, so a crew with more points gets more coming at it. It's a guide, so move it to suit the table: if the crew's walking through everything, push harder, and if they're drowning, ease off.
 
 ### Spending it {#spending-it}
 
 -   **A telegraph costs its steps.** A d10 is 5, and you take it off the budget as you say it.
 -   **Spend it on everything.** Threats, the ground, events, stakes, and anything else you decide the scene needs. A telegraph aimed at a clock or a stake is as good as one aimed at a character, and often better.
--   **Not all of it at bodies.** One die at each of the crew's Body is a fair round, so at Even, spend the rest on their Mind and their Soul, control, position, stakes, clocks and words. Two at the same Root, from two threats, is a hard one, because a track only stops one, and that's about right at Hard.
--   **Count the dice at each Root, not just the steps.** Every die at someone lands unless they stop it, and each of their tracks stops one at its Root. A d4 and a d6 at Bram's Body from two threats are fewer steps than a d12, but when he lets them ride, his Stamina only stops one of them, so the other gets through whatever it rolled. The d12 might not get through at all. A d6 at his Body and a d6 at his Mind are two different tracks, though, and each gets its own roll.
+-   **Not all of it at bodies.** One die at each of the crew's Body is a fair round, so at Even, spend the rest on their Mind and their Soul, control, position, stakes, clocks and words.
+-   **At Hard, pile it on.** In the fight of the session, put the first die at each of their Bodies, then two or three more from different threats at whoever's hurting most. That's what wears a Root down to nothing, and getting someone Bloodied in round 3 or 4 is about right.
+-   **Count the dice at each Root, not just the steps.** Every die at someone lands unless they stop it, and each of their dice stops one. Their Root splits its whole number to meet what's coming, so more dice at one Root means smaller dice meeting them. A d12 at Bram's Body meets his d12 and his d6, and it probably doesn't get through. Three d6s at his Body are fewer steps, but his 9 split three ways is three d6s, and one of theirs usually gets through. A d6 at his Body and a d6 at his Mind are two different Roots, though, and each gets its own roll.
+-   **More hits cost more.** A telegraph that's 2 hits, from a deadly threat, costs its steps twice, and 3 hits three times.
 -   **One die at each person.** A threat can telegraph at as many of the crew as the story allows, but it only aims one die at each of them, unless a tag says it can do more, like *Flurry*. To spread them thin, aim at more of them, not more dice at one.
 -   **Answered telegraphs still count.** You spent the pressure, and the crew stopping it is what it was for.
 -   **A telegraph at several targets costs its steps once for each target.** *The fire spreads, a d8 at the Body of all three on the stair* is 12 steps. That's nearly a third of a four-player round, so save a telegraph at everyone for the moment it matters.
@@ -337,9 +338,11 @@ With four players that's 44 steps: a d10 at each of them and 24 more for stakes,
 
 | Setting | Round budget | Four players | Use it for |
 | --- | --- | --- | --- |
-| **A breather** | About half | 22 | Scenes about choices, not survival. Social scenes, a job going well, the first round when the threats are overconfident. |
-| **Even** | All of it | 44 | Most scenes. The threats push about as hard as the crew can push back. |
-| **Hard** | About half again | 66 | The fight of the session. The crew can't answer everything, and something gets through. |
+| **A breather** | About half | 24 | Scenes about choices, not survival. Social scenes, a job going well, the first round when the threats are overconfident. |
+| **Even** | All of it | 48 | Most scenes. The threats push about as hard as the crew can push back. |
+| **Hard** | About half again | 72 | The fight of the session. The crew can't answer everything, something gets through, and somebody gets Bloodied. |
+
+**The fight of the session runs about 45 minutes.** At Hard that's four or five rounds, and the first of the crew should be Bloodied in round 3 or 4. If it happens sooner, your telegraphs are too heavy, so ease off. If nobody's hurt by round 5, push harder, and pile more of it on one of them.
 
 :::note
 **Spread them thin.** The crew shouldn't ever have enough actions to do everything. A ward on a friend, a blessing before the charge, a Study on the boss: they're all good, and each one's an action spent somewhere other than the stakes. Telegraph enough that those choices hurt.
@@ -368,23 +371,23 @@ Let the threat's tags tell you what it does. *Reach* pins from a distance, *Call
 
 ### Fear is a telegraph {#s-fear-gm}
 
-Fear, lies and pressure are telegraphs like any attack, aimed at someone's Mind: *the brute roars at Bram, a d8 at his Mind.* Bram can answer it, or let it ride on his Confidence, and there's no other roll for fear. His shield won't stop it when he Defends, because how he's defending doesn't fit it, and nobody can [intercept](#s-intercept) it for him, because it's inside his head. That's the [Bard](#a-bard)'s job: a Bard's song can stand between the whole crew and the fear. Despair, temptation, curses and anything trying to take someone over work the same way, at their Soul, and their Resolve rides against them.
+Fear, lies and pressure are telegraphs like any attack, aimed at someone's Mind: *the brute roars at Bram, a d8 at his Mind.* Bram can answer it, or let it ride on his Mind, and there's no other roll for fear. His shield won't stop it when he Defends, because how he's defending doesn't fit it, and nobody can [intercept](#s-intercept) it for him, because it's inside his head. That's the [Bard](#a-bard)'s job: a Bard's song can stand between the whole crew and the fear. Despair, temptation, curses and anything trying to take someone over work the same way, at their Soul, and their Soul rolls against them.
 
-It's worth going after their Mind and their Soul as well as their Body. Every track starts at d12, but a crew built for blows isn't built for words: Bram's plate does nothing for his Confidence, and his Mind's only 2, so answering a lie isn't his strength. Every size you take off a track is a smaller die defending it next time, and a size they can't spend on their archetype.
+It's worth going after their Mind and their Soul as well as their Body. A crew built for blows isn't built for words: Bram's plate does nothing for his Mind, and his Mind's only 3, so it rolls a d6 and it's got 3 points to lose. Every point you take off it is a point he can't spend bringing his Mind in, and once it's 0, the next lie that gets through leaves him Frayed. Vesk's and Wren's Souls are 0, so a curse that gets through to them wounds them straight away.
 
-Say the brute roars at Bram's Mind, a d8, and nobody answers it. At the end of the round his Confidence rolls 3 against the roar's 6, so it gets through, and it's a d10. Next round the brute roars again and the captain sneers at him too, a d8 and a d6, both at his Mind. His Confidence only stops one of them, so the other gets through whatever it rolls, unless somebody sings, or he pays 2 for 1 from his Stamina and his Resolve to keep his Confidence where it is.
+Say the brute roars at Bram's Mind, a d8, and nobody answers it. At the end of the round his Mind rolls its d6, a 3, against the roar's 6, so it gets through, and he's on 2. Next round the brute roars again and the captain sneers at him too, a d8 and a d6, both at his Mind. His Mind's 3 steps make a d4 and a d2 to meet them, so one of them's likely through whatever it rolls, unless somebody sings, or he takes it on his Soul, 2 for 1.
 
 ### Aim at what they care about {#aim-at-what-they-care-about}
 
-Go for the stake they're winning, the friend whose Stamina is down to a d4, the item marked *Wanted* or the bond they wrote in session one. The crew should never feel safe leaving a telegraph unanswered just because it's small.
+Go for the stake they're winning, the friend whose Body's down to its last point, the item marked *Wanted* or the bond they wrote in session one. The crew should never feel safe leaving a telegraph unanswered just because it's small.
 
 ### Pressure heavy armour {#pressure-heavy-armour}
 
-Plate and a shield are Body armour, and they're a step each on any roll they fit, his Defend included: his Body, both Titles, *hold the line*, *fight in a shield wall*, Guardian, his plate and his shield are 14 steps, two d12s and a d4, and with his Stamina that's four dice for four blows. Their boxes take hits for him too, three between them. That's what plate's meant to do. Instead of fighting it with bigger numbers, fight it with more dice. **Letting it ride, his Stamina stops one telegraph at his Body**, so a second threat on him gets one through, however well he rolls. Now he has to choose: let it ride and offer his plate, or spend his action Defending instead of swinging. Every blow he puts on his armour ticks a box, so a fight that keeps coming wears it down. Go for the friends beside him too, because every die he intercepts off them is one more his dice have to stop, and aim at what plate does nothing for, like his Mind and his Soul, the stake behind him or the clock. Heavy armour buys time, so make them decide what to spend it on.
+Bram's plate and shield are Body armour, three boxes between them, and every box takes a hit for him instead of a point. His Defend's his Body at full, 9 steps, on top of the 9 his Body rolls when they land, so that's a d12 and a d6 twice over, four dice for four blows. That's what plate's meant to do. Instead of fighting it with bigger numbers, fight it with more dice. **Letting it ride, his Body splits 9 steps to meet whatever's at it**, so one big die at him meets a d12 and a d6, and four little ones meet four little ones of his. Now he has to choose: let it ride and offer his plate, or spend his action Defending instead of swinging. Every blow he puts on his armour ticks a box, so a fight that keeps coming wears it down. Go for the friends beside him too, because every die he intercepts off them is one more his dice have to stop, and aim at what plate does nothing for, like his Mind and his Soul, the stake behind him or the clock. Heavy armour buys time, so make them decide what to spend it on.
 
 ### Go easy on vulnerabilities {#go-easy-on-vulnerabilities}
 
-A [vulnerability](#s-vulnerable) on one of the crew makes a hit two sizes, so the track it's at drops two at once. *Prone* and *Exposed* are vulnerabilities already, so a telegraph that knocks Isolde flat sets up the next blow, and that's usually plenty. Keep any others rare, and put them face up like everything else.
+A [vulnerability](#s-vulnerable) on one of the crew makes a hit two hits, so the Root it's at loses two points at once. *Prone* and *Exposed* are vulnerabilities already, so a telegraph that knocks Isolde flat sets up the next blow, and that's usually plenty. Keep any others rare, and put them face up like everything else.
 
 ### One answer, sparingly {#one-answer-sparingly}
 
@@ -401,10 +404,10 @@ Give the wall something big to answer, the eye something hidden to find, and the
 ## Running a Round {#s-running-round}
 
 1.  **Telegraph.** Everything goes face up and comes off the round budget. Say which telegraphs have only one answer.
-2.  **Ask what they do.** They go in whatever order they like, one action each, and more for anyone who buys extra ones with Aura: 3 for the first in a round, then 4, then 5. Let them talk and plan, but keep it moving.
+2.  **Ask what they do.** They go in whatever order they like, one action each, and every die in it's an intent. Let them talk and plan, but keep it moving.
 3.  **Let them roll for your side.** The first time a threat's attacked in a round, the player going at it rolls its Challenge die too, in another colour. That roll stands for the round, so everyone who goes at that threat this round has to beat it. A *Layered* threat rolls one die for every tag it's got left keeping it going, and its best die is the roll that stands. A stake works the same way. You'll hardly touch a die all round.
 4.  **Say what the win does.** The player's intent happens: strip the tag, place the condition, move the threat, reveal the secret. If they made an opening, a Mook or a Named threat falls, and a Boss loses two whole tags, multipliers and all, unless it was its weak point. On a multiplier, tick one off, plus one for every [vulnerability](#s-vulnerable) that fits, wherever the player puts it, and say what's left. Every die that won, and every top face, is 1 Aura for whoever rolled.
-5.  **End the round.** Everything unanswered lands. Each player rolls each of their tracks once: Stamina against what's at their Body, Confidence against what's at their Mind and Resolve against what's at their Soul. They roll the telegraphs' dice too. Each of their dice stops one telegraph at its Root that it beats or ties, and they say which, and every one they stop is 1 Aura. Anyone who [Defended](#s-defend) has their Defend's dice as well, each stopping one that fits how they're defending. The rest gets through. For each one that gets through, name what it costs, usually a size off that track, and take a fair swap if they offer one, like their armour on that Root, 2 for 1 from their other tracks or their Aspiration. Untouched events and clocks step down, and every condition steps down one size. Spend the ones you said you would.
+5.  **End the round.** Everything unanswered lands. Each player rolls each Root that's got something landing on it, once, at full, split however they like: their Body against what's at their Body, their Mind against what's at their Mind and their Soul against what's at their Soul. They roll the telegraphs' dice too. Each of their dice stops one telegraph at that Root that it beats or ties, and they say which, and every one they stop is 1 Aura. Anyone who [Defended](#s-defend) has their Defend's dice as well, each stopping one that fits how they're defending. The rest gets through. Every die of yours that gets through is a hit, or more for a deadly threat or a vulnerability, and a hit's a point off that Root. Take a fair swap if they offer one, like a box of their armour on that Root, 2 for 1 on another Root or their Aspiration. A hit on a Root at 0 wounds it, and a hit on a wounded Root at 0 is a Scar. Untouched events and clocks step down, and every condition steps down one size. Spend the ones you said you would.
 6.  **Describe the new situation.** Then telegraph again.
 
 The first roll on a threat matters. If Bram goes at the captain and the captain's d8 comes up 2, everyone else in the crew knows the captain's wide open for the rest of the round.
@@ -429,17 +432,17 @@ When a player shoves the shielded captain off a narrow bridge, *Shield* and *For
 
 **A miss only costs something when it matters.** When something pushes back or time's short, a miss lands a consequence. When nothing's at stake, a miss is just a miss: the lock didn't open, so try something else.
 
-**Name the cost.** When a blow lands or a miss matters, pick a cost that fits it and the threat: a size off the track it was aimed at, a box on their armour on that Root, something else they carry breaking (never an attuned thing, because those can't break), their Aspiration, the Party Goal or a clock. A miss can cost a size of Confidence or Resolve too, when it fits. A threat's tags are a good guide: *Venom* poisons, and *Grasping* takes what they carry. If the player offers a different one that fits and costs about as much, like *not my Stamina, my shield takes it*, take it. Paying 2 for 1 from their other two tracks always fits. If the telegraph had one answer, it happens.
+**Name the cost.** When a blow lands or a miss matters, pick a cost that fits it and the threat: a hit, a point off the Root it was aimed at, a box on their armour on that Root, something else they carry breaking (never an attuned thing, because those can't break), their Aspiration, the Party Goal or a clock. A miss can cost a point of their Mind or their Soul too, when it fits. A threat's tags are a good guide: *Venom* poisons, and *Grasping* takes what they carry. If the player offers a different one that fits and costs about as much, like *not my Body, my shield takes it*, take it. Taking it 2 for 1 on another Root always fits, as long as that Root's got the points. If the telegraph had one answer, it happens.
 
-**Mind and Soul cost the same way.** When fear, lies or pressure get through, it's a size of their Confidence, and when despair, temptation or a curse gets through, it's a size of their Resolve, unless their armour on that Root takes it or they pay 2 for 1. If it had a specific intent, like *Frightened* or *Taunted*, that's what it does, unless they take the size on their track instead.
+**Mind and Soul cost the same way.** When fear, lies or pressure get through, it's a point of their Mind, and when despair, temptation or a curse gets through, it's a point of their Soul, unless their armour on that Root takes it or they take it 2 for 1. If it had a specific intent, like *Frightened* or *Taunted*, that's what it does, unless they take it as a hit instead.
 
 **Fail forward.** When a miss matters outside a round, change the situation. The lock holds and the guard's footsteps are on the stair, or the magistrate refuses and now he knows your name. The Twist table in [The Oracle](#oracle) is full of these.
 
 **When a great setup misses.** If a player planned something, it was cool, and the dice said no, you can give them 1 Aura. It keeps them making plans like that. Wren spends a round getting up the bell tower for the perfect shot, Bram drags the captain out into the open for her, and her dice come up 2 and 1 against the captain's 6. That's a great setup that didn't land, so the GM gives Wren 1 Aura.
 
-**Make a Blaze magnificent.** When a hit gets through to a track that's already on its smallest size, they [Blaze](#s-blaze): they declare something extraordinary, and it happens, no roll. Let it be as big as the moment, then give it room: the scene afterwards should feel different because of it.
+**Make a Blaze magnificent.** While one of their Roots is wounded, a player can take the [Blaze](#s-blaze) on their turn: they take the Scar, declare something extraordinary, and it happens, no roll, then they leave the scene. Let it be as big as the moment, then give it room: the scene afterwards should feel different because of it.
 
-**When a player chooses to die.** From their very first Blaze, a player can choose for their character to die, instead of leaving the scene with a Scar. If they do, slow right down. Let them tell their last moment in their own words, and make sure what they died for happens: the door holds, the crew gets out, the threat goes down with them. Then give everyone at the table a moment to answer it, in character. When a Scar would lock the last size on one of their tracks, that Blaze is their last, so run that one the same way.
+**When a player chooses to die.** From their very first Blaze, a player can choose for their character to die, instead of leaving the scene with a Scar. If they do, slow right down. Let them tell their last moment in their own words, and make sure what they died for happens: the door holds, the crew gets out, the threat goes down with them. Then give everyone at the table a moment to answer it, in character. When a Scar would lock the last point of one of their Roots, that scene's their last, so run it the same way.
 
 ## Secrets and Discovery {#s-discovery}
 
@@ -452,14 +455,14 @@ When a player shoves the shielded captain off a narrow bridge, *Shield* and *For
 ## Archetypes and Study at the Table {#s-gm-area}
 
 -   **Let each archetype do its thing.** Every [archetype](#archetypes) has something only it can do, and a Trait that's always true of it. When it comes out, let it change the fight, and say what it looks like: Dorrie's influence turning the captain's cut onto his own sergeant, or an Illusionist's wall sending the guards the long way round.
--   **Let an ability be as big as it says.** Every archetype has [abilities](#s-abilities), paid for out of its home track, and every size a player pays is a size they can't defend with, so don't shave them down. When Bram pays for *Stand firm*, the next two hits that get through to him do nothing, however big they were. When Dorrie turns that captain, he fights for the crew till the round ends.
--   **Areas are the Elementalist's.** An [Elementalist](#a-elementalist) can make a die their area, and it takes a split but no Aura. Say what it touches before they roll. Fire catches everyone in the squares it covers, friend and foe, so if a friend's standing in the fireball, say so, and let them make it smaller, or pay 1 Resolve for *Sculpt* so it skips them. Wards, blessings and heals reach one person, and a split's second die can reach another friend they can touch.
+-   **Let an ability be as big as it says.** Every archetype has [abilities](#s-abilities), paid for in Aura, and every Aura a player pays is Aura they can't spend bringing a Root in, so don't shave them down. When Bram pays for *Stand firm*, the next two hits that get through to him take 1 point between them, however big they were. When Dorrie turns that captain, he fights for the crew till the round ends.
+-   **Areas are the Elementalist's.** An [Elementalist](#a-elementalist) can make a die their area, and it costs one of their dice and nothing more. Say what it touches before they roll. Fire catches everyone in the squares it covers, friend and foe, so if a friend's standing in the fireball, say so, and let them make it smaller, or pay for *Sculpt* so it skips them. Wards, blessings and heals reach one person, and a split's second die can reach another friend they can touch.
 -   **Big things are big Challenges.** Going beyond is 1 Aura whatever the size, so the size goes in the Challenge. Phasing through a garden wall and through the vault door both cost 1 Aura, but the vault door's a far bigger Challenge, with tags for what stands in the way. Set it by how hard it is in the world, and let them roll.
 -   **Study finds what's there:** a hidden tag or a straight answer. Only an Oracle's *Foretold* makes something true that wasn't.
--   **Judge a truth by the scene.** When an [Oracle](#a-oracle) wins a Study and pays for *Foretold*, they can introduce a truth instead, something that wasn't obvious to anyone else, and it counts as a step for anyone in the crew this scene, on any roll it fits. If it could be here, it is. If it's too big, ask them to make it smaller or pick something else.
+-   **Judge a truth by the scene.** When an [Oracle](#a-oracle) wins a Study and pays for *Foretold*, they can introduce a truth instead, something that wasn't obvious to anyone else, and anyone in the crew can bring a Root in on it this scene, like a permission they've all got. If it could be here, it is. If it's too big, ask them to make it smaller or pick something else.
 
 :::example[Isolde's truth]
-Isolde wins her Study on the Warden, pays 1 Confidence for Foretold and says the chalk circle it's bound to has a crack in it. A crack could be there, so now there's one, and anyone in the crew can use it this scene. If she'd said the circle was never drawn at all, that's too big, so the GM asks her for something smaller.
+Isolde wins her Study on the Warden, pays 1 Aura for Foretold and says the chalk circle it's bound to has a crack in it. A crack could be there, so now there's one, and anyone in the crew can use it this scene. If she'd said the circle was never drawn at all, that's too big, so the GM asks her for something smaller.
 :::
 
 ## Quick Rulings {#s-rulings}
@@ -468,20 +471,20 @@ When the rules don't say, find the nearest rule. Most questions come down to one
 
 | The situation | The ruling |
 | --- | --- |
-| Nothing fits, not even a Root. | Every roll's at least 1 step: a d2. They can still bring in the ground, or a tag they know, for 1 Aura each. |
+| No Root fits, or the one that does is 0. | Every roll's at least 1 step: a d2. They can still bring another Root in, if a permission explains it. |
 | How hard is it? Nothing's fighting back. | A Challenge. 2: easy for a pro. 3: it takes care. 4: hard. 5: very hard. 6: the best in the world might fail. A tag for each thing that makes it worse. |
-| The whole crew does the same thing. | It's a [combo](#s-teamwork): one of them rolls, on their Root, and everyone who put an action in brings everything on their sheet that fits, 1 each, with a split for every action in it. Nobody pays Aura for the combo. |
-| Two things in one action. | Split the die: a split for each action in the roll, and another when it's past 6 steps. Or find another action: hold this one and they've got two next round, or buy an extra one with Aura, 3 for the first in a round. |
+| The whole crew does the same thing. | It's a [combo](#s-teamwork): one of them rolls, on their Root, and everyone who put an action in brings the Root that fits how they're helping, all of it. Nobody pays Aura for the combo. |
+| Two things in one action. | Split the dice. Every die's an intent, and they can split them any way they like. Nobody gets another go this round. |
 | The crew strikes first. | If the crew acts before the threats know, the GM telegraphs nothing that round. Anyone who never saw it coming is helpless. |
-| An ally fights beside the crew. | It's a threat on your side: a Challenge and tags. A player spends an action to direct it: roll its Challenge die. Threats can telegraph at it, and when they land, its Challenge die stops one, the way a track does. It has no tracks, so strip its tags. It can intercept for any of the crew for free, and they can for it, for 1 Aura. |
-| Fire, falls, floods, traps. | The world telegraphs: a die at whoever's in it, from the round budget. Answer it, or roll your track when it lands. |
+| An ally fights beside the crew. | It's a threat on your side: a Challenge and tags. A player spends an action to direct it: roll its Challenge die. Threats can telegraph at it, and when they land, its Challenge die stops one, the way one of a Root's dice does. It has no points, so strip its tags. It can intercept for any of the crew for free, and they can for it, for 1 Aura. |
+| Fire, falls, floods, traps. | The world telegraphs: a die at whoever's in it, from the round budget. Answer it, or roll the Root it's at when it lands. |
 | Something that lasts a while: a poison, a spell, an alarm. | A condition, if it sits on someone. A clock or an event, if it sits on the scene. |
 | A long task: research for a day, forging papers. | Outside rounds, one action for a quick go, or two if they can take their time. In downtime, a slot. |
 | Something big and strange the rules don't cover. | Is it an intent (roll against a Challenge), or going beyond (1 Aura)? It's almost always one or the other. |
 | They want to know something about the world. | If a permission covers knowing it, tell them. If nobody knows, roll the [Oracle](#oracle). |
 | A player is taken prisoner, or knocked out. | Only a one-answer telegraph, a Blaze, or the player's choice does that. Say so when you telegraph it. |
-| A resting break between scenes. | Aura refills when the next scene starts. At the end of the scene, everyone rests: they roll each track that's below d12, and a 4 or more puts it up a size. A track on d2 waits for downtime. |
-| A player argues something on their sheet fits. | If it doesn't plainly fit, they say how it fits and pay 1 Aura. If they're making a case for why it's normal, it's going beyond: 1 Aura, and move on. |
+| A resting break between scenes. | Aura refills when the next scene starts. At the end of the scene, everyone rests: each Root below its maximum rolls unsplit and gets back what it rolls, as far as its maximum, or half of it while it's wounded. |
+| A player argues a permission brings a Root in. | If it plainly explains how, it does, and they pay the point or the 3 Aura. If they're pushing it past what it normally does, that's going beyond: 1 Aura more, and move on. |
 
 ## Pacing {#s-pacing}
 
@@ -497,7 +500,7 @@ When the rules don't say, find the nearest rule. Most questions come down to one
 -   **An arc is four to six sessions.** It's got a Party Goal, a faction moving against the crew, and at least one Aspiration coming to a head.
 -   **Aspirations are your map.** Every player's written down what their character wants, so build scenes that put it within reach, then make them choose between it and something else.
 -   **Aspirations are the milestones.** When one resolves and a new Title, archetype or attuned thing goes on a sheet, the campaign's turned a page, so mark it.
--   **The world grows with them.** The [threat budget](#s-threat-budget) rises with every new Title, archetype and attuned thing, and threats that were bosses become lieutenants. Factions notice the crew and start writing threads toward it, bond threads and hostile ones (see [How a Faction Sees the Crew](#s-standing)).
+-   **The world grows with them.** The [threat budget](#s-threat-budget) rises with every new Title and permission, and threats that were bosses become lieutenants. Factions notice the crew and start writing threads toward it, bond threads and hostile ones (see [How a Faction Sees the Crew](#s-standing)).
 -   **Size the faction board to the campaign.** Four to twelve core [factions](#s-faction-board), each with up to three [mini factions](#s-mini-factions), and the same card works at any size: factions inside a city, cities inside a country, countries on the world stage. Each downtime, only telegraph the ones the crew can reach, and let the rest move off-screen: say what changed, with no roll (see [The Faction Turn](#s-faction-turn)).
 -   **Remember everything.** Bring back the maid who swore she saw a stranger, and the Warden who knelt, because a world that remembers is one worth being competent in.
 
@@ -508,13 +511,13 @@ When the rules don't say, find the nearest rule. Most questions come down to one
 
 **At the table.** Describe, ask, say yes, and only roll when something pushes back. Be generous with permissions and consistent with rulings. When they look at you, make a move.
 
-**Catches and Resolve.** Catches and hostile threads are the players' to let bite. When one bites, make it real trouble. A big bite puts their Resolve up a size instead of 1 Aura, and that's their call. Give 1 Aura when a great setup misses. When a bond thread strains with one of your people, play their side.
+**Catches and trouble.** Catches and hostile threads are the players' to let bite. When one bites, make it real trouble. A big bite gets them a point of Soul back instead of 1 Aura, and that's their call. Give 1 Aura when a great setup misses. When a bond thread strains with one of your people, play their side.
 
-**In a round.** Telegraph everything, face up, within the round budget: about 11 steps for each player, about half that for a breather and half again at Hard. A telegraph at one of the crew says Body, Mind or Soul. Mix harm, control, position, stakes, clocks and words, about one die at each of the crew's Body at Even. A threat aims one die at each of the crew, unless a tag says more, and each of their tracks stops one at its Root, so count the dice at each Root. Nobody can intercept what's at someone's Mind or Soul. Let the players roll the threats' dice, once a round for each threat, let wins change things, and recognise openings.
+**In a round.** Telegraph everything, face up, within the round budget: three quarters of the threat budget, so 48 for a starting crew of four, about half that for a breather and half again at Hard. A telegraph at one of the crew says Body, Mind or Soul, and how many hits when it's more than one. Mix harm, control, position, stakes, clocks and words, about one die at each of the crew's Body at Even, and at Hard pile more onto whoever's hurting. A threat aims one die at each of the crew, unless a tag says more, and each of their dice stops one, so count the dice at each Root. The fight of the session runs about 45 minutes, with somebody Bloodied in round 3 or 4. Nobody can intercept what's at someone's Mind or Soul. Let the players roll the threats' dice, once a round for each threat, let wins change things, and recognise openings.
 
-**Threats.** Size scenes from the threat budget: 15 a character as they start, so that's 60 for a starting crew of four, and a third on each character's share with every new Title, archetype or attuned thing (20, 27, 36 and 48). A multiplier's as big as the creature needs, on the tag that says what it is, and four times its Challenge is a good start. They're built for 60, so multiply each one by the threat budget and divide by 60. A vulnerability can strip two tags in one hit, so give them out with care, and keep them rare on the crew.
+**Threats.** Size scenes from the threat budget: the crew's Roots added up, so 64 for a starting crew of four, and 6 more with every new Title. A multiplier's as big as the creature needs, on the tag that says what it is, and its Challenge less 2 is a good start. They're built for 64, so multiply each one by the threat budget and divide by 64. A crew of four lands three or four wins a round. A vulnerability can strip two tags in one hit, so give them out with care, and keep them rare on the crew.
 
-**Consequences.** Only when it matters. Name the cost of a blow or a miss, take a fair swap, and fail forward. What gets through to their Mind or Soul costs a size of Confidence or Resolve, the same as a blow, unless armour on that Root takes it or they pay 2 for 1. When a player chooses to die at a Blaze, slow right down and let them tell it.
+**Consequences.** Only when it matters. Name the cost of a blow or a miss, take a fair swap, and fail forward. A hit's a point off the Root it was at, the same at their Mind or Soul as at their Body, unless armour on that Root takes it or they take it 2 for 1. At 0 it wounds them, and on a wounded Root at 0 it's a Scar. When a player chooses to die at a Blaze, slow right down and let them tell it.
 
 **Archetypes and Study.** Let each archetype do its thing, let an ability be as big as it says, and say what an Elementalist's burst touches. Going beyond is 1 Aura, so put the size in the Challenge. Study finds what's there, and if an Oracle's truth could be there, it is.
 

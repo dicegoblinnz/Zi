@@ -131,7 +131,7 @@ How a strained thread plays out at the table, from both sides, is in [Playing th
 | **One roll to beat** | The first time it's attacked in a round, it rolls its Challenge, and everyone who goes at it that round has to beat that roll. A *Layered* threat rolls its dice, and its best one stands. |
 | **Strip a tag** | A win aimed at it, or one tick off its multiplier. Spending *Burning*, *Bleeding* or *Poisoned*. An *Acid vial*. A *Piercing* weapon gets past *Armoured*, and a *Breaker* past *Shield*. |
 | **End it in one win** | An opening: its weak point, helpless, or getting around everything that keeps it going. A Boss only falls to its weak point. Any other opening strips two whole tags, multipliers and all. |
-| **Tick down a multiplier** | Every win against a tag with a multiplier, like *Armoured ×12*, ticks one off, and the GM says what's left. A condition that would strip a tag ticks one off instead. |
+| **Tick down a multiplier** | Every win against a tag with a multiplier, like *Armoured ×4*, ticks one off, and the GM says what's left. A condition that would strip a tag ticks one off instead. |
 | **Hit harder** | A vulnerability: every one that fits a win that strips a tag or takes a track down adds one more tick, and you choose where it goes, on the same tag or another one the hit could reach. *Prone*, *Exposed* (condition). The Warrior's *Opened* (1 Stamina). Hidden ones are hidden tags, so Study finds them. |
 | **Find a hidden tag** | Study. *Sighted*, *Spotted* (condition). |
 | **Turn a tag against it** | Bring it into your roll (1 Aura). |
