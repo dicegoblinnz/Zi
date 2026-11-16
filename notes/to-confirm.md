@@ -36,6 +36,7 @@ Written into The Core, Conflict (bar A Full Fight), Downtime, Appendix D and the
 13. **2 for 1 keeps its name**, for taking a hit on another Root for 2 points of it, and with several hits, each one goes where you like.
 14. **Downtime's Recover is Mend now**, since you don't need a slot to heal, and mending what you carry still takes one.
 15. **Appendix D's archetype lines are the plan's swaps, not new designs**: the Bard's Lift rests the crew's Mind like a scene's end, the Bloodsworn counts points of Body for sizes of Stamina, the Healer's *Good Hands* ignores a step of Toll, a Maker puts their Aura into a friend's awakening, a Teleporter's portal is 1 Aura, and the Warrior's *Second Skin* is a step a piece on your Body's defence. Prompt 2's archetypes are the truth, and prompt 7 brings these into line.
+16. **A truth from the Oracle's *Foretold* is a tag on whatever it's about**, for the whole crew for the rest of the scene, like a tag they've found, since it can't be a free step any more.
 
 ## 14 Nov: stacking
 
