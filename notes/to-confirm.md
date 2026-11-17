@@ -16,6 +16,17 @@ Part 3 of the rework (`notes/fixes-plan.md`), from your 17 Nov chat (`notes/play
 8. **Packs give Resources**, half their tier rounded up.
 9. **A vessel holds its tier in charge**, filled only with Aura you'd lose or a point at a time mid-scene, and spent only on your own abilities and awakenings.
 
+### 4. The loop under tension
+
+Prompt 4 (`tools/fight_sim.py`, `notes/loop-under-tension.md`). Its proposals are in the note, and these are the calls it made to run them.
+
+1. **What the four carry in the sim**, on the plan's prices since prompt 2's crew wasn't written yet: Bram's Named plate (tier 3) and a Trusty shield as a guard, Vesk's Trusty leathers and a Trusty knife, Wren's Named longbow and her hooded cloak as a guard (the plan's "a cloak that blurs you"), and Ash's ember stone as a tool that fits her fire. An attuned thing comes at tier 2, its awakenings on top.
+2. **A guard goes on once a landing.** When Bram Defends, his shield's 2 steps go on the Body roll against what's landing and not on the Defend's dice as well, since it's one item a roll and the two are one landing.
+3. **2 for 1 onto armour comes before the wound.** With soak back every scene, Vesk taking a Soul hit on her leathers costs her nothing, so the sim plays it that way, and the walk-through shows it.
+4. **A fight's minutes come from what's in it now**, about 33 seconds a go, 9 a die and 6 a thing checked or paid, set so 16 Nov's fights come out as long as the old flat guess. They're a guess too, so time a round at the table and move them.
+5. **Two fixes to the sim itself**: the hard GM's third die of every three now goes round the Roots (it was always Body, so Mind and Soul never got any), and a deadly telegraph costs what the book says (it cost its steps once).
+6. **Bram still intercepts for everyone by default**, as prompt 3 had it, with `--reach` for how many friends he can get in front of. The note gives both.
+
 ### 2. The character
 
 Written into Building Your Character (03), Title Ideas and the Crew (03b) and Coin and Kit (18) on 17 Nov, on `rules/2026-11-17-fixes-character`.
