@@ -40,7 +40,7 @@ Every archetype's ability list was reworked on 18 Nov (designed on Fable, writte
 - **Leave a door** reaches anywhere in the same city. Yours to set.
 - **Twins to watch at the table** (the independent review): the Bloodsworn's *Mine to take* and the Guardian's *Put it on me* both take a friend's hit (raw to feed the blood, or soaked), and the Warrior's *Riposte* and the Bard's *Answer back* both send a stopping die back (Body, or Mind and Soul). Kept as different ways to play. *(Superseded by the levers pass: *Answer back* is *Throw it back*, and *Put it on me* no longer takes a hit.)*
 - **Isolde's Oracle lines stay as they were.** The Fable pass added a line each to *Push* and *Hold it*, and Isolde's paper sheet ran out of room, so both are back to their 17 Nov words.
-- **The Teleporter** still has no Push and nothing for the faction turn.
+- **The Teleporter** still has no Push and nothing for the faction turn. *(Levers pass 2: the faction turn's on four lists now, the Face, Leader, Oracle and Gambler, so that's by design.)*
 - **Parry** is weak beside *Second Skin*. Left. If you want it better, it lasts the scene. *(Answered by the levers pass: *Parry* is held, so it lasts the scene.)*
 - **Call them out** has no roll, so the GM's choice is the check. Say if it should roll.
 
@@ -48,14 +48,28 @@ Every archetype's ability list was reworked on 18 Nov (designed on Fable, writte
 
 A second pass on the abilities against the levers map (designed on Fable, 18 Nov). 31 of 179 changed, and all of it's in the book and the change log as `c-2026-11-18-levers`. These are yours to say yes or no to.
 
-- **Signatures are new:** the Guardian's *Not while I stand* (4), the Summoner's *Call the horde* (4), the Elementalist's *Let it loose* (5), the Healer's *Close the wound* (5), the Illusionist's *Grand illusion* (5) and the Teleporter's *Everybody out* (5).
+- **Signatures are new:** the Guardian's *Not while I stand* (4), the Summoner's *Call the horde* (4), the Elementalist's *Let it loose* (5), the Healer's *Close the wound* (5), the Illusionist's *Grand illusion* (5) and the Teleporter's *Everybody out* (5). *(Levers pass 2: every archetype has one now, eleven more.)*
 - ***Close the wound* at 5**, against the 2 you had. The middle road: 3 Aura to lift a wound's cap for the scene on a heal.
 - **Held is new:** *Marching song*, *Scent of blood*, *Hold the line*, *I built that*, *Tooth and claw*, *All beast*, *Borrow its knack* and *Parry*.
-- **New levers used from the map:** a condition turned back (*Throw it back*), a point to break a condition (*Bite down*), a die read as its top face (*Loaded*, 3, the game's only 3), reach as difficult ground (*Hold the line*), a stride after a win (*Press on*), a point back when a threat falls (*Blood up*), acting before the first telegraphs (*First to move*, 2), a clock not ticking (*Not today*, 2), a charm (*Keep this on you*), a multiplier's ticks (*Where it's soft*) and a wound cleared (*Close the wound*, 5).
+- **New levers used from the map:** a condition turned back (*Throw it back*), a point to break a condition (*Bite down*), a die read as its top face (*Loaded*, 3, the game's only 3), reach as difficult ground (*Hold the line*), a stride after a win (*Press on*), a point back when a threat falls (*Blood up*), acting before the first telegraphs (*First to move*, 2), a clock not ticking (*Not today*, 2), a charm (*Keep this on you*), a multiplier's ticks (*Where it's soft*) and a wound cleared (*Close the wound*, 5). *(Levers pass 2: *Bite down* is cut, for *Blood for blood*.)*
 - **Near a guardrail:** *Blood up* and *Scab over* (Aura into points, both once a round with no paying again), *Keep this on you* (close to the cut *Bottle it*), *First to move* (it goes before the telegraphs, but it isn't an extra action) and *Press on* (a free stride off a win).
-- **Up to 2 Aura:** *Crescendo*, *Red mist*, *Double or nothing*, *On me* and *That was never me*.
+- **Up to 2 Aura:** *Crescendo*, *Red mist*, *Double or nothing*, *On me* and *That was never me*. *(Levers pass 2: *Crescendo*'s 3 now.)*
 - **The twins:** *Answer back* replaced, *Put it on me* keeps only a miss's cost, and *Your turn* replaced.
 - **Still yours:** *Everyone gets it* and *Turn them* at 1 Aura, *Bleed for it* paying itself back, and *On the move*, *On the fly* and *In passing*.
+
+The second levers pass (Fable, 18 Nov) changed 30 more and added one, and it's in the same change log entry. Yours to say yes or no to:
+
+- **A signature on every archetype**, eleven new: yes or no to the idea, then each one. The strongest are *Bought and paid for*, *Borrowed time* and *Hot streak*.
+- **The faction turn's on four lists** (Face, Leader, Oracle, Gambler), down from twelve, and none hands out a free outcome. Say if you want it on more.
+- ***Paid in Blood* pays on points you spend yourself**, so every Bloodsworn ability priced with a point is free in Aura. The fix is in the Trait (it pays when a hit takes the point), or *Bleed for it* once a roll.
+- ***Crescendo* at 3**, the ladder's price for the whole crew.
+- ***Opened* only off an explosion.** On any win it'd be 2 Aura.
+- ***Kill stroke* pays no Aura** for the die it sets on its top face, and it's close to the Gambler's *Loaded*.
+- ***Sit with them* takes 1 Toll off** for an action and 1 Aura, once a scene a patient, the first thing that does.
+- ***Blood oath* hexes whoever breaks their word** at a d8, up to the next downtime, so the GM has to remember it.
+- ***Showstopper* in a fight** pulls every telegraph onto the Bard for a round. Watch it beside a Guardian, who gets Aura for each one he takes.
+- **Investigation's thinner** on the Bard, Elementalist, Gambler, Illusionist, Leader and Shifter lists. Study still does that job for everyone.
+- **The Leader's signature is *Go again*** in the book, where the design had *Again!*.
 
 ## 17 Nov: the fixes
 
@@ -120,7 +134,7 @@ Written into The Core, Conflict (bar A Full Fight), Downtime, Appendix D and the
 
 Written 17 Nov on `rules/2026-11-17-fixes-abilities-b`: ten abilities each for the Healer, Hunter, Illusionist, Leader, Maker and Oracle in 03a, the old ones word for word.
 
-1. **Abilities that reach the faction turn are paid in the scene before it**, since there's no Aura in downtime: the Hunter's *Hunt them down*, the Leader's *Orders for the week* and the Oracle's *Read the year*.
+1. **Abilities that reach the faction turn are paid in the scene before it**, since there's no Aura in downtime: the Hunter's *Hunt them down*, the Leader's *Orders for the week* and the Oracle's *Read the year*. *(Levers pass 2: *Hunt them down* is cut, for *Nowhere to run*.)*
 2. **Marking's one die, not your action.** The Hunter's mechanic said "spend your action", where Conflict's Marked and Appendix C already had it as a die's intent, so the Hunter's section says a die now.
 3. **Toll stays a cost for the Healer.** Nothing ignores it past *Good Hands*: *Take the Toll* moves a heal's Toll onto the Healer, *Share it* gives every patient their own, and *Close the wound* (2 Aura) clears a wound mid-scene and is still a heal, Toll and all. *(Superseded by the levers pass: *Close the wound* is a 5 Aura signature and not a heal, so no Toll.)*
    Superseded by the 18 Nov abilities rework: *Take the Toll* is cut and *Share it* is *Go round*.
@@ -141,7 +155,7 @@ The Bard, Bloodsworn, Elementalist, Face, Gambler and Guardian in 03a, ten abili
 1. **Ten each, simplest first, Push first.** Every one that was there is kept word for word. The Bloodsworn and the Gambler hadn't got a Push, so each has one now: the Bloodsworn's on a roll its blood's put steps on, and the Gambler's on a die it's just flipped.
 2. **Three are 2 Aura**, because each does what a whole action or a whole downtime would: *Shield of the storm* (the Elementalist's area on a Defend, so one die stops every blow at everyone in it), *Friends in high places* (the Face's influence left on a faction, turning its whole downtime action) and *House rules* (the Gambler wins every tie for a round). Everything else is 1.
    Superseded in part by the 18 Nov abilities rework: *House rules* is cut, and the other two stay at 2.
-3. **The faction turn's abilities are paid in a scene**, since there's no Aura in downtime: the Bard's *A song about them* (a song to a crowd counts as the crew's Influence or Undermine, without the crew's action), the Face's *Friends in high places* and the Gambler's *Side bet* (a flip at the next faction turn).
+3. **The faction turn's abilities are paid in a scene**, since there's no Aura in downtime: the Bard's *A song about them* (a song to a crowd counts as the crew's Influence or Undermine, without the crew's action), the Face's *Friends in high places* and the Gambler's *Side bet* (a flip at the next faction turn). *(Levers pass 2: *A song about them* is cut, for *Showstopper*.)*
 4. **Bleed out is kept word for word, and it's yours to look at.** It's the one ability left that adds steps by counting something (3 for every point the Body's down), on top of the mechanic's own 3 a point, so a Bloodsworn on 2 of 9 gets 21 steps for 1 Aura. Say if it should go, or become something like "the steps from every hit this round go on the roll you're making now".
    Superseded by the 18 Nov abilities rework: *Bleed out* is cut, and *Not yet* is in.
 5. **The levers Boons left** went where the plan put them: *Scab over* is the Bloodsworn's Regen (a point back at the round's end, to half its maximum, the way a breath works on Mind, and no Toll), *Back on my feet* is the Guardian's Recovery (its Body rolled twice at a scene's end), and *Stand firm* stays the Guardian's Toughness. Soak gets *Take it on the plate* (the Guardian's armour taking a friend's hit) and *Through the mail* (soak counting for the Bloodsworn's steps, never its Aura).

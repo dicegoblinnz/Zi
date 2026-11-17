@@ -131,7 +131,7 @@ A vulnerability makes a hit hurt more. When a win strips one of its tags or land
 | **Soft Underbelly** | Its belly's bare. Get underneath it, and every hit there gets one more tick. |
 | **Easily Shamed** | Shame works on it. A win that shames it in front of its people gets one more tick. |
 | **Holy Ground** | On holy ground, everything hurts it more. Lure it there. |
-| **Opened** | The Warrior's, for 1 Aura: every hit on it gets one more tick till the round ends. |
+| **Opened** | The Warrior's, for 1 Aura when a die of theirs explodes and wins: every hit on it gets one more tick till the round ends. |
 
 ## What drives it {#what-drives-it}
 
