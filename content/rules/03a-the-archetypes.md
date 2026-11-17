@@ -634,23 +634,25 @@ You collect **animal tags**, the way a [Summoner](#a-summoner) catches souls. Sp
 
 **Push (1 Aura):** +2 to one of your Shifter dice.
 
-**Become it (1 Aura):** take any animal tag with no roll, even a breath attack. Pay again for another.
+**Become it (1 Aura):** take any animal tag now with no roll, even a breath attack, as part of whatever you're doing, and even when it isn't your go, like wings as you fall. It's borrowed, so it lasts till the scene ends and you can't strip it. Pay again for another.
 
-**Another beast (1 Aura):** swap your *Something of the Beast* for another one now, in the middle of the scene. Pay again to swap again.
+**Another beast (1 Aura):** pick a second *Something of the Beast* now, on top of the one you've got, till the scene ends. Pay again for another.
 
-**Nose for it (1 Aura):** your *Something of the Beast* finds one thing nobody else in the crew could, and the GM tells you what fits it: where someone's hiding, what's been through here, or what's coming. Pay again for another.
+**Nose for it (1 Aura):** your *Something of the Beast* finds one thing nobody else in the crew could. Say which sense you're using, and the GM tells you straight what it finds: where someone's hiding, what's been through here, or what's coming. Pay again for another.
 
-**Kin (1 Aura):** till the scene ends, one kind of animal treats you as one of its own, so a guard dog won't bark at you, a horse lets you up, or a hawk shows you where it's been. Pay again for another kind.
+**Kin (1 Aura):** till the scene ends, one kind of animal treats you as one of its own, so a guard dog won't bark at you, a horse lets you up, or a hawk shows you where it's been. A beast that's a threat still fights you if its handler sets it on you, but it won't raise the alarm. Pay again for another kind.
+
+**A little bird (1 Aura):** send a bird or a small beast off with a message or one small thing to someone you could name, or to watch a place. It gets there this scene if it's close, or by the next scene if it's across town, and a watcher comes back and the GM tells you what it saw, the way a beast sees it. Send it to watch a faction's place in the last scene before downtime, and when the GM telegraphs that faction's action, ask her one question about it and she answers it straight.
 
 **Share the shape (1 Aura):** a friend you're touching gets one of your animal tags till the scene ends, and it does for them what it does for you. It's still yours too, and only you can strip it. Pay again for another tag, or another friend.
 
-**Slip it (1 Aura):** strip one of your animal tags to break a condition on you, with no roll. An eel's skin slips the grip, and wings get you out from under the net. Pay again for another.
+**Slip it (1 Aura):** strip one of your animal tags to break a condition on you, any time, with no roll. The tag has to fit: an eel's skin slips the grip, and wings get you out from under the net. Pay again for another.
 
-**Thick hide (1 Aura):** when you strip an animal tag instead of taking a hit, it takes every hit that telegraph brings, not just the one.
+**Tooth and claw (1 Aura):** till the scene ends, one of your animal tags is an item at tier 2 on any roll it fits, on top of your six: claws or jaws as a weapon, a shell or a thick hide as a guard, or gills or a climbing grip as a tool. It's the one item on that roll, and if the tag's stripped, it's gone. Pay again for another tag.
 
-**The pounce (1 Aura):** when an animal tag's moving you, like wings or a cat's spring, a die you put on moving can have an intent of its own as well. You land on them, and if it beats their defence, it happens. Dice on moving still add up for how far you go. Pay again for another die.
+**The pounce (1 Aura):** when an animal tag's moving you, like wings or a cat's spring, one die you put on moving has an intent as well. Its number counts twice, for how far you go and against their defence when you land, so long as it gets you to them. Pay again for another die.
 
-**All beast (2 Aura):** you're the animal, whole, till the scene ends or you change back. Anyone who sees you sees a stray dog or a crow on the gutter, and nobody looks twice. You can't talk or hold anything it couldn't, and your animal tags work the same.
+**All beast (1 Aura):** you're the animal, whole, till the scene ends or you change back, which is free whenever you like. Anyone who didn't see you change sees a stray dog or a crow on the gutter, and nobody looks twice unless you do something no animal would. You can't talk or use anything you carry, but your armour still soaks, and your animal tags and Trait work the same.
 :::
 
 :::example[Wings]
@@ -678,23 +680,25 @@ Catching souls and summoning are the Summoner's, and nobody else can do them. He
 
 **Push (1 Aura):** +2 to one of your dice when you're catching a soul.
 
-**Call the horde (1 Aura):** this time each Aura you spend calls up a d6, not a d4, still no bigger than the soul's own die. Pay again and it's a d8.
+**Call it now (1 Aura):** call a summon out the moment you need it, without waiting for your action: in the middle of someone else's go, or as the telegraphs land. You still pay its Aura. It can intercept straight away, but it doesn't act till next round.
 
-**Hold together (1 Aura):** one of your summons doesn't fade at the end of this round. Pay again for another summon.
+**Hold together (1 Aura):** the next time this round one of your summons would lose a size, to the fade or to a hit that gets through, it doesn't. Pay again for another.
 
-**Ask the dead (1 Aura):** ask a soul in your attunement one thing it knew while it was alive, without calling it out. It answers as well as it can, and a hound's answer is a hound's.
+**Ask the dead (1 Aura):** ask a soul you hold, in your attunement or one you're carrying, one thing it knew while it was alive, without calling it out. It answers as well as it can, and a hound's answer is a hound's. Pay again for another question.
 
-**Borrow its knack (1 Aura):** one thing a soul in your attunement could do is yours till the scene ends, like a permission, so it can bring a Root in: the courtier's manners, or the hound's nose. Pay again for another.
+**Borrow its knack (1 Aura):** one thing a soul you hold could do is yours till the scene ends, like a permission, so it can bring a Root in: the courtier's manners, the hound's nose or the locksmith's hands. Pay again for another.
 
-**Speak through it (1 Aura):** see and hear what one of your summons does, and talk through it, wherever it goes till it fades. Send the rats under the door and you're in the room.
+**Speak through it (1 Aura):** see and hear what one of your summons does, and talk through it, wherever it goes till it's gone. Send the rats under the door and you're in the room.
 
-**Call it now (1 Aura):** call a summon out the moment you need it, without waiting for your action: in the middle of someone else's go, or as the telegraphs land. You still pay its Aura.
+**Call the horde (1 Aura):** every summon you call out this time brings a d4 one just like it, so call three and six come. It works on your pocket summon too. Pay again and each brings another.
 
-**Catch it whole (1 Aura):** when a die of yours puts a creature down, the same die catches its soul as well, with no die of its own on the catch.
+**Catch it whole (1 Aura):** when a die of yours puts a creature down, the same die catches its soul as well, with no die of its own on the catch. A summon's die counts as yours for this. The soul still ticks one of your Resources.
 
-**Take it for me (1 Aura):** when something gets through to you, one of your summons beside you takes it instead, once the dice are down. Each hit knocks a size off it, the way it would if it had intercepted.
+**Stand with them (1 Aura):** one of your summons goes with a friend this round, and instead of acting on its own, its die's one of theirs: it rolls in their throw, they give it its intent, and it counts as theirs for their archetype, so it explodes for a Warrior. It's still a summon's die, so it never pays Aura. Pay again for another summon, or another friend.
 
-**Soul for a soul (1 Aura):** this round your summons can intercept what's aimed at a friend's Soul as well as their Body, since a soul can get in front of a curse.
+**Rise (1 Aura):** a soul you've caught this scene can be called out now, though it isn't in your attunement yet. You pay for it the usual way, none bigger than its own die. It's what it was, so the bandit captain knows his own men and his own door.
+
+**Haunt them (1 Aura):** as a scene ends, leave a soul you hold haunting a faction's face or one of its places, and it's not yours to call or ask till the next downtime's over. When that faction telegraphs its action, the soul's die goes against it as an Obstruct, and it doesn't cost the crew its action (see [The Faction Turn](#s-faction-turn)). Win or lose, the soul comes back and the GM tells you what it saw.
 :::
 
 :::example[Sable calls them out]
@@ -712,25 +716,25 @@ Your [stride](#s-movement) can be a teleport of up to 10 units. If you're a [Gua
 :::rule
 **Trait:** *Not There*. Once a scene, whenever you like, even as something's landing on you, teleport anywhere you can see within 10 units. It takes no action, and whatever was about to land on you misses. It's the one time moving gets you out of a telegraph aimed at you.
 
-**Portal (1 Aura):** open a portal and link it to another spot within 10 units. It lasts the round, and anyone who steps in comes out the other end. Pay again for another.
+**Portal (1 Aura):** open a portal between two spots you can see within 10 units. It takes no action and lasts till the round ends, and anyone who steps in either end comes out the other as part of their move, threats included. A telegraph aimed at someone follows them through, and one aimed at a place stays behind. Pay again for another portal, or another round on one that's open.
 
-**Swap (1 Aura):** swap places with anyone you can see, friend or foe. Pay again for another swap.
+**Further (1 Aura):** everything of yours that goes 10 units goes 10 more this round, your teleport and *Not There* included. Pay again for 10 more.
 
-**Further (1 Aura):** your teleport goes 10 units further this round. Pay again for 10 more.
+**Fetch (1 Aura):** something you can see within 10 units that nobody's holding or wearing, and that you could carry in your arms, is in your hand, or something in your hand goes there, a willing friend's hand included. Pay again for another thing.
 
-**Hold it open (1 Aura):** a portal of yours stays open another round. Pay again for another round.
+**Take them with you (1 Aura):** when you teleport, someone willing you're touching comes too, and if it's your *Not There*, whatever was about to land on them misses as well. Someone unwilling takes Drop them. Pay again for another.
 
-**Take them with you (1 Aura):** when you teleport, bring someone you're touching with you. Pay again for another.
+**Swap (1 Aura):** swap places with a friend or a Mook you can see within 10 units, with no roll. Anyone bigger takes Drop them. Pay again for another swap.
 
-**Fetch (1 Aura):** something you can see within 10 units that nobody's holding on to is in your hand, or something in your hand goes there. Pay again for another thing.
+**Keyhole (1 Aura):** open a hole the size of a coin to any spot within 10 units, wall or no wall. Till the round ends you see and hear through it, and what you see through it counts as seen for your teleport, Portal, Fetch and Swap. When nobody's counting rounds, it lasts as long as you keep still and watch. Only sight and sound go through, and someone looking right at the other end can spot it. Pay again for another round, or another keyhole.
 
-**Step through (1 Aura):** your teleport can take you somewhere within 10 units you can't see, as long as you've been there or know it well: the other side of a door, the room upstairs, or the vault you cased last week.
+**Leave a door (1 Aura):** mark the spot you're standing on. Till the next downtime's over, it counts as within 10 units from anywhere in the same city, for your teleport and your portals. A new mark takes the old one's place, unless you pay again to keep both.
 
-**Through the portal (1 Aura):** this round, your dice and the crew's can go through a portal you've got open, at anything near its other end.
+**Through the portal (1 Aura):** this round, your dice and the crew's can go through a portal you've got open, at anything near its other end, and theirs can come back the same way.
 
-**In and out (1 Aura):** this round your dice can go at anyone within 10 units as if you were right beside them, and you finish the round back where you started.
+**In and out (1 Aura):** this round each of your dice can go at anyone within 10 units, each at someone different if you like, and you finish the round back where you started. You count as right beside each of them as its die lands, so anything that needs a touch works.
 
-**Drop them (1 Aura):** when a die of yours wins against someone you're touching, you send them anywhere within 10 units you can see, as well as whatever the die was for: off the wall, into the cell, or back across the square. Pay again for another.
+**Drop them (1 Aura):** when a die of yours wins against someone you're touching, you send them anywhere within 10 units you can see, as well as whatever the die was for: off the wall, into the cell, or back across the square. Over a drop they fall, and the GM says what that does, but never into anything solid. Pay again for another.
 :::
 
 :::example[Out through the portal]
@@ -752,23 +756,25 @@ Your dice **explode** when you fight. A die that lands on its top face gives you
 
 **Push (1 Aura):** +2 to any one of your dice in a fight. If that takes it to its top face or past, there's no Aura for it, but it still explodes.
 
-**Opened (1 Aura):** when one of your dice wins in a fight, the target's *Opened* till the round ends. *Opened* is the Warrior's own [vulnerability](#s-vulnerable), so it stacks with fire, blades and the rest. Every hit on it ticks once more till the round ends, starting with the one that opened it. Two Warriors can each open the same target, and both count. Pay again to open another target your dice beat.
-
 **Not just fights (1 Aura):** your dice explode on this roll even when it isn't a fight: a door to break, a wall to climb, or a man to stare down.
 
 **Parry (1 Aura):** this round, your weapon's tier goes on your roll when things land at your Body, the way a guard's would. It's still one item a roll.
+
+**Opened (1 Aura):** when one of your dice wins in a fight, the target's *Opened* till the round ends. *Opened* is the Warrior's own [vulnerability](#s-vulnerable), so it stacks with fire, blades and the rest. Every hit on it ticks once more till the round ends, starting with the one that opened it. Two Warriors can each open the same target, and both count. Pay again to open another target your dice beat.
 
 **Read the fighter (1 Aura):** when one of your dice wins in a fight, the GM tells you one of the target's hidden tags as well. Pay again for another.
 
 **Face me (1 Aura):** when one of your dice wins against a threat, its next telegraph has to come at you, as well as whatever the die was for. Pay again for another threat your dice beat.
 
-**Follow through (1 Aura):** when one of your dice explodes, roll the new one as a die of its own, with its own intent, instead of adding it on. It can explode too. Pay again for another.
-
 **Through them (1 Aura):** when one of your dice puts a mook down, it goes on at another within your reach, with the same number, against their defence. Pay again and it goes on again.
 
-**Riposte (1 Aura):** when one of your dice stops a blow as it lands, it goes at whoever swung it as well, with an intent you give it, against their defence. Pay again for another die.
+**Follow through (1 Aura):** when one of your dice explodes, say so before you roll the new one, and it's a die of its own, with its own intent, instead of adding on. It pays Aura and explodes like any die. Pay again for another.
 
-**Show them how (1 Aura):** a friend beside you rolls dice that explode in this fight, the way yours do, till the round ends. Pay again for another friend.
+**Riposte (1 Aura):** when one of your dice stops a blow aimed at you, whether you're answering it, Defending or it's landing, it goes at whoever swung it as well, with the number it rolled and an intent you give it, against their roll for the round. Pay again for another die.
+
+**Show them how (1 Aura):** a friend beside you rolls dice that explode in this fight, the way yours do, till the round ends, and the Aura from their explosions is theirs. Pay again for another friend.
+
+**Call them out (1 Aura):** challenge someone in front of people whose opinion they care about, with no roll. The GM picks: they face you alone, and while nobody else touches either of you their telegraphs only come at you, or they back down and lose face, and one tag that rests on their name is gone, her pick. It needs a name to lose and people watching who matter to them, so a beast, a zealot or a man with nobody watching just says no.
 :::
 
 :::example[The sellsword]
