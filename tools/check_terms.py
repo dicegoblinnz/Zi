@@ -19,7 +19,7 @@ RETIRED = [
     ("tiers", r"\b(Novice|Skilled)\b|\bMaster tier\b|\bat Master\b"),
     ("specialization", r"\bspeciali[sz](ation|ations|ed)\b"),
     ("Help action", r"\bHelp(s|ing|ed)?\b|\bhelp action\b"),
-    ("Guard action", r"\bGuard(s|ing|ed)?\b(?! (of|at the|on the gate))(?!\]\(#s-items\))"),
+    ("Guard action", r"(?<!\| )(?<!\*\*)\bGuard(s|ing|ed)?\b(?! (of|at the|on the gate))(?!\]\(#s-items\))"),
     ("two actions", r"\b(two|both|second|2) actions?\b|\byour two actions\b"),
     ("item rarity", r"\b(rarity|Rare|Legendary)\b"),
     ("stretch", r"\bstretch(es|ed|ing)?\b"),
