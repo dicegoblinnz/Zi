@@ -39,7 +39,7 @@ Start with how they work, then find yours in [Picking Your Archetypes](#s-pickin
 
 Say you're a Warrior and put *Parry* up. Your weapon's a guard every time blows land at your Body till the scene ends, and your Aura maximum's 4 while it's up. Bram's a Guardian, so if he took *Not while I stand*, 4 Aura once a scene would stop every blow at his Body that round, his own and the ones he took for friends, with no roll at all.
 
-An ability's never steps on a roll. It does what it says, and that's all. It can work with what you've got, though: an item's tier, your Resources, a vessel's charge or your armour's soak. With the Warrior's *Parry*, your weapon's tier goes on your roll when blows land, which a weapon never does on its own, and with the Shadow's *I had it planned*, you say a Resource without ticking one. The Maker's *Tune it up* puts an item a tier higher for the scene, and *Made it earlier* hands you one at tier 2, and it's the item's tier that goes on the roll, never the ability. Wren's roll to mark a creature is her Body as usual, and paying for Mark the pack sends that roll at two more.
+An ability's never steps on a roll. It does what it says, and that's all. It can work with what you've got, though: an item's tier, your Resources, a vessel's charge or your armour's soak. With the Warrior's *Parry*, your weapon's tier goes on your roll when blows land, which a weapon never does on its own, and with the Shadow's *I had it planned*, you say a Resource without ticking one. The Maker's *Tune it up* puts an item a tier higher for the scene, and *Made it earlier* hands you one at tier 2, and it's the item's tier that goes on the roll, never the ability. Wren marks a creature by winning against it with her Body as usual, and paying for Mark the pack sends that die's number at two more.
 
 **Push** is the one most archetypes have on their list: +2 to one die on your mechanic, once you've rolled and you know you need it. A die the +2 takes to its top face, or past it, doesn't pay Aura. **Take the same archetype twice** and its Push is +3, three times it's +4, and so on. You only need Push the once: Vesk's first Shadow came with Push and her second with Vanish, and her Push is +3.
 
@@ -53,7 +53,7 @@ A few things in the game belong to one archetype, and if you're not that archety
 
 -   **Leading** is the [Leader](#a-leader)'s: handing your steps out to friends. Anyone can put their action into a friend's roll as a [combo](#s-teamwork).
 -   **Areas** are the [Elementalist](#a-elementalist)'s. A *Sweep* weapon goes at everyone in your reach whoever's swinging it, and threats have areas of their own (see [Area](#s-area)).
--   **Heal rolls** are the [Healer](#a-healer)'s. Anyone can [quick heal](#s-healing) for 1 Aura.
+-   **Heal rolls** are the [Healer](#a-healer)'s.
 -   **Catching souls and summoning** are the [Summoner](#a-summoner)'s.
 -   **Intercepting for free** is the [Guardian](#a-guardian)'s. Anyone can [intercept](#s-intercept) for 1 Aura.
 -   **Flipping dice** is the [Gambler](#a-gambler)'s.
@@ -145,14 +145,14 @@ You're at Lord Vane's party, and Vesk needs to get up the stair past the guests 
 
 The Bloodsworn gets more dangerous every time they bleed.
 
-**Every point your Body loses adds 3 steps to an action.** If you lose it as you act, because you spent it, the steps go on that roll. If a hit takes it, they go on your next action. Two hits from one die, because it found a [vulnerability](#s-vulnerable), add 6.
+**Every point your Body loses adds 3 steps to an action.** As you act, you can spend points of your Body for nothing but the blood, as many as you like, and each one's 3 steps on that roll. A point a hit takes puts its 3 on your next action, and two hits from one die, because it found a [vulnerability](#s-vulnerable), add 6. Your armour soaks a hit only when you want it to.
+
+You can't spend a locked point or one you haven't got, and spending your Body to 0 doesn't wound it, the same as for anyone.
 
 :::rule
-**Trait:** *Paid in Blood*. Every point your Body loses gives you 1 Aura, whether a hit took it or you spent it yourself.
+**Trait:** *Paid in Blood*. Every point a hit takes off your Body gives you 1 Aura. A point you spend yourself never does.
 
 **Push (1 Aura):** +2 to one die on a roll your blood's put steps on.
-
-**Bleed for it (1 Aura):** before you roll, spend a point of your Body for nothing but the blood, and your mechanic puts its 3 steps on this roll. Pay again to spend another point for 3 more.
 
 **Scab over (1 Aura):** pay any time in the round, and your Body gets a point back at the end of it, as far as half what it holds, rounded up. It isn't a heal, so it adds no Toll. It's once a round.
 
@@ -162,7 +162,7 @@ The Bloodsworn gets more dangerous every time they bleed.
 
 **Make them bleed (1 Aura):** when one of your dice wins on a roll your blood's put steps on, whatever it beat is *Bleeding* at that die's size, on top of whatever the die was for. Pay again for another die.
 
-**Mine to take (1 Aura):** when a hit gets through to the Body of a friend within your stride, take it yourself, after it's landed. It's a point off your Body instead of theirs, and your armour doesn't soak it, so your blood gets its steps and *Paid in Blood* gives you its Aura. Pay again for another hit.
+**Mine to take (1 Aura):** when a hit gets through to the Body of a friend within your stride, take it yourself, after it's landed. It's a point off your Body instead of theirs, and your armour doesn't soak it. You chose it, so *Paid in Blood* doesn't pay, but your blood still gets its 3 steps. Pay again for another hit.
 
 **Now I know you (1 Aura):** when a hit takes a point off your Body, the GM tells you how whatever hit you comes at you: one of its hidden tags of that kind, or that it hasn't got one.
 
@@ -176,7 +176,7 @@ The Bloodsworn gets more dangerous every time they bleed.
 :::example[Two hits]
 Two blows get through to you this round, and your Body goes from 9 to 7, so your next action's got 6 more steps, and *Paid in Blood* gives you 2 Aura. You weren't acting when they landed, so that Aura stops at your maximum, and anything over it can go to a friend.
 
-Next round you swing at the one who did it. Your Body's still 9 steps, whatever it's lost, so it's 15 with the blood: two d12s and a d6. Pay 1 Aura for Bleed for it as you swing and spend a point, and that's 3 more, 18 in all, three d12s. Losing the point gives you the Aura straight back, and your Body's down to 6.
+Next round you swing at the one who did it. Your Body's still 9 steps, whatever it's lost, so it's 15 with the blood: two d12s and a d6. As you swing you spend a point for nothing but the blood, and that's 3 more, 18 in all, three d12s. You spent that one yourself, so *Paid in Blood* doesn't pay for it, and your Body's down to 6.
 :::
 
 **Title ideas:** [Warrior](#k-warrior) · [Hexer](#k-warlock)
@@ -231,7 +231,7 @@ The curtains catch, and next round the GM telegraphs the fire spreading to the d
 
 The Face gets into a threat's head, so its own attacks go where you say.
 
-Spend your action and build your dice the usual way, but don't roll them. Put them on a threat as **influence**, and they stay until you use them or the scene ends. At any point before one of its telegraphs lands, roll your influence against it. Each of its dice that your best influence die beats is yours: say what it does instead, as long as it fits the story, like hitting one of its own or the ground. Then the influence is spent.
+When you act, any of your dice can go on a threat as **influence** instead of being rolled, while the rest roll as usual with their own intents. Influence stays until you use it or the scene ends, dice on a threat that's already got your influence join it, and you can have influence on more than one threat, each put down on its own. At any point before one of its telegraphs lands, roll your influence against it. Each of its dice that your best influence die beats is yours: say what it does instead, as long as it fits the story, like hitting one of its own or the ground. Then the influence is spent.
 
 :::rule
 **Trait:** *I Know a Guy*. Once a scene, say you know someone who could turn up here, and one true thing about them. They come into the scene, the GM plays them, and they help you however they can.
@@ -239,8 +239,6 @@ Spend your action and build your dice the usual way, but don't roll them. Put th
 **Push (1 Aura):** +2 to one of your influence dice.
 
 **Turn them (1 Aura):** when your influence takes one of a Mook's or a Named threat's dice, that threat's on the crew's side till the round ends: every die it's telegraphed this round is yours to aim, the ones you didn't beat too. Never a Boss. Pay again for another threat your influence took a die from.
-
-**In passing (1 Aura):** when you act, some of your dice can go on a threat as influence, unrolled, while the rest roll as usual with their own intents. It's still your one action, and dice on a threat that's already got your influence join it.
 
 **Know their price (1 Aura):** when your influence takes one of a threat's dice, the GM tells you what drives it as well, one of its hidden tags.
 
@@ -276,7 +274,7 @@ The Gambler turns a die over after it lands, whoever's it is.
 **Once a round, flip a die.** When any die you can see lands, yours, a friend's or a threat's, you can flip it: its new number is its size plus 1, take away what it rolled. A 2 on a d10 becomes a 9, and a 9 becomes a 2. It costs no action. A flipped die never pays Aura, and it doesn't explode.
 
 :::rule
-**Trait:** *Bad Luck Pays*. Every die of yours that comes up 1 gives you 1 Aura, as long as it stays a 1.
+**Trait:** *Bad Luck Pays*. Every die of yours, a d4 or bigger, that comes up 1 gives you 1 Aura, as long as it stays a 1.
 
 **Push (1 Aura):** +2 to a die of yours or a friend's that you've just flipped.
 
@@ -353,7 +351,7 @@ The Healer patches people up in the middle of a scene, so they don't have to wai
 
 Only a Healer can make a **heal roll**. It's an action: roll the Root that fits how you're healing, at full and never split, its dice filled to a d12 first, so 8 steps is a d12 and a d4. **Your patient gets back what it rolls**, spread across their Roots however they like, less 5 for each **Toll** they've got already, and never past what a Root can hold, or half that while it's wounded. Then it's 1 more Toll for them. Its top faces give you Aura the way any die's do, but what it heals never does. Nothing heals a [Scar](#s-blaze), and there's more on Toll in [Healing](#s-healing).
 
-A heal reaches one person. Anyone can [quick heal](#s-healing) for 1 Aura, though.
+A heal reaches one person.
 
 :::rule
 **Trait:** *Good Hands*. Your heals ignore a step of Toll: each one loses 5 less for the Toll your patient's got, so a heal from you on someone with 1 Toll is whole.
@@ -362,7 +360,7 @@ A heal reaches one person. Anyone can [quick heal](#s-healing) for 1 Aura, thoug
 
 **Talk them through it (1 Aura):** your heal reaches someone who can see and hear you, not just someone you can reach. They do the stitching while you tell them how.
 
-**Clean it out (1 Aura):** your heal also ends a condition a healer could treat on your patient, like *Bleeding*, *Burning*, *Poisoned*, *Blinded* or *Stunned*, with no roll. It goes on a heal roll, never a quick heal. Pay again for another.
+**Clean it out (1 Aura):** your heal also ends a condition a healer could treat on your patient, like *Bleeding*, *Burning*, *Poisoned*, *Blinded* or *Stunned*, with no roll. It goes on a heal roll. Pay again for another.
 
 **Go round (1 Aura):** split your heal like any other roll, and give each die to a different patient you can reach. The dice aren't filled to a d12 first, since you're shaping them yourself. Each patient gets what their die rolls, less 5 for each Toll they've got, and takes 1 Toll.
 
@@ -372,11 +370,11 @@ A heal reaches one person. Anyone can [quick heal](#s-healing) for 1 Aura, thoug
 
 **What did this (1 Aura):** when you win a [Study](#s-study) on someone hurt, sick or dead, you get two of its picks instead of one: two straight answers, or an answer and a hidden tag. Pay once you've won.
 
-**Owed (1 Aura):** someone you've healed or patched up, the GM's people included, does one thing for you that they'd do for whoever saved their life. There's no roll, and it's once for each of them.
+**Owed (1 Aura):** someone you've healed, the GM's people included, does one thing for you that they'd do for whoever saved their life. There's no roll, and it's once for each of them.
 
 **Rest easy (1 Aura):** when the scene ends, one Root of yours or of a friend you can reach rolls its rest twice and keeps the better. Pay again for another Root, or another friend.
 
-**Pull them back (1 Aura):** when someone you can reach takes a Scar, they stay in the scene instead of leaving it. It costs no action. That Root's still wounded and on 0, so they'll want to keep their head down. Pay again for another.
+**Hold still (1 Aura):** once a round, with no action and no roll, someone you can reach gets 1 point back on one of their Roots, as far as it holds, or half that while it's wounded. It isn't a heal, so it adds no Toll. Paying again gets you nothing more.
 
 **Close the wound (5 Aura, signature):** as your action, with no roll, clear one wound on someone you can reach, so that Root can heal to its maximum again. It isn't a heal, so it gives no points and no Toll. It never touches a Scar.
 :::
