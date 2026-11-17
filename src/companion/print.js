@@ -336,7 +336,7 @@ export async function fillSheet(ch, c, s0, { goal = null, B = null, blank = null
   });
   c.titles.slice(ROWS.titles).forEach((t, k) => notes.push(said(`Title ${NUMERALS[ROWS.titles + k] ?? ROWS.titles + k + 1}, ${t.text ?? t.name} (${spreadNote(t)}): ${t.permissions.map(permWords).join(", ") || "no permissions yet"}`)));
   // Every ability says what it costs in Aura.
-  const ability = (a, x) => `${x.name} (${Math.max(1, Number(x.cost) || 1)} Aura): ${plain(x.text ?? x.html)}`;
+  const ability = (a, x) => `${x.name} (${Math.max(1, Number(x.cost) || 1)} Aura${x.kind ? `, ${x.kind}` : ""}): ${plain(x.text ?? x.html)}`;
   const archs = R.archetypesOf(c, B);
   archs.slice(0, ROWS.archetypes).forEach((a, i) => {
     const at = `archetype_${i + 1}`;

@@ -2612,6 +2612,49 @@ if (part("4")) {
   await context.close();
 }
 
+// 4h. Held and signature abilities (18 Nov), pure, on a made-up archetype
+// since the chapter's still to be written: a held one off the maximum till a
+// new scene or it's dropped, a signature once a scene and never on charge at
+// 5, Parry held, a save from before them untouched, and a cut ability going
+// the usual way.
+if (part("4h")) {
+  const B = { ...BUILD, archetypes: [...BUILD.archetypes, { name: "Testwright", abilities: [{ name: "Hum", cost: 1, kind: "held" }, { name: "Big one", cost: 5, kind: "signature" }, { name: "Middle", cost: 4, kind: "signature" }, { name: "Plain", cost: 1 }] }] };
+  const ash = book.crew.find((x) => x.id === "ash");
+  const c = rootsSheet({ ...ash, archetypes: [...ash.archetypes, { name: "Testwright", have: ["Hum", "Big one", "Middle", "Plain"] }] }, [], B);
+  same(RS.archetypesOf(c, B).find((a) => a.name === "Testwright")?.abilities.map((x) => [x.name, x.kind]), [["Hum", "held"], ["Big one", "signature"], ["Middle", "signature"], ["Plain", ""]], "each ability's kind read off the book");
+  const hum = RS.heldKey("Testwright", "Hum");
+  let s = RS.freshCore(c);
+  same([RS.holdUp(c, s, hum, 1), s.aura, RS.auraMax(c, s), RS.isUp(s, hum)], [true, 4, 4, true], "a held ability put up: 1 Aura paid and 1 off the maximum");
+  same(RS.holdUp(c, s, hum, 1), false, "and it can't go up twice");
+  s = RS.normalCore(JSON.parse(JSON.stringify(s)), c);
+  same([RS.isUp(s, hum), RS.auraMax(c, s), s.aura], [true, 4, 4], "still up through a reload");
+  RS.gainAura(s, c, 3);
+  same(s.aura, 4, "Aura coming in stops at the lower maximum");
+  RS.sceneEnd(c, s, {});
+  same([RS.isUp(s, hum), RS.auraMax(c, s), s.aura], [false, 5, 5], "a new scene drops it and fills Aura to 5");
+  RS.holdUp(c, s, hum, 1);
+  same([RS.dropHeld(c, s, hum), RS.auraMax(c, s), s.aura, "up" in s], [true, 5, 4, false], "dropped: the maximum's back and the Aura paid isn't");
+  const big = RS.heldKey("Testwright", "Big one");
+  const mid = RS.heldKey("Testwright", "Middle");
+  same([RS.sigOk(s, big, 5, { charge: true }), RS.sigOk(s, mid, 4, { charge: true }), RS.sigOk(s, big, 5)], [false, true, true], "a signature at 5 refuses charge, and one at 4 takes it");
+  same([RS.useSig(s, mid, 4), RS.useSig(s, mid, 4), RS.sigUsed(s, big)], [true, false, false], "a signature once a scene, and another still there");
+  s = RS.normalCore(JSON.parse(JSON.stringify(s)), c);
+  same(RS.sigUsed(s, mid), true, "used through a reload");
+  RS.sceneEnd(c, s, {});
+  same(RS.sigUsed(s, mid), false, "and back at a new scene");
+  // Parry's held: up once, free on every landing after, gone at a new scene.
+  same([RS.holdUp(c, s, RS.PARRY, 1), RS.isUp(s, RS.PARRY), RS.auraMax(c, s), RS.holdUp(c, s, RS.PARRY, 1)], [true, true, 4, false], "Parry put up once for the scene");
+  RS.downtimeRest(c, s);
+  same(RS.isUp(s, RS.PARRY), false, "downtime drops it too");
+  // A save from before held and signature abilities: nothing up, nothing used.
+  const old = RS.normalCore({ ...JSON.parse(JSON.stringify(RS.freshCore(c))), aura: 5 }, c);
+  same(["up" in old, "sig" in old, RS.auraMax(c, old), old.aura], [false, false, 5, 5], "a save from before loads untouched");
+  same(RS.normalCore({ ...RS.freshCore(c), up: { junk: "x", [hum]: 9 }, sig: [3, mid] }, c).up, { [hum]: 5 }, "a broken up tidied");
+  // Cut by the levers pass: through cutOf with the book's list.
+  same(RS.cutOf("Guardian", ["Push", "Your turn", "Knock it back"], ["Push", "Not while I stand", "Hold the line"]), { have: ["Push"], cut: ["Your turn", "Knock it back"] }, "cut abilities come off for the player to choose");
+  console.log("held and signature: up and dropped, a new scene, once a scene, no charge at 5, Parry held, older saves");
+}
+
 // 4b. Saved before the new core. Vesk saved on stacking keeps her play, her
 // tracks gone and every Root full, her Scar on her Body, Old Vesk from
 // before Roots comes all the way across; one built on stacking gets each

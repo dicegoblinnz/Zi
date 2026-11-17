@@ -619,7 +619,7 @@ export function archetypesOf(c, B) {
     a.abilities = a.abilities.filter((x) => a.have.includes(x.name)).slice(0, MAX_ABILITIES).map((x) => {
       const isPush = /^Push$/i.test(x.name);
       const said = (s) => (isPush && a.times > 1 ? String(s).replace(/\+2\b/, `+${push}`) : s);
-      return { name: x.name, text: said(x.text), html: said(x.html ?? x.text), push: isPush ? push : 0, cost: Math.max(1, int(x.cost, 1)) };
+      return { name: x.name, text: said(x.text), html: said(x.html ?? x.text), push: isPush ? push : 0, cost: Math.max(1, int(x.cost, 1)), kind: KIND_OF[x.kind] ?? "" };
     });
   }
   return out;
@@ -715,6 +715,14 @@ export function normalCore(raw, c) {
     s.choose = choicesOf(c);
   }
   for (const k of ["tracks", "power", "store", "bought", "stacked", "used", "shrugged", "boxes", "tough", "beyond", "elem"]) delete s[k];
+  // Held abilities up and signatures used this scene (18 Nov): none on a
+  // state from before them.
+  const up = Object.entries(obj(s.up)).filter(([k, v]) => typeof k === "string" && int(v, 0) > 0).map(([k, v]) => [text(k, 130), clamp(v, 1, 5)]);
+  if (up.length) s.up = Object.fromEntries(up);
+  else delete s.up;
+  const sig = Array.isArray(s.sig) ? [...new Set(s.sig.filter((k) => typeof k === "string").map((k) => text(k, 130)))] : [];
+  if (sig.length) s.sig = sig;
+  else delete s.sig;
   s.acting = Boolean(s.acting);
   // Past the maximum only while acting.
   s.aura = clamp(s.aura, 0, s.acting ? 99 : auraMax(c, s));
@@ -995,6 +1003,7 @@ export function sceneEnd(c, s, rolls = {}, { fill = {} } = {}) {
   const filled = [];
   s.acting = false;
   delete s.spill;
+  powerOff(s);
   s.aura = auraMax(c, s);
   s.soak = {};
   const healed = zero();
@@ -1020,6 +1029,7 @@ export function downtimeRest(c, s) {
   s.res = [];
   delete s.out;
   delete s.spill;
+  powerOff(s);
   return s;
 }
 
@@ -1133,6 +1143,40 @@ export function spendCharge(c, s, key, n = 1) {
 // Aura's maximum: the sheet's, 5. Nothing's powered any more, so nothing
 // comes off it.
 export const auraMax = (c, s) => Math.max(0, int(c.numbers?.aura, BASE_AURA) - poweredOf(s));
+
+// Held and signature abilities (18 Nov). A held one's paid once and stays
+// up till the scene ends or it's dropped, its Aura off the maximum while it
+// is. A signature's once a scene, and one at 5 can't be paid with charge.
+export const KIND_OF = { held: "held", signature: "signature" };
+export const heldKey = (arch, name) => `${arch}|${name}`;
+export const PARRY = heldKey("Warrior", "Parry");
+export const isUp = (s, key) => Boolean(obj(s?.up)[key]);
+export const upOf = (s) => Object.keys(obj(s?.up));
+// Putting one up: n Aura off what you've got and off the maximum. paid says
+// the Aura's gone already (with a landing's).
+export function holdUp(c, s, key, n = 1, { paid = false } = {}) {
+  const cost = Math.max(1, int(n, 1));
+  if (isUp(s, key) || (!paid && s.aura < cost)) return false;
+  if (!paid) s.aura -= cost;
+  s.up = { ...obj(s.up), [key]: cost };
+  if (!s.acting) s.aura = Math.min(s.aura, auraMax(c, s));
+  return true;
+}
+// Dropping one: the maximum's back, and the Aura paid for it isn't.
+export function dropHeld(c, s, key) {
+  if (!isUp(s, key)) return false;
+  delete s.up[key];
+  if (!Object.keys(s.up).length) delete s.up;
+  return true;
+}
+export const sigUsed = (s, key) => Array.isArray(s?.sig) && s.sig.includes(key);
+// Can it be paid this way: once a scene, and never with charge at 5.
+export const sigOk = (s, key, cost, { charge = false } = {}) => !sigUsed(s, key) && !(charge && int(cost, 0) >= 5);
+export function useSig(s, key, cost, opts = {}) {
+  if (!sigOk(s, key, cost, opts)) return false;
+  s.sig = [...(Array.isArray(s.sig) ? s.sig : []), key];
+  return true;
+}
 
 // Aura coming in. While you're acting it can go past your maximum, and
 // what's over is gone once you've finished. Otherwise it stops at your
@@ -1503,13 +1547,16 @@ export function scarOn(s, t, catchText) {
 export const restsOf = (s) => TRACKS.filter((t) => s.tracks[t] < 12 && s.tracks[t] > 2);
 export const RESTS_ON = 4;
 
-// Powering a passive awakening is gone: nothing's ever powering anything, so
-// these do nothing on the new core.
-export const poweredOf = (s) => Object.values(obj(s?.power)).reduce((t, v) => t + Math.max(0, int(v, 0)), 0);
+// Powering a passive awakening is gone, but a held ability (18 Nov) is up
+// till the scene ends or it's dropped, and its Aura comes off the maximum
+// while it is: s.up, by heldKey(), with what was paid for it.
+export const poweredOf = (s) => [...Object.values(obj(s?.power)), ...Object.values(obj(s?.up))].reduce((t, v) => t + Math.max(0, int(v, 0)), 0);
 export const passivesOf = () => [];
 export const powerUp = () => false;
 export function powerOff(s) {
   s.power = {};
+  delete s.up;
+  delete s.sig;
 }
 export const addsToDie = () => false;
 export const onDefence = (w) => /\b(telegraphs land|defence|Defend)\b/i.test(w?.text ?? "");
