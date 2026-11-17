@@ -950,7 +950,7 @@ function panelView(key, c, s) {
       <div class="cc-row"><button type="button" class="button sm" data-act="cond-down" data-i="${i}">Down a size</button><button type="button" class="button sm" data-act="cond-off" data-i="${i}">Spent or broken</button></div></div></li>`;
   }).join("");
   const options = ["against", "for"].map((kind) => `<optgroup label="${kind === "for" ? "For you" : "Against you"}">${DATA.conditions.filter((x) => x.kind === kind).map((x) => `<option value="${esc(x.name)}">${esc(x.name)}</option>`).join("")}</optgroup>`).join("");
-  const toll = `<div class="cc-toll"><p><b>Toll ${s.toll}.</b> ${s.toll ? `The next heal from someone else loses ${R.TOLL_STEP * s.toll}.` : "Your next heal’s whole."} ${tip("pa-toll", ["Every heal you take from someone or something else is 1 more Toll, and a heal loses 5 for each Toll you’ve already got.", "It drops by 1 at the end of each scene, and downtime clears it.", link("s-healing", "Healing in the rules")], "Toll")}</p><div class="cc-row"><button type="button" class="button sm" data-act="toll" data-d="-1"${off(!s.toll)}>One less</button><button type="button" class="button sm" data-act="toll" data-d="1">One more</button></div></div>`;
+  const toll = `<div class="cc-toll"><p><b>Toll ${s.toll}.</b> ${s.toll ? `The next heal from someone else loses ${R.TOLL_STEP * s.toll}.` : "Your next heal’s whole."} ${tip("pa-toll", ["Every heal you take from someone or something else is 1 more Toll, and a heal loses 5 for each Toll you’ve already got.", "It drops by 1 at the end of each scene, and downtime clears it.", link("s-healing", "Healing in the rules")], "Toll")}</p><div class="cc-row"><button type="button" class="button sm" data-act="toll" data-d="-1"${off(!s.toll)}>One less</button><button type="button" class="button sm" data-act="toll" data-d="1">One more</button>${s.toll && !s.sat ? `<button type="button" class="button sm" data-act="sat">Someone sat with you: 1 less</button>` : ""}</div></div>`;
   return `${toll}${conds ? `<ul class="cc-conds">${conds}</ul><div class="cc-row"><button type="button" class="button" data-act="round">End of round: every condition down a size</button></div>` : `<p><b>No conditions on you right now.</b> ${ruleTip("s-conditions", "How conditions work", "pa-cond")}</p>`}
     <form class="cc-form" data-form="cond">
       <label class="cc-field">Add a condition <select name="pick">${options}</select></label>
@@ -1997,6 +1997,7 @@ function flipOn(which, paid = false) {
     const f = r.foes[Number(which.split(":")[1] ?? 0)];
     if (!f?.size || f.v == null) return;
     f.v = f.size + 1 - f.v;
+    f.flip = true;
     r.log.push(`Flipped their d${f.size}, so it’s ${aNum(f.v)} now.`);
     return;
   }
@@ -2012,7 +2013,7 @@ function flipOn(which, paid = false) {
 function pickNote(c, s) {
   const p = roll.pick;
   if (!p) return "";
-  if (p.type === "flip") return `<div class="cc-note" role="status"><p>Tap a die to flip it, yours${roll.foes?.some((f) => f.size && f.v != null) ? " or theirs" : ""}. It comes up its size plus 1, take away what it rolled, so a 2 on a d10 is a 9. A flipped die never pays Aura.</p><div class="cc-row"><button type="button" class="button sm" data-act="pick-cancel">Never mind</button></div></div>`;
+  if (p.type === "flip") return `<div class="cc-note" role="status"><p>Tap a die to flip it${roll.streak ? ", one you haven’t flipped yet" : ""}, yours${roll.foes?.some((f) => f.size && f.v != null) ? " or theirs" : ""}. It comes up its size plus 1, take away what it rolled, so a 2 on a d10 is a 9. A flipped die never pays Aura.</p><div class="cc-row"><button type="button" class="button sm" data-act="pick-cancel">Never mind</button></div></div>`;
   if (p.type === "reroll") return `<div class="cc-note" role="status"><p>Tap a die to roll it again, or roll them all. It’s a point of Soul either way.</p><div class="cc-row"><button type="button" class="button sm" data-act="reroll-all">Roll them all</button><button type="button" class="button sm" data-act="pick-cancel">Never mind</button></div></div>`;
   return `<div class="cc-note" role="status"><p>Tap the die to put +${p.bonus} on, for ${esc(p.arch)}’s Push, ${p.from ? `${p.cost} charge` : auraCost(p.cost)}.</p><div class="cc-row"><button type="button" class="button sm" data-act="pick-cancel">Never mind</button></div></div>`;
 }
@@ -2054,7 +2055,7 @@ function resultView(c, s, ch) {
   const hidden = r.dice.filter((d) => !d.mark).map((d) => d.size);
   const offers = r.spinning || r.pick ? "" : [
     ...outs.map((o, i) => (o === "tie" ? `<button type="button" class="button sm" data-act="win-tie" data-i="${i}"${off(s.aura < 1)}>Win the tie on the d${r.dice[i].size}: 1 Aura</button>` : "")),
-    isA(c, "Gambler") && !r.flips ? `<button type="button" class="button sm" data-act="flip">Flip a die, your one this round</button>` : "",
+    isA(c, "Gambler") && R.canFlip(r) ? `<button type="button" class="button sm" data-act="flip">${r.streak ? "Flip a die, on your Hot streak" : "Flip a die, your one this round"}</button>` : "",
     isA(c, "Shadow") && !r.pooled && hidden.length && !r.heal ? `<button type="button" class="button sm" data-act="hid">Got into hiding: your ${andList(hidden.map((d) => `d${d}`))} into your shadow pool</button>` : "",
     ...pushes.map((p) => `<button type="button" class="button sm is-aura" data-act="push" data-a="${esc(p.arch)}"${off(s.aura < p.cost)}>${esc(p.arch)}’s Push: +${p.bonus} on a die, ${auraCost(p.cost)}</button>${chargeFor(c, s, p.cost).map((v) => `<button type="button" class="button sm is-aura" data-act="push" data-a="${esc(p.arch)}" data-from="${esc(v.key)}">${esc(p.arch)}’s Push, ${p.cost} charge from ${esc(yours(v))}</button>`).join("")}`),
     canReroll ? `<button type="button" class="button sm" data-act="reroll">Roll again: a point of Soul</button>` : "",
@@ -3028,8 +3029,12 @@ const recount = () => {
 function pickDie(i) {
   const p = roll?.pick;
   if (!p) return;
+  if (p.type === "flip") {
+    const d = typeof i === "string" ? roll.foes[Number(i.split(":")[1] ?? 0)] : roll.dice[i];
+    if (!R.flipsDie(roll, d)) return;
+  }
   if (p.type === "flip") return change("flipping a die", (s) => {
-    flipOn(typeof i === "string" ? i : [i], Boolean(p.paid));
+    flipOn(typeof i === "string" ? i : [i], Boolean(p.paid || roll.streak));
     s.last = lastOf();
   }, { say: false });
   if (typeof i === "string") return;
@@ -3123,6 +3128,10 @@ function payAbility(from = "") {
           flipOn(roll.dice.map((_, i) => i), true);
           s.last = lastOf();
         } else if (/\bflip one more die\b/i.test(x.text)) roll.pick = { type: "flip", die: null, paid: true };
+        else if (R.STREAK.test(x.text)) {
+          roll.streak = true;
+          roll.log.push("You’re on a Hot streak till the round ends: flip any die you can see, never the same one twice, with no Aura and no explosion.");
+        }
       }
     }
     return message;
@@ -3373,6 +3382,7 @@ const ACT = {
     roll.groups.main.count = null;
     recount();
   },
+  sat: () => change("someone sitting with you", (s) => (R.satWith(s) ? `Someone sat with you, so your Toll’s ${s.toll}. It isn’t a heal, and it’s once a scene.` : "")),
   toll: (el) => change("changing your Toll", (s) => {
     s.toll = clamp(s.toll + Number(el.dataset.d), 0, 99);
     return `Your Toll’s ${s.toll}.`;
@@ -3852,7 +3862,7 @@ const ACT = {
     roll.log.push(`You’re hidden, so your ${andList(dice.map((d) => `d${d}`))} go${dice.length === 1 ? "es" : ""} in your shadow pool.`);
   }, { say: false }),
   flip() {
-    if (!roll || roll.flips) return;
+    if (!R.canFlip(roll)) return;
     roll.pick = { type: "flip", die: null };
     renderDialog();
   },

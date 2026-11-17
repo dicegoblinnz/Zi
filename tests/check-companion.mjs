@@ -2381,7 +2381,7 @@ if (part("3d")) {
   same(await page.$$eval('.cc-choose li:has-text("Iron Lungs")', (els) => els.length), 0, "Got it puts it away for good");
 
   // A Gambler flips a die once a round for free, theirs or yours, and pays
-  // 1 Aura for Double or nothing, flipping every die of his.
+  // 2 Aura for Double or nothing, flipping every die of his.
   const gil = fromCrew(bram, BUILD);
   gil.archs = ["Gambler", "Leader"];
   gil.have = [["Double or nothing"], ["Push"]];
@@ -2396,8 +2396,32 @@ if (part("3d")) {
   if (!(await page.$eval('#cc-dialog details[data-open="abil"]', (d) => d.open))) await page.click('#cc-dialog details[data-open="abil"] > summary');
   await page.click('#cc-dialog .cc-how button[data-act="ability"]:has-text("Double or nothing")');
   await page.click('#cc-dialog button[data-act="pay-way"]');
-  has(await page.textContent("#cc-dialog .cc-log"), "Paid 1 Aura for Double or nothing", "Double or nothing paid in Aura");
+  has(await page.textContent("#cc-dialog .cc-log"), "Paid 2 Aura for Double or nothing", "Double or nothing paid in Aura");
   has(await page.textContent("#cc-dialog .cc-log"), "Flipped every die of yours", "and every die flipped");
+  await t.done();
+  // Hot streak (18 Nov): 4 Aura once a scene, then every flip's free till the
+  // round ends, never the same die twice.
+  const hot = { ...gil, have: [["Hot streak"], ["Push"]], name: "Hot" };
+  await put("own-hot", "Hot", hot);
+  await open("own-hot");
+  await t.roll("Body", { foes: [10], dice: [9, 3, 7] });
+  await page.click('#cc-dialog button[data-act="flip"]');
+  await page.click('#cc-dialog button.cc-pickdie[data-i="1"]');
+  same(await page.$$eval('#cc-dialog button[data-act="flip"]', (els) => els.length), 0, "the free flip used before the streak");
+  if (!(await page.$eval('#cc-dialog details[data-open="abil"]', (d) => d.open))) await page.click('#cc-dialog details[data-open="abil"] > summary');
+  const auraWas = Number((await t.aura()).split("/")[0]);
+  await page.click('#cc-dialog .cc-how button[data-act="ability"]:has-text("Hot streak")');
+  await page.click('#cc-dialog button[data-act="pay-way"]');
+  const auraPaid = auraWas - Number((await t.aura()).split("/")[0]);
+  has(await page.textContent("#cc-dialog .cc-log"), "You’re on a Hot streak", "Hot streak paid and on");
+  await page.click('#cc-dialog button[data-act="flip"]:has-text("Hot streak")');
+  await page.click('#cc-dialog button.cc-pickdie[data-i="1"]');
+  has(await page.textContent("#cc-dialog .cc-note"), "one you haven’t flipped yet", "the same die can't be flipped twice");
+  await page.click('#cc-dialog button.cc-pickdie[data-i="0"]');
+  await page.click('#cc-dialog button[data-act="flip"]');
+  await page.click('#cc-dialog .cc-them button[data-act="pick"]');
+  same((await page.textContent("#cc-dialog .cc-log")).match(/Flipped /g)?.length, 3, "three flips, two of them on the streak");
+  same([auraPaid, auraWas - Number((await t.aura()).split("/")[0])], [4, 4], "4 Aura for the streak, and nothing for its flips");
   await t.done();
 
   // A Healer: a heal's her Root unsplit, and it heals what it rolls. Healing
@@ -2652,7 +2676,32 @@ if (part("4h")) {
   same(RS.normalCore({ ...RS.freshCore(c), up: { junk: "x", [hum]: 9 }, sig: [3, mid] }, c).up, { [hum]: 5 }, "a broken up tidied");
   // Cut by the levers pass: through cutOf with the book's list.
   same(RS.cutOf("Guardian", ["Push", "Your turn", "Knock it back"], ["Push", "Not while I stand", "Hold the line"]), { have: ["Push"], cut: ["Your turn", "Knock it back"] }, "cut abilities come off for the player to choose");
-  console.log("held and signature: up and dropped, a new scene, once a scene, no charge at 5, Parry held, older saves");
+  // The second levers pass (18 Nov). Hot streak's a signature at 4 the roll
+  // card knows by its words: once it's on, flips are free and as many as
+  // you like, never the same die twice.
+  const abil = (a, n) => B.archetypes.find((x) => x.name === a)?.abilities.find((x) => x.name === n);
+  const hot = abil("Gambler", "Hot streak");
+  same([hot?.cost, hot?.kind, RS.STREAK.test(hot?.text ?? "")], [4, "signature", true], "Hot streak a signature at 4, read off its words");
+  const r = { flips: 1 }, d = { flip: true }, fresh = {};
+  same([RS.canFlip(r), RS.flipsDie(r, fresh)], [false, true], "with no streak, one flip a round");
+  r.streak = true;
+  same([RS.canFlip(r), RS.flipsDie(r, fresh), RS.flipsDie(r, d)], [true, true, false], "on a streak, flips past the first, never the same die twice");
+  // Opened only on an exploding die that wins. Nothing on the phone puts it
+  // on a target, so the gate's the words the roll card shows.
+  same(/\bexplodes and wins\b/.test(abil("Warrior", "Opened")?.text ?? ""), true, "Opened only on an exploding die that wins");
+  // Sit with them: 1 Toll off the patient, once a scene, and no heal.
+  s = RS.freshCore(c);
+  s.toll = 2;
+  same([RS.satWith(s), s.toll, RS.satWith(s), s.toll], [true, 1, false, 1], "Sit with them takes 1 Toll off, once a scene");
+  s = RS.normalCore(JSON.parse(JSON.stringify(s)), c);
+  same(s.sat, true, "still sat with through a reload");
+  RS.sceneEnd(c, s, {});
+  same(["sat" in s, s.toll, RS.satWith(s)], [false, 0, false], "back at a new scene, and nothing to take off at 0");
+  // Cut in this pass: a Bard with Old songs and a Warrior with Face me get the choice.
+  const bard = rootsSheet({ ...ash, archetypes: [{ name: "Bard", have: ["Push", "Old songs"] }, { name: "Warrior", have: ["Push", "Face me"] }] }, [], B);
+  same(RS.choicesOf(bard).filter((x) => x.k === "ability").map((x) => x.name), ["Old songs", "Face me"], "Old songs and Face me come off for the player to choose");
+  same(Object.entries(RS.HAD_ABILITIES).flatMap(([a, l]) => l.filter((n) => !abil(a, RS.abilityNow(a, n))).map((n) => `${a}: ${n}`)), ["Bloodsworn: Bleed out"], "every 16 Nov ability still in the book bar Bleed out");
+  console.log("held and signature: up and dropped, a new scene, once a scene, no charge at 5, Parry held, older saves, Hot streak, Opened, Sit with them");
 }
 
 // 4b. Saved before the new core. Vesk saved on stacking keeps her play, her
