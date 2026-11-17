@@ -414,7 +414,7 @@ Put one of your dice on a creature to mark it. Win and it's ***Marked***, a spec
 
 **On its trail (1 Aura):** put your marking die on what something left behind, like its footprints or the knife it dropped, against its Challenge. Win and you know which way it went and how far ahead it is till the next downtime, and it's *Marked* with that die when you find it. A *Marked* creature that gets away works the same with no roll, and it's *Marked* again at the die it had when you catch up.
 
-**Hunt them down (1 Aura):** when a scene ends with a *Marked* creature that answers to a faction, the Mark goes on that faction in the next faction turn, at the die it ended the scene on. The crew's roll against that faction rolls the Mark die too. A creature you're on the trail of counts.
+**Nowhere to run (4 Aura, signature):** with no action and no roll, the Mark on one creature you can see stops fading. It stays at the die it's on till the creature falls or the scene ends. When it falls, the Mark jumps as usual and fades from there.
 :::
 
 :::example[Marking the Warden]
@@ -442,19 +442,19 @@ Spend your action and roll your illusion dice against the threats' Challenge. **
 
 **For their eyes (1 Aura):** one of your illusions shows only to the people you choose. Everyone else sees what's really there.
 
-**Grand illusion (5 Aura, signature):** once a scene, as your action, with no roll, throw up one illusion as big as the scene: the building's on fire, the watch has arrived, the vault's empty. Every threat in the scene believes it without meeting its Challenge, till it interacts with it or tries to get through it. Then it's an ordinary illusion for that threat, as if you'd rolled the top face of your biggest illusion die. It does nothing real, *Made You Look* pays as usual, and a vessel's charge can't pay for it.
-
-**Decoy (1 Aura):** when a blow's about to land on someone your illusion's copied, it lands on the illusion instead, as long as the threat still believes it, and the illusion's gone. The copy has to be standing there already.
+**Decoy (1 Aura):** when a blow's about to land on someone your illusion's copied, it lands on the illusion instead, as long as the threat still believes it, and the illusion's gone. The copy has to be standing there already. You moved the blow there, so *Made You Look* doesn't pay for it.
 
 **Fell for it (1 Aura):** when a threat swings at one of your illusions, talks to it or tries to get through it, it takes the condition your illusion would leave it with, at the size of your biggest illusion die: *Taunted* by the clone, *Frightened* by the monster or *Blinded* by the flash. Never a vulnerability like *Prone*.
 
-**Takes one to know one (1 Aura):** you know an illusion, a disguise or a forgery when you see one, with no roll, and the GM tells you what it's hiding. If it's none of those, she says so and you keep your Aura.
+**Look again (1 Aura):** when a threat sees through one of your illusions by beating what you rolled, there was another under it. The illusion stands, changed however you like, and that threat has to beat the same number again. It takes no action. Pay again each time. It's no help once a threat's touched the illusion or walked through it.
 
 **That was never me (2 Aura):** the you everyone's been watching was an illusion, and you've been somewhere else in the scene all along, anywhere you could have walked to unseen since the scene began or since you were last touched or hit. Nothing you've done or taken is undone, and a telegraph already aimed at you still follows you.
 
-**Leave it standing (1 Aura):** one of your illusions stays after you've gone, till someone sees through it or the next downtime ends. A faction's action in the next faction turn aimed at what it shows or hides has to beat what you rolled first, or it's wasted on the illusion.
+**Leave it standing (1 Aura):** one of your illusions stays after you've gone, till someone sees through it or the next downtime ends, and what you rolled is still what they have to beat.
 
 **Make it real (1 Aura):** one illusion's real till the round ends: the wall stops them, the bridge takes your weight, the door locks. It does what the real thing would and nothing more, so a clone can be stood behind and takes one blow before it's gone, but it won't swing for you. Pay again for another round, or another illusion. When the round ends it's an illusion again, so get everyone off the bridge first.
+
+**Grand illusion (5 Aura, signature):** as your action, with no roll, throw up one illusion as big as the scene: the building's on fire, the watch has arrived, the vault's empty. Every threat in the scene believes it, and none of them sees through it by looking. A threat only knows once it touches it or walks into it, and then only that threat knows. It does nothing real, and *Made You Look* pays as usual.
 :::
 
 :::example[A wall across the corridor]
@@ -474,8 +474,6 @@ Only a Leader leads. An order or a rallying song is an action: a Root at full an
 
 **Push (1 Aura):** +2 to one of a friend's dice, on a roll your steps went into, once it's rolled and you can see it's needed. A roll your steps went into is any roll this round that got steps from your lead or your *Where It's Needed*.
 
-**Size them up (1 Aura):** before anyone acts this round, ask the GM who's in charge here, who's closest to breaking or who's about to run, and she tells you straight. It works on a room full of courtiers the same as a fight. Pay again for another of the three.
-
 **Take charge (1 Aura):** people in the scene who aren't threats, like a crowd or a ship's crew, do what you tell them this round, as long as it's something they'd do for whoever's in charge. There's no roll. They won't fight for you, but what they do changes the ground: the crowd blocks the street, or the crew cuts the anchor. Pay again for another round.
 
 **On me (2 Aura):** shout, and every friend who can hear or see you can move their stride right now, wherever the round's got to, even off their turn. It's a stride, never an action, so it gets them out of a telegraph aimed at a place before it lands, but one aimed at a person still lands on them wherever they go.
@@ -493,6 +491,8 @@ Only a Leader leads. An order or a rallying song is an action: a Root at full an
 **Everyone gets it (1 Aura):** every friend who can hear or see you gets all your lead's steps, not a share. With *Lead from the front*, they each get all the steps you didn't keep.
 
 **Orders for the week (1 Aura):** a lead you make in the last scene before downtime can wait for the faction turn, and its steps go on the crew's roll there. You pay for it in the scene.
+
+**Go again (4 Aura, signature):** when a friend's roll your steps went into has just landed, with no action, they pick the whole throw up and roll it again, the same dice with the same intents, and keep whichever throw they like, whole. The second throw pays no Aura. It never works on an Oracle's foresight.
 :::
 
 :::example[Orders from the doorway]
@@ -538,7 +538,7 @@ A tag works like a permission for whoever's holding the item: it lets them do so
 
 **Masterwork (1 Aura):** the tags you make this time last till downtime.
 
-**A flaw in it (1 Aura):** when a making die of yours wins on something a faction owns or leans on, like its press, its ship or its gate, pay as the scene ends and it fails them when they need it. At the next faction turn that's a Destroy on that faction, a tick off the asset it's part of, and it doesn't cost the crew its action. It's one tick on a faction a faction turn.
+**The big one (5 Aura, signature):** as your action, with no roll, something you built for exactly this is here, too big to carry, like a ram, a smoke engine or a rope bridge, with up to three tags you name. They work for the crew there till the scene ends, the way *Rig it*'s do, and anyone using it can break one instead of taking a hit. It has to be something you could have built and got here.
 :::
 
 :::example[Vesk's coin]
@@ -574,13 +574,13 @@ Your foresight's two numbers at most, however many steps you've got, so make the
 
 **Leave an omen (1 Aura):** instead of swapping a foresight number in, hang it on someone you can see as *Blessed* or *Hexed*, at the die it came off, so a 9 off your d12 is *Blessed d12*. Pay again for another number.
 
-**Echoes (1 Aura):** hold something, or stand somewhere, and see the moment that mattered most in its past. The GM tells you what you see.
-
 **What's coming (1 Aura):** ask the GM what'll happen in this scene if the crew leaves it alone, and she tells you straight.
 
 **Foretold (1 Aura):** win a [Study](#s-study) and introduce a truth instead. It's true from now on, and anyone in the crew can bring a Root in on it this scene, like a permission they've all got.
 
 **Read the year (1 Aura):** as the last scene before downtime ends, roll your foresight with no action and keep it for the faction turn. Its numbers swap into any faction's dice there, the crew's included.
+
+**Borrowed time (4 Aura, signature):** as the telegraphs are about to land, with no action and no roll, none of them land this round. They stay out with their dice as they were rolled, and land at the end of next round with that round's, so the crew's got a round more to answer them. Clocks and events still tick.
 :::
 
 :::example[Seeing the brute's club]
@@ -618,7 +618,7 @@ When you get into hiding, the dice you rolled to hide go into your **shadow pool
 
 **Light fingers (1 Aura):** when a die of yours wins against someone who hasn't seen you, take one thing they're carrying as well as whatever the die was for: a key, a letter, a purse. Pay again for another thing, or another person.
 
-**Never saw it (1 Aura):** when a die of yours wins against someone who hasn't seen you, they're *Exposed* at that die's size as well as whatever the die was for. Pay again for another die.
+**Kill the lights (1 Aura):** with no action and no roll, one light within your stride goes out, like a lamp, a torch or a shutter swung to, and where it lit is dark enough for *Any Shadow Will Do* till someone lights it again. Pay again for another. Never daylight or a building on fire.
 
 **Gone into the dark (1 Aura):** one die that gets you into hiding answers a telegraph aimed at you as well, with the same roll. Pay again for another die.
 
@@ -626,7 +626,7 @@ When you get into hiding, the dice you rolled to hide go into your **shadow pool
 
 **Wait for it (1 Aura):** while you're hidden, take your action after the telegraphs' dice are rolled and before they land, so you see every number before you choose what your dice do. It's still your one action.
 
-**Kept for later (1 Aura):** a die left in your pool when the last scene before downtime ends keeps for the faction turn, and it goes on the crew's roll there as its own die, as long as what you saw was that faction's business. You pay for it in the scene. Pay again for another die.
+**Already done (4 Aura, signature):** with no action and no roll, say one thing you did earlier this scene while nobody was looking, and it's done: the door's unlocked, the letter's in your coat, the bowstrings are cut. It has to be somewhere you could have reached unseen since the scene began. It's never a hit, and it never puts anyone down.
 :::
 
 :::example[Under the gallery]
@@ -650,21 +650,21 @@ You collect **animal tags**, the way a [Summoner](#a-summoner) catches souls. Sp
 
 **First to move (2 Aura):** as a round starts, before the first telegraph goes out, take your action. Your dice go against each threat's roll for the round, rolled now. You've acted, so you can't answer a telegraph this round, and you still roll when they land.
 
-**Nose for it (1 Aura):** your *Something of the Beast* finds one thing nobody else in the crew could. Say which sense you're using, and the GM tells you straight what it finds: where someone's hiding, what's been through here, or what's coming. Pay again for another.
-
 **Kin (1 Aura):** till the scene ends, one kind of animal treats you as one of its own, so a guard dog won't bark at you, a horse lets you up, or a hawk shows you where it's been. A beast that's a threat still fights you if its handler sets it on you, but it won't raise the alarm. Pay again for another kind.
 
-**A little bird (1 Aura):** send a bird or a small beast off with a message or one small thing to someone you could name, or to watch a place. It gets there this scene if it's close, or by the next scene if it's across town, and a watcher comes back and the GM tells you what it saw, the way a beast sees it. Send it to watch a faction's place in the last scene before downtime, and when the GM telegraphs that faction's action, ask her one question about it and she answers it straight.
+**A little bird (1 Aura):** send a bird or a small beast off with a message or one small thing to someone you could name, or to watch a place. It gets there this scene if it's close, or by the next scene if it's across town, and a watcher comes back and the GM tells you what it saw, the way a beast sees it.
 
 **Share the shape (1 Aura):** a friend you're touching gets one of your animal tags till the scene ends, and it does for them what it does for you. It's still yours too, and only you can strip it. Pay again for another tag, or another friend.
 
-**Slip it (1 Aura):** strip one of your animal tags to break a condition on you, any time, with no roll. The tag has to fit: an eel's skin slips the grip, and wings get you out from under the net. Pay again for another.
+**Another skin (1 Aura):** any time, with no action and no roll, swap your *Something of the Beast* pick for another. The old one's gone. Pay again to swap again.
 
 **Tooth and claw (1 Aura, held):** while it's up, one of your animal tags is an item at tier 2 on any roll it fits, on top of your six: claws or jaws as a weapon, a shell or a thick hide as a guard, or gills or a climbing grip as a tool. It's the one item on that roll, and if the tag's stripped, it's gone. Pay again for another tag, each held on its own.
 
 **The pounce (1 Aura):** when an animal tag's moving you, like wings or a cat's spring, one die you put on moving has an intent as well. Its number counts twice, for how far you go and against their defence when you land, so long as it gets you to them. Pay again for another die.
 
-**All beast (1 Aura, held):** while it's up you're the animal, whole, and changing back is dropping it, free whenever you like. Anyone who didn't see you change sees a stray dog or a crow on the gutter, and nobody looks twice unless you do something no animal would. You can't talk or use anything you carry, but your armour still soaks, and your animal tags and Trait work the same.
+**All beast (1 Aura, held):** while it's up you're the animal to look at, and nobody looks twice unless you do something no animal would. You can't talk or use your hands. Everything else on your sheet works the same, and dropping it's free.
+
+**The whole pack (4 Aura, signature):** as your action, with no roll, every friend you can see gets one of your animal tags, the same one for all of them, till the scene ends, so the whole crew's got wings, or gills. It does for them what it does for you. It's still yours, and if you strip it they all lose it.
 :::
 
 :::example[Wings]
@@ -698,11 +698,9 @@ Catching souls and summoning are the Summoner's, and nobody else can do them. He
 
 **Ask the dead (1 Aura):** ask a soul you hold, in your attunement or one you're carrying, one thing it knew while it was alive, without calling it out. It answers as well as it can, and a hound's answer is a hound's. Pay again for another question.
 
-**Borrow its knack (1 Aura, held):** while it's up, one thing a soul you hold could do is yours, like a permission, so it can bring a Root in: the courtier's manners, the hound's nose or the locksmith's hands. Pay again for another knack, each held on its own.
+**Borrow its knack (1 Aura, held):** name a soul you hold. While it's up, the one thing it knew best is yours, like a permission, so it can bring a Root in: the courtier's manners, the hound's nose or the locksmith's hands. It's one knack at a time, and paying again gets you nothing more.
 
 **Speak through it (1 Aura):** see and hear what one of your summons does, and talk through it, wherever it goes till it's gone. Send the rats under the door and you're in the room.
-
-**Call the horde (4 Aura, signature):** once a scene, as your action, with no roll, every soul in your attunement comes out at once, each at a d4, for no more Aura. Pay the usual on top to build any of them bigger, none past its own die. Your pocket summon comes at its own die if you haven't used it this scene. A soul that's already out isn't called twice, they fade as usual, and each still needs a reason in the story.
 
 **Catch it whole (1 Aura):** when a die of yours puts a creature down, the same die catches its soul as well, with no die of its own on the catch. A summon's die counts as yours for this. The soul still ticks one of your Resources.
 
@@ -710,7 +708,9 @@ Catching souls and summoning are the Summoner's, and nobody else can do them. He
 
 **Rise (1 Aura):** a soul you've caught this scene can be called out now, though it isn't in your attunement yet. You pay for it the usual way, none bigger than its own die. It's what it was, so the bandit captain knows his own men and his own door.
 
-**Haunt them (1 Aura):** as a scene ends, leave a soul you hold haunting a faction's face or one of its places, and it's not yours to call or ask till the next downtime's over. When that faction telegraphs its action, the soul's die goes against it as an Obstruct, and it doesn't cost the crew its action (see [The Faction Turn](#s-faction-turn)). Win or lose, the soul comes back and the GM tells you what it saw.
+**Last breath (1 Aura):** when one of your summons goes, faded out or sent back by a hit, its die rolls once more as it goes, at the size it just had, at anything beside it, with an intent you give it, against that target's roll for the round. It takes no action and never pays Aura. Pay again for another summon.
+
+**Call the horde (4 Aura, signature):** as your action, with no roll, every soul in your attunement that isn't out already comes out at once, each at a d4, for no more Aura. They fade as usual.
 :::
 
 :::example[Sable calls them out]
@@ -774,11 +774,9 @@ Your dice **explode** when you fight. A die that lands on its top face gives you
 
 **Parry (1 Aura, held):** while it's up, your weapon's tier goes on your roll when things land at your Body, the way a guard's would. It's still one item a roll.
 
-**Opened (1 Aura):** when one of your dice wins in a fight, the target's *Opened* till the round ends. *Opened* is the Warrior's own [vulnerability](#s-vulnerable), so it stacks with fire, blades and the rest. Every hit on it ticks once more till the round ends, starting with the one that opened it. Two Warriors can each open the same target, and both count. Pay again to open another target your dice beat.
+**Opened (1 Aura):** when one of your dice explodes and wins in a fight, the target's *Opened* till the round ends. *Opened* is the Warrior's own [vulnerability](#s-vulnerable), so it stacks with fire, blades and the rest. Every hit on it ticks once more till the round ends, starting with the one that opened it. Two Warriors can each open the same target, and both count. Pay again to open another target an exploding die of yours beat.
 
 **Press on (1 Aura):** when one of your dice wins in a fight, move your stride right now, with no action. Pay again for another winning die and another stride. It gets you out of a telegraph aimed at a place, never one aimed at you.
-
-**Face me (1 Aura):** when one of your dice wins against a threat, its next telegraph has to come at you, as well as whatever the die was for. Pay again for another threat your dice beat.
 
 **Through them (1 Aura):** when one of your dice puts a mook down, it goes on at another within your reach, with the same number, against their defence. Pay again and it goes on again.
 
@@ -789,6 +787,8 @@ Your dice **explode** when you fight. A die that lands on its top face gives you
 **Blood up (1 Aura):** when one of your dice puts a threat down, your Body gets a point back, up to what it holds, or up to half that while it's wounded. Once a round, with no paying again. It isn't a heal, so there's no Toll.
 
 **Call them out (1 Aura):** challenge someone in front of people whose opinion they care about, with no roll. The GM picks: they face you alone, and while nobody else touches either of you their telegraphs only come at you, or they back down and lose face, and one tag that rests on their name is gone, her pick. It needs a name to lose and people watching who matter to them, so a beast, a zealot or a man with nobody watching just says no.
+
+**Kill stroke (4 Aura, signature):** as you act in a fight, before you roll, set one of your dice on its top face instead of rolling it. It pays no Aura, and it explodes from there. With *Not just fights* it works anywhere.
 :::
 
 :::example[The sellsword]
