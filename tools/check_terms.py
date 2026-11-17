@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Flag rules words that the 7 Oct to 16 Nov 2026 changes retired, and broken links.
+"""Flag rules words that the 7 Oct to 17 Nov 2026 changes retired, and broken links.
 
 Usage: python3 tools/check_terms.py [FILE.md ...]   (default: every chapter)
        add --links to check every #anchor link points at a real heading id
@@ -15,10 +15,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 RETIRED = [
     ("game name", r"\bZi\b(?!['’]Dara)"),
-    ("tiers", r"\b(Novice|Skilled|tiers?)\b|\bMaster tier\b|\bat Master\b"),
+    # Since 17 Nov "tier" is an item's tier again, so only the old names stay.
+    ("tiers", r"\b(Novice|Skilled)\b|\bMaster tier\b|\bat Master\b"),
     ("specialization", r"\bspeciali[sz](ation|ations|ed)\b"),
     ("Help action", r"\bHelp(s|ing|ed)?\b|\bhelp action\b"),
-    ("Guard action", r"\bGuard(s|ing|ed)?\b(?! (of|at the|on the gate))"),
+    ("Guard action", r"\bGuard(s|ing|ed)?\b(?! (of|at the|on the gate))(?!\]\(#s-items\))"),
     ("two actions", r"\b(two|both|second|2) actions?\b|\byour two actions\b"),
     ("item rarity", r"\b(rarity|Rare|Legendary)\b"),
     ("stretch", r"\bstretch(es|ed|ing)?\b"),
@@ -104,6 +105,17 @@ RETIRED = [
     ("Aspiration die", r"\bAspiration[’']?s?\b[^.|]{0,40}\b(at|on|to) d(2|4|6|8|10|12)\b|\bAspiration (roll|climbs|resolves)\b|\bclimbs past d12 and resolves\b|\bAspirations? at d2\b"),
     ("Scar as a Catch", r"\bScars? (is|as|written down as) a Catch\b|\bCatches? (come|comes) from (a )?Scars?\b|\bScar's a Catch\b|\bor a Scar\b|\bCatches[^.]{0,80}\b(from|in) (your )?\[?Scars\b"),
     ("splits by action", r"\b(takes?|uses?) (a|one of your|up your) splits?\b|\bsplits? to spare\b|\bevery action in the roll gives\b|\bgives? you a split\b"),
+    # 17 Nov 2026: the fixes. No Boons and nothing trading permissions for an
+    # always-on effect (the Oracle's Boon die, Boon table and Great Boon are
+    # fine). Six items with tiers, three Resources said in the moment, and
+    # armour that soaks, so the equipment, utility and bag counts, armour's
+    # boxes and Common, Fine and Masterwork as its quality are gone.
+    ("Boons", r"\bBoons\b|\bBoon['’]s\b|(?<!Great )(?<!two )(?<!Fate, )(?<!on the )\bBoon\b(?!,? and Bane| dic?e\b| doesn['’]t| tables?\b| with Great)"),
+    ("permission trade", r"\b(two|2) permission slots?\b|\bpermission slots? (on a Title )?(buys?|holds?|can hold)\b|\bpermissions? (go |goes )?for an? (Boon|Trait)\b|\btwo (permissions )?for an? (Boon|Trait)\b"),
+    ("equipment and utility", r"\b(equipment|utility)( items?| slots?)\b|\((equipment|utility)\b|\b(3|three) (equipment|utility)\b|\b(an? |in a |one of your )?utility slots?\b|\bon top of (your |her |his |their )?equipment\b"),
+    ("the bag", r"\b(your|her|his|their|an empty|a|the) bag\b|\bbag (holds|counts?)\b|\b\d+ of 10\)|\bBag\]"),
+    ("armour boxes", r"\bbox(es)? (of|on) (\w+ )?armour\b|\barmour['’]?s? box(es)?\b|\b(1|2|3|one|two|three) box(es)?\b|\bbox(es)? ticked\b|\btick(s|ed|ing)? (a|one|its|the|every) (of (its|their|the) )?box(es)?\b|\blast box\b"),
+    ("armour quality", r"\b(Common|Fine|Masterwork)( worn| court| plate)? (armour|leathers|plate|shields?|clothes|coat|helmet|piece)\b|\barmour['’]?s? quality\b|\b(Common|Fine|Masterwork) (has|is|armour)\b|\bone piece can be Fine\b|#s-armour-quality\b|#recovering-armour\b"),
 ]
 
 

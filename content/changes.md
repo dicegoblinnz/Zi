@@ -1,9 +1,27 @@
 ---
 title: "What's Changed"
 id: changes
-updated: 2026-11-16
+updated: 2026-11-17
 ---
 This is the record of every rules change since the 2 Oct 2026 book, newest first. Each entry's date is the day the change went to the table. When a later change replaces an earlier one, the earlier entry says so. The rules chapters always show the game as it is now, so if you only want to play, read those and skip this.
+
+## 17 Nov 2026: Items with tiers, armour that soaks, Resources and vessels, and no Boons {#c-2026-11-17-fixes}
+
+Mo's calls in chat, the third part of the rework that comes in parts, on top of [The new core](#c-2026-11-16-core).
+
+**No Boons, and nothing trades permissions for an always-on effect.** Traits only come from archetypes, one each, and a Scar that grows into a Trait stays, since that's downtime and never permissions. Burdens stay on attuned things, where each one pays for two more awakenings on it. It replaces Boons, bought with two permission slots on a Title at creation or swapped for in downtime and back, and a Burden paying for a Boon. See [Burdens](#s-boons), [Grow](#grow) and [Wounds, Scars and the Blaze](#s-blaze).
+
+**Three Resources each, said in the moment.** A Resource is something ordinary you happen to have, said when you need it: *as it happens, I've got rope on me*. Tick one and it's real, and it does what the thing does, never steps and never soak. Something you use up is gone once it's used, and all three come back in downtime, or when the story restocks you. A purse of gold is one. It replaces three utility items, the bag of 10 and getting something out of it for your action. See [Resources](#s-resources) and [Titles and Permissions](#s-permissions).
+
+**Six items at most, each with a tier from 1 to 6.** An item's real gear you've got ready: a weapon, a guard, armour, a tool good enough to matter, a pack or a vessel, attuned things included, and your keepsake on top. When one fits what you're doing, it puts its tier on in steps, one item a roll, the one doing the work, so Wren's Body 8 and her Named longbow, tier 3, is 11 steps before *Long shot*. Tier 6 is a d12's worth. A Root you bring in brings no item of its own. It starts at tier 2 for a point, or tier 3 for a point more, and Grow in downtime takes one to tier 3, money to tier 4 and the story to 5 and 6. It replaces three equipment items, plain items never being a step, and an item costing a point whatever it was. See [Items](#s-items), [Item tiers](#s-item-tiers), [How a roll adds up](#how-permissions-stack) and [Weapons](#s-weapons-tactics).
+
+**Guards only add to avoiding harm, and dodging's Body.** A shield, a buckler or a parrying dagger puts its tier on a roll that's only getting out of the way, when the blows land, a Defend or an answer that's only stopping one, once a landing, and never on anything else. A weapon never goes on a roll avoiding harm. See [Answering a Telegraph](#s-answering), [When It Lands](#s-defending) and [Defend](#s-defend).
+
+**Armour soaks first, and it's back every scene.** Armour sits on a Root, Body unless it says otherwise, and soaks as many points as its tier before that Root loses any, a point of soak for each point. A hit taken 2 for 1 on another Root is 2 points there, soaked first by that Root's armour, and a vulnerability's or a deadly threat's extra hits are a point of soak each. A wound comes only once the soak and the points are both gone. Soak's all back at the end of every scene, armour never breaks from soaking, and "your armour takes it" isn't one of the GM's consequences any more, since it's automatic. "Something breaks" still is. It replaces armour's boxes ticked instead of a point, Common, Fine and Masterwork as its quality with 1, 2 or 3 boxes, and armour breaking on its last box. See [Hits and Consequences](#s-consequences), [Armour](#s-armour) and [Your Points](#s-tracks).
+
+**Vessels hold charge.** A vessel's an item that holds as much charge as its tier. It only fills with Aura you'd lose (past your maximum when you finish acting, past it off your turn, or what's left when a scene ends) or a point from any Root mid-scene, and it keeps through downtime. Its charge stands in for Aura on your own abilities and your own awakenings' extra steps, a charge for each Aura, and nothing else. See [Vessels](#s-vessels) and [Aura](#s-aura).
+
+**Downtime:** your Resources and your soak come back with everything else, Mend is for broken items only, Grow can buy an item at tier 2 or raise one a tier to tier 3, and a permission only ever swaps for another permission. It replaces mending armour's boxes, and swapping two permissions for a Boon and back. See [Your Slots](#your-slots), [Mend](#recover) and [Grow](#grow).
 
 ## 16 Nov 2026: An Aspiration's 5 points, and Scars that grow {#c-2026-11-16-aspiration}
 
@@ -41,7 +59,7 @@ The book's examples are on the new core too: [A Full Fight](#s-fight), [Vesk, Se
 
 Mo's calls in chat, the second part of the rework that comes in parts, after a game designers meetup on 15 Nov.
 
-**A roll's one Root, rolled at full.** Pick Body, Mind or Soul for how you're doing it, and roll all of it. Nothing else on your sheet is counted: not your Titles, permissions, archetypes, abilities or items. Points you've spent, lost or locked never make the dice smaller. It replaces a Root and a step for every thing on your sheet that fits, 1 Aura for each one you had to explain, and bringing in the ground, a tag or a Catch as a step. See [How a roll adds up](#how-permissions-stack) and [Steps and Dice](#s-building-die).
+**A roll's one Root, rolled at full.** Pick Body, Mind or Soul for how you're doing it, and roll all of it. Nothing else on your sheet is counted: not your Titles, permissions, archetypes, abilities or items. (Since 17 Nov the item doing the work adds its tier.) Points you've spent, lost or locked never make the dice smaller. It replaces a Root and a step for every thing on your sheet that fits, 1 Aura for each one you had to explain, and bringing in the ground, a tag or a Catch as a step. See [How a roll adds up](#how-permissions-stack) and [Steps and Dice](#s-building-die).
 
 **A Title puts 5 on your Roots**, spread however you like, and the permission it comes with is 1 more, so it's 6 in all. A permission's still 1 on its Root, and it's what lets you bring a Root in, never a step. It replaces a Title's 3. See [Roots](#s-roots) and [Titles and Permissions](#s-permissions).
 
@@ -59,15 +77,15 @@ Mo's calls in chat, the second part of the rework that comes in parts, after a g
 
 **Abilities cost Aura**, 1 each time you use one. It replaces 1 from the archetype's home track, or 2 from your other two. See [Abilities](#s-abilities).
 
-**Defence is the Root.** When telegraphs land, roll the Root they're at, at full, split how you like, and each die stops one it meets or beats. Your defence doesn't shrink as you're hurt. Defending puts a Root on top. It replaces rolling your tracks, and a Root and everything that fits for a Defend. See [When It Lands](#s-defending) and [Defend](#s-defend).
+**Defence is the Root.** When telegraphs land, roll the Root they're at, at full, split how you like, and each die stops one it meets or beats. Your defence doesn't shrink as you're hurt. Defending puts a Root on top. (Since 17 Nov a guard's tier goes on top too.) It replaces rolling your tracks, and a Root and everything that fits for a Defend. See [When It Lands](#s-defending) and [Defend](#s-defend).
 
-**A hit takes 1 point** from its Root, and 2 for 1 takes it on another Root instead, for 2 points of that one. A vulnerability's one more hit, and a deadly threat's telegraph says how many it is. It replaces a size off a track, and 2 for 1 from your other two tracks. See [Hits and Consequences](#s-consequences) and [Vulnerabilities](#s-vulnerable).
+**A hit takes 1 point** from its Root, and 2 for 1 takes it on another Root instead, for 2 points of that one. A vulnerability's one more hit, and a deadly threat's telegraph says how many it is. (Since 17 Nov armour on the Root soaks first.) It replaces a size off a track, and 2 for 1 from your other two tracks. See [Hits and Consequences](#s-consequences) and [Vulnerabilities](#s-vulnerable).
 
 **Wounds, Scars and the Blaze.** A hit on a Root with no points left wounds it, **Bloodied** for your Body, **Frayed** for your Mind and **Hollow** for your Soul, and a wounded Root heals only to half its maximum till downtime or a story moment clears it. A hit on a wounded Root with no points left is a Scar, and you leave the scene. A Scar's a Catch that locks a point of its Root for good. While you're wounded, you can take the Blaze on your turn: the Scar, something extraordinary, then out, or die if you choose. It replaces Blazing at d2 and a Scar locking a track's size. See [Wounds, Scars and the Blaze](#s-blaze).
 
 **Healing and Toll.** At the end of every scene, roll each Root unsplit and get back what you roll, and downtime puts everything back. A Healer's heal is rolled unsplit and gets back what it rolls, spread across the patient's Roots, and every heal from someone or something else gives them 1 Toll, and each Toll takes 5 off every heal after it till it drops off, one a scene. A heal reaches one person, since it isn't split. A quick heal's 1 point back. Recovery's top faces give Aura, and what's healed never does. It replaces a 4 or more putting a track up a size, a heal die on 4 or more doing the same, and a quick heal's size. See [Healing](#s-healing).
 
-**Downtime puts everything back**, so its Recover slot's gone, and mending is a slot of its own. It replaces every track up a size and 6 sizes back for a slot. See [Your Slots](#your-slots) and [Mend](#recover).
+**Downtime puts everything back**, so its Recover slot's gone, and mending is a slot of its own. (Since 17 Nov it mends broken items only, since armour's soak comes back every scene.) It replaces every track up a size and 6 sizes back for a slot. See [Your Slots](#your-slots) and [Mend](#recover).
 
 **Everything that put your Resolve up a size gets you a point of Soul back**: a big bite from a Catch or a hostile thread, and straining a bond thread. *Take a breath* is 1 point back on your Mind, as far as half its maximum, rounded up. The conditions that moved a track move a point: a spent *Heartened* gives you a point of Mind back, a spent *Shaken* or a refused *Charmed* is a hit at your Mind, and a spent *Poisoned* has your Body defend as a d2. See [Catches and Trouble](#s-trouble), [Bonds and threads](#s-bonds) and [Conditions to start with](#s-conditions-list).
 
@@ -117,7 +135,7 @@ Mo's calls in chat, the first part of a rework that comes in parts.
 
 **Every archetype comes with its mechanic, a Trait that's always on, and one ability**, your pick off its list, and more abilities are bought. Archetypes don't cap your actions any more. It replaces having every ability as soon as you took the archetype. See [How Archetypes Work](#s-how-archetypes) and [Abilities](#s-abilities).
 
-**New characters are built on 35 points.** A Title, archetype or attuned thing is 5, and comes with one permission, ability or awakening. Another permission, ability or thing you carry is 1, and a Boon's 2. Your keepsake, your bag, your threads, Connect and your Aspiration are free. At least one Title, one archetype and one attuned thing is recommended, and the rest is up to you, with more points for a one-shot or catching up. It replaces starting with two Titles of three permissions each, two archetypes and one attuned thing. See [Building Your Character](#building-character) and [A Complete Character](#a-complete-character-start-to-finish).
+**New characters are built on 35 points.** A Title, archetype or attuned thing is 5, and comes with one permission, ability or awakening. Another permission, ability or thing you carry is 1, and a Boon's 2. Your keepsake, your bag, your threads, Connect and your Aspiration are free. (Since 17 Nov an item's 1 at tier 2 and 1 more a tier, there are no Boons and no bag, and your Resources are free.) At least one Title, one archetype and one attuned thing is recommended, and the rest is up to you, with more points for a one-shot or catching up. It replaces starting with two Titles of three permissions each, two archetypes and one attuned thing. See [Building Your Character](#building-character) and [A Complete Character](#a-complete-character-start-to-finish).
 
 **An Aspiration past d12** still brings a new Title, archetype or attuned thing, and now each comes with its one permission, ability or awakening. See [Aspiration](#s-aspiration).
 
@@ -171,7 +189,7 @@ Mo's call in chat.
 
 **Traits are gone.** You don't pick two when you make a character, a Grow in downtime can't give you one, and nothing in the game comes from one any more: no extra actions, no Aura back, no ties won. See [Building Your Character](#s-title), the [Quick Build](#s-quick) and [Grow](#grow).
 
--   **The Boons still do the useful ones.** Toughness shrugs off the first hit each scene, Stride's 2 more stride, and Kit carries one more item. See [Boons and Burdens](#s-boons).
+-   **The Boons still do the useful ones.** Toughness shrugs off the first hit each scene, Stride's 2 more stride, and Kit carries one more item. (Since 17 Nov there are no Boons.) See [Boons and Burdens](#s-boons).
 -   **The six crew lose theirs**, and every example in the book's played without them. Vesk's stride is 3, and Bram's Stamina drops on his first hit like anyone's. See [the crew](#s-pregens).
 
 It replaces the traits list, the two you started with and growing more (27 Oct and 14 Oct below).
@@ -217,7 +235,7 @@ Mo's call in chat.
 
 ## 27 Oct 2026: Armour's quality, and a box for every blow {#c-2026-10-27-armour}
 
-**Armour, shields and helmets have a quality now: Common, Fine or Masterwork.** That's how many boxes the piece has, 1, 2 or 3, and every blow it takes for you ticks one. It's still a line on your Defend till its last box is ticked, and then it breaks. So the more you wear, the more blows you can take. Before, a piece broke the first time it took a blow for you. Quality doesn't add a step: a Masterwork shield's one line, the same as a Common one. See [Armour](#s-armour), [Quality](#s-armour-quality) and [Consequences](#s-consequences).
+**Armour, shields and helmets have a quality now: Common, Fine or Masterwork.** That's how many boxes the piece has, 1, 2 or 3, and every blow it takes for you ticks one. It's still a line on your Defend till its last box is ticked, and then it breaks. So the more you wear, the more blows you can take. Before, a piece broke the first time it took a blow for you. Quality doesn't add a step: a Masterwork shield's one line, the same as a Common one. (Since 17 Nov armour has a tier and soaks that many points, all back every scene, and a shield's a guard.) See [Armour](#s-armour), [Quality](#s-armour-quality) and [Consequences](#s-consequences).
 
 **A helmet's armour like any other:** a line on your Defend, one of your equipment, and a quality with its boxes. It's in the [item list](#the-item-list) now. The item list's fine sword is a sword, and its fine coat is a good coat, so neither reads as a quality.
 
@@ -225,7 +243,7 @@ Mo's call in chat.
 
 **You start with Common, and one piece can be Fine.** Bram's plate is Fine, with two boxes, and his shield and Vesk's leathers are Common, with one each. See [What you carry](#s-carrying) and [the crew](#s-pregens).
 
-**A slot in downtime mends one piece, every box on it**, broken or not, usually for a purse of gold, the same as mending something broken. A Workshop does it without a slot. See [Recover](#recover).
+**A slot in downtime mends one piece, every box on it**, broken or not, usually for a purse of gold, the same as mending something broken. A Workshop does it without a slot. (Since 17 Nov only a broken item needs mending.) See [Recover](#recover).
 
 **What it costs:** Common armour's a purse of gold, Fine's several, and Masterwork's a small fortune, if you can find a smith who makes it. Before, real armour was several purses. See [What you can afford](#what-you-can-afford) and [Upgrading gear](#upgrading-gear).
 
@@ -387,7 +405,7 @@ These all came out of the playtests.
 
 **Items.** See [Items](#s-items) and [What you carry](#s-carrying).
 -   Plain items are just what they are. A sword counts as a line when it fits. Each piece of plain armour makes your Armour a size bigger. (From 24 Oct it's a line on your Defend, and from 27 Oct a plain item goes on one set action.)
--   Resources are items now. You carry 3 equipment, 3 utility items and a keepsake, and your bag holds 10 more.
+-   Resources are items now. You carry 3 equipment, 3 utility items and a keepsake, and your bag holds 10 more. (Since 17 Nov you carry six items with tiers, and three Resources are said in the moment.)
 -   Rarity (common, rare, legendary) is gone.
 
 **Attunement.** You've got two attunement slots on top of what you carry. An attuned thing has permissions of its own and grows in three stages, Awakened, Tempered and Perfected, each needing a material. It can't be broken, and you can hand it to a friend. See [Attunement](#s-attunement).
@@ -414,7 +432,7 @@ These all came out of the playtests.
 
 **Permissions:** how to write them (a doing word and what it's done to, and the size test), and swapping them in downtime. See [Permissions](#s-writing-permissions).
 
-**Boons and Banes:** permanent upgrades that cost two permission slots, and downsides that pay for them, from one menu. (On 13 Oct Banes moved to attunement as Burdens.) See [Boons and Burdens](#s-boons).
+**Boons and Banes:** permanent upgrades that cost two permission slots, and downsides that pay for them, from one menu. (On 13 Oct Banes moved to attunement as Burdens. Since 17 Nov there are no Boons.) See [Boons and Burdens](#s-boons).
 
 ## 9 and 10 Oct 2026: Titles, set actions and one action a round {#c-2026-10-09}
 

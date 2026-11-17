@@ -194,6 +194,28 @@ A chat changes only its own files, its own parts of `tests/` and its own blocks 
 
 Written 17 Nov: the decisions, this plan, the 17 Nov section in `notes/to-confirm.md` and the line in CLAUDE.md, on `rules/2026-11-17-fixes` off `rules/2026-11-16-core`. Prompts 1, 2, 3a, 3b, 3c and 4 can start.
 
+### 1. The rules
+
+Written 17 Nov on `rules/2026-11-17-fixes-rules`. Its calls are under 1. The rules in `notes/to-confirm.md`'s 17 Nov section.
+
+- **The Core (02)**: items and Resources on the rest of your sheet (Titles and Permissions), How a roll adds up and Steps and Dice with the item doing the work as its tier (one a roll, a guard only avoiding harm, armour, packs and vessels never), Bringing In a Root bringing no item, The Roll with a guard on your Body when blows land, Aura with no Aura Boon, a vessel catching Aura you'd lose and its charge standing in on your own abilities and awakenings only, nothing from Boons in Getting it back, and Your Points with armour soaking first, a point into a vessel mid-scene, and 2 for 1 soaked on the other Root.
+- **Conflict (05)**, bar A Full Fight: Your Action (no bag, a Resource free, a combo's item), Movement (no Stride Boon or bag), Answering (dodging's Body, a guard on avoiding harm, never a weapon), When It Lands and Defend (a guard once a landing), Intercept's Burden, **Hits and Consequences** with soak first, more hits a point each, 2 for 1 soaked there, wounds only once soak and points are gone, soak back every scene and a worked example of Bram's plate and shield, "your armour takes it" gone from the GM's list and "something breaks" crossing an item out, Weapons adding their tier, and Wounds, Healing and Social on soak and Burdens.
+- **Downtime (12)**: soak and your three Resources back as it starts, a vessel keeping its charge, Mend for broken items only, Grow buying an item at tier 2 or raising one a tier to 3, and no Boon swaps. Bram's slot in A Full Week raises his shield where it mended his plate.
+- **Appendix D**: the item line in Building the roll, a Resource free and a combo's item, a vessel under Aura, soak under Your points, dodging and a guard under defence, consequences without boxes, points with items at tier 2, Traits and Burdens in place of Boons, three Resources to start, **Items and Resources** on the old `#s-qr-carry`, a caught soul that isn't an item, and downtime.
+- **The glossary**: Armour, Item, Keepsake, Hit, Combo, Downtime, Rest, Trait, Swap and the rest rewritten, Bag, Boon, Boxes, Equipment, Quality and Utility gone, and Broken, Guard, Pack, Resources (yours, and a faction's), Soak, Tier and Vessel new.
+- **The change log entry `c-2026-11-17-fixes`**, with a Since 17 Nov note on the older entries it replaces (`c-2026-11-16-core`, `c-2026-11-14-stacking`, `c-2026-11-09-traits`, `c-2026-10-27-armour`, `c-2026-10-13` and `c-2026-10-12`).
+- **`tools/check_terms.py`** retires Boons (the Oracle's Boon die, Boon table and Great Boon pass), the permission trade, the equipment and utility counts, the bag, armour's boxes and Common, Fine and Masterwork as its quality, and stops flagging "tier", which is an item's now. The rest of the book has 184 lines for prompt 7 (03, 03b, 17, 18, 19, 30, 32, 36 and A Full Fight).
+- **Links to prompt 2's ids** that aren't on this branch yet: `#s-resources`, `#s-vessels` and `#s-item-tiers` (8 links, which `--links` and the build note till 2 lands), and `#s-items`, `#s-armour` and `#s-boons`, which exist now and have to survive in 2's 03 (`#s-boons` linked as Burdens). Nothing links `#s-carrying`, `#s-armour-quality` or `#recovering-armour` from these chapters any more.
+
+The crew's items in the examples: **Bram's Named plate** (armour, Body, tier 3) and **Trusty shield** (guard, tier 2), **Vesk's Trusty worn leathers** (armour, Body, tier 2), **Wren's Named longbow** (tier 3), as the lead set them, and from the plan's own sample shapes, **Vesk's grappling line** (tool, tier 2) and **Named set of picks** (tool, tier 3). Through the hide also needed **Bram's war hammer** and **Ash's ember stone** at tier 2, the starting tier. Elsewhere the examples were turned to keep off an item whose tier isn't settled: the guard captain is Wren's shot now, Bram's chase down the alley ends in a grab, Vesk kicks the guard's wrist, and Bringing In a Root has Bram shouldering through. Dorrie's court clothes soak "their tier" with no number. Prompt 2 matches these or tells prompt 8.
+
+For the prompts after this one:
+
+- **Prompt 2**: keep `#s-items`, `#s-armour`, `#s-attunement` and `#s-boons` (on Burdens), and write `#s-resources`, `#s-vessels` and `#s-item-tiers`. The tiers above are what these chapters use.
+- **Prompts 3a to 3c**: Appendix D's archetype lines are still the 03a ones. The Warrior's *Second Skin* there says your armour's 1 step a piece when it lands, which armour adding no steps rules out, and the Maker's line says "an item's size". The Summoner's soul no longer takes a utility slot (call 7).
+- **Prompt 6**: Appendix D changed, so the player reference wants `npm run sheets`, and Your points has a Soak bullet now, which may push its page.
+- **Prompt 7**: `python3 -I tools/check_terms.py` lists the leftovers. The Learn deck's cards on these sections are named by the build.
+
 ### 3b. Abilities II
 
 Built 17 Nov on `rules/2026-11-17-fixes-abilities-b`. Its calls are in `notes/to-confirm.md` under 17 Nov, 3b.
