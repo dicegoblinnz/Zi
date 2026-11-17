@@ -2,6 +2,20 @@
 
 Your rules left a few gaps, and the book has to say something in each one, so Claude made a call. Every one of these is in the book now, written as a rule. Tell Claude "yes", "no, do this instead" or "leave it for now", and the book and the change log get updated. Your own open questions are at the bottom of `content/changes.md`, and your decisions are in `notes/playtest-sheets/` (the 27 Oct ones in `2026-10-27-chat-decisions.md`).
 
+## 17 Nov: the fixes
+
+Part 3 of the rework (`notes/fixes-plan.md`), from your 17 Nov chat (`notes/playtest-sheets/2026-11-17-chat-decisions.md`). These are the calls Claude made writing it down, before any chat built it. Each chat adds its own in a subsection below.
+
+1. **Boons go entirely.** Every Boon was bought with two permission slots, which is the trade you've taken out, so there's nothing left to be one. Burdens stay on attuned things and pay for two awakenings, and the Boon levers worth keeping become awakenings, abilities and items.
+2. **A Resource is ordinary and never steps.** Say it, tick one, and it's real. Things you use up are gone once used, and all three come back in downtime, or when the story restocks you.
+3. **"Resources" is now two things**: a character's three, and the crew's on the party sheet. The book says "your Resources" and "the crew's resources" and the glossary has both. Say if you'd rather one of them had another word.
+4. **One item a roll**, the one doing the work. Guards (shields and the like) add only to avoiding harm, and weapons don't.
+5. **Armour soaks first and comes back every scene.** It's extra health you wear, so it doesn't break from soaking, and the GM can still name "something breaks" as a consequence.
+6. **An item's 1 point at tier 2 at creation**, and 1 more a tier, tier 3 at most. Grow takes one to tier 3 in downtime, money to tier 4, and 5 and 6 come out of the story with a material.
+7. **Attuned things are items** and count among your six. Their tier and their awakenings both go on a roll they fit.
+8. **Packs give Resources**, half their tier rounded up.
+9. **A vessel holds its tier in charge**, filled only with Aura you'd lose or a point at a time mid-scene, and spent only on your own abilities and awakenings.
+
 ## 16 Nov: the new core
 
 **Not built yet.** Part 2 of the rework (`notes/core-plan.md`), from your 16 Nov chat (`notes/playtest-sheets/2026-11-16-chat-decisions.md`). These are the calls Claude made writing it down, before any chat built it. Each chat adds its own in a subsection below.

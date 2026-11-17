@@ -16,6 +16,10 @@ Part 2 of the rework (`notes/core-plan.md`) was built on `rules/2026-11-16-core`
 - **On the new core:** the builder (build `v: 5`, a Title spreading 5 with All on and a stepper on each Root, `nudgeSpread()`, each awakening picking its Root, `core: true` on the sheet it makes), the other ways in, downtime (everything back first with `downtimeRest()`, no Recover slot, Mend its own, a new Title spreading 5), print and the paper sheet, the player reference's points page, the live table (one action a round counted by the roll's `rid`, `ans: { root, bring, steps }`, a telegraph's `hits`, When it lands recording `hits`, `lost`, `box`, `wound` and `scar`, `woundsOf()` and `outOf()`, a Scar or the Blaze out of the scene, old tables still read), the table screen and the Worker.
 - **The play screen, the roller, the learning round and `/kit/`** are on it too (prompt 4): the play screen's line below says how, the dice roller's targets coming at you have hits (1 to 4, `hits` in `setupOf()`, `readDice()` and `readLanes()`), the learning round's on the crew's new numbers, and the faction turn's reroll is a point of Soul.
 
+## The 17 Nov fixes
+
+Part 3 of the rework (`notes/fixes-plan.md`, Mo's 17 Nov chat in `notes/playtest-sheets/2026-11-17-chat-decisions.md`): no Boons or permission trade, three Resources said in the moment, six items with tiers that add steps, armour that soaks, vessels that hold charge, about ten abilities an archetype, and the loop run under pressure. Built by several chats on `rules/2026-11-17-fixes`. Read the plan before any work on it. Not live till Mo says.
+
 ## Where things are
 
 - `content/rules/*.md`: the rulebook, one chapter per file. Front matter gives `title`, `id`, `order` (book order, so `03a` is 3.2 and `03b` is 3.5), `part`, `partNumber`, `source` and `updated`. `_parts.yaml` describes the five parts.
