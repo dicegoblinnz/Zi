@@ -148,7 +148,7 @@ A hit, soak first, then a point off the Root it's at · something breaks, crosse
 
 ## The archetypes {#s-qr-archetypes}
 
-Each ability's 1 Aura, or 2 for a few big ones, and they stack. Most have a Push: +2 on one die of the mechanic after you roll, +3 if you've taken it twice. Each one's Trait comes after its mechanic, and the whole of each is in [The Archetypes](#archetypes).
+Each ability's 1 Aura, or 2 or 3 for a few big ones, and they stack. A **held** one's paid once and stays up for the scene, its Aura off your maximum while it's up. A **signature**'s 4 or 5 Aura, once a scene, with no roll, and never stacks. Most have a Push: +2 on one die of the mechanic after you roll, +3 if you've taken it twice. Each one's Trait comes after its mechanic, and the whole of each is in [The Archetypes](#archetypes).
 
 -   **Bard:** your action gives every friend who can hear you a point back on their Mind, or your song Defends you all against fear, split as you like. *All Eyes on Me:* 1 Aura a threat, and it watches only you while you perform.
 -   **Bloodsworn:** every point your Body loses is 3 steps on your action, and you can spend them on purpose. *Paid in Blood:* 1 Aura for every point your Body loses.
