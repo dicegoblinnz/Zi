@@ -193,3 +193,13 @@ A chat changes only its own files, its own parts of `tests/` and its own blocks 
 ### 0. Write it down
 
 Written 17 Nov: the decisions, this plan, the 17 Nov section in `notes/to-confirm.md` and the line in CLAUDE.md, on `rules/2026-11-17-fixes` off `rules/2026-11-16-core`. Prompts 1, 2, 3a, 3b, 3c and 4 can start.
+
+### 4. The loop under tension
+
+Built 17 Nov on `rules/2026-11-17-fixes-loop`. Its calls are under 4 in `notes/to-confirm.md`'s 17 Nov section, and what it found is `notes/loop-under-tension.md`.
+
+- **`tools/fight_sim.py`** has the fixes as its default (`--rules fixes`, with 16 Nov as `--rules core`): `KIT` (what Bram, Vesk, Wren and Ash carry), a weapon's or a tool's tier on a roll it fits, a guard's on the Body roll when telegraphs land, soak a point a point with 2 for 1 soaked by the other Root's armour, vessels filled with Aura that'd be lost (and points with `--vessel-pts`) and spent on awakenings and abilities, and `scene_end()`. The GM can be `--gm cruel` (the rest on the weakest Root anywhere), `--reach` limits Bram's intercepts, `--before even|hard` carries the crew in from an earlier fight, `--deadly-price` prices a deadly telegraph's extra hits, and `--grid` runs `find_core_f()` across round budgets. Minutes come from the dice model (`GO_BASE`, `PER_DIE`, `PER_CHOICE`, `LAND_*`, `PER_HIT`, `PHONE`), with the flat one beside it. About 5 seconds a setting at 3,000 fights.
+- **The numbers:** items take the crew from 2.6 to 2.9 wins a round played plain and 3.7 to 4.0 hard, a go from 2.3 dice to 2.9 (3.9 hard, four or more in 69% of hard goes), and the big fight from 56 to 52 minutes plain and 45 to 42 hard. Hard's 72 and multipliers at a Challenge less 2 still make 45 minutes.
+- **For prompt 7:** keep the round budget, threat budget and multipliers. Add that the round budget's a most once the threats can't reach the crew, keep multipliers as written as the crew grows (the threat budget's scaling over-shoots a 45-minute fight by about half at four picks), price a deadly telegraph at its steps and half again for each hit past the first, and at Hard aim past the Guardian, with one die a round at a Root of 0. The note has the evidence for each.
+- **For prompts 5 and 6:** write an attuned item's steps as one number with its awakenings (*his war hammer, 4 steps, 6 knocking them down*), and the Root with its weapon in, to save an add on every swing. That's a proposal waiting on Mo.
+
