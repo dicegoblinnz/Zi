@@ -71,6 +71,14 @@ The second levers pass (Fable, 18 Nov) changed 30 more and added one, and it's i
 - **Investigation's thinner** on the Bard, Elementalist, Gambler, Illusionist, Leader and Shifter lists. Study still does that job for everyone.
 - **The Leader's signature is *Go again*** in the book, where the design had *Again!*.
 
+### The final review (18 Nov)
+- ***Call them out*** (Warrior) went from 1 to 2 Aura: it pulls a threat's telegraphs onto you the way the Bard's *Showstopper* does for a whole scene, so 1 was under the ladder.
+- **Near-twins left on purpose:** *Loaded* (Gambler, a die that's landed reads as its top face) and *Kill stroke* (Warrior, set a die on its top face before you roll, and it explodes). Say if one should go.
+- **The Hunter's list** leans on moving the Mark (five of ten). It's the mechanic, but it's the narrowest list.
+- ***Pull them back*** (Healer) keeps someone in the scene after a Scar. It never heals the Scar, but it's close to that line.
+- ***Wait for it*** (Shadow) sees the threats' numbers before you act, which edges toward the Oracle.
+- ***Everyone gets it*** at 1 Aura is the one the review says is most underpriced (the ladder says the whole crew is 3), and it stacks with the Leader's *Go again*.
+
 ## 17 Nov: the fixes
 
 Part 3 of the rework (`notes/fixes-plan.md`), from your 17 Nov chat (`notes/playtest-sheets/2026-11-17-chat-decisions.md`). These are the calls Claude made writing it down, before any chat built it. Each chat adds its own in a subsection below.

@@ -788,7 +788,7 @@ Your dice **explode** when you fight. A die that lands on its top face gives you
 
 **Blood up (1 Aura):** when one of your dice puts a threat down, your Body gets a point back, up to what it holds, or up to half that while it's wounded. Once a round, with no paying again. It isn't a heal, so there's no Toll.
 
-**Call them out (1 Aura):** challenge someone in front of people whose opinion they care about, with no roll. The GM picks: they face you alone, and while nobody else touches either of you their telegraphs only come at you, or they back down and lose face, and one tag that rests on their name is gone, her pick. It needs a name to lose and people watching who matter to them, so a beast, a zealot or a man with nobody watching just says no.
+**Call them out (2 Aura):** challenge someone in front of people whose opinion they care about, with no roll. The GM picks: they face you alone, and while nobody else touches either of you their telegraphs only come at you, or they back down and lose face, and one tag that rests on their name is gone, her pick. It needs a name to lose and people watching who matter to them, so a beast, a zealot or a man with nobody watching just says no.
 
 **Kill stroke (4 Aura, signature):** as you act in a fight, before you roll, set one of your dice on its top face instead of rolling it. It pays no Aura, and it explodes from there. With *Not just fights* it works anywhere.
 :::
