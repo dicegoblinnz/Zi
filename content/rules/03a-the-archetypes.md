@@ -346,7 +346,23 @@ A heal reaches one person. Anyone can [quick heal](#s-healing) for 1 Aura, thoug
 
 **Push (1 Aura):** +2 to one of your dice when you heal.
 
+**Talk them through it (1 Aura):** your heal reaches someone who can see and hear you, not just someone you can reach. They do the stitching while you tell them how.
+
+**Take the Toll (1 Aura):** the 1 Toll this heal gives goes on you instead of your patient. The heal still loses 5 for each Toll they've got already.
+
+**Rest easy (1 Aura):** when the scene ends, one Root of yours or of a friend you can reach rolls its rest twice and keeps the better. Pay again for another Root, or another friend.
+
+**What did this (1 Aura):** when you win a [Study](#s-study) on someone hurt, sick or dead, you get two of its picks instead of one: two straight answers, or an answer and a hidden tag.
+
+**Owed (1 Aura):** someone you've healed or patched up, the GM's people included, does one thing for you that they'd do for whoever saved their life. There's no roll, and it's once for each of them.
+
+**Share it (1 Aura):** your heal reaches one more person you can reach. Roll it once and share what it rolls out between them, and each share loses 5 for each Toll that patient's got already and gives them 1 Toll. Pay again for one more.
+
+**On the move (1 Aura):** your heal can be one die of a roll instead of your whole action, so the rest of your dice can do whatever else you're up to. Make that die as big as you like.
+
 **Pull them back (1 Aura):** when someone you can reach takes a Scar, they stay in the scene instead of leaving it. It costs no action. That Root's still wounded and on 0, so they'll want to keep their head down. Pay again for another.
+
+**Close the wound (2 Aura):** your heal clears a wound as well, so that Root can heal to its maximum again. It's still a heal, so it gives Toll and loses for Toll the same as any other.
 :::
 
 :::example[Healing Vesk]
@@ -359,7 +375,7 @@ Say you're a Healer, *The field surgeon of the Red Company*, and you heal with y
 
 The Hunter marks the prey, and everyone who goes at it rolls an extra die.
 
-Spend your action and roll against a creature to mark it. Win and it's ***Marked***, a special condition carrying the die you won with. It doesn't give a step and nobody spends it. Instead, anyone who acts against it rolls the Mark die too, as one more die against it. It fades a size every round like any [condition](#s-conditions).
+Put one of your dice on a creature to mark it. Win and it's ***Marked***, a special condition carrying the die you won with. It doesn't give a step and nobody spends it. Instead, anyone who acts against it rolls the Mark die too, as one more die against it. It fades a size every round like any [condition](#s-conditions).
 
 **The Mark jumps.** When a *Marked* creature falls, the Mark moves to another creature you can see, with the die it had.
 
@@ -368,7 +384,23 @@ Spend your action and roll against a creature to mark it. Win and it's ***Marked
 
 **Push (1 Aura):** +2 to the Mark die when it's rolled. It's your Aura, whoever's rolling.
 
+**Hold the scent (1 Aura):** the Mark doesn't fade at the end of this round. Pay again for another round.
+
 **Mark the pack (1 Aura):** your roll to mark goes at two more creatures you can see, and each one it beats is *Marked* with it. Pay again for two more.
+
+**Point it out (1 Aura):** a friend can give one of their dice the intent to mark a creature for you. If it wins, the creature's *Marked* with that die, the same as if you'd marked it yourself.
+
+**Where it's soft (1 Aura):** the first time the Mark die wins this round, the GM tells you one of the creature's hidden tags as well, if it's got one.
+
+**Watch its hands (1 Aura):** when a *Marked* creature's telegraphs land this round, whoever they land on rolls the Mark die with their defence, as one more die that can stop one.
+
+**Run it down (1 Aura):** this round, anyone chasing a *Marked* creature can roll the Mark die with the dice they put on moving, and it adds like they do.
+
+**Mark the way (1 Aura):** your die to mark can go at a stake or an event instead of a creature. Win and it's *Marked*, and anyone who works it rolls the Mark die too. It doesn't jump.
+
+**On its trail (1 Aura):** when a *Marked* creature gets away, you know which way it went and how far ahead it is till the next downtime, and when you catch up with it, it's *Marked* again at the die it had.
+
+**Hunt them down (1 Aura):** when a scene ends with a *Marked* creature that answers to a faction, the Mark goes on that faction in the next faction turn, at the die it ended the scene on. The crew's roll against that faction rolls the Mark die too.
 :::
 
 :::example[Marking the Warden]
@@ -390,6 +422,22 @@ Spend your action and roll your illusion dice against the threats' Challenge. **
 
 **Push (1 Aura):** +2 to one of your illusion dice.
 
+**Wear it (1 Aura):** your illusion goes on you or a friend you can touch: another face, or a guard's coat. It holds up when someone talks to them close up, and only beating what you rolled sees through it.
+
+**For their eyes (1 Aura):** one of your illusions shows only to the people you choose. Everyone else sees what's really there.
+
+**Nothing there (1 Aura):** your illusion hides something that's there instead of showing something that isn't, like a friend in a doorway or the blood on the floor. Pay again for another.
+
+**Solid enough (1 Aura):** a threat that touches one of your illusions or talks to it still believes it. Only beating what you rolled sees through it now.
+
+**It moves (1 Aura):** one of your illusions moves and acts like the real thing till the round ends, a clone running for the gate or a guard waving the others on. Pay again for another round.
+
+**Decoy (1 Aura):** a telegraph at someone your illusion's copied lands on the illusion instead, as long as the threat believes it, and the illusion's gone.
+
+**Takes one to know one (1 Aura):** you know an illusion, a disguise or a forgery when you see one, with no roll, and the GM tells you what it's hiding.
+
+**Leave it standing (1 Aura):** one of your illusions stays after you've gone, till someone sees through it or the next downtime ends.
+
 **Make it real (1 Aura):** one illusion's real till the round ends. The wall stops them, and the clone hits back. Pay again for another round, or another illusion.
 :::
 
@@ -410,7 +458,23 @@ Only a Leader leads. An order or a rallying song is an action: a Root at full an
 
 **Push (1 Aura):** +2 to one of a friend's dice, on a roll your steps went into.
 
+**Size them up (1 Aura):** before anyone acts this round, ask the GM which threat's in charge, or which one's closest to breaking, and she tells you straight.
+
+**Signal (1 Aura):** your lead reaches a friend who can't hear or see you, as long as you've agreed a signal or sent word. Pay again for another friend.
+
+**On me (1 Aura):** every friend who can hear or see you can move their stride again this round, free.
+
+**Rally them (1 Aura):** instead of handing a friend steps, make them *Rallied*, with the die those steps make, a d12 at most. Pay again for another friend.
+
+**Take charge (1 Aura):** people in the scene who aren't threats, like a crowd or a ship's crew, do what you tell them this round, as long as it's something they'd do for whoever's in charge. There's no roll.
+
+**Shift the weight (1 Aura):** this round your *Where It's Needed* moves 2 steps for each of you, not 1. Pay again and it's 3.
+
+**Lead from the front (1 Aura):** keep some of your lead's steps and roll them yourself, as dice with intents of their own, and hand the rest out.
+
 **Everyone gets it (1 Aura):** every friend who can hear or see you gets all your steps, not a share.
+
+**Orders for the week (1 Aura):** a lead you make in the last scene before downtime can wait for the faction turn, and its steps go on the crew's roll there.
 :::
 
 :::example[Orders from the doorway]
@@ -438,7 +502,23 @@ A tag works like a permission for whoever's holding the item: it lets them do so
 
 **Push (1 Aura):** +2 to one of your making dice.
 
+**Made it earlier (1 Aura):** say a Resource for you or a friend you can reach without ticking one off, as long as it's something you could have made, like a hook or a key that nearly fits. Pay again for another.
+
+**Knock it together (1 Aura):** tick a Resource and it's an item at tier 1 till the scene ends, like a chair leg made a club. It's on top of your six.
+
+**Tune it up (1 Aura):** a making die that wins can put the item a tier higher till the scene ends instead of giving it a tag, as far as tier 6. Pay again and another winning die can.
+
+**Mend it (1 Aura):** a making die that wins against something broken can mend it instead of giving it a tag, and it stays mended.
+
 **Masterwork (1 Aura):** the tags you make this time last till downtime.
+
+**On the fly (1 Aura):** your making can be one die of a roll instead of your whole action, so you can fix your hook halfway up the wall and keep climbing with the rest.
+
+**Rig it (1 Aura):** your making can go on something nobody carries, like a door, a cart or a crane, and its tags work for the crew there till the scene ends.
+
+**Know how it's made (1 Aura):** when you win a [Study](#s-study) on something made, like a lock or a construct, the GM tells you its weak point as well, or that it hasn't got one.
+
+**Bottle it (1 Aura):** when Aura you'd lose could go into a vessel, it can go into a friend's you can touch instead, as their charge.
 :::
 
 :::example[Vesk's coin]
@@ -464,7 +544,21 @@ Your foresight's two numbers at most, however many steps you've got, so make the
 
 **Hold it (1 Aura):** your foresight lasts till you use it or the scene ends.
 
+**See further (1 Aura):** *Seen It Coming* rolls 2 more of the threats' dice this round. Pay again for 2 more.
+
+**Another glimpse (1 Aura):** your foresight's one number more this time. Pay again for another.
+
+**Look again (1 Aura):** roll one of the threats' dice from *Seen It Coming* again, and keep whichever of the two you like. Pay again for another.
+
+**Echoes (1 Aura):** hold something, or stand somewhere, and see the moment that mattered most in its past. The GM tells you what you see.
+
+**What's coming (1 Aura):** ask the GM what'll happen in this scene if the crew leaves it alone, and she tells you straight.
+
 **Foretold (1 Aura):** win a [Study](#s-study) and introduce a truth instead. It's true from now on, and anyone in the crew can bring a Root in on it this scene, like a permission they've all got.
+
+**Leave an omen (1 Aura):** instead of letting a foresight number go, make it *Blessed* or *Hexed* on someone you can see, at the smallest die it fits. Pay again for another.
+
+**Read the year (1 Aura):** as the last scene before downtime ends, roll your foresight with no action and keep it for the faction turn. Its numbers swap into any faction's dice there, the crew's included.
 :::
 
 :::example[Seeing the brute's club]

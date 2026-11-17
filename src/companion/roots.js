@@ -47,6 +47,25 @@ export const ROOTS = ["Body", "Mind", "Soul"];
 export const WOUNDS = { Body: "Bloodied", Mind: "Frayed", Soul: "Hollow" };
 export const MAX_PERMS = 6;
 export const MAX_ABILITIES = 6;
+// Each archetype's abilities as the book had them on 16 Nov, before the 17
+// Nov fixes made each list about ten long. A character saved before stacking
+// has no `have`, and came with every ability its archetype had then, so these
+// are what it keeps, never the longer list (`hadOf()`).
+export const HAD_ABILITIES = {
+  Bard: ["Push", "Crescendo"], Bloodsworn: ["Bleed for it", "Bleed out"], Elementalist: ["Push", "Sculpt"],
+  Face: ["Push", "Turn them"], Gambler: ["Another flip", "Double or nothing"], Guardian: ["Push", "Stand firm"],
+  Healer: ["Push", "Pull them back"], Hunter: ["Push", "Mark the pack"], Illusionist: ["Push", "Make it real"],
+  Leader: ["Push", "Everyone gets it"], Maker: ["Push", "Masterwork"], Oracle: ["Push", "Hold it", "Foretold"],
+  Shadow: ["Push", "Vanish"], Shifter: ["Push", "Become it"], Summoner: ["Push", "Call the horde"],
+  Teleporter: ["Portal", "Swap"], Warrior: ["Push", "Opened"],
+};
+// The abilities one from before stacking had, out of the names on the list
+// now: the 16 Nov ones still there, or the whole list for an archetype that
+// came after.
+export function hadOf(name, names) {
+  const had = HAD_ABILITIES[name];
+  return (had ? names.filter((x) => had.includes(x)) : names).slice(0, MAX_ABILITIES);
+}
 export const STAGES = ["Awakened", "Tempered", "Perfected"];
 // What a Title puts on your Roots, and what it put before the new core.
 export const TITLE_ROOTS = 5;
@@ -423,7 +442,7 @@ export function archetypesOf(c, B) {
     // The book's, or what the sheet carries when there's no book to hand.
     const rule = ARCH.get(a.name) ?? a;
     const abilities = rule.abilities ?? a.abilities ?? [];
-    out.push({ name: a.name, id: a.id ?? rule.id ?? null, home: trackKey(a.home ?? rule.home) ?? "stamina", times: 1, summary: rule.summary ?? "", for: rule.for ?? "", trait: traitOf(rule.trait ?? a.trait), have: [...(a.have ?? abilities.map((x) => x.name))], abilities });
+    out.push({ name: a.name, id: a.id ?? rule.id ?? null, home: trackKey(a.home ?? rule.home) ?? "stamina", times: 1, summary: rule.summary ?? "", for: rule.for ?? "", trait: traitOf(rule.trait ?? a.trait), have: [...(a.have ?? hadOf(a.name, abilities.map((x) => x.name)))], abilities });
   }
   for (const a of out) {
     const push = a.times + 1;

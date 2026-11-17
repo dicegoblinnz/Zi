@@ -16,6 +16,21 @@ Part 3 of the rework (`notes/fixes-plan.md`), from your 17 Nov chat (`notes/play
 8. **Packs give Resources**, half their tier rounded up.
 9. **A vessel holds its tier in charge**, filled only with Aura you'd lose or a point at a time mid-scene, and spent only on your own abilities and awakenings.
 
+### 3b. Abilities II
+
+Written 17 Nov on `rules/2026-11-17-fixes-abilities-b`: ten abilities each for the Healer, Hunter, Illusionist, Leader, Maker and Oracle in 03a, the old ones word for word.
+
+1. **Abilities that reach the faction turn are paid in the scene before it**, since there's no Aura in downtime: the Hunter's *Hunt them down*, the Leader's *Orders for the week* and the Oracle's *Read the year*.
+2. **Marking's one die, not your action.** The Hunter's mechanic said "spend your action", where Conflict's Marked and Appendix C already had it as a die's intent, so the Hunter's section says a die now.
+3. **Toll stays a cost for the Healer.** Nothing ignores it past *Good Hands*: *Take the Toll* moves a heal's Toll onto the Healer, *Share it* gives every patient their own, and *Close the wound* (2 Aura) clears a wound mid-scene and is still a heal, Toll and all.
+4. **The Maker's tier for the scene comes off a making die.** *Tune it up* lets a winning making die put an item a tier higher till the scene ends instead of a tag, as far as tier 6, so Aura never buys a tier on its own.
+5. **A Resource can become a rough item for the Maker.** *Knock it together* makes a ticked Resource a tier 1 item till the scene ends, on top of your six, and *Made it earlier* is 1 Aura for a Resource that doesn't tick one off.
+6. **The Maker can fill a friend's vessel.** *Bottle it* lets Aura the Maker would lose go into a friend's vessel they can touch, and it's that friend's charge, spent only on their own abilities and awakenings, so nothing's farmed and the cap's still the vessel's tier.
+7. **A heal or a making can be one die of a roll** (*On the move*, *On the fly*), so the rest of the dice do something else. It's still one action, and the heal's still one die, unsplit.
+8. **The Oracle's *Look again* rerolls a threat's die** it rolled with *Seen It Coming*, keeping either. It's a reroll, never a flip, so the Gambler keeps flipping to itself.
+9. **The Leader's *Take charge*** has people who aren't threats, like a crowd or a ship's crew, do what the Leader says for a round, with no roll, as long as they'd do it for whoever's in charge.
+10. **A character saved before stacking keeps the abilities its archetype had on 16 Nov**, never the longer list (`HAD_ABILITIES` and `hadOf()` in `roots.js`, used by `builder.js`), since a save with no `have` came with every ability its archetype had then. And the build no longer warns on a list past six, since a character holds six and the list's ten.
+
 ### 3a. Abilities I
 
 The Bard, Bloodsworn, Elementalist, Face, Gambler and Guardian in 03a, ten abilities each, on `rules/2026-11-17-fixes-abilities-a`.
