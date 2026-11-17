@@ -40,6 +40,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Burden](#s-boons)** | A permanent downside, like −2 stride. It only ever comes on an attuned thing, once it's Tempered, where it pays for two more awakenings on that thing. |
 | **[Catch](#s-trouble)** | Trouble that's ready to go, on an attuned thing. Let it bite for 1 Aura, as often as you like, as long as it's real trouble, or a point of Soul for a big bite. |
 | **[Challenge](#s-challenges)** | The die something defends with: 2 (d4) to 6 (d12). It never steps down, unless a tag like *Crumbling* says so. |
+| **[Charge, a vessel's](#s-vessels)** | What a vessel holds, up to its tier, each one paying an Aura on your own abilities and awakenings. A charge from a point holds that point of its Root, like a lock, till it's spent, and points are spent first. |
 | **[Climbs](#s-climb)** | How the Goal, a project and an agenda move: from d2 up, a step on every win, one step a roll. Past d12, it's done. |
 | **[Clock](#s-stakes)** | A die on a stake that steps down every round nobody works it. |
 | **[Combo](#s-teamwork)** | Two or more actions into the same thing at the same time, yours or your friends'. You roll once between you, every action brings the Root that fits how they're helping, all of it, and the one item doing their part, and there's no Aura for the combo. |
@@ -89,7 +90,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Log](#s-log)** | One sentence a session, kept with the party sheet. |
 | **[Marked](#a-hunter)** | The Hunter's special condition on a creature, at the die they won with. It gives no step and nobody spends it: anyone who acts against it rolls the Mark die too. It fades a size a round. |
 | **[Material](#s-attunement)** | What an attuned thing needs before it reaches its next stage, found in the story or bought. A summoning attunement's material is souls. |
-| **[Maximum](#s-tracks)** | A Root's number less its locked points. Its points never go past it, and a wounded Root heals only to half of it. |
+| **[Maximum](#s-tracks)** | A Root's number less its locked points and any held in a vessel. Its points never go past it, and a wounded Root heals only to half of it. |
 | **[Mend](#s-bonds)** | Making a strained thread right with them, by playing it out, doing them a favour or paying them, in downtime or in a scene with them. Then it's whole again. |
 | **[Mini faction](#s-mini-factions)** | A faction another one made, up to three each. It does two of the six outcomes and nothing else, and its parent hands it one resource and one asset to start. It sits out the downtime it's made, then acts on its own. |
 | **[Mook](#s-staying)** | Challenge 2 or 3, with none or one tag keeping it going. Falls to one good win. |
@@ -150,7 +151,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Top face](#s-the-roll)** | A die's highest number. 1 Aura back, unless a Push took it there, it's a summon's, an Oracle swapped it in or a Gambler flipped it. A Warrior's explodes. |
 | **[Trait](#s-how-archetypes)** | Something that's always true of you because of your archetype, written in its rule box. Every archetype has one, most cost nothing, and some get you Aura back. Take the same archetype twice and it's still the one Trait. Traits only come from archetypes, and from a Scar grown into one. |
 | **[Trouble](#s-trouble)** | Something going wrong for you that the GM can run with. You bring it yourself, by letting a Catch bite or with no Catch at all, and take 1 Aura for it. |
-| **[Vessel](#s-vessels)** | An item that holds charge, as much as its tier: a lantern of captured light, a prayer string. Fill it only with Aura you'd lose or a point mid-scene, and spend it only on your own abilities and awakenings, a charge for each Aura. It keeps through downtime. |
+| **[Vessel](#s-vessels)** | An item that holds charge, as much as its tier: a lantern of captured light, a prayer string. Fill it only with Aura you'd lose, never what's left when a scene ends, or a point mid-scene, and spend it only on your own abilities and awakenings, a charge for each Aura. It keeps through downtime. |
 | **[Vulnerability](#s-vulnerable)** | Something that makes a hit hurt more, like *Prone* or *Vulnerable to fire*. Each one that fits a win that does harm adds a tick, and you choose where it goes, so one can strip two plain tags. On you, it's one more hit. The same one never counts twice. |
 | **[Ward](#s-wards)** | A condition like *Warded* or *Blessed* that you put on a friend. Nothing pushes back, so the die you built is its die. One friend, or a second you can touch with a split. |
 | **[Weak point](#s-hidden)** | The tag that holds a threat together. Break it and it falls. |

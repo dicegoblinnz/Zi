@@ -1247,6 +1247,8 @@ if (part("1e")) {
     ["bram", "Getting out of the way behind his shield", { root: "Body", item: "shield", avoid: true }, 11, "d12 + d10", 0],
     ["bram", "His shield on a swing adds nothing", { root: "Body", item: "shield" }, 9, "d12 + d6", 0],
     ["bram", "His plate never adds a step", { root: "Body", item: "plate armour", avoid: true }, 9, "d12 + d6", 0],
+    ["bram", "His hammer never adds getting out of the way", { root: "Body", item: "war hammer", avoid: true }, 9, "d12 + d6", 0],
+    ["bram", "Bar a Warrior's Parry", { root: "Body", item: "war hammer", avoid: true, parry: true }, 11, "d12 + d10", 0],
     ["bram", "Swinging his hammer", { root: "Body", item: "war hammer", awk: [["Ring the bell", 0]] }, 13, "2d12 + d2", 0],
     ["bram", "Barking an order", { root: "Soul" }, 4, "d8", 0],
     ["bram", "An order with his Body brought in on a point", { root: "Soul", bring: [["Body", "fight in a shield wall", "pt"]] }, 13, "2d12 + d2", 0],
@@ -1266,7 +1268,7 @@ if (part("1e")) {
     tryIt(`${id}, ${what}`, () => {
       const c = sheet(id);
       const s = RS.freshCore(c);
-      const roll = { root: r.root, item: r.item ? itemKey(c, r.item) : null, avoid: Boolean(r.avoid), awk: (r.awk ?? []).map(([n, a]) => ({ key: awkKey(c, n), aura: a })), bring: (r.bring ?? []).map(([root, perm, pay]) => ({ root, perm: permKey(c, perm), pay })) };
+      const roll = { root: r.root, item: r.item ? itemKey(c, r.item) : null, avoid: Boolean(r.avoid), parry: Boolean(r.parry), awk: (r.awk ?? []).map(([n, a]) => ({ key: awkKey(c, n), aura: a })), bring: (r.bring ?? []).map(([root, perm, pay]) => ({ root, perm: permKey(c, perm), pay })) };
       if (r.item && !roll.item) note(`${id}, ${what}: the item isn't on the sheet`);
       for (const w of roll.awk) if (!w.key) note(`${id}, ${what}: an awakening isn't on the sheet`);
       for (const b of roll.bring) if (!b.perm) note(`${id}, ${what}: the permission isn't on the sheet`);
@@ -1274,6 +1276,14 @@ if (part("1e")) {
       same([k.total, diceLabel(k.dice), k.aura, k.ok], [steps, dice, aura, true], `${id}, ${what}`);
     });
   }
+  tryIt("a Warrior's Second Skin", () => {
+    const c = sheet("bram");
+    const s = RS.freshCore(c);
+    const plate = itemKey(c, "plate armour");
+    c.archetypes = [...c.archetypes, { name: "Warrior", have: ["Push"] }];
+    same(RS.countRoll(c, s, { root: "Body", item: plate, avoid: true }).total, 12, "a Warrior's plate is a guard as well, 3 more getting out of the way");
+    same([RS.countRoll(c, s, { root: "Body", item: plate }).total, RS.countRoll(c, s, { root: "Soul", item: plate, avoid: true }).total], [9, 4], "never on anything else, or on a Root it isn't on");
+  });
   tryIt("the rest of a roll", () => {
     const c = sheet("bram");
     const s = RS.freshCore(c);
@@ -1394,14 +1404,22 @@ if (part("1e")) {
     const as = RS.freshCore(a);
     const horn = itemKey(a, "coal horn");
     same([RS.chargeOf(a, as, horn), RS.fillVessel(a, as, horn, 2, { from: "aura" })], [0, 0], "her horn starts empty, and Aura she wouldn't lose can't go in");
+    same(RS.fillVessel(a, as, horn, 2, { from: "aura", spill: 2 }), 0, "and saying she lost some doesn't make it so");
     as.acting = true;
     as.aura = 7;
     same([RS.fillVessel(a, as, horn, 3, { from: "aura" }), as.aura, RS.chargeOf(a, as, horn)], [2, 5, 2], "the 2 past her 5 while she's acting go in");
     as.acting = false;
-    same([RS.fillVessel(a, as, horn, 1, { from: "aura", spill: 1 }), RS.chargeOf(a, as, horn), as.aura], [1, 3, 5], "and Aura that would stop at her maximum");
+    same([RS.gainAura(as, a, 2), as.aura, as.spill], [2, 5, 2], "2 Aura coming in off her turn stops at her 5, and she's lost 2");
+    same([RS.fillVessel(a, as, horn, 3, { from: "aura" }), RS.chargeOf(a, as, horn), as.aura, as.spill], [1, 3, 5, 1], "Aura she really lost goes in, as far as the horn holds");
+    as.charge[horn] = 0;
+    same([RS.fillVessel(a, as, horn, 3, { from: "aura" }), RS.fillVessel(a, as, horn, 1, { from: "aura" }), "spill" in as], [1, 0, false], "and never more than she lost");
+    as.acting = true;
+    as.aura = 6;
+    same([RS.doneActing(as, a), as.spill, RS.fillVessel(a, as, horn, 3, { from: "aura" }), RS.chargeOf(a, as, horn)], [1, 1, 1, 2], "Aura past her maximum as she finishes acting can still go in after");
+    as.charge[horn] = 3;
     same(RS.fillVessel(a, as, horn, 1, { from: "pt", root: "Soul" }), 0, "a full horn takes nothing");
     as.charge[horn] = 1;
-    same([RS.fillVessel(a, as, horn, 1, { from: "pt", root: "Soul" }), as.pts.Soul, RS.chargeOf(a, as, horn)], [1, 9, 2], "a point of her Soul's a charge, mid-scene");
+    same([RS.fillVessel(a, as, horn, 1, { from: "pt", root: "Soul" }), as.pts.Soul, RS.chargeOf(a, as, horn), as.held[horn].Soul, RS.capOf(a, as, "Soul")], [1, 9, 2, 1, 9], "a point of her Soul's a charge, mid-scene, held in the horn like a lock");
     as.out = true;
     same(RS.fillVessel(a, as, horn, 1, { from: "pt", root: "Soul" }), 0, "never once she's left the scene");
     delete as.out;
@@ -1411,14 +1429,18 @@ if (part("1e")) {
     const fire = { root: "Soul", item: stone, awk: [{ key: awkKey(a, "Fire without a word"), aura: 2 }], charge: [{ key: horn, n: 2 }] };
     const k = RS.countRoll(a, as, fire);
     same([k.total, diceLabel(k.dice), k.aura, k.charge, k.ok], [19, "3d12 + d2", 0, [{ key: horn, n: 2 }], true], "2 charge pays for the 2 Aura on Fire without a word, so she throws 19 on no Aura");
-    same([RS.payFor(a, as, k), RS.chargeOf(a, as, horn)], [true, 1], "and paying spends the charge");
+    same([RS.payFor(a, as, k), RS.chargeOf(a, as, horn), as.held?.[horn], RS.capOf(a, as, "Soul")], [true, 1, undefined, 10], "and paying spends the charge, her point of Soul first, so it's free to come back");
     same(RS.countRoll(a, as, { root: "Soul", charge: [{ key: horn, n: 1 }] }).charge, [], "charge only pays for an awakening's Aura");
     same([RS.spendCharge(a, as, horn, 2), RS.spendCharge(a, as, horn, 1), RS.chargeOf(a, as, horn)], [false, true, 0], "spending charge on an ability, never more than's there");
     const end = RS.freshCore(a);
     end.aura = 3;
-    same([RS.sceneEnd(a, end, {}, { fill: { [horn]: 5 } }).filled, RS.chargeOf(a, end, horn), end.aura], [[{ key: horn, n: 3 }], 3, 5], "Aura left at a scene's end goes in, never past its tier, and then Aura's full");
+    same([RS.sceneEnd(a, end, {}, { fill: { [horn]: 5 } }).filled, RS.chargeOf(a, end, horn), end.aura], [[], 0, 5], "Aura left at a scene's end isn't lost, so it never goes in, and Aura's full");
+    RS.fillVessel(a, end, horn, 2, { from: "pt", root: "Soul" });
+    RS.sceneEnd(a, end, { Soul: 12 });
+    same([end.pts.Soul, RS.capOf(a, end, "Soul")], [8, 8], "the 2 points held in it don't come back at a scene's end");
     RS.downtimeRest(a, end);
-    same(RS.chargeOf(a, end, horn), 3, "it keeps its charge through downtime");
+    same([RS.chargeOf(a, end, horn), end.held[horn].Soul, end.pts.Soul], [2, 2, 8], "it keeps its charge through downtime, and the points held in it stay held");
+    same(RS.normalCore({ ...end, charge: { [horn]: 1 }, held: { [horn]: { Soul: 2 } } }, a).held[horn].Soul, 1, "never more held than its charge");
     // Six items at most.
     const many = rootsSheet({ ...sheets.vesk, items: [...sheets.vesk.items, { name: "a lantern", tier: 2 }, { name: "a crowbar", tier: 2 }] }, [], BUILD);
     same([many.items.length, RS.choicesOf(many).find((x) => x.k === "items")], [7, { k: "items", over: 1 }], "a seventh item is theirs to choose which goes");
@@ -2549,7 +2571,7 @@ if (part("4")) {
   // A point of Mind into her coal horn, no action.
   await t.panel("aura");
   await page.click(`#cc-panel button[data-act="fill"][data-k="${horn.key}"][data-from="pt"][data-r="Mind"]`);
-  same([await t.pts("Mind"), await charge()], ["4/5", "Coal horn 1/3"], "a point of Mind for a charge");
+  same([await t.pts("Mind"), await charge()], ["4/4", "Coal horn 1/3"], "a point of Mind for a charge, held in the horn");
   await t.panel("aura", false);
   // Her fire: her Soul, her ember stone doing the work, and its awakening
   // with an Aura on it, paid from the coal horn.
@@ -2564,25 +2586,26 @@ if (part("4")) {
   await page.click('#cc-dialog button[data-act="go"]');
   await t.rolled();
   await t.done();
-  same([await t.aura(), await charge()], ["7/5", "Coal horn 0/3"], "her Aura past 5 while she's acting, the charge spent");
+  same([await t.aura(), await charge(), await t.pts("Mind")], ["7/5", "Coal horn 0/3", "4/5"], "her Aura past 5 while she's acting, the charge spent, and her point of Mind free to come back");
   // Finishing acting: what's over goes into her coal horn.
   await page.click(`.cc-acting button[data-act="fill"][data-k="${horn.key}"][data-from="over"]`);
   same([await t.aura(), await charge()], ["5/5", "Coal horn 2/3"], "the 2 over her 5 into her coal horn as she finishes");
-  // New scene: her Mind rests, and the Aura she's got left fills the horn.
+  // New scene: her Mind rests, and the Aura she's got left isn't lost, so it
+  // stays out of the horn.
   await page.click('button[data-act="scene"]');
-  has(await page.textContent("#cc-dialog .dlg-body"), "Your Aura left, 1 into your coal horn", "the Aura she'd lose offered into her coal horn");
+  same((await page.textContent("#cc-dialog .dlg-body")).includes("coal horn"), false, "the Aura she's got left isn't offered into her coal horn");
   await page.evaluate(() => window.ziCompanion.setDice([4]));
   await page.click('#cc-dialog button[data-act="rest-go"]');
   await page.click('#cc-dialog button[data-act="rest-done"]');
   await t.closed();
-  same([await t.pts("Mind"), await t.aura(), await charge()], ["5/5", "5/5", "Coal horn 3/3"], "rested, Aura full, and her coal horn full");
+  same([await t.pts("Mind"), await t.aura(), await charge()], ["5/5", "5/5", "Coal horn 2/3"], "rested, Aura full, and her coal horn as it was");
   // Downtime: her Resources back, her coal horn still full.
   await page.click('button[data-act="downtime"]');
   await t.finish();
-  same([await page.textContent('.cc-stat[data-p="res"] .v'), await charge()], ["3/3", "Coal horn 3/3"], "downtime: her Resources back, and her coal horn keeps its charge");
+  same([await page.textContent('.cc-stat[data-p="res"] .v'), await charge()], ["3/3", "Coal horn 2/3"], "downtime: her Resources back, and her coal horn keeps its charge");
   await page.click('.cc-tabs a[data-t="sheet"]');
   await openFold(page, "kit");
-  has(await page.textContent('details[data-open="sh-kit"]'), "A Proven coal horna vessel, 3 of 3 charge", "her coal horn on the Sheet tab");
+  has(await page.textContent('details[data-open="sh-kit"]'), "A Proven coal horna vessel, 2 of 3 charge", "her coal horn on the Sheet tab");
   has(await page.textContent('details[data-open="sh-kit"]'), "A Trusty scorched coatarmour on Body, 2 of 2 soak left", "her coat's soak there too");
   await page.click('.cc-tabs a[data-t="play"]');
   console.log("points: Vesk to a Scar and back, heals with Toll, a breath, Dorrie's court clothes, Isolde's Blaze, and Ash's Resources and coal horn");

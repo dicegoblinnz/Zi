@@ -1554,8 +1554,9 @@ def scene_end(c, rng, kit=True):
     """The end of a scene: each Root below what it holds rolls unsplit (its
     dice filled to a d12 first) and gets back what it rolls, up to what it
     holds or half that while it's wounded. A Scar locks a point of its Root
-    for good. Soak comes back (the fixes, not 16 Nov's boxes), leftover Aura
-    goes into a vessel, Aura fills, and Toll drops by 1."""
+    for good. Soak comes back (the fixes, not 16 Nov's boxes), Aura fills,
+    and Toll drops by 1. Leftover Aura never goes into a vessel (prompt 8 of
+    the fixes), since it isn't lost."""
     if c.scar:
         c.cap[c.scar] = max(0, c.cap[c.scar] - 1)
         c.scar = None
@@ -1568,8 +1569,6 @@ def scene_end(c, rng, kit=True):
             c.pts[r] = min(top, c.pts[r] + sum(rng.randint(1, d) for d in dice))
     if kit:
         c.armour = dict(c.worn)
-    if c.vessel:
-        c.charge = min(c.vessel, c.charge + c.aura)
     c.aura = c.max
     c.toll = max(0, c.toll - 1)
     c.out = c.hidden = c.defending = False

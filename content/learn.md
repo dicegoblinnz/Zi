@@ -115,7 +115,7 @@ Three spears get through to Vesk's Body. Her leathers soak two, and the third ta
 ::::
 
 ::::card[Pushing yourself]{#l-paying teaches=s-tracks}
-Your points pay for things too. **A point of a Root** brings it into a roll, and **a point of Soul rolls again** after a miss. When a hit gets through, **2 for 1** takes it on another Root instead, for 2 points of that one, if it's got them, soak included. A point can go into a vessel mid-scene, too. Pushing never hurts you: you can't spend what you haven't got, so spending down to 0 only leaves you exposed.
+Your points pay for things too. **A point of a Root** brings it into a roll, and **a point of Soul rolls again** after a miss. When a hit gets through, **2 for 1** takes it on another Root instead, for 2 points of that one, if it's got them, soak included. A point can go into a vessel mid-scene, too, held there till it's spent. Pushing never hurts you: you can't spend what you haven't got, so spending down to 0 only leaves you exposed.
 
 :::example
 A spear gets through to Bram's Body. He takes it without a flinch and pays 2 points of his Soul, so his Soul's on 2 and his Body stays on 7.

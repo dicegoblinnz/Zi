@@ -35,6 +35,7 @@
 //   { v, aura, acting, pts: { Body, Mind, Soul }, wound: { Body, Mind, Soul },
 //     toll, scars: { Body: [words], Mind: [], Soul: [] }, blaze, out, dead,
 //     soak: { [itemKey]: used }, res: [words], charge: { [itemKey]: n },
+//     held: { [itemKey]: { Body, Mind, Soul } }, spill,
 //     conditions, threads, crossed, picked, asp, aspText, notes, last,
 //     grown, before, moved, core, choose, seen, tele, pool }
 // pts is what each Root's got now, full on a new character (capOf). wound
@@ -44,7 +45,10 @@
 // it wounded at 0, or the Blaze taken), and out says they've left the scene.
 // soak is how much of each piece of armour's soak is used this scene, res
 // is the Resources they've said since downtime, in their words, and charge
-// is what's in each vessel. crossed is the items that are broken till
+// is what's in each vessel. held is how much of that charge came from each
+// Root's points, held there like a lock till it's spent, and spill is Aura
+// they really lost (past the maximum on finishing acting, or stopping at it
+// off their turn) that can still go into a vessel. crossed is the items that are broken till
 // they're mended. core is there till the player's seen that the character
 // moved onto the new core, and choose is what a move left for them to choose
 // (choicesOf). grown is what downtime gave them, in the shapes growRoots()
@@ -155,10 +159,19 @@ export function tierIn(said, tiers = TIERS) {
   const a = /^an? $/i.test(art) ? (/^[aeiou]/i.test(noun) ? "an " : "a ") : art.toLowerCase();
   return { name: `${a}${noun}`, tier: t.n };
 }
-// What each kind's tier does on a roll: a weapon or a tool on anything it
-// fits, a guard only on a roll avoiding harm, and armour, a pack or a vessel
-// never.
-export const addsSteps = (it, avoid = false) => (it?.kind === "weapon" || it?.kind === "tool" ? true : it?.kind === "guard" ? Boolean(avoid) : false);
+// What each kind's tier does on a roll: a tool on anything it fits, a weapon
+// on anything but a roll avoiding harm (bar a Warrior's Parry), a guard only
+// on a roll avoiding harm, armour only there for a Warrior (Second Skin), and
+// a pack or a vessel never.
+export const addsSteps = (it, avoid = false, { parry = false, skin = false } = {}) => {
+  if (it?.kind === "tool") return true;
+  if (it?.kind === "weapon") return !avoid || Boolean(parry);
+  if (it?.kind === "guard") return Boolean(avoid);
+  if (it?.kind === "armour") return Boolean(avoid && skin);
+  return false;
+};
+// A Warrior's Second Skin: their armour's a guard as well.
+export const skinOf = (c) => (c?.archetypes ?? []).some((a) => a?.name === "Warrior");
 // An item's name without its article, for matching an attuned thing to it.
 const bareItem = (name) => specKey(String(name ?? "").replace(/^(a|an|the|her|his|their|your|my) /i, "").replace(/\s*\([^)]*\)\s*$/, ""));
 // Each item's key lasts a reload: item|its name, and a second of the same
@@ -706,6 +719,21 @@ export function normalCore(raw, c) {
   const charge = obj(s.charge);
   s.charge = {};
   for (const [k, v] of Object.entries(charge)) if (item(k)?.kind === "vessel" && int(v, 0) > 0) s.charge[k] = clamp(v, 0, item(k).tier);
+  // Points held in a vessel they've still got, never more than its charge.
+  const held = obj(s.held);
+  s.held = {};
+  for (const [k, h] of Object.entries(held)) {
+    let room = s.charge[k] ?? 0;
+    const out = zero();
+    for (const r of ROOTS) {
+      out[r] = Math.min(room, Math.max(0, int(h?.[r], 0)));
+      room -= out[r];
+    }
+    if (ROOTS.some((r) => out[r] > 0)) s.held[k] = out;
+  }
+  if (!Object.keys(s.held).length) delete s.held;
+  if (int(s.spill, 0) > 0) s.spill = int(s.spill, 0);
+  else delete s.spill;
   s.res = (Array.isArray(s.res) ? s.res : []).map((x) => text(x, 120)).filter(Boolean).slice(0, resOf(c));
   s.grown = (Array.isArray(s.grown) ? s.grown : []).filter((g) => g && typeof g === "object" && typeof g.k === "string");
   s.before = (Array.isArray(s.before) ? s.before : []).filter((g) => g && typeof g === "object" && typeof g.k === "string");
@@ -752,11 +780,22 @@ export function awakeningsOf(c, s = {}) {
   return out;
 }
 // What's locked on each Root: a point for each Scar, then a point for each
-// awakening that works, never more than the Root.
+// awakening that works, then the points held in their vessels.
 export function lockedOf(c, s = {}) {
   const out = zero();
   for (const r of ROOTS) out[r] = Math.min(c.roots?.[r] ?? 0, s.scars?.[r]?.length ?? 0);
   for (const w of awakeningsOf(c, s)) if (w.works) out[w.root] += 1;
+  const held = heldOf(s);
+  for (const r of ROOTS) out[r] += held[r];
+  return out;
+}
+// The points held in their vessels, by Root, all of them or one vessel's.
+export function heldOf(s, key = null) {
+  const out = zero();
+  for (const [k, h] of Object.entries(obj(s?.held))) {
+    if (key && k !== key) continue;
+    for (const r of ROOTS) out[r] += Math.max(0, int(h?.[r], 0));
+  }
   return out;
 }
 // What a Root can hold: the Root less what's locked, and half that, rounded
@@ -897,23 +936,19 @@ export function healBy(c, s, rolled, spread = null, { other = false, ease = 0, b
 // The Roots that roll at the end of a scene: the ones below what they can
 // hold that have dice to roll.
 export const restOf = (c, s) => ROOTS.filter((r) => (c.roots?.[r] ?? 0) > 0 && (s.pts?.[r] ?? 0) < capOf(c, s, r));
-// The end of a scene: Aura they've got left can go into their vessels first
-// (fill is { [vesselKey]: n }), then Aura's full again, every piece of
-// armour's soak is back, each Root gets back what it rolled (rolls is
-// { Body, Mind, Soul }, each Root's dice unsplit added up) up to what it can
-// hold, Toll drops by 1, and anyone who left the scene is back for the next.
-// Points never go into a vessel here.
+// The end of a scene: Aura's full again, every piece of armour's soak is
+// back, each Root gets back what it rolled (rolls is { Body, Mind, Soul },
+// each Root's dice unsplit added up) up to what it can hold, Toll drops by
+// 1, and anyone who left the scene is back for the next. Nothing goes into a
+// vessel here: the Aura they've got left isn't lost, since the next scene
+// starts full, and points never go in at a scene's end. Points held in a
+// vessel stay held. fill is still taken, from phones before that, and does
+// nothing, so filled is always empty.
 export function sceneEnd(c, s, rolls = {}, { fill = {} } = {}) {
+  void fill;
   const filled = [];
-  for (const [key, n] of Object.entries(obj(fill))) {
-    const left = Math.min(Math.max(0, int(n, 0)), Math.max(0, int(s.aura, 0)));
-    const put = left ? addCharge(c, s, key, left) : 0;
-    if (put) {
-      s.aura -= put;
-      filled.push({ key, n: put });
-    }
-  }
   s.acting = false;
+  delete s.spill;
   s.aura = auraMax(c, s);
   s.soak = {};
   const healed = zero();
@@ -930,7 +965,7 @@ export function sceneEnd(c, s, rolls = {}, { fill = {} } = {}) {
 }
 // Downtime puts everything back: wounds and Toll clear, every Root's full,
 // armour's soak is back and so are all their Resources. Scars stay, and so
-// does what's in their vessels.
+// does what's in their vessels, with the points held there.
 export function downtimeRest(c, s) {
   s.wound = { Body: false, Mind: false, Soul: false };
   s.toll = 0;
@@ -938,6 +973,7 @@ export function downtimeRest(c, s) {
   s.soak = {};
   s.res = [];
   delete s.out;
+  delete s.spill;
   return s;
 }
 
@@ -984,12 +1020,17 @@ function addCharge(c, s, key, n) {
 //     action. It's pushing, so it can leave them at 0 and never wounds them.
 //     Never at a scene's end or in downtime (sceneEnd and downtimeRest never
 //     do it), and never once they've left the scene.
+//     Each point's held in the vessel, like a lock, till its charge is spent
+//     (s.held), so the Root can't get it back at a scene's end or in
+//     downtime while it's there.
 //   from "aura": only Aura they'd lose. That's whatever's past their maximum
 //     on s.aura (while they're acting, which they'd lose on finishing), taken
-//     off it, and spill, the Aura that came in while they weren't acting and
-//     stopped at their maximum (what gainAura handed back), which never
-//     reached s.aura. Aura left at a scene's end goes in through sceneEnd.
-export function fillVessel(c, s, key, n = 1, { from = "aura", root = null, spill = 0 } = {}) {
+//     off it first, then s.spill, the Aura they really lost (past the maximum
+//     as they finished acting, or stopping at it off their turn), which
+//     gainAura and doneActing keep count of. Aura left at a scene's end
+//     never goes in. The old spill option is ignored, so a phone can't say
+//     it lost Aura it didn't.
+export function fillVessel(c, s, key, n = 1, { from = "aura", root = null } = {}) {
   const it = vesselAt(c, s, key);
   if (!it) return 0;
   let want = Math.min(Math.max(0, int(n, 0)), it.tier - chargeOf(c, s, key));
@@ -999,11 +1040,21 @@ export function fillVessel(c, s, key, n = 1, { from = "aura", root = null, spill
     want = Math.min(want, s.pts?.[root] ?? 0);
     if (want < 1) return 0;
     s.pts[root] -= want;
-  } else {
-    const past = Math.max(0, int(s.aura, 0) - auraMax(c, s));
-    want = Math.min(want, past + Math.max(0, int(spill, 0)));
-    if (want < 1) return 0;
-    s.aura -= Math.min(want, past);
+    const put = addCharge(c, s, key, want);
+    if (!s.held || typeof s.held !== "object") s.held = {};
+    s.held[key] = { ...zero(), ...obj(s.held[key]) };
+    s.held[key][root] += put;
+    return put;
+  }
+  const past = Math.max(0, int(s.aura, 0) - auraMax(c, s));
+  const lost = Math.max(0, int(s.spill, 0));
+  want = Math.min(want, past + lost);
+  if (want < 1) return 0;
+  const fromPast = Math.min(want, past);
+  s.aura -= fromPast;
+  if (want > fromPast) {
+    s.spill = lost - (want - fromPast);
+    if (!s.spill) delete s.spill;
   }
   return addCharge(c, s, key, want);
 }
@@ -1011,11 +1062,23 @@ export function fillVessel(c, s, key, n = 1, { from = "aura", root = null, spill
 // charge for each Aura it'd cost. It's never Aura: it never counts towards
 // their maximum, never goes to a friend, and never pays for bringing in a
 // Root, a tie, an intercept, a quick heal, going beyond or borrowing.
+// The points held in it go first, so each Root gets its point free again
+// (spent, so it comes back the usual way), then the charge from Aura.
 export function spendCharge(c, s, key, n = 1) {
   const want = Math.max(0, int(n, 0));
   if (!want || !vesselAt(c, s, key) || chargeOf(c, s, key) < want) return false;
   s.charge[key] = chargeOf(c, s, key) - want;
   if (!s.charge[key]) delete s.charge[key];
+  let free = want;
+  const h = s.held?.[key];
+  if (h) {
+    for (const r of ROOTS) {
+      const off = Math.min(free, Math.max(0, int(h[r], 0)));
+      h[r] = Math.max(0, int(h[r], 0)) - off;
+      free -= off;
+    }
+    if (!ROOTS.some((r) => h[r] > 0)) delete s.held[key];
+  }
   return true;
 }
 
@@ -1038,15 +1101,19 @@ export function gainAura(s, c, n = 1) {
   }
   const room = Math.max(0, max - s.aura);
   s.aura += Math.min(room, n);
-  return Math.max(0, n - room);
+  const over = Math.max(0, n - room);
+  if (over) s.spill = Math.max(0, int(s.spill, 0)) + over;
+  return over;
 }
-// Finished acting: anything over the maximum's gone.
+// Finished acting: anything over the maximum's gone, and kept count of in
+// spill, where a vessel can still catch it.
 export function doneActing(s, c) {
   const max = auraMax(c, s);
   const over = Math.max(0, s.aura - max);
   s.aura = Math.min(s.aura, max);
   s.acting = false;
   delete s.bought;
+  if (over) s.spill = Math.max(0, int(s.spill, 0)) + over;
   return over;
 }
 // What a die pays when it lands: 1 if it won, and 1 for its top face. A die
@@ -1118,11 +1185,13 @@ export function thingsOf(c, s = {}) {
 // Count a roll on the new core: the Root, at full whatever it's got left,
 // each Root brought in (bring), at full too, and 2 for each awakening that
 // fits (awk) and 2 more for each Aura spent on it, and one item's tier. r is:
-//   { root, bring: [{ root, perm, pay }], awk: [{ key, aura }], item, avoid,
+//   { root, bring: [{ root, perm, pay }], awk: [{ key, aura }], item, avoid, parry,
 //     charge: [{ key, n }], dice, against, aim, conds: [name], pool: [{ i, die }], plus }
 // item is the key of the one item doing the work, which adds its tier when
-// it can: a weapon or a tool on anything, a guard only when avoid says the
-// roll's avoiding harm, and armour, a pack, a vessel or a broken one never.
+// it can (addsSteps): a tool on anything, a weapon on anything but a roll
+// avoiding harm unless parry says a Warrior's paid for Parry, a guard only
+// when avoid says the roll's avoiding harm, armour only then for a Warrior
+// and only on the Root it's on, and a pack, a vessel or a broken one never.
 // charge is charge out of their vessels paying for the Aura on awakenings,
 // a charge for each Aura, never for anything else on the roll.
 // A Root's brought in on a permission that justifies it (perm, a key off the
@@ -1170,7 +1239,8 @@ export function countRoll(c, s, r) {
   // One item, the one doing the work.
   const it = r?.item ? (c.items ?? []).find((x) => x.key === r.item) : null;
   const broken = it && it.attuned == null && s.crossed?.[it.key];
-  const item = it && !broken && addsSteps(it, r?.avoid) ? { key: it.key, name: it.name, tier: it.tier, steps: it.tier } : null;
+  const skin = skinOf(c) && it?.kind === "armour" && (it.root ?? "Body") === root;
+  const item = it && !broken && addsSteps(it, r?.avoid, { parry: r?.parry, skin }) ? { key: it.key, name: it.name, tier: it.tier, steps: it.tier } : null;
   // Charge paying for awakenings' Aura, never more than that Aura.
   const awkAura = awk.reduce((t, w) => t + w.aura, 0);
   const charge = [];

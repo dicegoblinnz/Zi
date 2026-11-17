@@ -35,7 +35,7 @@ Every player gets **two personal slots**. The crew gets **one action**, the same
 
 Some things happen without costing a slot. **Every downtime starts with everything back**: every Root on its maximum, every wound cleared, your Toll gone and your armour's soak full (see [Healing](#s-healing)). Scars stay, and so do the points your awakenings lock. You never need a slot to heal.
 
-**Your three Resources come back too**, since you've had time to restock (see [Resources](#s-resources)). Vesk ticked two last session, a bit of wire and a smoke bomb. The bomb's gone, since she threw it, but she's got all three to tick again next session. A vessel keeps its charge.
+**Your three Resources come back too**, since you've had time to restock (see [Resources](#s-resources)). Vesk ticked two last session, a bit of wire and a smoke bomb. The bomb's gone, since she threw it, but she's got all three to tick again next session. A vessel keeps its charge, and a point you put in one stays held there till it's spent.
 
 ## What You Can Do With a Slot {#what-you-can-do-with-a-slot}
 

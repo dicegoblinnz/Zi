@@ -1,5 +1,7 @@
 # The loop under tension (17 Nov)
 
+**Since:** prompt 7 reran this on the real crew in 03b (Bram's plate and helmet soak 5, Wren's cloak is a tool so she's got no guard, Ash's coat soaks 2 and her coal horn's a tier 3 vessel). The big fight's still 52 minutes plain and 42 hard, so 45 holds, but with the hard GM piling on from round 1 the first Bloodied came in round 2 (Wren's Body, 33% at `--reach 1`). Piling on from round 2, the sim's default now and Running the Game's advice, puts it back in round 3 (31%, 3% in round 2), so prompt 7's numbers in `notes/fixes-plan.md` replace this note's first Bloodied. Prompt 8 then stopped vessels filling with Aura left at a scene's end, and made a point put in one stay held there till it's spent.
+
 Prompt 4 of `notes/fixes-plan.md`, Mo's Fix 6. The whole loop on the 17 Nov fixes, run under pressure two ways: thousands of fights in `tools/fight_sim.py`, and once by hand, as a table would play it, with real dice. Your targets: rolls quick on paper and on a phone, a big roll that feels like a fistful of dice, a clever fit that still matters, and the big fight of a session at about 45 minutes with the first Bloodied around round 3 or 4.
 
 Everything here's a proposal. Only the GM's numbers move on this note's say-so (prompt 7 writes them in), and nothing in a chapter's changed.

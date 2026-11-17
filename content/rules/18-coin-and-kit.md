@@ -54,7 +54,7 @@ What's in the pack is whatever you say when you tick the Resource. The pack's on
 
 ## Vessels to use {#s-kit-vessels}
 
-A [vessel](#s-vessels) holds its tier in charge, filled with Aura you'd lose or a point at a time mid-scene, and spent on your own abilities and awakenings. Here are a few to use straight off the page. Each is an item of its own, with its tier.
+A [vessel](#s-vessels) holds its tier in charge, filled with Aura you'd lose or a point at a time mid-scene, which stays held there till it's spent, and spent on your own abilities and awakenings. Here are a few to use straight off the page. Each is an item of its own, with its tier.
 
 | Vessel | Tier | What it is |
 | --- | --- | --- |

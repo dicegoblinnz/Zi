@@ -5,8 +5,8 @@ slug: the-archetypes
 order: 3.2
 part: "Play"
 partNumber: "Part I"
-source: Mo's playtest sheets, 14 and 16 Oct 2026, and his chat decisions, 6 to 8, 14 and 16 Nov 2026
-updated: 2026-11-16
+source: Mo's playtest sheets, 14 and 16 Oct 2026, and his chat decisions, 6 to 8, 14, 16 and 17 Nov 2026
+updated: 2026-11-17
 ---
 :::quote
 Every archetype has something only it can do.
@@ -33,7 +33,7 @@ Start with how they work, then find yours in [Picking Your Archetypes](#s-pickin
 **You can't pay Aura you haven't got.** While you're acting, what's past your maximum is yours to spend like the rest. A [vessel](#s-items)'s charge can pay for your own abilities instead, a charge for each Aura.
 :::
 
-An ability's never steps on a roll. It does what it says, and that's all. It can work with what you've got, though: an item's tier, your Resources, a vessel's charge or your armour's soak. With the Warrior's *Parry*, your weapon's tier goes on your roll when blows land, which a weapon never does on its own, and with the Shadow's *I had it planned*, you say a Resource without ticking one. Wren's roll to mark a creature is her Body as usual, and paying for Mark the pack sends that roll at two more.
+An ability's never steps on a roll. It does what it says, and that's all. It can work with what you've got, though: an item's tier, your Resources, a vessel's charge or your armour's soak. With the Warrior's *Parry*, your weapon's tier goes on your roll when blows land, which a weapon never does on its own, and with the Shadow's *I had it planned*, you say a Resource without ticking one. The Maker's *Tune it up* and *Knock it together* change an item's tier for the scene, and it's the item's tier that goes on the roll, never the ability. Wren's roll to mark a creature is her Body as usual, and paying for Mark the pack sends that roll at two more.
 
 **Push** is the one most archetypes have on their list: +2 to one die on your mechanic, once you've rolled and you know you need it. A die the +2 takes to its top face, or past it, doesn't pay Aura. **Take the same archetype twice** and its Push is +3, three times it's +4, and so on. You only need Push the once: Vesk's first Shadow came with Push and her second with Vanish, and her Push is +3.
 
@@ -210,7 +210,7 @@ It doesn't cost Aura. Everyone the story puts in it defends against your other d
 :::
 
 :::example[Five guards]
-Ash is in the middle of five guards, and she throws fire: her Soul, 11 steps, and her ember stone's *Fire without a word* is 2 more, 13. She shapes them into a d12, a d10 and a d4, and the d4's her burst, going off around her. It rolls 2, but the guards are three squares out, so she pays 1 Aura and it's a 4. That's the d4's top face, but the +2 got it there, so there's no Aura for it. All five defend against her d12, her d10 goes at the door behind them, and the burst never touches her.
+Ash is in the middle of five guards, and she throws fire: her Soul, 11 steps, her ember stone's tier, 2 more, and its *Fire without a word*, 2 more again, 15. She shapes them into two d12s and a d6, and the d6's her burst, going off around her. It rolls 4, but the guards are five squares out, so she pays 1 Aura and it's a 6. That's the d6's top face, but the +2 got it there, so there's no Aura for it. All five defend against her first d12, her second goes at the door behind them, and the burst never touches her.
 
 The curtains catch, and next round the GM telegraphs the fire spreading to the doorway, a d8 at whoever's in it. Ash walks out through the flames without a mark on her.
 :::
@@ -328,7 +328,7 @@ If you're a Teleporter as well, you intercept for every friend within 10 units (
 :::
 
 :::example[Three goblins]
-Three goblins telegraph a d6 each at Vesk, Wren and Isolde, all within Bram's stride, and their chief's got a d8 aimed at Bram himself. He intercepts all three for free, and that's 3 Aura for *Better Me Than You* before anything's rolled. He's Defending, so when they land he's got his Body twice over, his Defend's 9 steps and the landing's 9, and he makes each of them a d12 and a d6. That's four dice for four blows. The goblins land 6, 4 and 1 and the chief 7, and Bram rolls 5 and 2 on his d12s and 4 and 3 on his d6s. The 4 holds the goblin's 4, because ties go to him, and the 2 holds the 1. That leaves the 6 and the 7, and his 5 and 3 can't stop either, so he pays 1 Aura for Stand firm, and the two of them take 1 point off his Body between them. Two of his dice won, so that's 2 more Aura. He isn't acting when it comes in, so whatever takes him past his maximum goes to the crew.
+Three goblins telegraph a d6 each at Vesk, Wren and Isolde, all within Bram's stride, and their chief's got a d8 aimed at Bram himself. He intercepts all three for free, and that's 3 Aura for *Better Me Than You* before anything's rolled. He's Defending, so when they land he's got his Body twice over, his Defend's 9 steps and the landing's 9, with his Trusty shield's 2 on the landing, 11. He makes the landing a d12 and a d10 and his Defend a d12 and a d6. That's four dice for four blows. The goblins land 6, 4 and 1 and the chief 7, and Bram rolls 5 and 2 on his d12s, 4 on his d10 and 3 on his d6. The 4 holds the goblin's 4, because ties go to him, and the 2 holds the 1. That leaves the 6 and the 7, and his 5 and 3 can't stop either, so he pays 1 Aura for Stand firm, and the two of them are 1 point between them, which his armour soaks. Two of his dice won, so that's 2 more Aura. He isn't acting when it comes in, so whatever takes him past his maximum goes to the crew.
 :::
 
 **Title ideas:** [Guardian](#k-guardian) · [Warding](#k-wizard) · [Faith](#k-faith)
@@ -506,7 +506,7 @@ A tag works like a permission for whoever's holding the item: it lets them do so
 
 **Knock it together (1 Aura):** tick a Resource and it's an item at tier 1 till the scene ends, like a chair leg made a club. It's on top of your six.
 
-**Tune it up (1 Aura):** a making die that wins can put the item a tier higher till the scene ends instead of giving it a tag, as far as tier 6. Pay again and another winning die can.
+**Tune it up (1 Aura):** a making die that wins can put the item a tier higher till the scene ends instead of giving it a tag, as far as tier 4. Tiers 5 and 6 only come out of the story. Pay again and another winning die can.
 
 **Mend it (1 Aura):** a making die that wins against something broken can mend it instead of giving it a tag, and it stays mended.
 
@@ -736,7 +736,7 @@ The Warrior's for fighting, with dice that don't stop at their top face.
 Your dice **explode** when you fight. A die that lands on its top face gives you 1 Aura as usual, then you roll it again and add the new number on, the only time dice add apart from moving and what abilities add. It keeps going as long as it keeps landing on top, so a d8 that comes up 8, then 5, is a 13.
 
 :::rule
-**Trait:** *Second Skin*. Your armour fights with you even when you haven't Defended. When something lands at a Root and Defend wasn't your action, your armour on that Root adds its tier to your roll, the way a guard's would. It's still one item a roll, so it's your armour or your shield.
+**Trait:** *Second Skin*. Your armour's a guard as well. On a roll avoiding harm, when something lands at a Root or you Defend it, your armour on that Root adds its tier to your roll, the way a shield would, and it still soaks whatever gets through. It's still one item a roll, so it's your armour or your shield.
 
 **Push (1 Aura):** +2 to any one of your dice in a fight. If that takes it to its top face or past, there's no Aura for it, but it still explodes.
 

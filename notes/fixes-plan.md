@@ -2,6 +2,8 @@
 
 Mo's 17 Nov ask, part 3 of the rework that comes in parts: six fixes on top of the new core (`notes/core-plan.md`, live since 16 Nov). His words are in `notes/playtest-sheets/2026-11-17-chat-decisions.md`, and the calls Claude made filling the gaps are in `notes/to-confirm.md` under 17 Nov.
 
+**Where it's at (17 Nov):** every prompt has landed, and prompt 8 brought them together on `rules/2026-11-17-fixes`, with the four suites passing whole. Not live: `main` and zidara.world stay on the new core till Mo says.
+
 Several chats build it at once, one prompt each, the way parts 1 and 2 were built. Every chat reads this plan first, owns its own files, works on its own branch, and lands back into `rules/2026-11-17-fixes`. Nothing merges to `main` till Mo says, because the live companion has to keep working for his four campaigns.
 
 ## Why
@@ -61,8 +63,8 @@ Newest wins. Everything Mo hasn't changed stands: the new core's Roots, points, 
 ### Fix 4: vessels
 
 - **A vessel** is an item that holds charge: a lantern of captured light, a prayer string, a battery-coil, a reliquary. It holds as much charge as its tier, so a tier 6 vessel holds 6.
-- **Filling it with Aura:** only with Aura you'd lose. The Aura past your maximum when you finish acting, Aura that comes in while you're not acting and stops at your maximum, and whatever Aura you've got left when the scene ends can go in instead.
-- **Filling it with points:** any time in a scene, no action, a point from any Root for a charge. That's pushing, so it can leave you exposed and never wounds you. Never at a scene's end and never in downtime, so it can't eat a recovery roll or a rest.
+- **Filling it with Aura:** only with Aura you'd lose. The Aura past your maximum when you finish acting, and Aura that comes in while you're not acting and stops at your maximum, can go in instead. Since prompt 8, never the Aura left when a scene ends, since you start the next one full (the review's finding 3).
+- **Filling it with points:** any time in a scene, no action, a point from any Root for a charge. That's pushing, so it can leave you exposed and never wounds you. Never at a scene's end and never in downtime. Since prompt 8, a point in a vessel stays held there like a lock till its charge is spent (points spent first), so it can't be refilled by a scene's end or a rest while it sits there (the review's finding 2).
 - **Spending charge:** only on your own abilities and your own awakenings' extra steps, a charge for each Aura they'd cost. It isn't Aura: it's never counted towards your maximum, never handed to a friend, and never pays for bringing in a Root, a tie, an intercept, a quick heal, going beyond or borrowing.
 - **It keeps** between scenes and through downtime.
 - **No farming.** It can only take what you'd have lost, it never turns back into Aura, and it can't hold more than its tier, so small dice past your maximum fill it once and then go nowhere.
@@ -114,8 +116,8 @@ Every chat codes to these names and shapes, so the pieces fit when they land. Pr
 - **A roll:** `countRoll(c, s, r)` takes `r.item` (an item's key) and `r.avoid` (true on a roll avoiding harm), and adds the item's tier when it can (a weapon or a tool on anything, a guard only with `avoid`, armour, packs and vessels never, a broken one never). It hands back `item: { key, name, tier, steps }`. `r.charge` is `[{ key, n }]`, charge paying for an awakening's Aura on this roll.
 - **Harm:** `takeHits(c, s, root, n, { on })` takes soak first from the armour on the Root the hits land on (`on ?? root`), a point a hit, 2 a hit on `on`, then points, then the wound and the Scar. It hands back `{ lost, soaked: [{ key, n }], wound, scar }`. `soakOf(c, s, root)` is what's left to soak there.
 - **Resources:** `sayRes(c, s, text)` ticks one and keeps its words, `resLeft(c, s)` is how many are left.
-- **Vessels:** `chargeOf(c, s, key)`, `fillVessel(c, s, key, n, { from: "aura" | "pt", root })` (points only mid-scene) and `spendCharge(c, s, key, n)`.
-- **Rests:** `sceneEnd(c, s, rolls, { fill })` puts soak back and lets leftover Aura into vessels (`fill` by key) before Aura's filled again. `downtimeRest(c, s)` puts soak and Resources back and keeps charge.
+- **Vessels:** `chargeOf(c, s, key)`, `fillVessel(c, s, key, n, { from: "aura" | "pt", root })` (points only mid-scene, Aura only up to `s.spill`) and `spendCharge(c, s, key, n)`. Since prompt 8, `s.held` keeps the points in each vessel by Root.
+- **Rests:** `sceneEnd(c, s, rolls)` puts soak back (its old `fill` is ignored since prompt 8). `downtimeRest(c, s)` puts soak and Resources back and keeps charge and what's held.
 - **Points:** `costOf()` in `points.js`: an item is 1 point at tier 2 and 1 more for each tier above, 3 at most at the start, and no Boons.
 - **A crew sheet in 03b** keeps its labels, with `**Items:**` in place of `**Carries:**` and `**Armour:**`, each item as `a Named set of picks (tool, tier 3)`, armour as `Trusty worn leathers (armour, Body, tier 2)` and an attuned one as `her grappling line (tool, tier 2, attuned)`, then `n of 6`, and `**Keepsake:**` and `**Resources:** 3.` on lines of their own. Prompt 2 owns the exact shape and `scripts/crew-sheets.mjs` reads it.
 - **The live table:** When it lands's record keeps `box` for older phones and adds `soaked` (a number). An answer's `steps` includes the item's tier, and `ans.item` names it.
@@ -330,3 +332,16 @@ Written 17 Nov on `rules/2026-11-17-fixes-book`. Its calls are under 7 in `notes
 - **`tools/check_terms.py`:** the Oracle's own Boon die is skipped in 21. What it still lists is either other prompts' (03, 03b and 18's links to `#s-armour-quality` and `#recovering-armour`, and Appendix A's The character sheet) or false positives that were there before part 3 (*Household Guard*, *Calls for Help*, the game's name, a heading id and a note's title).
 
 For prompt 8: Conflict's own examples (prompt 1's) still have Bram soaking 3 on his plate alone, where 03b gives him a helmet too, so 5 (Bram's plate and shield, and "ten hits" in Wounds, which is twelve). Appendix D changed, so the sheets want `npm run sheets`. `notes/loop-under-tension.md` is prompt 4's and still has the sim's own picks for the crew; the numbers above replace its first Bloodied.
+
+### 8. Bringing it together
+
+Done 17 Nov on `rules/2026-11-17-fixes` itself. Its calls are under 8 in `notes/to-confirm.md`'s 17 Nov section.
+
+- **The review's findings, with the lead's calls:** a vessel fills with Aura only when it's really lost (`s.spill`, counted by `gainAura()` and `doneActing()`, so the Aura panel's "Aura you lost: n in" can't make charge out of nothing); a point put in a vessel stays held there like a lock till it's spent, points first (`s.held`, `heldOf()`, in `lockedOf()`), and stays through a scene's end and downtime; no vessel fill at a scene's end (`sceneEnd()` ignores `fill`, and the rest card's offer and `sceneFill()` are gone); the Maker's *Tune it up* to tier 4; the Warrior's *Second Skin* making armour a guard, with *Parry* the other exception, on 03a, Appendices C and D, and When it lands (`guardOf()`, `hasParry()`); a weapon never adding on a roll avoiding harm bar *Parry* (`addsSteps(it, avoid, { parry, skin })`, `skinOf()`, `r.parry`); and Bram's helmet in 02's and Conflict's examples (soak 5, twelve hits). *Bleed out* is left for Mo.
+- **The rules text:** 02, 03, 03a, 05, 12, 18, Appendices C and D, the glossary (Vessel, Charge, Maximum) and the Learn deck, a paragraph for the vessels and one for *Second Skin* and *Tune it up* in `c-2026-11-17-fixes`, and the Fix 4 lines above.
+- **The leftovers:** 03a's front matter, Appendix D's Warrior and Summoner lines (a caught soul ticks a Resource), 02's Bram barks orders (Vesk's roof 15 to 17, Wren's shot 13 to 15), 03a's Five guards and Three goblins on Ash's ember stone and Bram's shield, the ability line saying the Maker changes a tier and never adds one, `tools/check_terms.py` at 0 lines with its known false matches taught and `--links` clean, the loop note's line saying prompt 7 reran it, and the sim's `scene_end()` filling no vessel.
+- **Built:** both PDFs (`npm run sheets`), the reading copy and the site.
+- **Checks:** `tests/check-companion.mjs` part 1e checks spill, held points, no scene-end fill, a weapon on avoiding harm, *Parry* and *Second Skin*, and part 4 plays Ash's held point of Mind through. All four suites pass whole on the merged branch.
+- **CLAUDE.md:** The 17 Nov fixes says what's where, and the lines about boxes, quality, utility, the bag and Boons further down are on items.
+
+Still Mo's: everything under 17 Nov in `notes/to-confirm.md`, the tier names and the vessel's name above, *Bleed out*, the Summoner's souls, whether crew weapons list their properties, a soak total per Root on the paper sheet, and a button for the GM to give a Resource back.

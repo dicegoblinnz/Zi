@@ -11,7 +11,7 @@ updated: 2026-11-17
 ## Building the roll {#building-the-die}
 
 -   Pick the Root that fits how you're doing it (Body, Mind or Soul), and roll all of it.
--   **Item:** the one doing the work, if it fits, puts its tier on in steps. One a roll. A guard's only on a roll avoiding harm, a weapon never is, and armour, packs and vessels add nothing. Nothing else on your sheet is counted.
+-   **Item:** the one doing the work, if it fits, puts its tier on in steps. One a roll. A guard's only on a roll avoiding harm, a weapon never is (bar a Warrior's *Parry*), and armour (bar a Warrior's *Second Skin*), packs and vessels add nothing. Nothing else on your sheet is counted.
 -   **Bring a Root in:** name the permission that explains how it gets in on what you're doing, and pay 1 point of that Root or 3 Aura. All of it goes on the roll, and never another item. You can bring both in, each paid on its own.
 -   **Awakenings:** one that fits is 2 steps, and each Aura you put in it is 2 more. Going beyond what something normally does is 1 Aura, sword or spell.
 -   Two sides a step, up to a d12. Past 6 steps, more dice. Every roll's at least 1 step, a d2. Points spent, lost or locked never shrink the dice.
@@ -58,14 +58,14 @@ updated: 2026-11-17
 ## Aura {#aura}
 
 -   Up to 5. You're full every scene, and there's none in downtime. While you're acting it can go past your maximum, and once you've finished acting for the round, anything over is gone. Off your turn it stops at your maximum, and you can give the rest to a friend in the scene.
--   **Vessel:** holds its tier in charge, and keeps it through downtime. Fill it only with Aura you'd lose (over your maximum when you finish acting, past it off your turn, or left when the scene ends), or a point from any Root mid-scene, no action. Spend it only on your own abilities and awakenings' extra steps, a charge for each Aura. It never counts towards your maximum or goes to a friend.
+-   **Vessel:** holds its tier in charge, and keeps it through downtime. Fill it only with Aura you'd lose (over your maximum when you finish acting, or past it off your turn), never what's left when a scene ends, or a point from any Root mid-scene, no action. A point in it is held there, like a lock, till it's spent, and points are spent first. Spend it only on your own abilities and awakenings' extra steps, a charge for each Aura. It never counts towards your maximum or goes to a friend.
 -   **Spend 1:** an ability, each time you use it · 2 more steps on an awakening that fits · borrow one thing through a bond thread · go beyond · win a tie when you're acting · intercept for a friend within your stride · a quick heal · keep a Catch quiet.
 -   **Get 1 back:** every die of yours that wins · every top face · letting a Catch bite, as often as you like, as long as it's real trouble · bringing real trouble on yourself with no Catch · a great setup that didn't land, if the GM says so.
 -   **Spend 3:** bring a Root in, when a permission explains it, instead of paying a point of that Root.
 
 ## Your points {#s-qr-tracks}
 
--   **A Root's number is its points:** its dice, what it can take, and what you spend. Each awakening locks a point of the Root it fits, and each Scar locks one for good, so what's left is its maximum. Locked points are still dice. A new character starts full.
+-   **A Root's number is its points:** its dice, what it can take, and what you spend. Each awakening locks a point of the Root it fits, each Scar locks one for good, and a point in a vessel's held there till it's spent, so what's left is its maximum. Locked points are still dice. A new character starts full.
 -   **Hits:** every telegraph die that gets through is a hit, and a hit's 1 point off its Root. A vulnerability's one more hit, and a deadly threat's telegraph says how many, each one a point. **2 for 1:** take a hit on another Root instead, for 2 points of it, if it's got them.
 -   **Soak:** armour on the Root soaks first, as many points as its tier, a point of soak a point, 2 for 1 included. It's all back at the end of every scene, and it never breaks from soaking.
 -   **Spending:** a point of the Root you bring in, or a point of Soul to roll again. You can't spend what you haven't got, so pushing never hurts you, and spending to 0 only leaves you exposed.
@@ -166,7 +166,7 @@ Each ability's 1 Aura, and they stack. Most have a Push: +2 on one die of the me
 -   **Shifter:** catch animal tags against their die, and keep them till downtime. *Something of the Beast:* a beast's sense or size, picked each scene.
 -   **Summoner:** only you catch souls and summon them. *Pocket Summon:* one soul out free once a scene, with no action.
 -   **Teleporter:** your stride can be a 10-unit teleport, and 1 Aura opens a portal. *Not There:* once a scene, teleport, and what's landing on you misses.
--   **Warrior:** your dice explode in a fight. *Second Skin:* if you haven't Defended, your armour's 1 step a piece when it lands.
+-   **Warrior:** your dice explode in a fight. *Second Skin:* your armour's a guard as well, its tier on a roll avoiding harm, and it still soaks.
 
 ## Bonds and threads {#s-qr-threads}
 
@@ -189,14 +189,14 @@ Each ability's 1 Aura, and they stack. Most have a Push: +2 on one die of the me
 ## Summoning {#s-qr-summoning}
 
 -   Only a Summoner catches souls and summons them. A summoning attunement holds souls, one to an awakening, on the same ladder. Starting souls are d4s.
--   **Catch one:** when a creature falls, put a die on it and roll against its Challenge. Beat it and you carry its soul, with its Challenge die, till it goes into your attunement in downtime. It isn't one of your items. Miss and it's gone.
+-   **Catch one:** when a creature falls, put a die on it and roll against its Challenge. Beat it and you carry its soul, with its Challenge die, till it goes into your attunement in downtime. It isn't one of your items, and it ticks one of your Resources till then. Miss and it's gone.
 -   **Call them out:** each soul's an active awakening, so calling it out spends Aura, as part of your action, with a reason in the story. Each Aura's a d4 of summons, built into one or several, none bigger than the soul's own die.
 -   A summon acts like anyone and rolls its own die. It drops a size every round and for every hit that gets through, and past d2 it's gone, back in your attunement. It intercepts for free and rolls its die to stop one of the dice it took. A horde rolls as one throw. Summons can't combo, and their dice never give Aura. They all go back at the end of the scene.
 
 ## Downtime {#s-qr-downtime}
 
 -   Four pressures: personal, party, faction, world. Ignore one and it gets worse, and twice makes it a scene. Every faction's action is telegraphed at the start, and rolled after the slots.
--   Two personal slots each, and the crew takes one action, like any faction. A personal slot can go into the crew's action. Every downtime starts with everything back: every Root full, wounds and Toll gone, soak full and your three Resources back. Vessels keep their charge.
+-   Two personal slots each, and the crew takes one action, like any faction. A personal slot can go into the crew's action. Every downtime starts with everything back: every Root full, wounds and Toll gone, soak full and your three Resources back. Vessels keep their charge, and the points held in them.
 -   **Mend:** an item that's broken. **Grow:** a slot buys what a point does: a new permission on a Title · a new ability off an archetype's list · a new awakening · a new item at tier 2 · an item a tier up, to 3 at most. Or it's a new thread, a point in your Aspiration, or a slot toward growing a Scar into a Trait (three slots).
 -   **Mend a thread** you've strained by making it right with them. Downtime's one place for it, and a scene with them is the other.
 -   **Swap** a permission for another that fits your Title. **Attune:** a slot for each new awakening, and the material for a new stage. A soul you're carrying goes into your summoning attunement.

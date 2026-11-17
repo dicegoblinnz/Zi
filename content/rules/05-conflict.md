@@ -204,9 +204,9 @@ When a telegraph lands on you, or when a miss costs you something because it mat
 -   **Soak comes back in full at the end of every scene**, whatever it took. Armour never breaks from soaking.
 
 :::example[Bram's plate and shield]
-Bram's holding the gate in his Proven plate, tier 3 armour on his Body, so it soaks 3, with his 7 points of Body behind it. Three Wardens' spears land on him at the end of the round, three d8s, and he lets them ride. His Body's 9 steps, and his Trusty shield's a guard, 2 more, so it's 11, and he splits it to meet them: two d8s and a d6. The spears roll 7, 4 and 6, and Bram gets 7, 2 and 6. His 7 meets the 7 and his 6 meets the 6, so those two are stopped, and the 4 gets through. That's a hit, and the plate soaks it, so it's got 2 left. Two dice stopped a spear each and the d6 landed on its top face, so that's 3 Aura.
+Bram's holding the gate in his Proven plate and Trusty helmet, armour on his Body at tier 3 and tier 2, so between them they soak 5, with his 7 points of Body behind it. Three Wardens' spears land on him at the end of the round, three d8s, and he lets them ride. His Body's 9 steps, and his Trusty shield's a guard, 2 more, so it's 11, and he splits it to meet them: two d8s and a d6. The spears roll 7, 4 and 6, and Bram gets 7, 2 and 6. His 7 meets the 7 and his 6 meets the 6, so those two are stopped, and the 4 gets through. That's a hit, and his armour soaks it, so it's got 4 left. Two dice stopped a spear each and the d6 landed on its top face, so that's 3 Aura.
 
-Next round the Warden captain's deadly, a d10 for 2 hits, and it gets through. Each hit's a point of soak, so the plate's empty, and Bram's still on 7. If it'd been 3 hits, the third would've taken a point of his Body. At the end of the scene the plate's back to soaking 3.
+Next round the Warden captain's deadly, a d10 for 2 hits, and it gets through. Each hit's a point of soak, so his armour's down to 2, and Bram's still on 7. Three more hits and he'd be losing points of Body. At the end of the scene his plate and helmet are back to soaking 5.
 :::
 
 Instead of a hit, the GM can name something else that fits:
@@ -494,7 +494,7 @@ The Warden's on its back, *Prone*, and Isolde's Study found it's *Dry as Tinder*
 -   **Your dice don't change.** A Bloodied Body still rolls its whole number.
 -   **A hit on a wounded Root with no points left is a Scar**, and you leave the scene.
 
-So Bram, with his Proven plate soaking 3 and 7 points of Body behind it, can take ten hits there and still be on his feet. The eleventh leaves him Bloodied, and the twelfth Scars him, unless somebody's healed him in between.
+So Bram, with his plate and helmet soaking 5 and 7 points of Body behind them, can take twelve hits there and still be on his feet. The thirteenth leaves him Bloodied, and the fourteenth Scars him, unless somebody's healed him in between.
 
 :::example[Wearing Vesk down]
 Vesk's down to 2 points of Body after a long night on the rooftops, and her worn leathers have soaked all they can this scene. In round one a spear gets through, so she's on 1. In round two a guard's blow lands while she's *Exposed*, which makes it 2 hits: the first takes her last point, and the second leaves her **Bloodied**. Her Body can only heal to 5 now, half of its 10, till downtime. One more hit on her Body and it's a Scar. She could Blaze on her turn and go out on her own terms, but she's got the prize in her hand, so she runs for it instead.

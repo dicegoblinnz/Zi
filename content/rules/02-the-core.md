@@ -231,7 +231,7 @@ Anything that works on its own, like a summoned beast or a raised servant acting
 -   **You start every scene full.** Your maximum's **5**. A scene is one place and one problem, and the next one starts when that problem's sorted or the crew moves on. There's no Aura in downtime.
 -   **Every die of yours that wins gives you 1 back, and so does every top face** (see [The Roll](#s-the-roll)).
 -   **While you're acting, it can go past your maximum.** Once you've finished acting for the round, anything over that's gone, so spend it first. When it comes in while you're not acting, like off your defence, it stops at your maximum, and you can give the rest to a friend in the scene.
--   **A vessel catches what you'd lose.** If you're carrying one, the Aura past your maximum when you finish acting, what comes in past it while you're not, and what you've got left when the scene ends can go into it as charge instead (see [Vessels](#s-vessels)).
+-   **A vessel catches what you'd lose.** If you're carrying one, the Aura past your maximum when you finish acting, and what comes in past it while you're not, if you'd rather keep it than give it to a friend, can go into it as charge instead. What you've got left when a scene ends isn't lost, since you start the next one full, so it doesn't go in (see [Vessels](#s-vessels)).
 
 **Spend it to:**
 
@@ -268,9 +268,9 @@ Your Roots are what keep you standing. **A Root's got as many points as its numb
 
 -   **Hits take points.** A telegraph that gets through to your Body takes a point of Body, and the same goes for your Mind and your Soul. A vulnerability or a deadly threat makes it 2 hits or more (see [Hits and Consequences](#s-consequences)).
 -   **Armour soaks first.** Armour sits on a Root, and it soaks as many points as its tier before that Root loses any, a point of soak for each point. It's health you're wearing, and it's all back at the end of every scene (see [Armour](#s-armour)).
--   **You spend them to push.** Bringing a Root in costs a point of it, and rolling again after a miss costs a point of Soul. Mid-scene, you can put a point from any Root into a vessel as a charge. You can't spend points you haven't got.
+-   **You spend them to push.** Bringing a Root in costs a point of it, and rolling again after a miss costs a point of Soul. Mid-scene, you can put a point from any Root into a vessel as a charge, and it stays held there till the charge is spent. You can't spend points you haven't got.
 -   **Your dice never shrink.** Spent, lost or locked, a Root's still its whole number on a roll. Vesk on 2 points of Body still rolls 11 steps, a d12 and a d10.
--   **Locked points.** Each awakening locks a point of the Root it fits for as long as it's attuned, and each Scar locks one for good. A locked point's still dice, but it's not a point you can have. What's left is that Root's **maximum**. Vesk's grappling line locks a point of her Body, so her Body's 11 and its maximum's 10.
+-   **Locked points.** Each awakening locks a point of the Root it fits for as long as it's attuned, and each Scar locks one for good. A point held in a vessel is the same till its charge is spent. A locked point's still dice, but it's not a point you can have. What's left is that Root's **maximum**. Vesk's grappling line locks a point of her Body, so her Body's 11 and its maximum's 10.
 -   **At 0 you're exposed.** The next hit on a Root with no points and no soak left wounds it (see [Wounds, Scars and the Blaze](#s-blaze)). A Root that's 0 to start with has nothing to lose, so its first hit wounds it: a curse that gets through to Vesk's Soul leaves her Hollow straight away.
 -   **They come back.** At the end of every scene, roll each Root that's below its maximum, unsplit, and get back what you roll. Downtime puts them all back (see [Healing](#s-healing)).
 
@@ -283,9 +283,9 @@ Your Roots are what keep you standing. **A Root's got as many points as its numb
 **2 for 1.** When a hit gets through, you can take it on another Root instead, for 2 points of it, as long as it's got them, and any armour on that Root soaks them first. Bram takes the spear standing up and unflinching, and it costs him 2 points of Soul instead of a point of Body.
 
 :::example[Bram's points in one fight]
-Bram's Body is 9, and his war hammer's two awakenings lock 2 of it, so he starts the fight on 7 points of Body, with his Proven plate on top, a tier 3 piece of armour that soaks 3. A spear gets through in round one, and the plate soaks it, 2 left. In round two *spot who's in charge* brings his Mind in for a point of Mind, so his Mind's on 2, though it's still 3 steps on his roll. Three blows get through in round three: the plate soaks two and it's empty, and the third takes a point of Body, so he's on 6. When one more spear gets through in round four he takes it 2 for 1 on his Soul, which has no armour, so his Soul's on 2 and his Body stays on 6.
+Bram's Body is 9, and his war hammer's two awakenings lock 2 of it, so he starts the fight on 7 points of Body, with his armour on top: his Proven plate, tier 3, and his Trusty helmet, tier 2, so his Body soaks 5. A spear gets through in round one, and his armour soaks it, 4 left. In round two *spot who's in charge* brings his Mind in for a point of Mind, so his Mind's on 2, though it's still 3 steps on his roll. Four blows get through in round three, and his armour soaks the lot, so it's empty. Two spears get through in round four. The first takes a point of Body, so he's on 6, and he takes the second 2 for 1 on his Soul, which has no armour, so his Soul's on 2 and his Body stays on 6.
 
-At the end of the scene his plate's back to soaking 3, and his Body rolls a d12 and a d6, 5 and 2, more than enough to put it back on 7, its maximum. His Mind rolls a 4 on its d6 and goes back to 3, and his Soul rolls a 3 on its d8 and goes back to 4.
+At the end of the scene his plate and helmet are back to soaking 5, and his Body rolls a d12 and a d6, 5 and 2, more than enough to put it back on 7, its maximum. His Mind rolls a 4 on its d6 and goes back to 3, and his Soul rolls a 3 on its d8 and goes back to 4.
 :::
 
 ## Catches and Trouble {#s-trouble}
@@ -324,7 +324,7 @@ Vesk's at the study door, and picking its lock is her Body, 11 steps. Dorrie joi
 Only a [Leader](#a-leader) leads. An order or a rallying song is your action: build it from the Root that fits, then hand its steps out however you like to friends who can hear or see you. They add them to their own rolls this round, and those steps don't have to fit anything. A lead can be a combo too, with friends putting their actions in before you hand it out.
 
 :::example[Bram barks orders]
-Bram's a Leader, and he barks orders from the doorway with his Soul, 4 steps. He gives 2 to Vesk and 2 to Wren, so this round Vesk's run over the roof goes from 13 steps to 15, two d12s and a d6, and Wren's shot from cover goes from 10 to 12, two d12s.
+Bram's a Leader, and he barks orders from the doorway with his Soul, 4 steps. He gives 2 to Vesk and 2 to Wren, so this round Vesk's run over the roof goes from 15 steps to 17, two d12s and a d10, and Wren's shot from cover goes from 13 to 15, two d12s and a d6.
 :::
 
 ## Studying Something {#s-study}

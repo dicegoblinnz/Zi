@@ -861,17 +861,19 @@ const chargePips = (n, max) => `<span class="cc-chargepips" aria-hidden="true">$
 function vesselsView(c, s) {
   const list = R.vesselsOf(c);
   if (!list.length) return "";
-  const max = R.auraMax(c, s);
   const row = (v) => {
     const n = R.chargeOf(c, s, v.key);
+    const held = R.heldOf(s, v.key);
+    const heldSaid = R.ROOTS.filter((r) => held[r]).map((r) => `${held[r]} of your ${r}`);
     const broken = Boolean(s.crossed?.[v.key]);
     const room = broken ? 0 : v.tier - n;
     const k = ` data-k="${esc(v.key)}"`;
     const fills = !room || s.out ? "" : R.ROOTS.filter((r) => s.pts[r] > 0).map((r) => `<button type="button" class="button sm" data-act="fill"${k} data-from="pt" data-r="${r}">A point of ${r} in</button>`).join("");
-    const full = room && !s.acting && s.aura >= max ? `<button type="button" class="button sm is-aura" data-act="fill"${k} data-from="spill">Aura while you’re full: 1 in</button>` : "";
-    return `<li class="cc-item cc-vessel"><p><b>${esc(cap(R.itemSaid(v)))}</b> ${chargePips(n, v.tier)} <small>${broken ? "broken till it’s mended" : `${n} of ${v.tier} charge`}</small></p>${fills || full ? `<div class="cc-row">${fills}${full}</div>` : ""}</li>`;
+    const lost = Math.max(0, Number(s.spill) || 0);
+    const full = room && lost ? `<button type="button" class="button sm is-aura" data-act="fill"${k} data-from="spill" data-n="${Math.min(lost, room)}">Aura you lost: ${Math.min(lost, room)} in</button>` : "";
+    return `<li class="cc-item cc-vessel"><p><b>${esc(cap(R.itemSaid(v)))}</b> ${chargePips(n, v.tier)} <small>${broken ? "broken till it’s mended" : `${n} of ${v.tier} charge${heldSaid.length ? `, ${andList(heldSaid)} held in it` : ""}`}</small></p>${fills || full ? `<div class="cc-row">${fills}${full}</div>` : ""}</li>`;
   };
-  return `<h3 class="cc-h3">${list.length > 1 ? "Your vessels" : "Your vessel"} ${tip("pa-vessel", ["A vessel holds as much charge as its tier, and keeps it between scenes and through downtime.", "Fill it with Aura you’d lose: what’s over your maximum when you finish acting, Aura that comes in while you’re full, and whatever’s left when the scene ends. Or put a point of any Root in for a charge, any time in a scene, with no action.", "Spend it on your own abilities and your own awakenings’ Aura, a charge for each Aura. It never pays for bringing a Root in, a tie, an intercept, a quick heal or going beyond.", link("s-vessels", "Vessels in the rules")], "How a vessel works")}</h3><ul class="cc-list">${list.map(row).join("")}</ul>`;
+  return `<h3 class="cc-h3">${list.length > 1 ? "Your vessels" : "Your vessel"} ${tip("pa-vessel", ["A vessel holds as much charge as its tier, and keeps it between scenes and through downtime.", "Fill it with Aura you’d lose: what’s over your maximum when you finish acting, and Aura that comes in while you’re full. What’s left when a scene ends isn’t lost, so it stays out.", "Or put a point of any Root in for a charge, any time in a scene, with no action. That point’s held in it, like a lock, till its charge is spent, and points are spent first.", "Spend it on your own abilities and your own awakenings’ Aura, a charge for each Aura. It never pays for bringing a Root in, a tie, an intercept, a quick heal or going beyond.", link("s-vessels", "Vessels in the rules")], "How a vessel works")}</h3><ul class="cc-list">${list.map(row).join("")}</ul>`;
 }
 // Finishing acting with Aura over the maximum: it's gone, or it goes into a
 // vessel with room, in the same tap.
@@ -930,7 +932,8 @@ function panelView(key, c, s) {
       return `<li class="cc-thing-row cc-armour"><span class="cc-thing${isBroken(s, a) ? " is-out" : ""}"><span>${esc(cap2(R.itemSaid(a)))}</span><small>${a.when ? `${esc(a.when)}, ` : ""}${esc(soakSaid(s, a))}</small></span>${marks ? `<span class="cc-boxes" role="group" aria-label="${esc(cap2(R.itemSaid(a)))}’s soak, ${leftOf(s, a)} of ${full} left">${marks}</span>` : ""}</li>`;
     }).join("");
     const soak = soakAt(c, s, root);
-    const locked = [...locks.map((w) => `<em>${esc(w.name)}</em>`), ...(s.scars[root].length ? [`${s.scars[root].length === 1 ? "a Scar" : `${s.scars[root].length} Scars`}`] : [])];
+    const held = R.heldOf(s)[root];
+    const locked = [...locks.map((w) => `<em>${esc(w.name)}</em>`), ...(s.scars[root].length ? [`${s.scars[root].length === 1 ? "a Scar" : `${s.scars[root].length} Scars`}`] : []), ...(held ? [`${held === 1 ? "a point" : `${held} points`} held in a vessel`] : [])];
     return `<p><b>${root} ${ptsSaid(c, s, root)}.</b> ${n ? `It rolls ${steps(n)}, ${diceLabel(stepsToDice(n))}, however many points it’s got left.` : "It’s 0, so it rolls a d2, and its first hit wounds it."}${s.wound[root] ? ` You’re <b>${R.WOUNDS[root]}</b>${n ? `, so it heals only to ${cap} till downtime or a moment in the story clears it` : " till downtime or a moment in the story clears it"}.` : ""}${locked.length ? ` ${andList(locked)} lock${locked.length === 1 && !s.scars[root].length ? "s" : ""} ${R.lockedOf(c, s)[root] === 1 ? "a point" : `${R.lockedOf(c, s)[root]} points`} of it.` : ""} ${tip(`pa-${root}`, [n ? `A ${root} of ${n} is ${n} steps of dice, ${n} points to take hits with, and ${n} to spend pushing yourself, less what’s locked.` : `A ${root} of 0 rolls a d2, and it’s got no points, so its first hit wounds it, unless you take it on another Root for 2 points.`, `A hit that gets through takes a point${soak.full ? `, from your armour’s soak first, ${soak.left} of ${soak.full} left this scene` : ""}. A hit on it at 0 wounds it, and a hit on it wounded at 0 is a Scar, and you leave the scene.`, "Pushing never hurts you: you can’t spend points you haven’t got.", link("s-tracks", "Your points in the rules")], `How your ${root} works`)}</p>
       <div class="cc-row"><button type="button" class="button" data-act="hit" data-r="${root}"${off(s.out || s.blaze)}>A hit gets through${soak.left ? ": your armour soaks it" : ""}</button>${others.map((x) => `<button type="button" class="button" data-act="hit" data-r="${root}" data-on="${x}"${off(s.out || s.blaze)}>Take it on your ${x}: 2 points</button>`).join("")}</div>
       <div class="cc-row"><button type="button" class="button" data-act="spend" data-r="${root}"${off(s.pts[root] < 1)}>Spend a point</button><button type="button" class="button" data-act="back" data-r="${root}"${off(s.pts[root] >= cap)}>A point back</button><button type="button" class="button" data-act="healin"${off(!R.ROOTS.some((x) => s.pts[x] < R.capOf(c, s, x)))}>A heal</button>${root === "Mind" ? `<button type="button" class="button" data-act="breath"${off(s.pts.Mind >= Math.ceil(cap / 2))}>Take a breath: a point back, up to ${Math.ceil(cap / 2)}</button>` : ""}</div>
@@ -1691,17 +1694,22 @@ function awakeView(c, s, g, key, where) {
 // and vessels never add steps, and a broken item's there to see but can't be
 // picked till it's mended. on says which is on, for When it lands's guard,
 // which goes on once a landing.
-function itemView(c, s, g, key, where, { guards = false, tools = true, on = g.item } = {}) {
-  const list = (c.items ?? []).filter((it) => (tools && (it.kind === "weapon" || it.kind === "tool")) || (guards && it.kind === "guard"));
+function itemView(c, s, g, key, where, { guards = false, tools = true, on = g.item, landing = false } = {}) {
+  // As blows land, a Warrior's armour on this Root is a guard too, and with
+  // Parry their weapon is, on their Body.
+  const skin = landing && R.skinOf(c);
+  const parry = landing && g.root === "Body" && hasParry(c);
+  const list = (c.items ?? []).filter((it) => (tools && (it.kind === "weapon" || it.kind === "tool")) || (guards && it.kind === "guard")
+    || (skin && it.kind === "armour" && (it.root ?? "Body") === g.root) || (parry && it.kind === "weapon"));
   if (!list.length) return "";
   const chip = (it) => {
     const broken = it.attuned == null && Boolean(s.crossed?.[it.key]);
     const now = on === it.key;
-    return `<button type="button" class="cc-pick k-item is-${now ? "in" : "out"}" data-act="item" data-g="${key}" data-k="${esc(it.key)}"${pressed(now)}${off(broken)}><em>${esc(cap(bareName(R.itemSaid(it))))}</em> <small>${broken ? "broken till it’s mended" : `+${it.tier}${it.kind === "guard" && tools ? ", only getting out of the way" : ""}`}</small></button>`;
+    return `<button type="button" class="cc-pick k-item is-${now ? "in" : "out"}" data-act="item" data-g="${key}" data-k="${esc(it.key)}"${pressed(now)}${off(broken)}><em>${esc(cap(bareName(R.itemSaid(it))))}</em> <small>${broken ? "broken till it’s mended" : `+${it.tier}${it.kind === "guard" && tools ? ", only getting out of the way" : landing && it.kind === "weapon" ? ", Parry for 1 Aura" : landing && it.kind === "armour" ? ", Second Skin" : ""}`}</small></button>`;
   };
   const ask = tools
     ? tip(`${where}-item`, ["One item a roll, the one doing the work, and it puts its tier on in steps when it fits. Vesk’s Proven set of picks is 3 more on a lock.", "A weapon or a tool goes on any roll it fits. A guard, like a shield, only goes on a roll that’s getting out of the way of harm.", "Armour, packs and vessels never add steps, and nor does anything broken.", link("s-items", "Items in the rules")], "The item doing the work")
-    : tip(`${where}-item`, ["A guard, like a shield, puts its tier on top when you’re getting out of the way, once a landing, on your Root’s roll or your Defend.", "Your weapons stay out of it, since what you’re doing is getting out of the way.", link("s-defending", "When it lands in the rules")], "Your guard");
+    : tip(`${where}-item`, ["A guard, like a shield, puts its tier on top when you’re getting out of the way, once a landing, on your Root’s roll or your Defend.", "Your weapons stay out of it, since what you’re doing is getting out of the way.", ...(skin ? ["You’re a Warrior, so your armour on this Root is a guard as well (Second Skin), and it still soaks."] : []), ...(parry ? ["With Parry, 1 Aura puts your weapon on instead."] : []), link("s-defending", "When it lands in the rules")], "Your guard");
   return `<fieldset class="cc-group cc-itemgrp" aria-labelledby="${where}-it-t"><legend><span id="${where}-it-t">${tools ? "The item doing the work" : "Your guard"}</span> ${ask}</legend><div class="cc-picks">${list.map(chip).join("")}</div></fieldset>`;
 }
 // The split: how many dice, and how the steps are shared between them. More
@@ -2143,22 +2151,32 @@ function openDefence(pre = null) {
 // The guard, once a landing: the one they've put on a roll, or, till they
 // say otherwise, their best guard on the first roll at their Body (their
 // Root's, or Defend's on their Body).
+// A Warrior's armour is a guard as well (Second Skin), on the Root it's on,
+// and so's the best of it to start with. A weapon's only ever picked, with
+// Parry, never put on for them.
 function guardOf(c, s, r, keys = defenceKeys(r)) {
   for (const key of keys) if (r.groups[key]?.item) return { g: key, key: r.groups[key].item };
   if (r.noGuard) return null;
-  const best = (c.items ?? []).filter((it) => it.kind === "guard" && !(it.attuned == null && s.crossed?.[it.key])).sort((a, b) => b.tier - a.tier)[0];
-  const at = keys.find((key) => r.groups[key]?.root === "Body");
-  return best && at ? { g: at, key: best.key } : null;
+  const at = (root) => keys.find((key) => r.groups[key]?.root === root);
+  const best = (c.items ?? []).filter((it) => !(it.attuned == null && s.crossed?.[it.key]))
+    .map((it) => ({ it, g: it.kind === "guard" ? at("Body") : it.kind === "armour" && R.skinOf(c) ? at(it.root ?? "Body") : null }))
+    .filter((x) => x.g).sort((a, b) => b.it.tier - a.it.tier)[0];
+  return best ? { g: best.g, key: best.it.key } : null;
 }
+// The Warrior's Parry: their weapon's tier on a roll as blows land at their
+// Body, for 1 Aura, the way a guard's would.
+const hasParry = (c) => (c.archetypes ?? []).some((a) => a.name === "Warrior" && (a.have ?? []).includes("Parry"));
+const parryOn = (c, guard) => (c.items ?? []).find((it) => it.key === guard?.key)?.kind === "weapon";
 const defenceKeys = (r) => [...R.ROOTS.filter((root) => r.incoming.some((x) => x.at === root && !x.nodef)), ...(r.defend ? ["defend"] : [])];
 function defencePool(c, s, r) {
   const keys = defenceKeys(r);
   const guard = guardOf(c, s, r, keys);
   const groups = keys.map((key) => {
     const g = r.groups[key];
-    const k = R.countRoll(c, s, asRoll(g, guard?.g === key ? { item: guard.key, avoid: true } : { item: null }, c, s));
+    const parry = guard?.g === key && parryOn(c, guard);
+    const k = R.countRoll(c, s, asRoll(g, guard?.g === key ? { item: guard.key, avoid: true, parry } : { item: null }, c, s));
     const sh = shaped(k.total, g);
-    return { key, g, root: g.root, k, ...sh, dice: sh.split, aura: k.aura + borrowsOf(g) };
+    return { key, g, root: g.root, k, ...sh, dice: sh.split, aura: k.aura + borrowsOf(g) + (parry && k.item ? 1 : 0) };
   });
   const points = Object.fromEntries(R.ROOTS.map((x) => [x, groups.reduce((t, x2) => t + (x2.k.points[x] ?? 0), 0)]));
   const aura = groups.reduce((t, x) => t + x.aura, 0);
@@ -2324,7 +2342,7 @@ function defenceBuild(c, s) {
     const open = ui.open.has(`dl-more-${x.key}`);
     return `<fieldset class="cc-group" aria-labelledby="dl-${x.key}-t"><legend><span id="dl-${x.key}-t">${at ? "Your Defend" : `Your ${x.root}`}</span> <small>${steps(x.k.total)}, ${diceLabel(x.dice)}</small></legend>
       ${at ? `<div class="cc-chips cc-rootpick" role="group" aria-label="Defend’s Root">${R.ROOTS.map((root) => `<button type="button" class="cc-chipbtn" data-act="root" data-g="defend" data-v="${root}"${pressed(g.root === root)}>${root} <small>${c.roots[root]}</small></button>`).join("")}</div>` : `<p class="cc-small">Stops one telegraph ${AT[x.root]} for each die. ${x.k.rootN ? "" : "Your Root’s 0, so it’s a d2."}</p>`}
-      ${itemView(c, s, g, x.key, `dl-${x.key}`, { guards: true, tools: false, on: p.guard?.g === x.key ? p.guard.key : null })}
+      ${itemView(c, s, g, x.key, `dl-${x.key}`, { guards: true, tools: false, landing: true, on: p.guard?.g === x.key ? p.guard.key : null })}
       ${splitView(x, x.key, "How many dice")}
       <details class="cc-own" data-open="dl-more-${x.key}"${open ? " open" : ""}><summary>Bring a Root in, or an awakening</summary>${bringView(c, s, g, x.key, `dl-${x.key}`)}${awakeView(c, s, g, x.key, `dl-${x.key}`)}</details></fieldset>`;
   };
@@ -2466,37 +2484,20 @@ function abilityView(c, s) {
 // far as it can hold, half while it's wounded. Toll drops by 1. Then Aura's
 // full and conditions end.
 const sceneSaid = (c, s) => `New scene. Aura ${s.aura}, ${glancePts(c, s)}.`;
-// The Aura left at the end of a scene, into each vessel with room in turn,
-// since it's Aura they'd lose: { [vesselKey]: n }.
-function sceneFill(c, s) {
-  let left = Math.max(0, s.aura);
-  const out = {};
-  for (const v of R.vesselsOf(c)) {
-    if (!left || s.crossed?.[v.key]) continue;
-    const n = Math.min(v.tier - R.chargeOf(c, s, v.key), left);
-    if (n > 0) {
-      out[v.key] = n;
-      left -= n;
-    }
-  }
-  return out;
-}
-const filledSaid = (c, h) => (h.filled?.length ? ` ${cap(andList(h.filled.map((x) => `${x.n} Aura you had left went into ${yours(c.items.find((it) => it.key === x.key) ?? { name: "a vessel" })}`)))}.` : "");
 function newScene() {
   const ch = current();
   const c = normal(ch);
   if (!c) return;
   const s = ch.state;
   const list = R.restOf(c, s);
-  // With nothing to roll, the Aura left goes into a vessel with room as the
-  // scene ends, and Undo takes it back.
+  // With nothing to roll it's straight on, and Undo takes it back.
   if (!list.length) return change("starting a new scene", (st, cc) => {
     const was = st.toll;
-    const h = R.sceneEnd(cc, st, {}, { fill: sceneFill(cc, st) });
+    R.sceneEnd(cc, st, {});
     endScene(st, cc);
-    return `${sceneSaid(cc, st)}${was ? ` Your Toll’s ${st.toll}.` : ""}${filledSaid(cc, h)}`;
+    return `${sceneSaid(cc, st)}${was ? ` Your Toll’s ${st.toll}.` : ""}`;
   });
-  roll = { kind: "rest", mode: "build", list: list.map((root) => ({ root, dice: fillDice(c.roots[root]).map((size) => ({ size, nat: 0 })) })), real: false, spinning: false, log: [], noFill: false };
+  roll = { kind: "rest", mode: "build", list: list.map((root) => ({ root, dice: fillDice(c.roots[root]).map((size) => ({ size, nat: 0 })) })), real: false, spinning: false, log: [] };
   openDialog();
 }
 const restDice = (r) => r.list.flatMap((x, i) => x.dice.map((d, j) => ({ ...d, i, j })));
@@ -2521,11 +2522,8 @@ function restView(c, s) {
     <button type="button" class="cc-x" data-act="close" aria-label="Close">${ICON.close}</button></div>`;
   if (r.mode === "pad") return padView("End of the scene", restDice(r).map((d) => [`Your ${r.list[d.i].root}, a d${d.size}`, `r${d.i}.${d.j}`, d.size, d.nat]), restDice(r).every((d) => d.nat));
   if (r.mode === "build") {
-    const fill = sceneFill(c, s);
-    const into = Object.entries(fill).map(([key, n]) => `${n} into ${esc(yours(c.items.find((it) => it.key === key)))}`);
     return `${head}<div class="dlg-body">
       <p>Roll each Root that’s below what it can hold, unsplit, and get back what you roll. ${ruleTip("s-healing", "How resting works", "rs-how")}</p>
-      ${into.length ? `<div class="cc-chips"><button type="button" class="cc-chipbtn is-aura" data-act="rest-fill"${pressed(!r.noFill)}>Your Aura left, ${andList(into)}</button>${tip("rs-fill", "The Aura you’ve got left when a scene ends is gone, since Aura’s full again for the next one, unless it goes into a vessel with room in it.", "Aura you’d lose")}</div>` : ""}
       ${r.list.map((x) => `<p class="cc-dice">${liveDice(x.dice.map((d) => [d.size, "you"]))}<span>Your ${x.root}, ${s.pts[x.root]} of ${R.capOf(c, s, x.root)}${s.wound[x.root] ? `, ${R.WOUNDS[x.root]}` : ""}</span></p>`).join("")}
       <p class="cc-small">Then it’s a new scene: Aura full, conditions gone${s.toll ? `, and your Toll drops to ${s.toll - 1}` : ""}.</p></div>
     <div class="dlg-foot"><button type="button" class="button primary" data-act="rest-go">Roll</button><button type="button" class="button" data-act="rest-real">Roll real dice</button></div>`;
@@ -2547,10 +2545,10 @@ function finishRest() {
   const last = undo[undo.length - 1];
   change("starting a new scene", (s, c) => {
     const rolls = Object.fromEntries(r.list.map((x) => [x.root, x.dice.reduce((t, d) => t + d.nat, 0)]));
-    const h = R.sceneEnd(c, s, rolls, { fill: r.noFill ? {} : sceneFill(c, s) });
+    const h = R.sceneEnd(c, s, rolls);
     endScene(s, c);
     const ups = R.ROOTS.filter((x) => h.healed[x]);
-    message = `${sceneSaid(c, s)} ${ups.length ? `You rested: ${andList(ups.map((x) => `your ${x} got ${h.healed[x]} back`))}.` : "Nothing more fitted this time."}${filledSaid(c, h)}`;
+    message = `${sceneSaid(c, s)} ${ups.length ? `You rested: ${andList(ups.map((x) => `your ${x} got ${h.healed[x]} back`))}.` : "Nothing more fitted this time."}`;
     return message;
   }, { say: false });
   closeDialog();
@@ -3408,10 +3406,6 @@ const ACT = {
   "rest-go": () => restRoll(false),
   "rest-real": () => restRoll(true),
   "rest-done": () => finishRest(),
-  "rest-fill"() {
-    roll.noFill = !roll.noFill;
-    renderDialog();
-  },
   downtime() {
     const ch = current();
     const c = normal(ch);
@@ -3492,9 +3486,10 @@ const ACT = {
     setUsed(s, a, n <= usedOf(s, a) ? n - 1 : n);
     return `${cap(yours(a, { quality: true }))}: ${soakSaid(s, a)} this scene.`;
   }),
-  // Filling a vessel: a point of a Root mid-scene (from "pt"), Aura over the
-  // maximum as you finish acting (over), or Aura coming in while you're full
-  // (spill), a charge each.
+  // Filling a vessel: a point of a Root mid-scene (from "pt"), held there
+  // till it's spent, Aura over the maximum as you finish acting (over), or
+  // Aura they really lost (spill, which R.fillVessel() counts from s.spill),
+  // a charge each.
   fill: (el) => change("filling a vessel", (s, c) => {
     const v = c.items.find((x) => x.key === el.dataset.k && x.kind === "vessel");
     if (!v) return "";
@@ -3502,11 +3497,11 @@ const ACT = {
     if (from === "pt") {
       const r = el.dataset.r;
       const put = R.fillVessel(c, s, v.key, 1, { from: "pt", root: r });
-      return put ? `A point of ${r} into ${yours(v)}, so your ${r}’s on ${s.pts[r]} and it’s got ${R.chargeOf(c, s, v.key)} of ${v.tier}.` : "";
+      return put ? `A point of ${r} into ${yours(v)}, so your ${r}’s on ${s.pts[r]} of ${R.capOf(c, s, r)} and it’s got ${R.chargeOf(c, s, v.key)} of ${v.tier}. The point’s held there till that charge is spent.` : "";
     }
     if (from === "spill") {
       const n = Math.max(1, Number(el.dataset.n) || 1);
-      const put = R.fillVessel(c, s, v.key, n, { from: "aura", spill: n });
+      const put = R.fillVessel(c, s, v.key, n, { from: "aura" });
       if (roll?.spill) roll.spill = Math.max(0, roll.spill - put);
       return put ? `${put} Aura you’d have lost went into ${yours(v)}, so it’s got ${R.chargeOf(c, s, v.key)} of ${v.tier}.` : "";
     }

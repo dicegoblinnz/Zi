@@ -658,8 +658,9 @@ An item only breaks when the GM names it as a consequence: the bowstring snaps, 
 
 A **vessel** is an item that holds charge, like a lantern of captured light, a prayer string, a battery-coil or a reliquary. **It holds as much charge as its tier**, so a tier 3 vessel holds 3, and it keeps what's in it between scenes and through downtime.
 
--   **Fill it with Aura you'd lose.** That's the Aura past your maximum when you finish acting, Aura that comes in while you're not acting and would stop at your maximum, and whatever Aura you've got left when the scene ends. Any of it can go in instead.
--   **Or fill it with points.** Any time in a scene, with no action, a point from any Root is a charge. That's pushing, so it can leave you exposed, and it never wounds you. It's never at a scene's end and never in downtime, so it can't eat a recovery roll or a rest.
+-   **Fill it with Aura you'd lose.** That's the Aura past your maximum when you finish acting, and Aura that comes in while you're not acting and would stop at your maximum, if you'd rather keep it than give it to a friend. Any of it can go in instead. The Aura you've got left when a scene ends isn't lost, since you start the next one full, so it stays out.
+-   **Or fill it with points.** Any time in a scene, with no action, a point from any Root is a charge. That's pushing, so it can leave you exposed, and it never wounds you. You can't do it at a scene's end or in downtime.
+-   **A point in a vessel stays held there** till its charge is spent, the way an awakening locks one. The Root can't get it back at a scene's end or in downtime while it's in the vessel. When you spend charge, the points go first, and a point spent is just a point spent, which comes back the usual way.
 -   **Spend it only on your own** abilities and your own awakenings' extra steps, a charge for each Aura they'd cost.
 -   **It isn't Aura.** It never counts towards your maximum, you can't hand it to a friend, and it never pays for bringing in a Root, a tie, an intercept, a quick heal, going beyond or borrowing.
 
@@ -668,7 +669,7 @@ It only takes Aura you'd have lost, it never turns back into Aura, and it can't 
 :::example[Ash's coal horn]
 Ash carries a coal horn at tier 3, a cow's horn of banked coals, so it holds 3. She's on 3 Aura when she throws fire at the Iron Wardens, and her dice pay her 4 while she's acting, so she's on 7. When she's finished acting the 2 past her 5 would go, so they go in the horn instead, and it's 2 of 3.
 
-Two rounds later she's got the captain cornered. She puts a point of her Soul in, no action, and the horn's full. Throwing fire is her Soul's 11, her ember stone's tier 2 and *Fire without a word*'s 2, 15 steps, and she spends 2 charge on the awakening for 4 more, 19, three d12s and a d2. She's still got 1 charge for her Push.
+Two rounds later she's got the captain cornered. She puts a point of her Soul in, no action, and the horn's full. That point's held in the horn, so her Soul's maximum is 9 till it's spent, with the point her ember stone locks. Throwing fire is her Soul's 11, her ember stone's tier 2 and *Fire without a word*'s 2, 15 steps, and she spends 2 charge on the awakening for 4 more, 19, three d12s and a d2. Her point of Soul goes first, so her Soul's back to a maximum of 10, and it'll come back at the scene's end the usual way. She's still got 1 charge for her Push.
 :::
 
 ## Burdens {#s-boons}

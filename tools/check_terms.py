@@ -5,7 +5,10 @@ Usage: python3 tools/check_terms.py [FILE.md ...]   (default: every chapter)
        add --links to check every #anchor link points at a real heading id
 
 Each hit is a line to read, not an automatic error. Some words are fine in
-context (a guard in a story, "Captain of the Guard", a rare painting).
+context (a guard in a story, a rare painting), and the known ones (the
+game's name, Captain of the Guard, Household Guard, Calls for Help, a truth
+serum, the old ids #s-armour-quality and #recovering-armour, which name How
+much it soaks and Broken items now) are left out, so a clean book is 0.
 """
 import glob
 import re
@@ -14,16 +17,16 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 RETIRED = [
-    ("game name", r"\bZi\b(?!['’]Dara)"),
+    ("game name", r"\bZi\b(?!['’]Dara)(?!\*, the Sumerian)"),
     # Since 17 Nov "tier" is an item's tier again, so only the old names stay.
     ("tiers", r"\b(Novice|Skilled)\b|\bMaster tier\b|\bat Master\b"),
     ("specialization", r"\bspeciali[sz](ation|ations|ed)\b"),
-    ("Help action", r"\bHelp(s|ing|ed)?\b|\bhelp action\b"),
-    ("Guard action", r"(?<!\| )(?<!\*\*)\bGuard(s|ing|ed)?\b(?! (of|at the|on the gate))(?!\]\(#s-items\))"),
+    ("Help action", r"(?<!Calls for )\bHelp(s|ing|ed)?\b(?! them and)|\bhelp action\b"),
+    ("Guard action", r"(?<!\| )(?<!\*\*)(?<!Household )(?<!of the )\bGuard(s|ing|ed)?\b(?! (of|at the|on the gate))(?!\]\(#s-items\))"),
     ("two actions", r"\b(two|both|second|2) actions?\b|\byour two actions\b"),
     ("item rarity", r"\b(rarity|Rare|Legendary)\b"),
     ("stretch", r"\bstretch(es|ed|ing)?\b"),
-    ("old names", r"\b(Insight|Truth|Limit Break|Spread|pour in)\b"),
+    ("old names", r"\b(Insight|Truth(?! serum)|Limit Break|Spread(?! them)|pour in)\b"),
     ("pockets", r"\bpockets?\b(?! [Ss]ummon)"),
     ("old Hurt", r"\b(three|3) Hurt boxes\b|\bHurt boxes\b|\bfourth Hurt\b"),
     ("Catch on a Title", r"\bTitle['’]?s? Catch(es)?\b|\bCatch on (each|your|a) Title\b|\bonce a scene\b.*\bCatch\b|\bCatch\b.*\bonce a scene\b"),
@@ -41,7 +44,7 @@ RETIRED = [
     ("Spark", r"\bSparks?\b"),
     ("GM trouble", r"\b(offers?|offered|take|turn(s|ed)? down|taking) (you )?(the )?trouble\b|\btrouble\b.*\bSpark\b|\bonce a session each\b"),
     ("heal die", r"\bheal dice?\b"),
-    ("connections", r"\bconnections?\b"),
+    ("connections", r"(?<!-)\bconnections?\b"),
     ("Confidence from Titles", r"\b(every|each) Title makes your Confidence\b|\bthree live\b|\bConfidence (is|is a|are) (one )?size bigger\b|\ball your Confidence\b"),
     ("opportunity", r"\bmake an opportunity\b|\bmaking an opportunity\b"),
     ("fear check", r"\bfear checks?\b"),
@@ -115,7 +118,7 @@ RETIRED = [
     ("equipment and utility", r"\b(equipment|utility)( items?| slots?)\b|\((equipment|utility)\b|\b(3|three) (equipment|utility)\b|\b(an? |in a |one of your )?utility slots?\b|\bon top of (your |her |his |their )?equipment\b"),
     ("the bag", r"\b(your|her|his|their|an empty|a|the) bag\b|\bbag (holds|counts?)\b|\b\d+ of 10\)|\bBag\]"),
     ("armour boxes", r"\bbox(es)? (of|on) (\w+ )?armour\b|\barmour['’]?s? box(es)?\b|\b(1|2|3|one|two|three) box(es)?\b|\bbox(es)? ticked\b|\btick(s|ed|ing)? (a|one|its|the|every) (of (its|their|the) )?box(es)?\b|\blast box\b"),
-    ("armour quality", r"\b(Common|Fine|Masterwork)( worn| court| plate)? (armour|leathers|plate|shields?|clothes|coat|helmet|piece)\b|\barmour['’]?s? quality\b|\b(Common|Fine|Masterwork) (has|is|armour)\b|\bone piece can be Fine\b|#s-armour-quality\b|#recovering-armour\b"),
+    ("armour quality", r"\b(Common|Fine|Masterwork)( worn| court| plate)? (armour|leathers|plate|shields?|clothes|coat|helmet|piece)\b|\barmour['’]?s? quality\b|\b(Common|Fine|Masterwork) (has|is|armour)\b|\bone piece can be Fine\b"),
 ]
 
 
