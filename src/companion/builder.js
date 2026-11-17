@@ -146,9 +146,9 @@ function fixRoots(x) {
 // An archetype's abilities, from the book.
 const abilitiesOf = (B, name) => (B?.archetypes ?? []).find((a) => a.name === name)?.abilities ?? [];
 const cleanHave = (h) => [...new Set(h.map((x) => str(typeof x === "string" ? x : x?.name, 60).trim()).filter(Boolean))].slice(0, MAX_ABILITIES);
-// Every ability an archetype has, for one from before stacking, or null till
-// the book's to hand.
-const allOf = (B, name) => (B ? abilitiesOf(B, name).map((x) => x.name).slice(0, MAX_ABILITIES) : null);
+// Every ability an archetype had, for one from before stacking (R.hadOf()), or
+// null till the book's to hand.
+const allOf = (B, name) => (B ? R.hadOf(name, abilitiesOf(B, name).map((x) => x.name)) : null);
 // An archetype from before stacking keeps every ability it had. One taken
 // more than once had them once, so they're dealt out between its copies, the
 // first ability to the first, the way the crew's Shadows have Push and

@@ -193,3 +193,11 @@ A chat changes only its own files, its own parts of `tests/` and its own blocks 
 ### 0. Write it down
 
 Written 17 Nov: the decisions, this plan, the 17 Nov section in `notes/to-confirm.md` and the line in CLAUDE.md, on `rules/2026-11-17-fixes` off `rules/2026-11-16-core`. Prompts 1, 2, 3a, 3b, 3c and 4 can start.
+
+### 3b. Abilities II
+
+Built 17 Nov on `rules/2026-11-17-fixes-abilities-b`. Its calls are in `notes/to-confirm.md` under 17 Nov, 3b.
+
+- **03a:** ten abilities each for the Healer, Hunter, Illusionist, Leader, Maker and Oracle, simplest first, every one `**Its name (1 Aura):**` in its rule box, all 1 Aura bar the Healer's *Close the wound* (2). The crew's are word for word (Bram's Leader *Push* and *Everyone gets it*, Isolde's *Push*, *Hold it* and *Foretold*, Wren's *Push* and *Mark the pack*), and every example and Title ideas line is kept. They reach past fights: the Healer's *What did this* and *Owed*, the Hunter's *Run it down*, *Mark the way* and *On its trail*, the Illusionist's *Wear it*, *For their eyes* and *Takes one to know one*, the Leader's *Take charge*, the Maker's *Rig it* and *Know how it's made*, the Oracle's *Echoes* and *What's coming*, and the faction turn through *Hunt them down*, *Orders for the week* and *Read the year*. The Maker touches items (*Tune it up*, *Mend it*, *Knock it together*), Resources (*Made it earlier*) and vessels (*Bottle it*). The Hunter's mechanic says marking's a die.
+- **Code:** `HAD_ABILITIES` and `hadOf()` in `roots.js` (all seventeen archetypes' 16 Nov lists), used by `archetypesOf()` and the builder's `allOf()`, so a save from before stacking keeps what it had. `build-content.mjs` no longer warns on more than six abilities on a list.
+- **Checks:** `npm run content` with 0 warnings, the voice check clean on 03a, `check_terms.py --links` clean, and `check-companion.mjs` parts 1e, 3, 3d, 4b, 5, 5b, 5c, 8 and 9 passing. `check_terms.py` flags *tier* on two of the Maker's lines, a retired word from before Roots, which prompt 1 lifts for items.
