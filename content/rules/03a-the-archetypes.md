@@ -389,18 +389,18 @@ Say you're a Healer, *The field surgeon of the Red Company*, and you heal with y
 
 The Hunter marks the prey, and everyone who goes at it rolls an extra die.
 
-Put one of your dice on a creature to mark it. Win and it's ***Marked***, a special condition carrying the die you won with. It doesn't give a step and nobody spends it. Instead, anyone who acts against it rolls the Mark die too, as one more die against it. It fades a size every round like any [condition](#s-conditions).
+Once a roll, when one of your dice wins against a creature, it's ***Marked*** with that die, as well as whatever the die was for. *Marked* is a special condition carrying the die you won with. It doesn't give a step and nobody spends it. Instead, anyone who acts against it rolls the Mark die too, as one more die against it. It fades a size every round like any [condition](#s-conditions). Your Mark's on one creature at a time, so Marking another moves it.
 
 **The Mark jumps.** When a *Marked* creature falls, the Mark moves to another creature you can see, with the die it had.
 
 :::rule
-**Trait:** *Good Hunting*. Every die a friend wins against a creature you've *Marked*, going at it or stopping it, gives you 1 Aura as well as them.
+**Trait:** *Good Hunting*. Every die a friend wins against a creature you've *Marked*, going at it or stopping it, gives you 1 Aura as well as them. So does every die a friend wins at a stake or an event you've *Marked*.
 
 **Push (1 Aura):** +2 to the Mark die once it's rolled. It's your Aura, whoever's rolling.
 
-**Draw blood (1 Aura):** before you roll, give your marking die a second intent at the same creature. If it wins, the creature's *Marked* and the other intent lands too. If that drops it, the Mark jumps straight on, at that die.
+**Head it off (1 Aura):** when a *Marked* creature tries to get away from you, by running, hiding or slipping out of a conversation, roll the Mark die there and then, with no action. It has to beat that number or it stays where it is this round. Once a round for each creature.
 
-**Mark the pack (1 Aura):** your roll to mark goes at two more creatures you can see, and each one it beats is *Marked* with it. Each Mark fades and jumps on its own. Pay again for two more.
+**Mark the pack (1 Aura):** when one of your dice Marks a creature, the same number goes at two more creatures you can see, and each one it beats is *Marked* with that die too. These are on top of your one Mark, and each fades and jumps on its own. Pay again for two more.
 
 **Watch its hands (1 Aura):** when a *Marked* creature's telegraphs land this round, whoever they land on rolls the Mark die with their defence, as one more die that can stop one. Pay any time before they land.
 
@@ -408,17 +408,17 @@ Put one of your dice on a creature to mark it. Win and it's ***Marked***, a spec
 
 **One by one (1 Aura):** when the Mark jumps, roll the Mark die there and then at the creature it jumped to, on its own, with an intent you give it, against that creature's roll for the round. It costs no action. Pay again each time it jumps.
 
-**Mark the way (1 Aura):** your die to mark can go at a stake or an event instead of a creature. Win and it's *Marked*, and anyone who works it rolls the Mark die too. It doesn't jump.
+**Mark the way (1 Aura):** when one of your dice wins at a stake or an event, it's *Marked* with that die, and anyone who works it rolls the Mark die too. It doesn't jump, and it doesn't move your Mark off a creature.
 
-**Set the snare (1 Aura):** your marking die goes on a spot instead of a creature, like a doorway or the gap they'll run for, or a name dropped in a conversation. Nothing pushes back, so you don't roll it, and it waits there without fading till the scene ends. The first creature to cross it, or flinch at the name, is *Marked* with that die. Pay again for another spot.
+**Set the snare (1 Aura):** put one of your dice on a spot instead of rolling it, like a doorway or the gap they'll run for, or a name dropped in a conversation. Nothing pushes back, so you don't roll it, and it waits there without fading till the scene ends. The first creature to cross it, or flinch at the name, is *Marked* with that die. Pay again for another spot.
 
-**On its trail (1 Aura):** put your marking die on what something left behind, like its footprints or the knife it dropped, against its Challenge. Win and you know which way it went and how far ahead it is till the next downtime, and it's *Marked* with that die when you find it. A *Marked* creature that gets away works the same with no roll, and it's *Marked* again at the die it had when you catch up.
+**On its trail (1 Aura):** put one of your dice on what something left behind, like its footprints or the knife it dropped, against its Challenge. Win and you know which way it went and how far ahead it is till the next downtime, and it's *Marked* with that die when you find it. A *Marked* creature that gets away works the same with no roll, and it's *Marked* again at the die it had when you catch up.
 
 **Nowhere to run (4 Aura, signature):** with no action and no roll, the Mark on one creature you can see stops fading. It stays at the die it's on till the creature falls or the scene ends. When it falls, the Mark jumps as usual and fades from there.
 :::
 
 :::example[Marking the Warden]
-Wren marks the Warden with an arrow: her Body and *Long shot*, 10 steps, a d12 and a d8. Her d12 wins, so it's *Marked d12*. Bram swings at it and rolls the Mark d12 with his own dice, and two of his dice beat it, so Bram takes 2 Aura and Wren takes 2 for *Good Hunting*. Next round it's *Marked d10*. When the Warden falls, the Mark jumps to the guard captain behind it, and he's *Marked d10*.
+Wren puts an arrow in the Warden: her Body, her longbow's tier 3 and *Long shot*, 13 steps, two d12s and a d2. One d12 wins, so the arrow hits and the Warden's *Marked d12* as well. Bram swings at it and rolls the Mark d12 with his own dice, and two of his dice beat it, so Bram takes 2 Aura and Wren takes 2 for *Good Hunting*. Next round it's *Marked d10*. When the Warden falls, the Mark jumps to the guard captain behind it, and he's *Marked d10*.
 
 Wren's taken Hunter twice, so her Push puts +3 on the Mark die.
 :::
@@ -429,7 +429,7 @@ Wren's taken Hunter twice, so her Push puts +3 on the Mark die.
 
 The Illusionist makes threats believe in things that aren't there.
 
-Spend your action and roll your illusion dice against the threats' Challenge. **Meet or beat it** and they believe your illusion until they interact with it or try to get through it: a clone of you for them to hit, a wall to run around, a crate to hide under. To see through it before then, a threat has to beat what you rolled. A tie's yours here, and you don't pay Aura for it.
+Any of your dice can be an illusion, as its intent. It's rolled once, against the highest Challenge among whoever it's meant to fool. **Meet or beat it** and they believe your illusion until they interact with it or try to get through it: a clone of you for them to hit, a wall to run around, a crate to hide under. To see through it before then, a threat has to beat what you rolled. A tie's yours here, and you don't pay Aura for it.
 
 :::rule
 **Trait:** *Made You Look*. When a threat swings at one of your illusions, talks to it or tries to get through it, take 1 Aura.
@@ -472,7 +472,7 @@ Only a Leader leads. An order or a rallying song is an action: a Root at full an
 :::rule
 **Trait:** *Where It's Needed*. Each round, you can move steps around between your own roll and the rolls of friends who can hear or see you, up to 1 step for each of you, counting yourself. Take them off one roll and put them on another before either's rolled. It's free and takes no action, and nobody's roll goes below 1 step.
 
-**Push (1 Aura):** +2 to one of a friend's dice, on a roll your steps went into, once it's rolled and you can see it's needed. A roll your steps went into is any roll this round that got steps from your lead or your *Where It's Needed*.
+**Push (1 Aura):** +2 to one of a friend's dice, on a roll your steps went into, once it's rolled and you can see it's needed. A roll your steps went into is any roll this round that got steps from your lead, your *Where It's Needed* or your *Everyone gets it*.
 
 **Take charge (1 Aura):** people in the scene who aren't threats, like a crowd or a ship's crew, do what you tell them this round, as long as it's something they'd do for whoever's in charge. There's no roll. They won't fight for you, but what they do changes the ground: the crowd blocks the street, or the crew cuts the anchor. Pay again for another round.
 
@@ -488,7 +488,7 @@ Only a Leader leads. An order or a rallying song is an action: a Root at full an
 
 **Follow it up (1 Aura):** lead after a friend's rolled instead of before. Your steps all go to that one friend, and they roll them straight away as more dice on the same roll, each with its own intent. It's still your one action, and it can't go on an Oracle's foresight.
 
-**Everyone gets it (1 Aura):** every friend who can hear or see you gets all your lead's steps, not a share. With *Lead from the front*, they each get all the steps you didn't keep.
+**Everyone gets it (1 Aura):** as you lead, one friend who can hear or see you gets 1 step more on their roll this round, on top of whatever you handed them, even if that was nothing. Their roll's one your steps went into, and it never goes on your own dice. Pay again for another step, for the same friend or another.
 
 **Orders for the week (1 Aura):** a lead you make in the last scene before downtime can wait for the faction turn, and its steps go on the crew's roll there. You pay for it in the scene.
 
@@ -496,11 +496,11 @@ Only a Leader leads. An order or a rallying song is an action: a Root at full an
 :::
 
 :::example[Orders from the doorway]
-Bram barks orders from the doorway with his Soul, 4 steps, and he gives 2 to Vesk and 2 to Wren. Vesk's slipping past the guard on her Body, 11 steps, so with Bram's 2 she's on 13, two d12s and a d2. She rolls 6, 5 and 1 against the guard's 7, so Bram pays 1 Aura to push her 6 to an 8, and she's past him.
+Bram barks orders from the doorway with his Soul, 4 steps, and he gives all 4 to Wren, so her shot's 17 steps, two d12s and a d10. He pays 1 Aura for *Everyone gets it* as well, and Vesk gets a step. She's slipping past the guard on her Body, 11 steps, so she's on 12, two d12s, and it's a roll his steps went into. She rolls 6 and 5 against the guard's 7, so Bram pays 1 Aura more to push her 6 to an 8, and she's past him.
 :::
 
 :::example[Where it's needed]
-Bram can see Vesk, Wren, Isolde and Dorrie, so with him that's five, and 5 steps he can move this round. Wren's about to put an arrow through the Warden's eye, and Bram's only holding the stair, so he takes 2 off his own Defend and 3 off Isolde's Study and puts all 5 on Wren's shot. Her 10 steps are 15 now, two d12s and a d6, and his Defend's down to 7.
+Bram can see Vesk, Wren, Isolde and Dorrie, so with him that's five, and 5 steps he can move this round. Wren's about to put an arrow through the Warden's eye, and Bram's only holding the stair, so he takes 2 off his own Defend and 3 off Isolde's Study and puts all 5 on Wren's shot. Her 13 steps are 18 now, three d12s, and his Defend's down to 7.
 :::
 
 **Title ideas:** [Captain](#k-captain) · [Courtier](#k-courtier) · [Sailor](#k-sailor)
@@ -509,7 +509,7 @@ Bram can see Vesk, Wren, Isolde and Dorrie, so with him that's five, and 5 steps
 
 The Maker gives an item something extra for the scene.
 
-Spend your action and roll against the item's size: a d4 for something tiny like a ring, a d6 for something small like a dagger, a d8 for something medium like a shield, a d10 for something large like armour, and a d12 for anything intricate. Each die that beats it gives the item a **tag for the scene**.
+Any of your dice can be a making die, rolled against the item's size: a d4 for something tiny like a ring, a d6 for something small like a dagger, a d8 for something medium like a shield, a d10 for something large like armour, and a d12 for anything intricate. Beat it and the item gets a **tag for the scene**. An item holds one tag you've made at a time, and a new one takes the old one's place, with your mark on top of either.
 
 A tag works like a permission for whoever's holding the item: it lets them do something the item couldn't before, and it can justify bringing a Root in. A ring that lets you see in the dark is fine, and a ring that gives you haste isn't. Whoever's holding the item can break a tag instead of taking a hit.
 
@@ -522,9 +522,7 @@ A tag works like a permission for whoever's holding the item: it lets them do so
 
 **Made it earlier (1 Aura):** say something you could have made, like a grapnel or a copy of the duke's seal, and you or a friend you can reach has it: an item at tier 2 till the scene ends, on top of your six, with no Resource ticked. Say what kind it is, a tool, a weapon or a guard, and never armour, a vessel or anything attuned. Pay again for another.
 
-**On the fly (1 Aura):** your making can be one die of a roll instead of your whole action, so you can fix your hook halfway up the wall and keep climbing with the rest.
-
-**Rig it (1 Aura):** your making can go on something nobody carries, like a door, a cart or a crane, and its tags work for the crew there till the scene ends. The GM says its size, and anyone using it can break a tag on it instead of taking a hit.
+**Rig it (1 Aura):** your making can go on something nobody carries, like a door, a cart or a crane, and its tag works for the crew there till the scene ends. The GM says its size, and anyone using it can break the tag instead of taking a hit.
 
 **Mend it (1 Aura):** a making die that wins against something broken mends it instead of giving it a tag, and it stays mended. That's a broken item, something broken in the scene like an axle or a bridge rope, or a tag you made that's been broken, your mark included, which goes straight back on.
 
@@ -542,7 +540,7 @@ A tag works like a permission for whoever's holding the item: it lets them do so
 :::
 
 :::example[Vesk's coin]
-Vesk hands you the first coin she ever stole, a d4. Your d8 rolls 6 against its 3, so the coin gets a tag for the scene, *turns a blade*, and you hand it back. When a blade gets through to her, she can break that tag instead of losing a point of her Body.
+Vesk hands you the first coin she ever stole, a d4. You put one of your dice on it, and your d8 rolls 6 against its 3, so the coin gets a tag for the scene, *turns a blade*, and you hand it back. When a blade gets through to her, she can break that tag instead of losing a point of her Body.
 
 Your own mark's on Bram's shield, *catches blades*. When a sword gets through to him at the end of a round, he breaks your mark instead of losing a point of his Body, and you put it back on in downtime.
 :::
@@ -639,7 +637,7 @@ The hall's lit up for the party, and the only dark's the shadow under the galler
 
 The Shifter takes on what animals can do, whether that's wings or a breath attack.
 
-You collect **animal tags**, the way a [Summoner](#a-summoner) catches souls. Spend your action, pick one and roll your Shifter dice against its die: most are a d4, swimming's a d6, flying's a d8 and a breath attack's a d12. Beat it and the tag's yours until downtime. It lets you do what the animal does, like a permission, so it can justify bringing a Root in too. Split to go for more than one, and strip one of your animal tags instead of taking a hit if you want to.
+You collect **animal tags**, the way a [Summoner](#a-summoner) catches souls. Any of your dice can go for an animal tag, against its die: most are a d4, swimming's a d6, flying's a d8 and a breath attack's a d12. Beat it and the tag's yours until downtime. It lets you do what the animal does, like a permission, so it can justify bringing a Root in too. Put more dice on more tags to go for more than one, and strip one of your animal tags instead of taking a hit if you want to.
 
 :::rule
 **Trait:** *Something of the Beast*. At the start of every scene, pick one thing a beast has: a hawk's eyes, a hound's nose, a cat's ears, or being small enough to slip through a gap or big enough to fill a doorway. It's true of you till the scene ends, so you can do what it lets you do. It isn't an animal tag, so it can't take a hit for you.
@@ -681,20 +679,23 @@ The Summoner catches the souls of fallen creatures and calls them back out when 
 
 Catching souls and summoning are the Summoner's, and nobody else can do them. Here's what you'll need at the table, and the rest is in [Summoning](#s-summoning).
 
--   **Catching a soul:** when a creature falls, put a die on it and roll against its Challenge. Beat it and you're carrying its soul, which ticks one of your Resources till downtime. Miss and it's gone. In downtime, put it into your summoning attunement.
--   **Your souls live in your summoning attunement**, one to each awakening, on the same stages as any attuned thing (see [Attunement](#s-attunement)). A soul's die is its Challenge die when you caught it. A soul's in an awakening's place, but it isn't steps, so it doesn't lock a point the way an awakening does.
--   **Calling one out** spends Aura, as part of an action: a d4 of summons for each Aura, built into one summon or several, and none of them bigger than that soul's own die. It needs a reason in the story.
--   **A soul is what it was.** A caught courtier talks and a hound tracks. Summons act in the round like anyone, fade a size every round, and lose a size to every hit that gets through. Their dice never pay Aura.
--   **A summon intercepts for free.** It can [intercept](#s-intercept) the blows aimed at someone within its stride, but not fear or despair, and it rolls its die to stop one of them.
+-   **Catching a soul:** any time before the scene ends, one of your dice can go at a creature that fell this scene, against its Challenge die. Win and you're carrying its soul, with that die, and it ticks one of your Resources till downtime. Miss and it's gone. In downtime, put it into your summoning attunement. You can't call a soul out till it's there.
+-   **Your souls live in your summoning attunement**, one to each awakening, on the same stages as any attuned thing (see [Attunement](#s-attunement)). A soul's die is the Challenge die it had when you caught it, and one you start with is a d8. A soul's in an awakening's place, but it isn't steps, so it doesn't lock a point the way an awakening does.
+-   **Calling one out** is part of your action, before you roll. Pay 1 Aura for a d4 summon, 2 for a d8 or 3 for a d12, never bigger than the soul's own die, so a d6 soul's a d4 for 1 or a d6 for 2. The same soul can be out as several summons. It comes out within your stride and needs a reason in the story, and on a later action, 1 Aura more puts it up a size.
+-   **A summon's Aura is held.** It comes off your Aura maximum while the summon's out, so with three d4s out your maximum's 2. A summon stays till the scene ends, a hit sends it back, or you send it back yourself, which is free. A vessel's charge can call one out, a charge for each Aura, and then it holds nothing.
+-   **Summons roll in your throw.** Whenever you act, every summon moves its stride and its die goes in your roll, with an intent of its own that the soul could do from where it stands. They never act any other time, and if your action has no roll, their dice are thrown on their own. A summon's die is never split, merged or added to, bar a *Push*. One that wins pays you 1 Aura, and its top face pays nothing.
+-   **A soul is what it was.** A caught courtier talks and a hound tracks, and that's what its die can be put to.
+-   **A summon guards.** Each one can guard one person within its stride, named as you call it or as you act. Once a round, the first blow that would land at that person's Body comes at the summon instead, free. Never what's at a Mind or a Soul.
+-   **When something lands on a summon**, it rolls its die, and meeting or beating stops it. Anything that gets through knocks it down a size, whatever it was meant to do: a d12 or d10 to a d8, a d8 or d6 to a d4, and a d4's gone. Each size down frees 1 of the Aura it held. Gone means back in your attunement, ready to call again. Summons have no Roots, soak, wounds or conditions.
 
 :::rule
-**Trait:** *Pocket Summon*. One of your souls is your pocket summon. Once a scene it comes out the moment you call it, at its own die, with no action and no Aura. Once it's gone, you can call it straight back the same way for the usual 1 Aura for each d4 of it. It still needs a reason in the story.
+**Trait:** *Pocket Summon*. One of your souls is your pocket summon. Once a scene it comes out the moment you call it, at its own die, with no action and no Aura, and it holds none. Once it's gone, you can call it back with no action for the usual Aura, held as usual. It still needs a reason in the story.
 
-**Push (1 Aura):** +2 to one of your dice when you're catching a soul.
+**Push (1 Aura):** +2 to a summon's die, or to one of your dice catching a soul.
 
-**Call it now (1 Aura):** call a summon out the moment you need it, without waiting for your action: in the middle of someone else's go, or as the telegraphs land. You still pay its Aura. It can intercept straight away, but it doesn't act till next round.
+**Call it now (1 Aura):** call a summon out any time, not just on your action: in the middle of someone else's go, or as the telegraphs land. You still pay its Aura. It can guard straight away, and its die's in your next throw.
 
-**Hold together (1 Aura):** the next time this round one of your summons would lose a size, to the fade or to a hit that gets through, it doesn't. Pay again for another.
+**Hold together (1 Aura):** when something gets through to one of your summons, it isn't knocked down. It takes no action. Pay again for another hit.
 
 **Ask the dead (1 Aura):** ask a soul you hold, in your attunement or one you're carrying, one thing it knew while it was alive, without calling it out. It answers as well as it can, and a hound's answer is a hound's. Pay again for another question.
 
@@ -704,17 +705,17 @@ Catching souls and summoning are the Summoner's, and nobody else can do them. He
 
 **Catch it whole (1 Aura):** when a die of yours puts a creature down, the same die catches its soul as well, with no die of its own on the catch. A summon's die counts as yours for this. The soul still ticks one of your Resources.
 
-**Stand with them (1 Aura):** one of your summons goes with a friend this round, and instead of acting on its own, its die's one of theirs: it rolls in their throw, they give it its intent, and it counts as theirs for their archetype, so it explodes for a Warrior. It's still a summon's die, so it never pays Aura. Pay again for another summon, or another friend.
+**Stand with them (1 Aura):** one of your summons goes with a friend this round. Its die's in their throw instead of yours, they give it its intent, and it counts as theirs for their archetype, so it explodes for a Warrior. A win pays them, and its top face still pays nothing. Pay again for another summon, or another friend.
 
-**Rise (1 Aura):** a soul you've caught this scene can be called out now, though it isn't in your attunement yet. You pay for it the usual way, none bigger than its own die. It's what it was, so the bandit captain knows his own men and his own door.
+**Rise (1 Aura):** a soul you've caught this scene can be called out now, though it isn't in your attunement yet. You pay for it the usual way, never bigger than its own die. It's what it was, so the bandit captain knows his own men and his own door.
 
-**Last breath (1 Aura):** when one of your summons goes, faded out or sent back by a hit, its die rolls once more as it goes, at the size it just had, at anything beside it, with an intent you give it, against that target's roll for the round. It takes no action and never pays Aura. Pay again for another summon.
+**Last breath (1 Aura):** when a hit knocks one of your summons down or sends it back, its die rolls once at whoever did it, at the size it had before the hit, with an intent you give it, against that threat's roll for the round. It takes no action and never pays Aura. Pay again for another summon.
 
-**Call the horde (4 Aura, signature):** as your action, with no roll, every soul in your attunement that isn't out already comes out at once, each at a d4, for no more Aura. They fade as usual.
+**Call the horde (4 Aura, signature):** with no action and no roll, five summons come out at once within your stride, each a d4 of any soul you hold, and none of them holds any Aura. They're in your throw this round, and they stay till the scene ends or a hit sends them back.
 :::
 
 :::example[Sable calls them out]
-Sable's got three souls in her summoning attunement: a rat swarm (d4), a hound (d6) and the harbour Warden (d8), and the Warden's her pocket summon. The watch is coming down the alley, so the Warden's out at her side as a d8 before anyone's moved, with no action and no Aura. She's still got her action, so she spends 2 Aura on the rats, as two swarms of d4. Next round the Warden's a d6 and the rats are d2s, and the round after that, the rats are gone. When the Warden goes too, she can have it straight back for 2 Aura.
+Sable's got three souls in her summoning attunement: a rat swarm (d4), a hound (d6) and the harbour Warden (d8), and the Warden's her pocket summon. The watch is coming down the alley, so the Warden's out at her side as a d8 before anyone's moved, with no action and no Aura, guarding her. On her action she pays 2 Aura for the rats, as two swarms of d4, so her Aura maximum's 3 while they're out. Her throw is her Soul's d12 and d2 with the Warden's d8 and the two d4s, each with its own intent. When the first club comes at her, it comes at the Warden instead. It rolls 3 against the club's 5, so it drops to a d4. Nothing fades, so the rats are still d4s next round.
 :::
 
 **Title ideas:** [Medium](#k-medium)
@@ -788,7 +789,7 @@ Your dice **explode** when you fight. A die that lands on its top face gives you
 
 **Call them out (2 Aura):** challenge someone in front of people whose opinion they care about, with no roll. The GM picks: they face you alone, and while nobody else touches either of you their telegraphs only come at you, or they back down and lose face, and one tag that rests on their name is gone, her pick. It needs a name to lose and people watching who matter to them, so a beast, a zealot or a man with nobody watching just says no.
 
-**Kill stroke (4 Aura, signature):** as you act in a fight, before you roll, set one of your dice on its top face instead of rolling it. It pays no Aura, and it explodes from there. With *Not just fights* it works anywhere.
+**Cut them down (4 Aura, signature):** when one of your dice wins against a threat in a fight, it wins against every other threat within your reach as well, with the same intent, with no action and no roll. Nothing's rolled against them, and it pays Aura once, the way any die that wins does. If it exploded, *Opened* still opens only the one it beat. With *Not just fights* it works anywhere.
 :::
 
 :::example[The sellsword]
