@@ -13,7 +13,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | Term | What it means |
 | --- | --- |
 | **[2 for 1](#s-consequences)** | When a hit gets through, taking it on another Root instead, for 2 points of that Root, as long as it's got them. Armour on that Root soaks them first. |
-| **[Ability](#s-abilities)** | Something an archetype does on top of its mechanic, for 1 Aura each time you use it, or 2 for a few big ones. They stack, so pay again for more of it. An archetype comes with one, and more are a point or a downtime slot each. |
+| **[Ability](#s-abilities)** | Something an archetype does on top of its mechanic, for 1 Aura each time you use it, or 2 or 3 for a few big ones. Some are held and a few are signatures. Most stack, so pay again for more of it. An archetype comes with one, and more are a point or a downtime slot each. |
 | **[Action](#s-actions)** | What you spend to do something. One a round, and nothing gets you another. Every die in it is an intent, so one roll can do several things. |
 | **[Advantage](#s-intents)** | Several dice on one intent. Your best die counts. |
 | **[Agenda](#s-agendas)** | What a faction is doing right now, on a die that climbs. Past d12, it happens. |
@@ -71,6 +71,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Guard](#s-items)** | An item like a shield, a buckler or a parrying dagger. Its tier goes on a roll that's avoiding harm, and never on anything else. |
 | **[Harmony](#oracle)** | An Oracle reading: two of the three dice match. |
 | **[Heal](#s-healing)** | The Healer's roll: an action, rolled unsplit, and one person gets back what it rolls, spread across their Roots, less 5 for each Toll they've got. |
+| **[Held](#s-abilities)** | An ability that changes what's true of you for the scene, like a sense, a form or a weapon that guards. You pay once, it stays up till the scene ends or you drop it, and its Aura comes off your maximum while it's up. |
 | **[Hit](#s-consequences)** | A telegraph's die that gets through to you: 1 point off the Root it's at, once the armour there has soaked what it can. A vulnerability's one more, and a deadly threat's telegraph says how many. |
 | **[Hollow](#s-blaze)** | Your Soul's wound, from a hit on it with no points left. It heals only to half its maximum till downtime or a story moment clears it. |
 | **[Hook](#s-aftermath)** | Something at the end of a session that pulls the crew into the next one. |
@@ -124,6 +125,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Scene](#s-aura)** | One place and one problem. Aura refills when a new one starts, and you rest when it ends. |
 | **[Scene clock](#s-scene-clock)** | A die on the whole scene. It steps down every round. Past d2, the scene turns. |
 | **[Shadow pool](#a-shadow)** | A Shadow's: the dice you rolled to get into hiding, to add to any roll after that, as dice or as steps. Each one's gone once you use it. |
+| **[Signature](#s-abilities)** | An archetype's one big ability, at 4 or 5 Aura. Once a scene, with no roll, and paying again gets you nothing more. A vessel's charge can't pay for one at 5. |
 | **[Size](#s-building-die)** | One die size. Stepping down one size is a d8 becoming a d6. |
 | **[Slot](#downtime)** | A unit of downtime. You get two, and the crew takes one action, which a slot of yours can go into. |
 | **[Snap](#s-bonds)** | What a thread does when you strain it again before it's mended. You still get your point of Soul back, but cross the thread out. When the last one goes, so does the bond. |

@@ -6,7 +6,7 @@ order: 36
 part: "Appendices & Index"
 partNumber: "Part IV"
 source: 2026-10-02 rulebook
-updated: 2026-11-17
+updated: 2026-11-18
 ---
 :::index-section
 ## A {#a}
@@ -115,6 +115,7 @@ updated: 2026-11-17
 
 -   **Healer** — [Healer](#a-healer)
 -   **Healing** — [Healing](#s-healing), [Healer](#a-healer), [Appendix C](#s-levers-hurt)
+-   **Held abilities** — [Abilities](#s-abilities)
 -   **Helmets** — [Armour and soak](#s-armour)
 -   **Hidden tag** — [Hidden tags and weak points](#s-hidden)
 -   **Hiding** — [Shadow](#a-shadow)
@@ -230,6 +231,7 @@ updated: 2026-11-17
 -   **Shadow pool** — [Shadow](#a-shadow)
 -   **Shaken** — [Conditions to start with](#s-conditions-list)
 -   **Shifter** — [Shifter](#a-shifter)
+-   **Signature abilities** — [Abilities](#s-abilities)
 -   **Snapping a thread** — [Bonds and threads](#s-bonds), [Playing the strain](#s-playing-the-strain)
 -   **Soul** — [Roots](#s-roots), [Your Points](#s-tracks), [Mind and Soul](#s-fear-gets-through)
 -   **Soak** — [Armour and soak](#s-armour), [Hits and Consequences](#s-consequences), [Appendix C](#s-levers-defence)

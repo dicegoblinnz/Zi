@@ -211,7 +211,7 @@ Bram's plate is tier 3 and his helmet tier 2, so his Body soaks 5 a scene. A spe
 ::::
 
 ::::card[Abilities]{#l-abilities teaches=s-abilities}
-Every archetype comes with one ability, and more are a point each, six at most. Each one says what it costs, **1 Aura** for most, every time you use it, and a [vessel](#s-vessels)'s charge can pay for your own. They stack, so pay again and you get it again. **Push** is the one most have: +2 to one die on your mechanic, once you've rolled, and +3 with the same archetype twice. A die it takes to its top face doesn't pay Aura.
+Every archetype comes with one ability, and more are a point each, six at most. Each one says what it costs, **1 Aura** for most, every time you use it, and a [vessel](#s-vessels)'s charge can pay for your own. Most stack, so pay again and you get it again. **Push** is the one most have: +2 to one die on your mechanic, once you've rolled, and +3 with the same archetype twice. A die it takes to its top face doesn't pay Aura.
 
 :::example
 Vesk's a Shadow twice over, and her best die to hide comes up 5 against the cellar guard's 7. She pays 1 Aura for her Push, +3, so it's 8 and he walks right past.

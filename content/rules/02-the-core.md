@@ -6,7 +6,7 @@ order: 2
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook, and Mo's chat decisions, 6 to 17 Nov 2026
-updated: 2026-11-17
+updated: 2026-11-18
 ---
 You play someone who's properly good at something, like a thief who can open any lock in the city or a fighter nobody wants to meet in a narrow corridor. Being good means you stack the odds in your favour before anyone touches a die.
 
@@ -237,14 +237,14 @@ Anything that works on its own, like a summoned beast or a raised servant acting
 
 -   **Bring a Root in**, for **3**, when a permission explains it and you'd rather keep that Root's points (see [Bringing In a Root](#s-bring)).
 -   **Put more into an awakening**: **1** for 2 more steps on a roll it fits, as many as you like (see [Attunement](#s-attunement)).
--   **Pay for an ability**, **1** each time you use it (see [Abilities](#s-abilities)).
+-   **Pay for an ability**, **1** for most, each time you use it (see [Abilities](#s-abilities)). A held one's paid once and stays up for the scene, and while it's up its Aura comes off your maximum. A signature's 4 or 5, once a scene.
 -   **Borrow** one thing off a friend's sheet through a bond thread you share, for **1** (see [Bonds and threads](#s-bonds)).
 -   **Go beyond** what something normally does, for **1**.
 -   **Win a tie** when you're the one acting, for **1**.
 -   **Intercept** for a friend within your stride, for **1**: take any of the blows aimed at their Body, and they come at you instead (see [Intercept](#s-intercept)). A [Guardian](#a-guardian) does it for free. Fear and despair are inside your friend's head, so nobody can step in front of those.
 -   **Quick heal** someone, for **1** and your action (see [Healing](#s-healing)), or keep a Catch quiet this time, for **1**.
 
-**A vessel's charge stands in for Aura** on your own abilities and on your own awakenings' extra steps, a charge for each Aura they'd cost. That's all it pays for. It never counts towards your maximum, you can't hand it to a friend, and it never brings a Root in, wins a tie, intercepts, quick heals, goes beyond or borrows.
+**A vessel's charge stands in for Aura** on your own abilities and on your own awakenings' extra steps, a charge for each Aura they'd cost. That's all it pays for, and it never pays for a signature at 5. It never counts towards your maximum, you can't hand it to a friend, and it never brings a Root in, wins a tie, intercepts, quick heals, goes beyond or borrows.
 
 ### Getting it back {#getting-it-back}
 

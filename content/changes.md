@@ -5,6 +5,24 @@ updated: 2026-11-18
 ---
 This is the record of every rules change since the 2 Oct 2026 book, newest first. Each entry's date is the day the change went to the table. When a later change replaces an earlier one, the earlier entry says so. The rules chapters always show the game as it is now, so if you only want to play, read those and skip this.
 
+## 18 Nov 2026: Held and signature abilities, and the levers pass {#c-2026-11-18-levers}
+
+A second pass on the abilities, checking each one against what it actually moves at the table. Most of them haven't changed. Before, every ability was paid each time you used it, at 1 or 2 Aura. See [Abilities](#s-abilities).
+
+**Held abilities.** One that changes what's true of you for the scene is paid once and stays up till the scene ends or you drop it, and while it's up its Aura comes off your maximum. They're the Bard's *Marching song*, the Bloodsworn's *Scent of blood*, the Guardian's *Hold the line*, the Maker's *I built that*, the Shifter's *Tooth and claw* and *All beast*, the Summoner's *Borrow its knack* and the Warrior's *Parry*, which lasts the scene now, where it was a round.
+
+**Signature abilities.** An archetype's one big thing, at 4 or 5 Aura, once a scene, with no roll, and no paying again. A vessel's charge can't pay for one at 5. There are six: the Guardian's *Not while I stand* (4) stops every blow at your Body for a round, the Summoner's *Call the horde* (4) brings every soul in your attunement out at a d4, the Elementalist's *Let it loose* (5) puts your element's condition on every threat in the scene, the Healer's *Close the wound* (5) clears a wound with no heal and no Toll, the Illusionist's *Grand illusion* (5) is believed by every threat with no roll, and the Teleporter's *Everybody out* (5) takes the crew out from under whatever's landing.
+
+**Replaced:** the Bard's *Answer back* is *Throw it back*, which sends *Frightened*, *Charmed*, *Taunted* or *Shaken* back on the threat that put it there. The Guardian's *Knock it back* is *Hold the line* and *Your turn* is *Not while I stand*. The Illusionist's *Solid enough* is *Grand illusion*. The Maker's *Know how it's made* is *Keep this on you*, a charm made in downtime with one use of a 1 Aura ability in it. The Oracle's *Look again* is *Not today*, which stops a clock ticking. The Shifter's *Another beast* is *First to move*, your action before the first telegraph. The Warrior's *Read the fighter* is *Press on*, a stride off a win, and *Show them how* is *Blood up*, a point back on your Body when you put a threat down.
+
+**New:** the Bloodsworn's *Bite down*, a point of Body to break a condition, and the Gambler's *Loaded* (3 Aura), a die that's just landed reading as its top face, beside the signatures.
+
+**Repriced to 2 Aura:** the Bard's *Crescendo*, the Bloodsworn's *Red mist*, the Gambler's *Double or nothing*, the Illusionist's *That was never me* and the Leader's *On me*.
+
+**Tightened:** the Bloodsworn's *Scab over* is once a round, and *Now I know you* tells you how whatever hit you comes at you. The Guardian's *Put it on me* takes only the cost of a friend's miss, never a hit that's landed. The Hunter's *Where it's soft* tells you its weak point or how many wins its multipliers have left, where it was any hidden tag.
+
+See [Bard](#a-bard) · [Bloodsworn](#a-bloodsworn) · [Elementalist](#a-elementalist) · [Gambler](#a-gambler) · [Guardian](#a-guardian) · [Healer](#a-healer) · [Hunter](#a-hunter) · [Illusionist](#a-illusionist) · [Leader](#a-leader) · [Maker](#a-maker) · [Oracle](#a-oracle) · [Shifter](#a-shifter) · [Summoner](#a-summoner) · [Teleporter](#a-teleporter) · [Warrior](#a-warrior), and every lever in [Appendix C](#s-levers-archetypes).
+
 ## 18 Nov 2026: Every archetype's abilities, reworked {#c-2026-11-18-abilities}
 
 Every archetype's list has been gone through, so each ability's worth its Aura and does something that archetype's known for. Plenty kept their names and do something different now, so read your archetype's list again before you play. The mechanics, the Traits and the crew's abilities keep their names, and most abilities are still 1 Aura.
@@ -16,6 +34,8 @@ Every archetype's list has been gone through, so each ability's worth its Aura a
 **A few that changed most:** the Maker's *Made it earlier* is an item at tier 2 on top of your six, where it was a Resource. The Shifter's *Become it* lasts the scene and can't take a hit for you. The Teleporter's *Swap* is a friend or a Mook within 10 units, where it was anyone you could see. The Summoner's *Call the horde* brings a d4 summon along with each one you call, where it made them d6s. The Bard's *Crescendo* is 2 points once a Lift, *Shake it off* needs no roll, and *Marching song* has everyone keep up with whoever's fastest. The Leader's *On me* moves everyone right now, even off their turn.
 
 See [Bard](#a-bard) · [Bloodsworn](#a-bloodsworn) · [Elementalist](#a-elementalist) · [Face](#a-face) · [Gambler](#a-gambler) · [Guardian](#a-guardian) · [Healer](#a-healer) · [Hunter](#a-hunter) · [Illusionist](#a-illusionist) · [Leader](#a-leader) · [Maker](#a-maker) · [Oracle](#a-oracle) · [Shadow](#a-shadow) · [Shifter](#a-shifter) · [Summoner](#a-summoner) · [Teleporter](#a-teleporter) · [Warrior](#a-warrior), and every lever in [Appendix C](#appendix-levers).
+
+Some of these changed again the same day, in [Held and signature abilities, and the levers pass](#c-2026-11-18-levers).
 
 ## 17 Nov 2026: The GM's numbers, for items and soak {#c-2026-11-17-budgets}
 

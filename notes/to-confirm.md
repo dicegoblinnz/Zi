@@ -20,9 +20,9 @@ Every archetype's ability list was reworked on 18 Nov (designed on Fable, writte
 - **One by one** rolls a die off your turn. Play it as written, and if it runs long, the Mark drops a size each jump.
 - **Good Hunting on a Marked stake** (with *Mark the way*): pay it there too. Recommended.
 - **Several Marks at once:** written as any number, a Mark only jumping to a creature that isn't *Marked*.
-- **The Guardian's Your turn** hands a friend a die. Read as clear of leading, and the fallback's *Heartened* at that die.
-- **Put it on me** takes the cost of a friend's miss too, not just a hit, which puts the Guardian in every scene. Look at it.
-- **Close the wound** stays at 2 Aura.
+- **The Guardian's Your turn** hands a friend a die. Read as clear of leading, and the fallback's *Heartened* at that die. *(Superseded by the levers pass: *Your turn* is replaced by *Not while I stand*.)*
+- **Put it on me** takes the cost of a friend's miss too, not just a hit, which puts the Guardian in every scene. Look at it. *(Answered by the levers pass: it takes only a miss's cost now, never a landed hit.)*
+- **Close the wound** stays at 2 Aura. *(Superseded by the levers pass: it's a signature at 5 Aura, with no heal and no Toll.)*
 - **The Illusionist's illusion as one die's intent**, against the highest Challenge in the room, rolled once. Recommended.
 - **Make it real** takes a blow but doesn't hit back on its own, since that's summoning.
 - ***Everyone gets it* kept at 1 Aura.** Its designer said 2, since at 1 it turns Bram's 4 steps into 20 every round. The lead kept it at 1, so Bram's sheet doesn't move.
@@ -30,19 +30,32 @@ Every archetype's ability list was reworked on 18 Nov (designed on Fable, writte
 - **One made tag an item at a time**, a new one replacing it, with your Mark on top. Recommended.
 - **Where It's Needed** left as it is. If rounds drag: one roll to one other, once a round.
 - **The Shadow's pool as steps** left as it is, and *Not done yet* only works on a pool die rolled as a die.
-- **The Shifter's Tooth and claw** makes an animal tag an item at tier 2 on top of your six, the way *Made it earlier* does. Say if it should count among them.
-- **Become it** lasts the scene and can't take a hit. **All beast** is 1 Aura. Both in the book.
+- **The Shifter's Tooth and claw** makes an animal tag an item at tier 2 on top of your six, the way *Made it earlier* does. Say if it should count among them. *(The levers pass made it held. Whether it counts among the six is still open.)*
+- **Become it** lasts the scene and can't take a hit. **All beast** is 1 Aura. Both in the book. *(The levers pass made *All beast* held, still 1 Aura.)*
 - **The Shifter's collecting as one die's intent**, like catching a soul. Recommended.
 - **The Summoner's mechanic fix:** a summon's win pays you 1 Aura (top faces still don't), summons roll in your throw on your action, one hit that gets through sends one back, and a summon guards one person. Recommended, not in the book.
 - **The Summoner's smaller calls:** Push on a summon's die too, a starting soul at a d6, a soul caught any time in the scene it fell, and a vessel's charge paying for calling out.
 - **Swap** no longer reaches Named threats or Bosses, and has a range. In the book.
 - **Take them with you and Not There** save a friend from a blow once a scene. Allowed.
 - **Leave a door** reaches anywhere in the same city. Yours to set.
-- **Twins to watch at the table** (the independent review): the Bloodsworn's *Mine to take* and the Guardian's *Put it on me* both take a friend's hit (raw to feed the blood, or soaked), and the Warrior's *Riposte* and the Bard's *Answer back* both send a stopping die back (Body, or Mind and Soul). Kept as different ways to play.
+- **Twins to watch at the table** (the independent review): the Bloodsworn's *Mine to take* and the Guardian's *Put it on me* both take a friend's hit (raw to feed the blood, or soaked), and the Warrior's *Riposte* and the Bard's *Answer back* both send a stopping die back (Body, or Mind and Soul). Kept as different ways to play. *(Superseded by the levers pass: *Answer back* is *Throw it back*, and *Put it on me* no longer takes a hit.)*
 - **Isolde's Oracle lines stay as they were.** The Fable pass added a line each to *Push* and *Hold it*, and Isolde's paper sheet ran out of room, so both are back to their 17 Nov words.
 - **The Teleporter** still has no Push and nothing for the faction turn.
-- **Parry** is weak beside *Second Skin*. Left. If you want it better, it lasts the scene.
+- **Parry** is weak beside *Second Skin*. Left. If you want it better, it lasts the scene. *(Answered by the levers pass: *Parry* is held, so it lasts the scene.)*
 - **Call them out** has no roll, so the GM's choice is the check. Say if it should roll.
+
+## 18 Nov: the levers pass
+
+A second pass on the abilities against the levers map (designed on Fable, 18 Nov). 31 of 179 changed, and all of it's in the book and the change log as `c-2026-11-18-levers`. These are yours to say yes or no to.
+
+- **Signatures are new:** the Guardian's *Not while I stand* (4), the Summoner's *Call the horde* (4), the Elementalist's *Let it loose* (5), the Healer's *Close the wound* (5), the Illusionist's *Grand illusion* (5) and the Teleporter's *Everybody out* (5).
+- ***Close the wound* at 5**, against the 2 you had. The middle road: 3 Aura to lift a wound's cap for the scene on a heal.
+- **Held is new:** *Marching song*, *Scent of blood*, *Hold the line*, *I built that*, *Tooth and claw*, *All beast*, *Borrow its knack* and *Parry*.
+- **New levers used from the map:** a condition turned back (*Throw it back*), a point to break a condition (*Bite down*), a die read as its top face (*Loaded*, 3, the game's only 3), reach as difficult ground (*Hold the line*), a stride after a win (*Press on*), a point back when a threat falls (*Blood up*), acting before the first telegraphs (*First to move*, 2), a clock not ticking (*Not today*, 2), a charm (*Keep this on you*), a multiplier's ticks (*Where it's soft*) and a wound cleared (*Close the wound*, 5).
+- **Near a guardrail:** *Blood up* and *Scab over* (Aura into points, both once a round with no paying again), *Keep this on you* (close to the cut *Bottle it*), *First to move* (it goes before the telegraphs, but it isn't an extra action) and *Press on* (a free stride off a win).
+- **Up to 2 Aura:** *Crescendo*, *Red mist*, *Double or nothing*, *On me* and *That was never me*.
+- **The twins:** *Answer back* replaced, *Put it on me* keeps only a miss's cost, and *Your turn* replaced.
+- **Still yours:** *Everyone gets it* and *Turn them* at 1 Aura, *Bleed for it* paying itself back, and *On the move*, *On the fly* and *In passing*.
 
 ## 17 Nov: the fixes
 
@@ -109,7 +122,7 @@ Written 17 Nov on `rules/2026-11-17-fixes-abilities-b`: ten abilities each for t
 
 1. **Abilities that reach the faction turn are paid in the scene before it**, since there's no Aura in downtime: the Hunter's *Hunt them down*, the Leader's *Orders for the week* and the Oracle's *Read the year*.
 2. **Marking's one die, not your action.** The Hunter's mechanic said "spend your action", where Conflict's Marked and Appendix C already had it as a die's intent, so the Hunter's section says a die now.
-3. **Toll stays a cost for the Healer.** Nothing ignores it past *Good Hands*: *Take the Toll* moves a heal's Toll onto the Healer, *Share it* gives every patient their own, and *Close the wound* (2 Aura) clears a wound mid-scene and is still a heal, Toll and all.
+3. **Toll stays a cost for the Healer.** Nothing ignores it past *Good Hands*: *Take the Toll* moves a heal's Toll onto the Healer, *Share it* gives every patient their own, and *Close the wound* (2 Aura) clears a wound mid-scene and is still a heal, Toll and all. *(Superseded by the levers pass: *Close the wound* is a 5 Aura signature and not a heal, so no Toll.)*
    Superseded by the 18 Nov abilities rework: *Take the Toll* is cut and *Share it* is *Go round*.
 4. **The Maker's tier for the scene comes off a making die.** *Tune it up* lets a winning making die put an item a tier higher till the scene ends instead of a tag, as far as tier 6, so Aura never buys a tier on its own. (Prompt 8 capped it at tier 4, the lead's call: tiers 5 and 6 only come out of the story.)
 5. **A Resource can become a rough item for the Maker.** *Knock it together* makes a ticked Resource a tier 1 item till the scene ends, on top of your six, and *Made it earlier* is 1 Aura for a Resource that doesn't tick one off.
@@ -117,7 +130,7 @@ Written 17 Nov on `rules/2026-11-17-fixes-abilities-b`: ten abilities each for t
 6. **The Maker can fill a friend's vessel.** *Bottle it* lets Aura the Maker would lose go into a friend's vessel they can touch, and it's that friend's charge, spent only on their own abilities and awakenings, so nothing's farmed and the cap's still the vessel's tier.
    Superseded by the 18 Nov abilities rework: *Bottle it* is cut.
 7. **A heal or a making can be one die of a roll** (*On the move*, *On the fly*), so the rest of the dice do something else. It's still one action, and the heal's still one die, unsplit.
-8. **The Oracle's *Look again* rerolls a threat's die** it rolled with *Seen It Coming*, keeping either. It's a reroll, never a flip, so the Gambler keeps flipping to itself.
+8. **The Oracle's *Look again* rerolls a threat's die** it rolled with *Seen It Coming*, keeping either. It's a reroll, never a flip, so the Gambler keeps flipping to itself. *(Superseded by the levers pass: *Look again* is replaced by *Not today*.)*
 9. **The Leader's *Take charge*** has people who aren't threats, like a crowd or a ship's crew, do what the Leader says for a round, with no roll, as long as they'd do it for whoever's in charge.
 10. **A character saved before stacking keeps the abilities its archetype had on 16 Nov**, never the longer list (`HAD_ABILITIES` and `hadOf()` in `roots.js`, used by `builder.js`), since a save with no `have` came with every ability its archetype had then. And the build no longer warns on a list past six, since a character holds six and the list's ten.
 

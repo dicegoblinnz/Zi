@@ -6,7 +6,7 @@ order: 3
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook, and Mo's chat decisions, 6 to 8, 14, 16 and 17 Nov 2026
-updated: 2026-11-17
+updated: 2026-11-18
 ---
 :::quote
 Your whole character fits in a few plain sentences and some numbers.
@@ -661,7 +661,7 @@ A **vessel** is an item that holds charge, like a lantern of captured light, a p
 -   **Fill it with Aura you'd lose.** That's the Aura past your maximum when you finish acting, and Aura that comes in while you're not acting and would stop at your maximum, if you'd rather keep it than give it to a friend. Any of it can go in instead. The Aura you've got left when a scene ends isn't lost, since you start the next one full, so it stays out.
 -   **Or fill it with points.** Any time in a scene, with no action, a point from any Root is a charge. That's pushing, so it can leave you exposed, and it never wounds you. You can't do it at a scene's end or in downtime.
 -   **A point in a vessel stays held there** till its charge is spent, the way an awakening locks one. The Root can't get it back at a scene's end or in downtime while it's in the vessel. When you spend charge, the points go first, and a point spent is just a point spent, which comes back the usual way.
--   **Spend it only on your own** abilities and your own awakenings' extra steps, a charge for each Aura they'd cost.
+-   **Spend it only on your own** abilities and your own awakenings' extra steps, a charge for each Aura they'd cost, and never on a signature at 5.
 -   **It isn't Aura.** It never counts towards your maximum, you can't hand it to a friend, and it never pays for bringing in a Root, a tie, an intercept, a quick heal, going beyond or borrowing.
 
 It only takes Aura you'd have lost, it never turns back into Aura, and it can't hold more than its tier, so once it's full, the Aura past your maximum goes the way it always did.
