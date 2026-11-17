@@ -6,14 +6,14 @@ order: 35
 part: "Appendices & Index"
 partNumber: "Part IV"
 source: 2026-10-02 rulebook, and Mo's chat decisions, 16 and 17 Nov 2026
-updated: 2026-11-17
+updated: 2026-11-18
 ---
 Here are the rule terms in the book, one line each, and each one links to its rule.
 
 | Term | What it means |
 | --- | --- |
 | **[2 for 1](#s-consequences)** | When a hit gets through, taking it on another Root instead, for 2 points of that Root, as long as it's got them. Armour on that Root soaks them first. |
-| **[Ability](#s-abilities)** | Something an archetype does on top of its mechanic, for 1 Aura each time you use it. They stack, so pay again for more of it. An archetype comes with one, and more are a point or a downtime slot each. |
+| **[Ability](#s-abilities)** | Something an archetype does on top of its mechanic, for 1 Aura each time you use it, or 2 for a few big ones. They stack, so pay again for more of it. An archetype comes with one, and more are a point or a downtime slot each. |
 | **[Action](#s-actions)** | What you spend to do something. One a round, and nothing gets you another. Every die in it is an intent, so one roll can do several things. |
 | **[Advantage](#s-intents)** | Several dice on one intent. Your best die counts. |
 | **[Agenda](#s-agendas)** | What a faction is doing right now, on a die that climbs. Past d12, it happens. |

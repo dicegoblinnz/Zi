@@ -6,7 +6,7 @@ order: 33
 part: "Appendices & Index"
 partNumber: "Part IV"
 source: 2026-10-02 rulebook, and Mo's chat decisions, 6 to 17 Nov 2026
-updated: 2026-11-17
+updated: 2026-11-18
 ---
 ## Building the roll {#building-the-die}
 
@@ -148,7 +148,7 @@ A hit, soak first, then a point off the Root it's at · something breaks, crosse
 
 ## The archetypes {#s-qr-archetypes}
 
-Each ability's 1 Aura, and they stack. Most have a Push: +2 on one die of the mechanic after you roll, +3 if you've taken it twice. Each one's Trait comes after its mechanic, and the whole of each is in [The Archetypes](#archetypes).
+Each ability's 1 Aura, or 2 for a few big ones, and they stack. Most have a Push: +2 on one die of the mechanic after you roll, +3 if you've taken it twice. Each one's Trait comes after its mechanic, and the whole of each is in [The Archetypes](#archetypes).
 
 -   **Bard:** your action gives every friend who can hear you a point back on their Mind, or your song Defends you all against fear, split as you like. *All Eyes on Me:* 1 Aura a threat, and it watches only you while you perform.
 -   **Bloodsworn:** every point your Body loses is 3 steps on your action, and you can spend them on purpose. *Paid in Blood:* 1 Aura for every point your Body loses.
@@ -190,7 +190,7 @@ Each ability's 1 Aura, and they stack. Most have a Push: +2 on one die of the me
 
 -   Only a Summoner catches souls and summons them. A summoning attunement holds souls, one to an awakening, on the same ladder. Starting souls are d4s.
 -   **Catch one:** when a creature falls, put a die on it and roll against its Challenge. Beat it and you carry its soul, with its Challenge die, till it goes into your attunement in downtime. It isn't one of your items, and it ticks one of your Resources till then. Miss and it's gone.
--   **Call them out:** each soul's an active awakening, so calling it out spends Aura, as part of your action, with a reason in the story. Each Aura's a d4 of summons, built into one or several, none bigger than the soul's own die.
+-   **Call one out:** each soul's an active awakening, so calling it out spends Aura, as part of your action, with a reason in the story. Each Aura's a d4 of summons, built into one or several, none bigger than the soul's own die.
 -   A summon acts like anyone and rolls its own die. It drops a size every round and for every hit that gets through, and past d2 it's gone, back in your attunement. It intercepts for free and rolls its die to stop one of the dice it took. A horde rolls as one throw. Summons can't combo, and their dice never give Aura. They all go back at the end of the scene.
 
 ## Downtime {#s-qr-downtime}

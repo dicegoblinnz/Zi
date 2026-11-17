@@ -6,7 +6,7 @@ order: 18
 part: "The Table"
 partNumber: "Part II"
 source: 2026-10-02 rulebook, and Mo's chat decisions, 16 and 17 Nov 2026
-updated: 2026-11-17
+updated: 2026-11-18
 ---
 :::quote
 Money in Zi'Dara is simple: a purse of gold is roughly a month's wages.
@@ -30,7 +30,7 @@ Every item has a [tier](#s-item-tiers), from 1 to 6, and that's how many steps i
 | Tier 5 | Only out of the story, with a material, the way an attuned thing's stages are. |
 | Tier 6 | Only out of the story, with a material, and there's only ever one of it. |
 
-A weapon keeps its properties at every tier, so a tier 4 crossbow is still *Long* and *Piercing*. Attuning something never changes its tier, and Aura never buys one. A [Maker](#a-maker) can give a thing tags as well, but they only last the scene.
+A weapon keeps its properties at every tier, so a tier 4 crossbow is still *Long* and *Piercing*. Attuning something never changes its tier, and Aura never buys one. A [Maker](#a-maker) can give a thing tags as well, which last the scene, and their *Tune it up* puts it a tier higher with a making die, but only till the scene ends and only as far as tier 4.
 
 Replacing a broken item, or mending one, takes a downtime slot and usually a purse of gold. Soaking never breaks armour, so it's broken when the GM names "something breaks" as a consequence, and it's crossed out till then (see [Broken items](#recovering-armour)). Attuned things are magic and can't break. Some things can't be replaced, and shouldn't be. Your mother's blade isn't for sale.
 

@@ -6,7 +6,7 @@ order: 3.2
 part: "Play"
 partNumber: "Part I"
 source: Mo's playtest sheets, 14 and 16 Oct 2026, and his chat decisions, 6 to 8, 14, 16 and 17 Nov 2026
-updated: 2026-11-17
+updated: 2026-11-18
 ---
 :::quote
 Every archetype has something only it can do.
@@ -33,7 +33,7 @@ Start with how they work, then find yours in [Picking Your Archetypes](#s-pickin
 **You can't pay Aura you haven't got.** While you're acting, what's past your maximum is yours to spend like the rest. A [vessel](#s-items)'s charge can pay for your own abilities instead, a charge for each Aura.
 :::
 
-An ability's never steps on a roll. It does what it says, and that's all. It can work with what you've got, though: an item's tier, your Resources, a vessel's charge or your armour's soak. With the Warrior's *Parry*, your weapon's tier goes on your roll when blows land, which a weapon never does on its own, and with the Shadow's *I had it planned*, you say a Resource without ticking one. The Maker's *Tune it up* and *Knock it together* change an item's tier for the scene, and it's the item's tier that goes on the roll, never the ability. Wren's roll to mark a creature is her Body as usual, and paying for Mark the pack sends that roll at two more.
+An ability's never steps on a roll. It does what it says, and that's all. It can work with what you've got, though: an item's tier, your Resources, a vessel's charge or your armour's soak. With the Warrior's *Parry*, your weapon's tier goes on your roll when blows land, which a weapon never does on its own, and with the Shadow's *I had it planned*, you say a Resource without ticking one. The Maker's *Tune it up* puts an item a tier higher for the scene, and *Made it earlier* hands you one at tier 2, and it's the item's tier that goes on the roll, never the ability. Wren's roll to mark a creature is her Body as usual, and paying for Mark the pack sends that roll at two more.
 
 **Push** is the one most archetypes have on their list: +2 to one die on your mechanic, once you've rolled and you know you need it. A die the +2 takes to its top face, or past it, doesn't pay Aura. **Take the same archetype twice** and its Push is +3, three times it's +4, and so on. You only need Push the once: Vesk's first Shadow came with Push and her second with Vanish, and her Push is +3.
 

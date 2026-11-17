@@ -8,7 +8,7 @@ id: learn
 # The cards teach the chapters and never change a rule. When a rules change
 # touches a section a card teaches, the build names the cards. Check them
 # against the chapters, then set checked to that change's date.
-checked: 2026-11-17
+checked: 2026-11-18
 ---
 ::::card[Did you succeed?]{#l-succeed teaches=the-core}
 You play someone who's properly good at something, like a thief who can open any lock in the city. Every roll's one of your three **Roots**, Body, Mind or Soul, rolled whole. The better you are, the bigger the Root, and the bigger your dice. Then the question's simple: did you succeed? Roll against whatever's in your way, and if you beat the number, you did.

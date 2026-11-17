@@ -6,7 +6,7 @@ order: 19
 part: "The GM"
 partNumber: "Part III"
 source: 2026-10-02 rulebook
-updated: 2026-11-17
+updated: 2026-11-18
 ---
 :::quote
 Your job is to build the players a world worth being competent in, and beating them isn't part of it.
@@ -459,7 +459,7 @@ When a player shoves the shielded captain off a narrow bridge, *Shield* and *For
 ## Archetypes and Study at the Table {#s-gm-area}
 
 -   **Let each archetype do its thing.** Every [archetype](#archetypes) has something only it can do, and a Trait that's always true of it. When it comes out, let it change the fight, and say what it looks like: Dorrie's influence turning the captain's cut onto his own sergeant, or an Illusionist's wall sending the guards the long way round.
--   **Let an ability be as big as it says.** Every archetype has [abilities](#s-abilities), paid for in Aura, and every Aura a player pays is Aura they can't spend bringing a Root in, so don't shave them down. When Bram pays for *Stand firm*, the next two hits that get through to him take 1 point between them, however big they were. When Dorrie turns that captain, he fights for the crew till the round ends.
+-   **Let an ability be as big as it says.** Every archetype has [abilities](#s-abilities), paid for in Aura, and every Aura a player pays is Aura they can't spend bringing a Root in, so don't shave them down. When Bram pays for *Stand firm*, two hits that got through to him that round take 1 point between them, however big they were. When Dorrie turns that captain, he fights for the crew till the round ends.
 -   **Areas are the Elementalist's.** An [Elementalist](#a-elementalist) can make a die their area, and it costs one of their dice and nothing more. Say what it touches before they roll. Fire catches everyone in the squares it covers, friend and foe, so if a friend's standing in the fireball, say so, and let them make it smaller, or pay for *Sculpt* so it skips them. Wards, blessings and heals reach one person, and a split's second die can reach another friend they can touch.
 -   **Big things are big Challenges.** Going beyond is 1 Aura whatever the size, so the size goes in the Challenge. Phasing through a garden wall and through the vault door both cost 1 Aura, but the vault door's a far bigger Challenge, with tags for what stands in the way. Set it by how hard it is in the world, and let them roll.
 -   **Study finds what's there:** a hidden tag or a straight answer. Only an Oracle's *Foretold* makes something true that wasn't.

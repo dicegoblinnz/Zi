@@ -2,6 +2,46 @@
 
 Your rules left a few gaps, and the book has to say something in each one, so Claude made a call. Every one of these is in the book now, written as a rule. Tell Claude "yes", "no, do this instead" or "leave it for now", and the book and the change log get updated. Your own open questions are at the bottom of `content/changes.md`, and your decisions are in `notes/playtest-sheets/` (the 27 Oct ones in `2026-10-27-chat-decisions.md`).
 
+## 18 Nov: the abilities rework
+
+Every archetype's ability list was reworked on 18 Nov (designed on Fable, written on Opus). These are the designers' calls that are yours, each with what they'd do. Nothing below is in the book yet unless it says so.
+
+- **Bard's Lift** is the strong part, not the list. If it's still too much: Lift's point only goes to friends whose Mind lost one to a hit this scene.
+- **All Eyes on Me** doesn't make a watched threat helpless (no opening), as written.
+- **Sing them through it** hands a friend the reason to bring a Root in. The designer reads it as clear of leading.
+- **Bleed for it** pays its own Aura back through *Paid in Blood*, so every Bloodsworn takes it. Kept. The other way: put it in the mechanic and drop the ability.
+- **A Bloodsworn in armour:** add to the mechanic "you can always let a hit through instead of soaking it" (*Through the mail* is cut).
+- **Shield of the storm** and **Friends in high places** stay at 2 Aura.
+- **The Face's influence as a die:** "any of your dice can go down as influence", like marking. Then *In passing* goes and *Play them off* comes back. Recommended.
+- **Influence on two threats at once:** yes, each put down on its own.
+- **The Gambler's Trait on d2s:** every d2 pays 1 Aura (a 1 pays *Bad Luck Pays*, a 2's a top face). Fix: it pays on a 1 on a d4 or bigger. The designer's biggest call.
+- **Press your luck** gives one die two wins. Say if that's the Warrior's ground.
+- **The Hunter's marking rides on a win:** when a die of yours wins against a creature, it can be *Marked* with that die as well, one Mark a roll. *Draw blood* goes for *Cornered*. Recommended, and it's what makes Wren feel good.
+- **One by one** rolls a die off your turn. Play it as written, and if it runs long, the Mark drops a size each jump.
+- **Good Hunting on a Marked stake** (with *Mark the way*): pay it there too. Recommended.
+- **Several Marks at once:** written as any number, a Mark only jumping to a creature that isn't *Marked*.
+- **The Guardian's Your turn** hands a friend a die. Read as clear of leading, and the fallback's *Heartened* at that die.
+- **Put it on me** takes the cost of a friend's miss too, not just a hit, which puts the Guardian in every scene. Look at it.
+- **Close the wound** stays at 2 Aura.
+- **The Illusionist's illusion as one die's intent**, against the highest Challenge in the room, rolled once. Recommended.
+- **Make it real** takes a blow but doesn't hit back on its own, since that's summoning.
+- ***Everyone gets it* kept at 1 Aura.** Its designer said 2, since at 1 it turns Bram's 4 steps into 20 every round. The lead kept it at 1, so Bram's sheet doesn't move.
+- **The Maker's making as one die's intent**, like marking. Then *On the fly* goes. Recommended.
+- **One made tag an item at a time**, a new one replacing it, with your Mark on top. Recommended.
+- **Where It's Needed** left as it is. If rounds drag: one roll to one other, once a round.
+- **The Shadow's pool as steps** left as it is, and *Not done yet* only works on a pool die rolled as a die.
+- **The Shifter's Tooth and claw** makes an animal tag an item at tier 2 on top of your six, the way *Made it earlier* does. Say if it should count among them.
+- **Become it** lasts the scene and can't take a hit. **All beast** is 1 Aura. Both in the book.
+- **The Shifter's collecting as one die's intent**, like catching a soul. Recommended.
+- **The Summoner's mechanic fix:** a summon's win pays you 1 Aura (top faces still don't), summons roll in your throw on your action, one hit that gets through sends one back, and a summon guards one person. Recommended, not in the book.
+- **The Summoner's smaller calls:** Push on a summon's die too, a starting soul at a d6, a soul caught any time in the scene it fell, and a vessel's charge paying for calling out.
+- **Swap** no longer reaches Named threats or Bosses, and has a range. In the book.
+- **Take them with you and Not There** save a friend from a blow once a scene. Allowed.
+- **Leave a door** reaches anywhere in the same city. Yours to set.
+- **The Teleporter** still has no Push and nothing for the faction turn.
+- **Parry** is weak beside *Second Skin*. Left. If you want it better, it lasts the scene.
+- **Call them out** has no roll, so the GM's choice is the check. Say if it should roll.
+
 ## 17 Nov: the fixes
 
 Part 3 of the rework (`notes/fixes-plan.md`), from your 17 Nov chat (`notes/playtest-sheets/2026-11-17-chat-decisions.md`). These are the calls Claude made writing it down, before any chat built it. Each chat adds its own in a subsection below.
@@ -68,9 +108,12 @@ Written 17 Nov on `rules/2026-11-17-fixes-abilities-b`: ten abilities each for t
 1. **Abilities that reach the faction turn are paid in the scene before it**, since there's no Aura in downtime: the Hunter's *Hunt them down*, the Leader's *Orders for the week* and the Oracle's *Read the year*.
 2. **Marking's one die, not your action.** The Hunter's mechanic said "spend your action", where Conflict's Marked and Appendix C already had it as a die's intent, so the Hunter's section says a die now.
 3. **Toll stays a cost for the Healer.** Nothing ignores it past *Good Hands*: *Take the Toll* moves a heal's Toll onto the Healer, *Share it* gives every patient their own, and *Close the wound* (2 Aura) clears a wound mid-scene and is still a heal, Toll and all.
+   Superseded by the 18 Nov abilities rework: *Take the Toll* is cut and *Share it* is *Go round*.
 4. **The Maker's tier for the scene comes off a making die.** *Tune it up* lets a winning making die put an item a tier higher till the scene ends instead of a tag, as far as tier 6, so Aura never buys a tier on its own. (Prompt 8 capped it at tier 4, the lead's call: tiers 5 and 6 only come out of the story.)
 5. **A Resource can become a rough item for the Maker.** *Knock it together* makes a ticked Resource a tier 1 item till the scene ends, on top of your six, and *Made it earlier* is 1 Aura for a Resource that doesn't tick one off.
+   Superseded by the 18 Nov abilities rework: *Knock it together* is cut, folded into *Made it earlier*, which is an item at tier 2 now.
 6. **The Maker can fill a friend's vessel.** *Bottle it* lets Aura the Maker would lose go into a friend's vessel they can touch, and it's that friend's charge, spent only on their own abilities and awakenings, so nothing's farmed and the cap's still the vessel's tier.
+   Superseded by the 18 Nov abilities rework: *Bottle it* is cut.
 7. **A heal or a making can be one die of a roll** (*On the move*, *On the fly*), so the rest of the dice do something else. It's still one action, and the heal's still one die, unsplit.
 8. **The Oracle's *Look again* rerolls a threat's die** it rolled with *Seen It Coming*, keeping either. It's a reroll, never a flip, so the Gambler keeps flipping to itself.
 9. **The Leader's *Take charge*** has people who aren't threats, like a crowd or a ship's crew, do what the Leader says for a round, with no roll, as long as they'd do it for whoever's in charge.
@@ -82,10 +125,14 @@ The Bard, Bloodsworn, Elementalist, Face, Gambler and Guardian in 03a, ten abili
 
 1. **Ten each, simplest first, Push first.** Every one that was there is kept word for word. The Bloodsworn and the Gambler hadn't got a Push, so each has one now: the Bloodsworn's on a roll its blood's put steps on, and the Gambler's on a die it's just flipped.
 2. **Three are 2 Aura**, because each does what a whole action or a whole downtime would: *Shield of the storm* (the Elementalist's area on a Defend, so one die stops every blow at everyone in it), *Friends in high places* (the Face's influence left on a faction, turning its whole downtime action) and *House rules* (the Gambler wins every tie for a round). Everything else is 1.
+   Superseded in part by the 18 Nov abilities rework: *House rules* is cut, and the other two stay at 2.
 3. **The faction turn's abilities are paid in a scene**, since there's no Aura in downtime: the Bard's *A song about them* (a song to a crowd counts as the crew's Influence or Undermine, without the crew's action), the Face's *Friends in high places* and the Gambler's *Side bet* (a flip at the next faction turn).
 4. **Bleed out is kept word for word, and it's yours to look at.** It's the one ability left that adds steps by counting something (3 for every point the Body's down), on top of the mechanic's own 3 a point, so a Bloodsworn on 2 of 9 gets 21 steps for 1 Aura. Say if it should go, or become something like "the steps from every hit this round go on the roll you're making now".
+   Superseded by the 18 Nov abilities rework: *Bleed out* is cut, and *Not yet* is in.
 5. **The levers Boons left** went where the plan put them: *Scab over* is the Bloodsworn's Regen (a point back at the round's end, to half its maximum, the way a breath works on Mind, and no Toll), *Back on my feet* is the Guardian's Recovery (its Body rolled twice at a scene's end), and *Stand firm* stays the Guardian's Toughness. Soak gets *Take it on the plate* (the Guardian's armour taking a friend's hit) and *Through the mail* (soak counting for the Bloodsworn's steps, never its Aura).
+   Superseded in part by the 18 Nov abilities rework: *Back on my feet* and *Through the mail* are cut, and *Take it on the plate* is *Put it on me*.
 6. **Nothing crosses into another archetype's one thing.** No ability gives areas, heal rolls, leading, summoning, free intercepts or flipping to anyone else. The Gambler's *Their bad luck* turns a threat's die the way a Face's influence does, but only on a 1, and the Bard's *Soul song* covers despair and curses at a Soul, which nobody can intercept.
+   Superseded in part by the 18 Nov abilities rework: *Soul song* is cut, into *Hymn*.
 7. **The examples are as they were**, since no rule they show has moved in 03a. Two of them will once prompt 2 sets the crew's items: Bram's three goblins (his shield's tier goes on both his rolls avoiding harm, and his plate soaks before Stand firm's point comes off his Body) and Ash's five guards (her ember stone's tier goes on her fire).
 
 ### 3c. Abilities III
@@ -100,6 +147,7 @@ Written 17 Nov on `rules/2026-11-17-fixes-abilities-c`: ten abilities each for t
 6. **Bram's Push example rolls 11 steps**, his Body and his shield as a guard at tier 2 (a Trusty shield), so it's a d12 and a d10 and the story's the same. If prompt 2 gives him another shield or none, the dice move.
 7. **A vessel can't pay for calling out summons**, since calling out is the Summoner's mechanic and charge only pays for abilities and awakenings. It can pay for *Call the horde* and the rest. Whether a Summoner's vessel should hold souls' Aura is yours to say.
 8. **The Summoner's souls on the new core are still open.** I've written its abilities to the rules as they stand, and three things don't sit right: summons act in the round like anyone (a horde's dice on top of your own one action), they fade and take hits in sizes while everyone else takes points, and nothing about them uses soak or wounds. *Take it for me* and *Soul for a soul* lean on summons intercepting, so they'll move with whatever you decide.
+   Superseded in part by the 18 Nov abilities rework: *Take it for me* and *Soul for a soul* are cut, and the mechanic fix is under 18 Nov.
 9. **Six is how many a character holds, never the list.** The build warned past six abilities on an archetype, and now it warns on one that costs under 1 Aura instead (a small change in `scripts/build-content.mjs`, prompt 2's).
 
 ### 5. The play screen and the table
@@ -142,6 +190,7 @@ Written 17 Nov on `rules/2026-11-17-fixes-book`: the GM's numbers, A Full Fight,
 6. **A caught soul in Magic and Appendix C** is the 03a way: a die on it, and it ticks one of your Resources till downtime.
 7. **The Learn deck stays at 40**: Awakenings folded into Attuned things to make room for Resources, What you carry became Items (keeping its id for bookmarks), and the first card's strongbox became a roof jump, so no item's on a roll before the deck teaches items.
 8. **Appendix C lists the new abilities that are levers**, about thirty of them (*House rules*, *Roll it again*, *Lend your shield*, *Parry*, *Take it on the plate*, *Scab over*, *Back on my feet*, *Rest easy*, *Grease the palm*, *I had it planned*, *Made it earlier*, *Won it at cards*, *Knock it together*, *Tune it up*, *Bottle it* and the rest), not all 170.
+   Superseded by the 18 Nov abilities rework: Appendix C's levers follow the new lists, and the cut ones are gone from it.
 9. ***Grasping*** in Appendix B can name one of your items as the cost, gone till you get it back.
 
 ### 8. Bringing it together

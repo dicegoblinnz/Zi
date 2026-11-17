@@ -1,9 +1,21 @@
 ---
 title: "What's Changed"
 id: changes
-updated: 2026-11-17
+updated: 2026-11-18
 ---
 This is the record of every rules change since the 2 Oct 2026 book, newest first. Each entry's date is the day the change went to the table. When a later change replaces an earlier one, the earlier entry says so. The rules chapters always show the game as it is now, so if you only want to play, read those and skip this.
+
+## 18 Nov 2026: Every archetype's abilities, reworked {#c-2026-11-18-abilities}
+
+Every archetype's list has been gone through, so each ability's worth its Aura and does something that archetype's known for. Plenty kept their names and do something different now, so read your archetype's list again before you play. The mechanics, the Traits and the crew's abilities keep their names, and most abilities are still 1 Aura.
+
+**Cut:** the Bard's *Keep them watching* and *Soul song* (it's in *Hymn* now), the Bloodsworn's *Bleed out* and *Through the mail*, the Elementalist's *Throw it* and *Walk with me*, the Face's *Old favour* and *Play them off*, the Gambler's *Won it at cards* and *House rules*, the Guardian's *Lend your shield* and *Back on my feet*, the Healer's *Take the Toll*, the Hunter's *Hold the scent*, *Point it out* and *Run it down*, the Illusionist's *It moves* (it's in *Solid enough* now), the Leader's *Shift the weight*, the Maker's *Knock it together* (it's in *Made it earlier* now) and *Bottle it*, the Shadow's *Keep one back* and *Out of nowhere*, the Shifter's *Thick hide*, the Summoner's *Take it for me* and *Soul for a soul*, and the Teleporter's *Step through*. New ones take their places.
+
+**Renamed:** the Guardian's *Take it on the plate* is *Put it on me*, and it takes a hit or a cost off a friend now, where it was only your armour soaking for them. The Healer's *Share it* is *Go round*, a die of your heal to each patient, where it was one roll shared out.
+
+**A few that changed most:** the Maker's *Made it earlier* is an item at tier 2 on top of your six, where it was a Resource. The Shifter's *Become it* lasts the scene and can't take a hit for you. The Teleporter's *Swap* is a friend or a Mook within 10 units, where it was anyone you could see. The Summoner's *Call the horde* brings a d4 summon along with each one you call, where it made them d6s. The Bard's *Crescendo* is 2 points once a Lift, *Shake it off* needs no roll, and *Marching song* has everyone keep up with whoever's fastest. The Leader's *On me* moves everyone right now, even off their turn.
+
+See [Bard](#a-bard) · [Bloodsworn](#a-bloodsworn) · [Elementalist](#a-elementalist) · [Face](#a-face) · [Gambler](#a-gambler) · [Guardian](#a-guardian) · [Healer](#a-healer) · [Hunter](#a-hunter) · [Illusionist](#a-illusionist) · [Leader](#a-leader) · [Maker](#a-maker) · [Oracle](#a-oracle) · [Shadow](#a-shadow) · [Shifter](#a-shifter) · [Summoner](#a-summoner) · [Teleporter](#a-teleporter) · [Warrior](#a-warrior), and every lever in [Appendix C](#appendix-levers).
 
 ## 17 Nov 2026: The GM's numbers, for items and soak {#c-2026-11-17-budgets}
 

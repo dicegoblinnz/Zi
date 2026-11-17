@@ -6,7 +6,7 @@ order: 7
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-11-17
+updated: 2026-11-18
 ---
 :::quote
 Everyone's got a soul, and a soul can be spent.
@@ -110,7 +110,7 @@ You start at Awakened, like anything you attune, so that's one soul, or two if y
 
 **Catching a soul.** When a creature falls, put a die on it, from the Root that fits how you catch it, and roll against its Challenge. Beat it and you're carrying its soul, with its Challenge die, and it ticks one of your [Resources](#s-resources) till downtime. It isn't one of your items. Miss and that soul's gone. In downtime, put it into your summoning attunement, or swap a soul that's in there for one you're carrying.
 
-**Calling them out** spends Aura, as part of your action. Every Aura's **a d4 of summons**: build them into one summon or several, as you like, but none bigger than that soul's own die. Three Aura on the harbour Warden, a d8, is a d8 Warden and a d4 one, or three d4s. It needs a reason in the story. Nobody calls up a horde to drink at the tavern.
+**Calling them out** spends Aura, as part of your action. Every Aura's **a d4 of summons**: build them into one summon or several, as you like, but none bigger than that soul's own die. Three Aura on the harbour Warden, a d8, is a d8 Warden and a d4 one, or three d4s. It needs a reason in the story. Nobody calls up a horde to drink at the tavern. A Summoner's own abilities bend this: *Call it now* calls one the moment you need it, without waiting for your action, *Call the horde* brings a d4 one along with each summon you call, and *Rise* calls out a soul you caught this scene, before it's in your attunement.
 
 **A soul is what it was.** A caught courtier talks, a hound tracks and a Warden fights. Each summon rolls its own die for whatever it does, and acts in the round like anyone.
 
@@ -120,7 +120,7 @@ You start at Awakened, like anything you attune, so that's one soul, or two if y
 
 **Intercepting.** A summon [intercepts](#s-intercept) for free, so it doesn't cost Aura or an action. It can take the blows aimed at someone within its stride, as many as you like, and they come at it instead. Like anyone's intercept, it can't take what's at their Mind or their Soul. When they land, it rolls its die to stop one of them, and it's got to beat it or tie. Every one that gets through knocks a size off it, and once it's gone, the rest go on to whoever they were aimed at.
 
-Summons can't combo, and **their dice never give Aura**, top faces and wins included. They all go back at the end of the scene.
+Summons can't combo (a Summoner's *Stand with them* puts one's die in a friend's throw, which isn't one), and **their dice never give Aura**, top faces and wins included. They all go back at the end of the scene.
 
 :::example[Summoning at the table]
 Sable's a Summoner, and she's got three souls: a rat swarm (d4), a hound (d6) and the harbour Warden (d8). Two dockhands come at her with clubs, so she spends 3 Aura as part of her action: 2 on the hound, which can't be bigger than a d6, so it's a d6 hound and a d2 one, and 1 on the rats, a d4 swarm. The swarm goes at the dockhands' feet.
