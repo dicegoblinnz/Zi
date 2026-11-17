@@ -16,6 +16,22 @@ Part 3 of the rework (`notes/fixes-plan.md`), from your 17 Nov chat (`notes/play
 8. **Packs give Resources**, half their tier rounded up.
 9. **A vessel holds its tier in charge**, filled only with Aura you'd lose or a point at a time mid-scene, and spent only on your own abilities and awakenings.
 
+### 1. The rules
+
+Written into The Core, Conflict (bar A Full Fight), Downtime, Appendix D and the glossary on 17 Nov, on `rules/2026-11-17-fixes-rules`.
+
+1. **In a combo, everyone who puts an action in brings their Root and the one item doing their part.** It's still one roll, but each of you spent an action, the way each brought their awakening before. Wren's longbow and Bram's shield both go on when they stop the brute's club for Isolde.
+2. **A guard goes on once a landing**, between your defence and your Defend, since it's one shield. Bram's Defend is his Body twice and his Trusty shield once, 20 steps.
+3. **An answer that only stops a blow counts as avoiding harm**, a friend's included, so a shield goes on it. Shooting the archer first is an attack, so the bow goes on and a shield doesn't.
+4. **Saying a Resource is free and takes no action**, like a few words. The action for getting something out of your bag went with the bag.
+5. **2 for 1 needs the other Root to have the 2, soak included.** The armour there soaks them first, a point of soak a point.
+6. **A broken item adds no steps and soaks nothing** till it's mended, and armour that's only soaked never needs mending.
+7. **A caught soul isn't an item.** You carry it till downtime, when it goes into your summoning attunement (Appendix D's Summoning). It used to take a utility slot. Prompts 3c and 7 can say otherwise for the Summoner.
+8. **Grow raises an attuned thing's tier the same way as any item's**, to tier 3, and its awakenings don't change.
+9. **Stride:** a Stride Burden and a *Heavy* Catch still take it away, and an item or an awakening that says so can add to it, in place of the Stride Boon.
+10. **Tier names clash with words the book already has.** The Told set's *Named* (tier 3) is also a threat's rank (Mook, Named, Boss), so "a Named longbow" and "a Named threat" sit side by side. The Forged set's *Fine* and *Masterwork* were armour's old qualities. Say if you'd rather a tier 3 name that's its own word.
+11. **The glossary has "Resources, your"** (a character's three) and **"Resource, a faction's"**, which says the crew's resources are those. The rest of the book's "the crew's resources" stays as it is.
+
 ## 16 Nov: the new core
 
 **Not built yet.** Part 2 of the rework (`notes/core-plan.md`), from your 16 Nov chat (`notes/playtest-sheets/2026-11-16-chat-decisions.md`). These are the calls Claude made writing it down, before any chat built it. Each chat adds its own in a subsection below.

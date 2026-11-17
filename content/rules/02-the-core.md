@@ -5,8 +5,8 @@ slug: the-core
 order: 2
 part: "Play"
 partNumber: "Part I"
-source: 2026-10-02 rulebook, and Mo's chat decisions, 6 to 16 Nov 2026
-updated: 2026-11-16
+source: 2026-10-02 rulebook, and Mo's chat decisions, 6 to 17 Nov 2026
+updated: 2026-11-17
 ---
 You play someone who's properly good at something, like a thief who can open any lock in the city or a fighter nobody wants to meet in a narrow corridor. Being good means you stack the odds in your favour before anyone touches a die.
 
@@ -38,7 +38,9 @@ A **permission** is something you can do, written as a doing word with how, what
 
 **A permission's a permission and nothing more.** It says what you can do, and it's what lets you bring a second Root into a roll (see [Bringing In a Root](#s-bring)). You never count them, so there's nothing to hunt for when you pick up your dice. One word for what kind of person you are, like *Strong* or *Deceptive*, isn't a permission, because that's what your Roots are for.
 
-The rest of your sheet doesn't touch your Roots, and it isn't counted on a roll either. Your **archetypes**, like Guardian or Shadow, are separate from your Titles. Each one's got something only it can do, a Trait that's always true of you, and abilities you pay for in Aura. They're all in [The Archetypes](#s-how-archetypes). Your **attuned thing** is something personal that's bound to you, and each of its **awakenings** locks a point of the Root it fits and puts 2 steps on a roll it fits (see [Attunement](#s-attunement)). Everything you carry does what it is: a sword cuts, a rope gets you up a wall and a lockpick opens locks.
+The rest of your sheet doesn't touch your Roots, and it isn't counted on a roll either. Your **archetypes**, like Guardian or Shadow, are separate from your Titles. Each one's got something only it can do, a Trait that's always true of you, and abilities you pay for in Aura. They're all in [The Archetypes](#s-how-archetypes). Your **attuned thing** is something personal that's bound to you, and each of its **awakenings** locks a point of the Root it fits and puts 2 steps on a roll it fits (see [Attunement](#s-attunement)).
+
+Your **items** are the real gear you've got on you, six at most: a weapon, a shield, armour, or a tool good enough to matter, like a grappling hook or a set of picks. Each one's got a **tier**, from 1 to 6, and when it's what's doing the work on a roll, it puts its tier on in steps (see [Items](#s-items)). Your attuned thing's one of them. Everything else is ordinary, and that's what your three **Resources** are for: say you've got it when you need it, tick one, and it's real. Halfway up the bell tower, Vesk's player says that as it happens she's got a bit of wire on her, ticks a Resource, and she's wired the trapdoor shut behind her (see [Resources](#s-resources)). A Resource does what the thing does, and it's never a step.
 
 [How a roll adds up](#how-permissions-stack) has Vesk's Roots, and everything that goes on a roll.
 
@@ -46,8 +48,9 @@ The rest of your sheet doesn't touch your Roots, and it isn't counted on a roll 
 
 -   **One Root a roll, at full.** Pick the one that fits how you're doing it. Points you've spent, lost or locked never make its dice smaller.
 -   **Another Root, when a permission explains it**, for 1 point of that Root or 3 Aura, and all of it goes on too (see [Bringing In a Root](#s-bring)).
+-   **The item doing the work, its tier in steps**, when it fits. It's one item a roll. A guard, like a shield, only goes on a roll that's avoiding harm, and armour, packs and vessels never add steps (see [Items](#s-items)).
 -   **2 steps for an awakening that fits**, and 2 more for every Aura you put in it.
--   **And nothing else.** Your Titles, permissions, archetypes, abilities and items aren't counted. A condition that's on you can still be a step for you or against you (see [Conditions](#s-conditions)).
+-   **And nothing else.** Your Titles, permissions, archetypes, abilities and Resources aren't counted. A condition that's on you can still be a step for you or against you (see [Conditions](#s-conditions)).
 -   **Nothing comes in levels.** A permission you picked up last week does as much as one you started with.
 
 | Vesk's | Where it comes from | Steps and points |
@@ -56,7 +59,7 @@ The rest of your sheet doesn't touch your Roots, and it isn't counted on a roll 
 | Mind | 3 from her second Title, *know how a lock's built*, *find a buyer for anything* | 5 |
 | Soul | nothing yet | 0 |
 
-So picking a lock is her Body, 11 steps, a d12 and a d10, and so is climbing, sneaking and knife work. Working out how a vault door's built before she touches it is her Mind, 5 steps, a d10. Her Soul's 0, so a rousing speech would be a d2, and that's fine. When she's at the vault door itself, *know how a lock's built* brings her Mind in for a point of it, and that's 16 steps, two d12s and a d8.
+So sneaking is her Body, 11 steps, a d12 and a d10, and so is climbing and knife work. Picking a lock is her Body too, and her Named set of picks is a tier 3 tool that fits, so that's 14 steps, two d12s and a d4. Working out how a vault door's built before she touches it is her Mind, 5 steps, a d10. Her Soul's 0, so a rousing speech would be a d2, and that's fine. When she's picking the vault door itself, *know how a lock's built* brings her Mind in for a point of it, and with her picks that's 19 steps, three d12s and a d2.
 
 ## Steps and Dice {#s-building-die}
 
@@ -66,13 +69,14 @@ Every roll goes the same way:
 
 1.  Say what you're doing and how, and pick the **Root** that fits how. All of it goes on the roll.
 2.  If a permission explains how another Root gets in on it, **bring that Root in** for 1 point of it or 3 Aura, and all of it goes on as well.
-3.  Put in any **awakening** that fits, 2 steps, and 2 more for every Aura you put in it.
-4.  Going beyond what something normally does is **1 Aura** (see [Going Beyond](#s-going-beyond)).
-5.  Turn your steps into dice, split them however you like, and give every die an intent.
-6.  Roll. Then, if you need it, pay Aura for an ability, like your Push (see [Abilities](#s-abilities)).
+3.  Put on the **item** doing the work, if one fits: its tier in steps.
+4.  Put in any **awakening** that fits, 2 steps, and 2 more for every Aura you put in it.
+5.  Going beyond what something normally does is **1 Aura** (see [Going Beyond](#s-going-beyond)).
+6.  Turn your steps into dice, split them however you like, and give every die an intent.
+7.  Roll. Then, if you need it, pay Aura for an ability, like your Push (see [Abilities](#s-abilities)).
 
 :::example[Building a roll]
-**One Root:** Vesk's going over Lord Vane's roof without a sound. That's her Body, 11 steps, and her grappling line's awakening, *Anywhere I can throw a hook*, fits a climb like that, so it's 13: two d12s and a d2.
+**One Root:** Vesk's going over Lord Vane's roof without a sound. That's her Body, 11 steps. Her grappling line's a tier 2 tool, so it's 2 more, and its awakening, *Anywhere I can throw a hook*, fits a climb like that, 2 more again. That's 15: two d12s and a d6.
 
 **Bringing one in:** Bram's chasing a smuggler down the quay, his Body, 9 steps, a d12 and a d6. Halfway down he bellows at the dockhands to grab the man, which is *bark an order that gets obeyed*, so he pays a point of Soul and his Soul comes in, 4 more. That's 13 steps, two d12s and a d2.
 :::
@@ -105,7 +109,7 @@ Your die is your steps × 2, up to a d12. Every six steps gives you another d12,
 | 24 | 4d12 |
 
 :::rule
-**No die you build is ever bigger than a d12.** A gifted beginner can build a d12 on a good day, and so can a master. The difference is how many of them you throw, and rolls get big when you bring Roots in: Vesk at the vault door with her Body and her Mind is two d12s and a d8 before she's put a single Aura in. In Zi'Dara, getting stronger means throwing more dice.
+**No die you build is ever bigger than a d12.** A gifted beginner can build a d12 on a good day, and so can a master. The difference is how many of them you throw, and rolls get big when you bring Roots in: Vesk at the vault door with her Body, her Mind and her picks is three d12s and a d2 before she's put a single Aura in. In Zi'Dara, getting stronger means throwing more dice.
 :::
 
 **A Root of 0?** You can still have a go. Every roll's at least 1 step, a d2. It's a long shot, but long shots do land.
@@ -114,10 +118,11 @@ Your die is your steps × 2, up to a d12. Every six steps gives you another d12,
 
 This is where you get clever. When something you can do explains how a second Root gets in on what you're doing, **bring that Root in**, and all of it goes on the roll.
 
--   **Name the permission** that explains it, and say how. Bram's swinging his hammer at the guard captain, and *spot who's in charge* is how his Mind gets in on it: he's going for the man giving the orders, where it'll hurt the rest of them most.
+-   **Name the permission** that explains it, and say how. Bram's shouldering through the guards to get his hands on their captain, and *spot who's in charge* is how his Mind gets in on it: he's going for the man giving the orders, where it'll hurt the rest of them most.
 -   **Pay for it**: 1 point of the Root you're bringing in, or 3 Aura. Bram pays a point of Mind.
 -   **All of it goes on.** His Body's 9 and his Mind's 3, so it's 12 steps, two d12s. Points you've spent or lost never make a Root smaller on a roll, so his Mind's still 3 steps on the next one, even with a point gone.
 -   **Bring in both** if you've got the permissions for it, each one paid for on its own.
+-   **It brings its Root and nothing else.** The item doing the work's already on the roll, and a Root you bring in never brings another.
 -   **Any roll will do**, your defence and a heal included. It's said as you build the roll, before anyone rolls, and it's in for that roll only.
 
 Spending a point or 3 Aura is a real choice. A point comes out of what that Root can take, and 3 Aura's most of what you've got. Either way it's said out loud, and the whole table hears the clever bit.
@@ -125,7 +130,7 @@ Spending a point or 3 Aura is a real choice. A point comes out of what that Root
 :::example[Bringing in at the table]
 Isolde's reading the dead order's script off a crypt wall, her Mind, 9 steps, a d12 and a d6. The script's a ward, and *draw a ward the dead can't cross* is how her Soul knows one when it sees it, so she pays a point of Soul and brings it in: 16 steps, two d12s and a d8.
 
-Wren's lining up a shot on the archer in the bell tower, her Body, 8 steps. She's read the ground the whole way in, so *read the land for an ambush* brings her Mind in. The Warden's howl left her Mind on 1 point, and spending it would leave nothing between her and the next one, so she pays 3 Aura instead. Her Mind's 8 steps however few points it's got left, so that's 16, and her longbow's *Long shot* fits too, 2 more: 18 steps, three d12s.
+Wren's lining up a shot on the archer in the bell tower, her Body, 8 steps. She's read the ground the whole way in, so *read the land for an ambush* brings her Mind in. The Warden's howl left her Mind on 1 point, and spending it would leave nothing between her and the next one, so she pays 3 Aura instead. Her Mind's 8 steps however few points it's got left, so that's 16. Her Named longbow's doing the work, a tier 3 weapon, so that's 3 more, and its *Long shot* fits too, 2 more: 21 steps, three d12s and a d6.
 :::
 
 ## The Roll {#s-the-roll}
@@ -136,7 +141,7 @@ Most of the time you're rolling against something that pushes back: a guard, a l
 -   **Tie** and it goes to whoever's defending: you when something comes at you, him when you go at the guard. If you're the one acting, even to stop something coming at you, you can pay **1 Aura** to win the tie. The GM never spends Aura, and there's no Aura in downtime (see [Downtime](#s-downtime-rolls)).
 -   **Roll under** and you didn't. Try something else, or pay **a point of Soul** to roll again (see [Your Points](#s-tracks)).
 
-**A target rolls its defence once a round.** The first time anyone goes at a threat in a round, roll its die, and that roll stands against everyone who goes at it till the round's over. It's different for you when the telegraphs land: you roll your Body once, at full, against everything landing at your Body, your Mind once against everything at your Mind, and your Soul once against everything at your Soul, and each die stops one telegraph (see [When It Lands](#s-defending)). Spend your action to [Defend](#s-defend) and you roll a Root on top.
+**A target rolls its defence once a round.** The first time anyone goes at a threat in a round, roll its die, and that roll stands against everyone who goes at it till the round's over. It's different for you when the telegraphs land: you roll your Body once, at full, against everything landing at your Body, with a guard like a shield on top, your Mind once against everything at your Mind, and your Soul once against everything at your Soul, and each die stops one telegraph (see [When It Lands](#s-defending)). Spend your action to [Defend](#s-defend) and you roll a Root on top.
 
 A wall you need to climb or a book you've got to get through before dawn doesn't fight back, but it's still a **Challenge**, and you still roll its die and have to beat it. A Challenge is a die twice its number, so Challenge 2 is a d4 and Challenge 6 is a d12. Threats have **tags** too, like *Armoured* or *Loyal*, and your wins strip them off. A win can also leave a **condition**, like *Burning*, that carries your die. Both are in [Conflict](#s-challenges).
 
@@ -165,9 +170,9 @@ Put more than one die on the **same** intent and that's **advantage**: your **be
 Every die you get past six steps can have **its own intent**, and that's what big rolls are for. Two dice at the same Warden are two chances to strip two tags. You can still put them on one intent for advantage, but a d12 and a d4 doing two different things is nearly always worth more than the same two dice on one intent.
 
 :::example[Three dice on the guard captain]
-Bram's holding the barricade, and the guard captain's coming over it. Bram swings with his Body, 9 steps, and *Ring the bell* fits his hammer, 2 more. He's going for the man giving the orders, so *spot who's in charge* brings his Mind in for a point of Mind, 3 more. That's 14 steps, two d12s and a d4: *one to knock the sword out of his hand, one to put him on the floor, and the d4 to make him give up.*
+The guard captain's coming over the barricade, and Wren's got him from the gallery. She shoots with her Body, 8 steps, and her Named longbow, 3 more, and *Long shot* fits, 2 more. That's 13 steps, two d12s and a d2: *one through his sword hand, one through his knee to put him on the floor, and the d2 to make him give up.*
 
-The captain's Challenge 5, and it's the first time anyone's gone at him this round, so he rolls his d10 once: 6. Bram's dice come up 9, 6 and 4. The sword goes skittering, the second d12's a tie, and the d4 was never going to beat a 6, though it landed on its top face. Bram could pay 1 Aura to win the tie, but he lets it go. So the captain's disarmed, still standing, and he won't yield. One die won and the d4 hit its top face, so that's 2 Aura for Bram.
+The captain's Challenge 5, and it's the first time anyone's gone at him this round, so he rolls his d10 once: 6. Wren's dice come up 9, 6 and 2. The sword goes skittering, the second d12's a tie, and the d2 was never going to beat a 6, though it landed on its top face. Wren could pay 1 Aura to win the tie, but she lets it go. So the captain's disarmed, still standing, and he won't yield. One die won and the d2 hit its top face, so that's 2 Aura for Wren.
 :::
 
 ### Splitting: shaping your dice {#s-splitting}
@@ -179,9 +184,9 @@ The catch is that small dice lose. A d2 against a d8 hardly ever wins, so the mo
 Every die can go at something different, as long as the Root you're rolling fits how you're doing it and you can reach it from where you are. If a die would be doing something your Root's got nothing to do with, like a rousing speech in the middle of Vesk's run across the rooftops, bring the right Root in for it, or leave it.
 
 :::example[Splitting at the study door]
-Vesk's at the study door, and picking its lock is her Body, 11 steps. *Know how a lock's built* brings her Mind in for a point of Mind, and it's 16. That's two d12s and a d8 as it comes, and she splits it four ways: a d12 for the lock, a d8 to keep it quiet so the guard at the foot of the stairs hears nothing, a d6 to listen for anyone else coming, and a d6 to leave the lock without a scratch on it.
+Vesk's at the study door, and picking its lock is her Body, 11 steps, and her Named picks, 3 more. *Know how a lock's built* brings her Mind in for a point of Mind, and it's 19. That's three d12s and a d2 as it comes, and she splits it four ways: a d12 for the lock, a d12 to keep it quiet so the guard at the foot of the stairs hears nothing, a d8 to listen for anyone else coming, and a d6 to leave the lock without a scratch on it.
 
-The lock's d8 rolls 5, and her d12 opens it with a 7. Her d8 lands on 8, a top face, against the guard's 3. Her first d6 has got nothing to beat but the quiet house, and the GM calls it a Challenge 1, a d2, which her 4 beats. Her last d6 comes up 2 against the lock's 5, so there'll be a scratch for someone to find. Three dice won, and the 8 was a top face as well, so that's 4 Aura.
+The lock's d8 rolls 5, and her first d12 opens it with a 7. Her second d12 lands on 12, a top face, against the guard's 3. Her d8 has got nothing to beat but the quiet house, and the GM calls it a Challenge 1, a d2, which her 4 beats. Her d6 comes up 2 against the lock's 5, so there'll be a scratch for someone to find. Three dice won, and the 12 was a top face as well, so that's 4 Aura.
 :::
 
 ### Area: one die for how far {#s-area}
@@ -223,9 +228,10 @@ Anything that works on its own, like a summoned beast or a raised servant acting
 
 **Aura** is your character's luck and flair, the bit of soul they put into a moment when skill alone won't get them there. It comes and goes all scene, and it's what you spend when you want more than your Roots give you.
 
--   **You start every scene full.** Your maximum's **5**, or more with the Aura Boon (see [Boons](#s-boons)). A scene is one place and one problem, and the next one starts when that problem's sorted or the crew moves on. There's no Aura in downtime.
+-   **You start every scene full.** Your maximum's **5**. A scene is one place and one problem, and the next one starts when that problem's sorted or the crew moves on. There's no Aura in downtime.
 -   **Every die of yours that wins gives you 1 back, and so does every top face** (see [The Roll](#s-the-roll)).
 -   **While you're acting, it can go past your maximum.** Once you've finished acting for the round, anything over that's gone, so spend it first. When it comes in while you're not acting, like off your defence, it stops at your maximum, and you can give the rest to a friend in the scene.
+-   **A vessel catches what you'd lose.** If you're carrying one, the Aura past your maximum when you finish acting, what comes in past it while you're not, and what you've got left when the scene ends can go into it as charge instead (see [Vessels](#s-vessels)).
 
 **Spend it to:**
 
@@ -238,17 +244,20 @@ Anything that works on its own, like a summoned beast or a raised servant acting
 -   **Intercept** for a friend within your stride, for **1**: take any of the blows aimed at their Body, and they come at you instead (see [Intercept](#s-intercept)). A [Guardian](#a-guardian) does it for free. Fear and despair are inside your friend's head, so nobody can step in front of those.
 -   **Quick heal** someone, for **1** and your action (see [Healing](#s-healing)), or keep a Catch quiet this time, for **1**.
 
+**A vessel's charge stands in for Aura** on your own abilities and on your own awakenings' extra steps, a charge for each Aura they'd cost. That's all it pays for. It never counts towards your maximum, you can't hand it to a friend, and it never brings a Root in, wins a tie, intercepts, quick heals, goes beyond or borrows.
+
 ### Getting it back {#getting-it-back}
 
 -   **Win and roll top faces.** That's where most of it comes from.
 -   **Let a Catch bite**, as often as you like, and take 1 Aura each time. A hostile thread bites the same way. A big bite gets you a point of Soul back instead. No Catch? Bring real trouble on yourself anyway and take 1 Aura. There's more in [Catches and Trouble](#s-trouble).
 -   **A great setup that doesn't land.** You planned it, it was cool, and the dice said no. The GM can give you 1 Aura for it.
--   **Boons** like *Beat a threat* and *In your element* (see [Boons](#s-boons)).
 
 :::example[Aura at one table]
-**Spent:** Wren's shooting from the gallery at the archer and the two men beside him. That's her Body, 8 steps, and her longbow's *Long shot* fits, 2 more. She's on 5, and she puts 2 into the bow for 4 steps more, so it's 14 steps, two d12s and a d4, and she's on 3.
+**Spent:** Wren's shooting from the gallery at the archer and the two men beside him. That's her Body, 8 steps, her Named longbow, 3 more, and its *Long shot* fits, 2 more. She's on 5, and she puts 2 into the bow for 4 steps more, so it's 17 steps, two d12s and a d10, and she's on 3.
 
 **Past her maximum:** All three of her dice win, and one lands on its top face, so she's on 7 while she's acting. The brute's club is coming at Isolde beside her, and Isolde's Body is 0, so Wren pays 1 to intercept it and she's on 6. When she's done for the round, the 1 over her maximum is gone.
+
+**Into a vessel:** If Wren carried a vessel, like a Trusty prayer string, tier 2, so it holds 2, that 1 over her maximum would go in it instead. A scene later it could pay for an Aura on *Long shot*, 2 more steps, and her own Aura wouldn't move.
 
 **Got back:** Crossing the market, Vesk's player says a watch sergeant knows her face from the posters. The GM has him shout for the watch, and Vesk takes 1 Aura.
 :::
@@ -258,10 +267,11 @@ Anything that works on its own, like a summoned beast or a raised servant acting
 Your Roots are what keep you standing. **A Root's got as many points as its number**, less any that are locked, and a new character starts with all of them. Those points are what it can take, and what you spend when you push yourself.
 
 -   **Hits take points.** A telegraph that gets through to your Body takes a point of Body, and the same goes for your Mind and your Soul. A vulnerability or a deadly threat makes it 2 hits or more (see [Hits and Consequences](#s-consequences)).
--   **You spend them to push.** Bringing a Root in costs a point of it, and rolling again after a miss costs a point of Soul. You can't spend points you haven't got.
+-   **Armour soaks first.** Armour sits on a Root, and it soaks as many points as its tier before that Root loses any, a point of soak for each point. It's health you're wearing, and it's all back at the end of every scene (see [Armour](#s-armour)).
+-   **You spend them to push.** Bringing a Root in costs a point of it, and rolling again after a miss costs a point of Soul. Mid-scene, you can put a point from any Root into a vessel as a charge. You can't spend points you haven't got.
 -   **Your dice never shrink.** Spent, lost or locked, a Root's still its whole number on a roll. Vesk on 2 points of Body still rolls 11 steps, a d12 and a d10.
 -   **Locked points.** Each awakening locks a point of the Root it fits for as long as it's attuned, and each Scar locks one for good. A locked point's still dice, but it's not a point you can have. What's left is that Root's **maximum**. Vesk's grappling line locks a point of her Body, so her Body's 11 and its maximum's 10.
--   **At 0 you're exposed.** The next hit on a Root with no points left wounds it (see [Wounds, Scars and the Blaze](#s-blaze)). A Root that's 0 to start with has nothing to lose, so its first hit wounds it: a curse that gets through to Vesk's Soul leaves her Hollow straight away.
+-   **At 0 you're exposed.** The next hit on a Root with no points and no soak left wounds it (see [Wounds, Scars and the Blaze](#s-blaze)). A Root that's 0 to start with has nothing to lose, so its first hit wounds it: a curse that gets through to Vesk's Soul leaves her Hollow straight away.
 -   **They come back.** At the end of every scene, roll each Root that's below its maximum, unsplit, and get back what you roll. Downtime puts them all back (see [Healing](#s-healing)).
 
 :::rule
@@ -270,12 +280,12 @@ Your Roots are what keep you standing. **A Root's got as many points as its numb
 
 **Roll again for a point of Soul.** Reroll a roll you just failed, all your dice or just one, your choice. The threat's dice stay where they landed. It works in downtime too, where there's no Aura.
 
-**2 for 1.** When a hit gets through, you can take it on another Root instead, for 2 points of it, as long as it's got them. Bram takes the spear standing up and unflinching, and it costs him 2 points of Soul instead of a point of Body.
+**2 for 1.** When a hit gets through, you can take it on another Root instead, for 2 points of it, as long as it's got them, and any armour on that Root soaks them first. Bram takes the spear standing up and unflinching, and it costs him 2 points of Soul instead of a point of Body.
 
 :::example[Bram's points in one fight]
-Bram's Body is 9, and his war hammer's two awakenings lock 2 of it, so he starts the fight on 7 points of Body. A spear gets through in round one, and he's on 6. In round two *spot who's in charge* brings his Mind in for a point of Mind, so his Mind's on 2, and his swing's still 12 steps, two d12s. Two blows get through in round three, so his Body's on 4, and when one more spear gets through in round four he takes it 2 for 1 on his Soul, so his Soul's on 2 and his Body stays on 4.
+Bram's Body is 9, and his war hammer's two awakenings lock 2 of it, so he starts the fight on 7 points of Body, with his Named plate on top, a tier 3 piece of armour that soaks 3. A spear gets through in round one, and the plate soaks it, 2 left. In round two *spot who's in charge* brings his Mind in for a point of Mind, so his Mind's on 2, though it's still 3 steps on his roll. Three blows get through in round three: the plate soaks two and it's empty, and the third takes a point of Body, so he's on 6. When one more spear gets through in round four he takes it 2 for 1 on his Soul, which has no armour, so his Soul's on 2 and his Body stays on 6.
 
-At the end of the scene his Body rolls a d12 and a d6, 5 and 2, and that's more than enough to put it back on 7, its maximum. His Mind rolls a 4 on its d6 and goes back to 3, and his Soul rolls a 3 on its d8 and goes back to 4.
+At the end of the scene his plate's back to soaking 3, and his Body rolls a d12 and a d6, 5 and 2, more than enough to put it back on 7, its maximum. His Mind rolls a 4 on its d6 and goes back to 3, and his Soul rolls a 3 on its d8 and goes back to 4.
 :::
 
 ## Catches and Trouble {#s-trouble}

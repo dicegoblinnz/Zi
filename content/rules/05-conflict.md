@@ -5,8 +5,8 @@ slug: conflict
 order: 5
 part: "Play"
 partNumber: "Part I"
-source: 2026-10-02 rulebook, and Mo's chat decisions, 6 Nov to 16 Nov 2026
-updated: 2026-11-16
+source: 2026-10-02 rulebook, and Mo's chat decisions, 6 Nov to 17 Nov 2026
+updated: 2026-11-17
 ---
 :::quote
 Every fight in this game runs on one engine, whether you're fighting with blades, with words or against the clock.
@@ -57,19 +57,18 @@ Or it's one of these instead:
 -   **Defend**: spend your action now, and when the telegraphs land, roll a Root on top of your defence. See [Defend](#s-defend).
 -   **Heal** someone, if you're a [Healer](#a-healer). See [Healing](#s-healing).
 -   **Lead**, if you're a [Leader](#a-leader): an order or a rallying song, with its steps handed out to friends who can hear or see you.
--   **Pull something out of your bag.**
 -   **Take a breath.** Your Mind gets 1 point back, as far as half its maximum, rounded up.
 
-Some things are free: your stride (before, during or after your action), a few words, and dropping something or putting it away. [Intercepting](#s-intercept) for a friend costs 1 Aura but no action, and a Guardian does it for free.
+Some things are free: your stride (before, during or after your action), a few words, saying you've got a Resource, and dropping something or putting it away. [Intercepting](#s-intercept) for a friend costs 1 Aura but no action, and a Guardian does it for free.
 
-There's no special action for helping. To help a friend, put your action into the same thing they're doing. That's a **combo**: one of you rolls, and everyone who put an action in brings the Root that fits how they're helping, all of it. It doesn't cost Aura, and it has to be one thing in the story. Any number of friends can pile into the same roll. There's one under [Answering a Telegraph](#s-answering), and the rest is in [Working Together](#s-teamwork).
+There's no special action for helping. To help a friend, put your action into the same thing they're doing. That's a **combo**: one of you rolls, and everyone who put an action in brings the Root that fits how they're helping, all of it, and the one item doing their part. It doesn't cost Aura, and it has to be one thing in the story. Any number of friends can pile into the same roll. There's one under [Answering a Telegraph](#s-answering), and the rest is in [Working Together](#s-teamwork).
 
 ### Doing more in a round {#s-extra-actions}
 
 You can't buy another action or hold yours for next round, and nothing else gets you a second one. If you want to do more in a round, split your dice. Every die's an intent, so every die's as good as an action, and bringing a Root in is how you get more dice to do it with (see [Bringing In a Root](#s-bring)).
 
 :::example[One action, three jobs]
-Vesk's on the gallery, and the GM's telegraphed a guard's club at her Body, a d8. The keys to the study are on his belt, and the study door's below. Her action's her Body, 11 steps, and she splits it three ways: a d8 to duck under the club, a d6 to put her knife in his hand so he drops the keys, and a d8 to get her over the rail and down to the door.
+Vesk's on the gallery, and the GM's telegraphed a guard's club at her Body, a d8. The keys to the study are on his belt, and the study door's below. Her action's her Body, 11 steps, and she splits it three ways: a d8 to duck under the club, a d6 to kick his wrist so he drops the keys, and a d8 to get her over the rail and down to the door.
 
 The club rolls 6 and her first d8 rolls 7, so it never lands. The guard's Challenge 3, and his d6 rolls 4 for the round, so her d6's 5 opens his hand and the keys hit the floor. Her last d8 rolls 3, so that's 3 squares on top of her stride, and she's down there with them. Two dice won, so that's 2 Aura.
 :::
@@ -86,8 +85,7 @@ You play Zi'Dara on a grid first, where 1 square is 1 unit, about five feet.
 -   **Going further takes dice.** Put any of your dice on moving, from a Root that fits how you're moving, and what they roll is how many more units you go. Dice you put on moving add together, which dice hardly ever do, and the rest of your dice can do whatever you went there to do.
 -   **Diagonals count as one.** It keeps things quick.
 -   **Difficult ground**, like deep snow, a slick floor or a crowd, costs 2 units a square.
--   **Your sheet can change your stride.** The Stride Boon adds 2 units. A Stride Burden takes 2 away, and a *Heavy* Catch on something you've attuned takes 1, to a minimum of 0. A [Teleporter](#a-teleporter)'s stride can be a teleport of up to 10 units.
--   **Getting something out of your bag** takes your action, but putting it away is free. See [What you carry](#s-carrying).
+-   **Your sheet can change your stride.** A Stride Burden takes 2 away, and a *Heavy* Catch on something you've attuned takes 1, to a minimum of 0. An item or an awakening that says so can add to it. A [Teleporter](#a-teleporter)'s stride can be a teleport of up to 10 units.
 
 :::rule
 **No reactions, no opportunity attacks.** You can walk right past a guard and nothing lashes out at you for moving. Threats control space with their *telegraphs*, like *cut off the way to the door* or *grab whoever runs*, so you always know what moving will cost before you move. Moving doesn't get you out of a telegraph aimed at you, though. That one lands wherever you end up, and diving behind cover once it's aimed is a way of answering it, so roll for it. Only a telegraph aimed at a place, like a fire or a falling chandelier, can be walked out of.
@@ -108,9 +106,9 @@ How far a bow, a thrown knife or a spell reaches is the story's call. The bands 
 **Line of sight** comes from the story. If something solid's in the way, you can't hit through it, and neither can they. That's what cover is. It decides what's possible, and it doesn't add steps. Stand behind a wall and the archer on the roof has to telegraph at someone else, or come down.
 
 :::example[Movement at the table]
-Vesk's stride is 3. In one round she moves those 3 units for free, then puts her whole action into getting across the rooftops: her Body, 11 steps, and her grappling line's *Anywhere I can throw a hook* fits, 2 more, so it's 13 steps, two d12s and a d2, and they add. She rolls 6, 3 and 2, and that's 14 units in total.
+Vesk's stride is 3. In one round she moves those 3 units for free, then puts her whole action into getting across the rooftops: her Body, 11 steps, her grappling line, a tier 2 tool, 2 more, and its *Anywhere I can throw a hook* fits, 2 more again, so it's 15 steps, two d12s and a d6, and they add. She rolls 6, 3 and 2, and that's 14 units in total.
 
-Bram's stride is 3, and the man he's after is 8 squares off down the alley. He splits his Body's 9 steps into a d8 for running and a d10 for when he gets there. The d8 rolls 6, so that's 9 units, he's there, and the d10 can swing. If the d8 had come up short, his d10 would've had nobody to hit.
+Bram's stride is 3, and the man he's after is 8 squares off down the alley. He splits his Body's 9 steps into a d8 for running and a d10 to drag the man down when he gets there. The d8 rolls 6, so that's 9 units, he's there, and the d10 can grab. If the d8 had come up short, his d10 would've had nobody to grab.
 :::
 
 ### Playing without a grid {#s-theatre}
@@ -127,6 +125,7 @@ When it matters where someone is, like who's in the doorway or who can reach the
 
 To **answer** a telegraph, give it one of your dice, or more, as an intent: dodge it, parry it, shove the brute's arm aside, shout the crowd down, slam the door before it slams on you, or shoot the archer first. The Root you're rolling has to fit the *way* you're stopping it. Then your dice go against the telegraph's dice. Friends can put their actions in too, and then it's a combo with one roll between you.
 
+-   **Getting out of the way is your Body.** Dodging, ducking and blocking are always Body, and a **guard**, like a shield, a buckler or a parrying dagger, puts its tier on top. A guard only ever adds to a roll that's avoiding harm, and a weapon never does: you can shoot the archer first, and your bow's on that roll, but a sword won't help you duck.
 -   **Win, and it's stopped.** It doesn't land.
 -   **Lose, and it lands at once**, right there and then, and nobody rolls a defence against it. A tie's a loss, unless you pay 1 Aura.
 
@@ -138,7 +137,7 @@ Answering's a gamble. It lets you throw what you like at a problem instead of tr
 -   **Telegraphs aimed at a stake, a place or a clock** have no defence to roll. If nobody answers them, they happen.
 
 :::example[Answering together]
-The brute telegraphs his club at Isolde's Body, a d8. Wren answers it for her with an arrow into his arm, and Bram puts his action into the same thing, getting his hammer under the club. Wren rolls, on her Body, 8 steps, and her longbow's *Long shot* fits a shot like that, 2 more. Bram brings his Body, 9, and *Ring the bell* fits his hammer, 2 more. That's 21 steps between them, three d12s and a d6, and they put all four on the club. It rolls 6 and their dice come up 8, 3, 5 and 2, so it never lands, and Wren gets 1 Aura for the die that won. If they'd lost, it'd have landed on Isolde there and then.
+The brute telegraphs his club at Isolde's Body, a d8. Wren answers it for her with an arrow into his arm, and Bram puts his action into the same thing, getting his shield under the club. Wren rolls, on her Body, 8 steps, with her Named longbow, 3 more, and its *Long shot* fits a shot like that, 2 more. Bram brings his Body, 9, and his Trusty shield's a guard on a roll that's only stopping a blow, 2 more. That's 24 steps between them, four d12s, and they put all four on the club. It rolls 6 and their dice come up 8, 3, 5 and 2, so it never lands, and Wren gets 1 Aura for the die that won. If they'd lost, it'd have landed on Isolde there and then.
 :::
 
 ## When It Lands {#s-defending}
@@ -149,18 +148,18 @@ You're never going to answer everything. Whatever nobody answered **lands at the
 -   **Your Mind**, against whatever's at your Mind: fear, lies and pressure.
 -   **Your Soul**, against whatever's at your Soul: despair, temptation, curses and anything trying to take you over.
 
-**Roll each Root that's got something landing on it, once, at full**, split however you like. **Each die stops one telegraph** at that Root, as long as it meets or beats it, because **ties go to you**. Roll them with the telegraphs' dice, then say which telegraph each of yours stops. Every die that stops one pays 1 Aura, the same as any win. Everything else gets through, and every die of theirs that gets through is a hit (see [Hits and Consequences](#s-consequences)).
+**Roll each Root that's got something landing on it, once, at full**, split however you like, and a guard that fits puts its tier on top, like a shield against blows at your Body. It goes on once, however many telegraphs are landing. **Each die stops one telegraph** at that Root, as long as it meets or beats it, because **ties go to you**. Roll them with the telegraphs' dice, then say which telegraph each of yours stops. Every die that stops one pays 1 Aura, the same as any win. Everything else gets through, and every die of theirs that gets through is a hit (see [Hits and Consequences](#s-consequences)).
 
 **Your dice don't shrink as you're hurt.** A Root's dice are its whole number however many points it's got left, so Bram's still stopping spears with a d12 and a d6 when he's down to his last point of Body. What runs out is how many hits you can take (see [Your Points](#s-tracks)).
 
-**You can bring a Root in on your defence** the same as on any roll, with a permission that explains how it helps and a point of that Root or 3 Aura, and an awakening that fits is 2 steps.
+**You can bring a Root in on your defence** the same as on any roll, with a permission that explains how it helps and a point of that Root or 3 Aura, and an awakening that fits is 2 steps. Your weapons stay out of it, since what you're doing is getting out of the way.
 
 :::example[One roll against two blows]
-Two guards telegraph at Vesk's Body this round, a d8 and a d6. Nobody answers either, so she lets them ride. At the end of the round she rolls her Body, 11 steps, as a d12 and a d10, and gets 5 and 2. The d8 rolls 6 and the d6 rolls 3. Her 5 stops the d6, and that's 1 Aura, and her 2 can't stop anything, so the d8 gets through. That's a hit, a point off her Body, and she's on 9. If she'd offered her worn leathers instead, she'd have stayed on 10, but they're Common, so they'd have broken on their one box.
+Two guards telegraph at Vesk's Body this round, a d8 and a d6. Nobody answers either, so she lets them ride. At the end of the round she rolls her Body, 11 steps, as a d12 and a d10, and gets 5 and 2. The d8 rolls 6 and the d6 rolls 3. Her 5 stops the d6, and that's 1 Aura, and her 2 can't stop anything, so the d8 gets through. That's a hit, and her Trusty worn leathers, tier 2 armour on her Body, soak it, so she's still on 10 points with 1 soak left.
 :::
 
 :::rule{#s-past-d12}
-**Split it to match.** Your defence is your whole Root, and it splits however you like, so look at what's landing before you choose. When three d6s are coming at Bram's Body, his 9 steps can be three d6s to meet them. When he Defends as well, his Body's in twice, 18 steps between the two, and that can be four dice for four telegraphs, or six d6s for six.
+**Split it to match.** Your defence is your whole Root, and it splits however you like, so look at what's landing before you choose. When three d6s are coming at Bram's Body, his 9 steps and his Trusty shield's 2 can be three d6s and a d4 to meet them. When he Defends as well, his Body's in twice and the shield once, 20 steps between them, and that can be four dice for four telegraphs, or six d6s and a d4 for seven.
 :::
 
 **Fear is a telegraph.** The GM telegraphs fear, lies and pressure like any attack, at your Mind, say a dragon's roar as a d10 at everyone's Mind, and there's no other roll for fear. Answer it, or let it land on your Mind. Nobody can intercept it for you, because it's inside your head, and a shield won't stop it. A [Bard](#a-bard)'s song is what shields the crew from fear. Despair, temptation and curses work the same way, at your Soul, and your Soul's what rolls against them.
@@ -169,12 +168,12 @@ Two guards telegraph at Vesk's Body this round, a d8 and a d6. Nobody answers ei
 
 ### Defend {#s-defend}
 
-**Defend** takes your action. When the telegraphs land at the end of the round, roll **a Root that fits how you're defending**, at full, on top of the Root they're landing on, and split it as you like. You can bring a Root in on it the usual way. Each of its dice stops one telegraph it meets or beats, as long as how you're defending fits it: a shield won't stop a lie, and a cool head won't stop a spear. Then you choose which die stops which.
+**Defend** takes your action. When the telegraphs land at the end of the round, roll **a Root that fits how you're defending**, at full, on top of the Root they're landing on, and split it as you like. You can bring a Root in on it the usual way. A guard's tier goes on once between your defence and your Defend. Each of its dice stops one telegraph it meets or beats, as long as how you're defending fits it: a shield won't stop a lie, and a cool head won't stop a spear. Then you choose which die stops which.
 
 It's what you do when a lot's coming at you, which is often once you've [intercepted](#s-intercept) for your friends, and it's what you do when a Root's low on points and can't take much more. It only covers what lands at the end of the round, though, so a failed answer still lands at once, with no defence roll.
 
 :::example[Bram Defends]
-A brute and two of his mates telegraph a d8 each at Wren's Body. She's within Bram's stride, so he intercepts all three, which is free for a Guardian, and Defends. When they land he rolls his Body for his defence and his Body again for the Defend, a d12 and a d6 each time, so he's got four dice for three blows. The d8s come up 7, 5 and 2. Bram rolls 9 and 6 on his d12s, and 6 and 3 on his d6s. He puts the 9 on the 7, the d6's 6 on the 5 and the 3 on the 2, so nothing gets through. That's three dice that won, and the d6 that stopped the 5 landed on its top face, so it's 4 Aura. He was on 5, and he's not acting, so it stops at his maximum, and he hands the other 4 out to the crew. Without the Defend, he'd have had 9 steps for three blows instead of 18.
+A brute and two of his mates telegraph a d8 each at Wren's Body. She's within Bram's stride, so he intercepts all three, which is free for a Guardian, and Defends. When they land he rolls his Body for his defence and his Body again for the Defend, a d12 and a d6 each time, and his Trusty shield's 2 more, a d4, so he's got five dice for three blows. The d8s come up 7, 5 and 2. Bram rolls 9 and 6 on his d12s, 6 and 3 on his d6s, and 1 on the d4. He puts the 9 on the 7, the d6's 6 on the 5 and the 3 on the 2, so nothing gets through. That's three dice that won, and the d6 that stopped the 5 landed on its top face, so it's 4 Aura. He was on 5, and he's not acting, so it stops at his maximum, and he hands the other 4 out to the crew. Without the Defend, he'd have had 11 steps for three blows instead of 20.
 :::
 
 ### Intercept {#s-intercept}
@@ -191,32 +190,40 @@ When a telegraph's aimed at a friend's Body and they're within your stride, you 
 The brute's club is coming down at Isolde's Body again, a d8, and her Body's 0, so if it gets through she's Bloodied. Vesk's right beside her, so she spends 1 Aura and intercepts it. It doesn't take her action, so she can still go at the brute with her knife. At the end of the round the club comes at Vesk, and she rolls her Body, a d12 and a d10: 9 against the club's 3, so it's stopped, and she gets her Aura back.
 :::
 
-There's a Burden for it in [Boons and Burdens](#s-boons): you can't intercept. There's no Boon, because intercepting for free is the Guardian's.
+There's a Burden for it, on an attuned thing: you can't intercept (see [Burdens](#s-boons)).
 
 ## Hits and Consequences {#s-consequences}
 
 When a telegraph lands on you, or when a miss costs you something because it mattered, a **consequence** lands. From a telegraph at one of your Roots, that's usually a **hit**:
 
--   **A hit takes 1 point** from the Root it was aimed at: a blade at your Body takes a point of Body, a lie at your Mind a point of Mind, and a curse at your Soul a point of Soul.
--   **More hits.** Every die of theirs that gets through is one hit, unless it's more. A [vulnerability](#s-vulnerable) makes it one more, and a deadly threat's telegraph says how many, *2 hits* or more, when it goes on the table. They go on one at a time.
--   **2 for 1.** You can take a hit on another Root instead, for 2 points of it, as long as it's got them. That's you standing there and taking it: Bram lets the spear hit him without a flinch, and it costs him 2 points of Soul instead of a point of Body. With more than one hit, each one can go where you like.
--   **At 0 it wounds you.** A hit on a Root with no points left wounds it, and a hit on a wounded Root with no points left is a Scar (see [Wounds, Scars and the Blaze](#s-blaze)). Damage carries on past 0, so 3 hits on a Body with 1 point left take the point, then wound it, then Scar it.
+-   **Armour soaks first.** A piece of [armour](#s-armour) sits on a Root, your Body unless it says otherwise, like court clothes on your Mind or a holy symbol on your Soul, and it soaks as many points as its tier. A hit on that Root takes a point of soak before it takes a point of the Root. It's extra health you're wearing.
+-   **Then a hit takes 1 point** from the Root it was aimed at: a blade at your Body takes a point of Body, a lie at your Mind a point of Mind, and a curse at your Soul a point of Soul.
+-   **More hits.** Every die of theirs that gets through is one hit, unless it's more. A [vulnerability](#s-vulnerable) makes it one more, and a deadly threat's telegraph says how many, *2 hits* or more, when it goes on the table. They go on one at a time, so each one's a point of soak, or a point of the Root once the soak's gone.
+-   **2 for 1.** You can take a hit on another Root instead, for 2 points of it, as long as it's got them, soak included. Armour on that Root soaks them first, a point of soak for each. That's you standing there and taking it: Bram lets the spear hit him without a flinch, and it costs him 2 points of Soul instead of a point of Body. With more than one hit, each one can go where you like.
+-   **At 0 it wounds you.** A hit on a Root with no soak and no points left wounds it, and a hit on a wounded Root with nothing left is a Scar (see [Wounds, Scars and the Blaze](#s-blaze)). Damage carries on past 0, so 3 hits on a Body with 1 point left and nothing to soak take the point, then wound it, then Scar it.
+-   **Soak comes back in full at the end of every scene**, whatever it took. Armour never breaks from soaking.
+
+:::example[Bram's plate and shield]
+Bram's holding the gate in his Named plate, tier 3 armour on his Body, so it soaks 3, with his 7 points of Body behind it. Three Wardens' spears land on him at the end of the round, three d8s, and he lets them ride. His Body's 9 steps, and his Trusty shield's a guard, 2 more, so it's 11, and he splits it to meet them: two d8s and a d6. The spears roll 7, 4 and 6, and Bram gets 7, 2 and 6. His 7 meets the 7 and his 6 meets the 6, so those two are stopped, and the 4 gets through. That's a hit, and the plate soaks it, so it's got 2 left. Two dice stopped a spear each and the d6 landed on its top face, so that's 3 Aura.
+
+Next round the Warden captain's deadly, a d10 for 2 hits, and it gets through. Each hit's a point of soak, so the plate's empty, and Bram's still on 7. If it'd been 3 hits, the third would've taken a point of his Body. At the end of the scene the plate's back to soaking 3.
+:::
 
 Instead of a hit, the GM can name something else that fits:
 
--   **Your armour takes it, or something breaks.** A piece of armour on that Root ticks one of its boxes instead of you losing the point, and it breaks when the last one's ticked (see [Armour](#s-armour)). Anything else you carry just breaks: cross it out until it's mended. Your attuned things are magic, and they can't be broken.
+-   **Something breaks.** A weapon, a shield, a tool or a piece of armour breaks: cross it out until it's mended (see [Mend](#recover)). A broken item adds no steps and soaks nothing. Your attuned things are magic, and they can't be broken.
 -   **Take a point off your Aspiration**, never below 0. The blow costs you your dream instead of your body.
 -   **Step the Party Goal back down** one size, never below d2.
 -   **Tick a clock**: step one of the scene's clocks, or one of the campaign's, down one.
 -   **Something else** the table agrees fits.
 
-**You can offer another.** If a different one fits the story and costs about as much, say so, and it lands there instead: *not my Body, my shield takes it.* It has to fit, though: an insult can't break your shield, and a blade can't tick your court clothes.
+**You can offer another.** If a different one fits the story and costs about as much, say so, and it lands there instead: *not my Body, let my shield split.* It has to fit, though: an insult can't break your shield.
 
 If the telegraph's intent was something specific, like *pin you*, *grab the painting* or *knock you off the roof*, that's what happens. You can usually offer a consequence instead: *I hold onto the painting and take the blow.* The only exception is a telegraph the GM said has only one answer.
 
 ### Mind and Soul {#s-fear-gets-through}
 
-Fear, lies and pressure get through to your Mind, and despair, temptation and anything trying to take you over get through to your Soul. They cost you the way a blade does: a point off that Root, unless your armour there takes it or you take it 2 for 1.
+Fear, lies and pressure get through to your Mind, and despair, temptation and anything trying to take you over get through to your Soul. They cost you the way a blade does: a point off that Root, unless armour there soaks it or you take it 2 for 1.
 
 If a telegraph at your Mind or your Soul had a specific intent, like *Frightened*, *Taunted* or *Charmed*, that's what happens when it gets through, unless you take it as a hit instead.
 
@@ -284,9 +291,9 @@ Some tags take more than one win to strip, and they carry a **multiplier**: *Arm
 :::example[Through the hide]
 The thing under the bridge is Challenge 5, and it's *Natural Armour ×7 (first)*, *Relentless* and *Hungry*. Nothing touches *Relentless* or *Hungry* until the armour's gone.
 
-Bram goes at the hide first, with his Body, 9 steps, and *Ring the bell* fits his hammer, 2 more, so it's 11 steps, a d12 and a d10, each one its own intent on the hide. He's the first to go at it this round, so he rolls its d10 as well, and it comes up 6. His d12 rolls 9 and his d10 rolls 4, so that's one off, and it's *Natural Armour ×6*.
+Bram goes at the hide first, with his Body, 9 steps, his war hammer, a tier 2 weapon, 2 more, and *Ring the bell* fits it, 2 more again, so it's 13 steps, two d12s and a d2, each one its own intent on the hide. He's the first to go at it this round, so he rolls its d10 as well, and it comes up 6. His d12s roll 9 and 4, so that's one off, and it's *Natural Armour ×6*. His d2 lands on 2, a top face, but it can't beat a 6, so that's 2 Aura for him.
 
-Ash throws fire at the same hide with her Soul, 11 steps, and *Fire without a word* fits, 2 more, so it's 13 steps, two d12s and a d2, all at the hide. The thing's 6 still stands, so nobody rolls its d10 again. Her d12s come up 12, a top face, and 7, so that's two more off, and it's *Natural Armour ×4*. Her d2 lands on 2, a top face as well, but it can't beat a 6. That's 4 Aura for her. Her 12 doesn't do any more than her 7, because a win ticks one off however high it rolls. A round or two more like that and the crew's through it.
+Ash throws fire at the same hide with her Soul, 11 steps, her ember stone, tier 2, 2 more, and *Fire without a word* fits, 2 more again, so it's 15 steps, two d12s and a d6, all at the hide. The thing's 6 still stands, so nobody rolls its d10 again. Her d12s come up 12, a top face, and 7, so that's two more off, and it's *Natural Armour ×4*. Her d6 comes up 4, under the 6. That's 3 Aura for her. Her 12 doesn't do any more than her 7, because a win ticks one off however high it rolls. A round or two more like that and the crew's through it.
 :::
 
 ### Hidden tags and weak points {#s-hidden}
@@ -321,7 +328,7 @@ Take a threat down and its telegraphs go with it, which is often the best answer
 
 ## Weapons and What They Let You Do {#s-weapons-tactics}
 
-A plain weapon is just what it is, and it lets you do what that weapon does: a sword cuts, a spear keeps them back, and a crossbow reaches across a street. It's never a step on the roll, because your Root's what does the fighting. An attuned weapon's an item the same way, and its awakenings do more on top: Wren's longbow does what any longbow does, and *Long shot* is 2 steps on a shot it fits, and 2 more for every Aura she puts in it.
+A weapon lets you do what that weapon does: a sword cuts, a spear keeps them back, and a crossbow reaches across a street. It's an item, so when it's what's doing the work it puts its tier on in steps (see [Items](#s-items)). It's one item a roll, so a sword in each hand is still one sword's tier. An attuned weapon's awakenings go on top: Wren's Named longbow is 3 steps on a shot, and *Long shot* is 2 more on a shot it fits, and 2 more for every Aura she puts in it, so with her Body's 8 she's on 13 steps before she's spent a thing. A weapon never goes on a roll that's only getting out of the way. That's what a guard's for.
 
 Weapons also come with **properties**, free with the weapon. They're the things a weapon lets you do that bare hands can't. The full list is in [Weapon properties](#s-weapon-props). At the table they sort into four jobs:
 
@@ -450,20 +457,20 @@ Isolde's got nothing to beat, so she doesn't roll. A Warden's a dead thing walki
 **The Mark jumps.** When a *Marked* creature falls, the Mark moves to another creature the Hunter can see, with the die it had.
 
 :::example[Marked]
-Wren marks the Warden with her Body, 8 steps, and *Long shot*, 2 more, a d12 and a d8, and the best of them wins, so it's *Marked d12*. Bram swings at it with his d12 and d6 and rolls the Mark d12 with them. Next round it's *Marked d10*, and when it falls, the Mark jumps to the second Warden, still a d10.
+Wren marks the Warden with her Body, 8 steps, her Named longbow, 3 more, and *Long shot*, 2 more, two d12s and a d2, and the best of them wins, so it's *Marked d12*. Bram swings at it and rolls the Mark's d12 with his own dice. Next round it's *Marked d10*, and when it falls, the Mark jumps to the second Warden, still a d10.
 :::
 
 ## Vulnerabilities {#s-vulnerable}
 
 A **vulnerability** is something that makes a hit hurt more, like *Vulnerable to fire*, *Prone* or *Opened*. Every vulnerability that fits a winning hit adds one more tick, and **you choose where each tick goes**: another tick off the same tag, or a tick on another of its keeps-it-going tags, which strips a plain one outright. So one vulnerability can strip two plain tags, or take two off one multiplier. It has to make sense, so the hit has to be able to reach what it takes, and nothing under a *first* tag can go till that tag's gone. You've still got to win, so a miss is a miss.
 
--   **A tick** is one hit on you, a point off the Root it's at, or one win off a threat's tag (see [Multipliers](#s-tough)).
+-   **A tick** is one hit on you, a point of soak or a point off the Root it's at, or one win off a threat's tag (see [Multipliers](#s-tough)).
 -   **They add up, one each.** A goblin that's *Prone*, *Vulnerable to fire* and *Vulnerable to blades* takes four ticks from a burning sword: one for the hit and three more.
 -   **The same word never stacks.** The same vulnerability twice counts once. Something that's really weak to fire has two different ones, like *Dry as Tinder* and *Burns Easily*.
 -   **Some are hidden.** A hidden vulnerability is a hidden tag, and [Study](#s-study) finds it.
 -   **Two people count twice.** Two [Warriors](#a-warrior) who both open the same target are two ticks, because they're two people.
 
-A vulnerability only adds to a win that's doing harm: a hit, or stripping a tag that keeps a threat going. It doesn't add to a win that puts a condition on something or moves it. It works the same way on the crew: one vulnerability makes it two hits, so you lose two points, and on top of a deadly threat's hits it's one more. *Prone* and *Exposed* are the usual ones, and the GM keeps the rest rare on the crew.
+A vulnerability only adds to a win that's doing harm: a hit, or stripping a tag that keeps a threat going. It doesn't add to a win that puts a condition on something or moves it. It works the same way on the crew: one vulnerability makes it two hits, so it's two points, soak first, and on top of a deadly threat's hits it's one more. *Prone* and *Exposed* are the usual ones, and the GM keeps the rest rare on the crew.
 
 :::example[Where the ticks go]
 A knight's down on the flagstones, *Prone*, and *Armoured ×3*, *Great Helm* and *Sword* are still keeping him going. Bram stands over him and his hammer wins: one tick for the hit and one more for *Prone*. He could take two off the armour. He caves the helm in and breaks the sword hand instead, so both of those are gone, and the knight's got *Armoured ×3* and nothing else.
@@ -475,7 +482,7 @@ The Warden's on its back, *Prone*, and Isolde's Study found it's *Dry as Tinder*
 
 ## Wounds, Scars and the Blaze {#s-blaze}
 
-**A hit on a Root with no points left wounds it.** Each Root's got one wound, with its own name:
+**A hit on a Root with no soak and no points left wounds it.** Each Root's got one wound, with its own name:
 
 | Root | Its wound |
 | --- | --- |
@@ -487,10 +494,10 @@ The Warden's on its back, *Prone*, and Isolde's Study found it's *Dry as Tinder*
 -   **Your dice don't change.** A Bloodied Body still rolls its whole number.
 -   **A hit on a wounded Root with no points left is a Scar**, and you leave the scene.
 
-So Bram, on 7 points of Body, can take seven hits there and still be on his feet. The eighth leaves him Bloodied, and the ninth Scars him, unless somebody's healed him in between.
+So Bram, with his Named plate soaking 3 and 7 points of Body behind it, can take ten hits there and still be on his feet. The eleventh leaves him Bloodied, and the twelfth Scars him, unless somebody's healed him in between.
 
 :::example[Wearing Vesk down]
-Vesk's down to 2 points of Body after a long night on the rooftops. In round one a spear gets through, so she's on 1. In round two a guard's blow lands while she's *Exposed*, which makes it 2 hits: the first takes her last point, and the second leaves her **Bloodied**. Her Body can only heal to 5 now, half of its 10, till downtime. One more hit on her Body and it's a Scar. She could Blaze on her turn and go out on her own terms, but she's got the prize in her hand, so she runs for it instead.
+Vesk's down to 2 points of Body after a long night on the rooftops, and her worn leathers have soaked all they can this scene. In round one a spear gets through, so she's on 1. In round two a guard's blow lands while she's *Exposed*, which makes it 2 hits: the first takes her last point, and the second leaves her **Bloodied**. Her Body can only heal to 5 now, half of its 10, till downtime. One more hit on her Body and it's a Scar. She could Blaze on her turn and go out on her own terms, but she's got the prize in her hand, so she runs for it instead.
 :::
 
 A **Scar** is the hit that did it, written down as a **negative permission** on that Root: something you can't do any more, or can't do the way you could, like *can't see on my left* or *can't stand the dark*. It's upheld, so the GM holds you to it every time it matters, the same way your permissions say what you can do. **A Scar locks a point of that Root for good**, so its maximum's a point smaller from now on, though its dice never are. Where it is on your body or your mind is up to you.
@@ -511,7 +518,7 @@ A spear takes Bram's left eye at the harbour gate, and he writes the Scar on his
 
 **A Scar that locks a Root's last point is your last.** Your character dies, or retires, your call, once they've left the scene.
 
-Some of you take more wearing down than others, and some less. A few Boons and Burdens change how much you can take, and they're in [Boons and Burdens](#s-boons).
+Some of you take more wearing down than others, and some less. Armour makes the most difference, and a few Burdens, awakenings and abilities change how much you can take too (see [Armour](#s-armour) and [Burdens](#s-boons)).
 
 The GM can take a Scar away when the story's earned it, like a miracle, a ritual or a year of rest. Cross it out, and the point it locked comes back. A Trait it's grown into stays.
 
@@ -519,7 +526,7 @@ The GM can take a Scar away when the story's earned it, like a miracle, a ritual
 
 Your points come back on their own, a bit at a time.
 
--   **At the end of every scene, you rest.** Roll each Root that's below its maximum, unsplit, and get back what you roll. Unsplit means the dice its steps make and nothing else, so Body 8 is a d12 and a d4.
+-   **At the end of every scene, you rest.** Your armour's soak is all back, and you roll each Root that's below its maximum, unsplit, and get back what you roll. Unsplit means the dice its steps make and nothing else, so Body 8 is a d12 and a d4.
 -   **Downtime puts everything back**: every Root on its maximum, every wound cleared and your Toll gone.
 -   **Nothing goes past a Root's maximum**, or past half of it while it's wounded, **and nothing heals a Scar.**
 
@@ -541,18 +548,18 @@ Say you're a Healer, and your Title's *The field surgeon of the Red Company*. Yo
 
 **Quick heal.** Anyone can do this one. Pay 1 Aura and your action, and someone you can reach gets 1 point back on one of their Roots, no roll. It isn't a heal roll, so Toll doesn't touch it and it doesn't give any. It's how a crew with no Healer gets by: Dorrie can't stitch a wound, but she can spend the Aura and her action to keep Bram on his feet.
 
-**Gear that says it heals** still works the way it's written. A medical kit's a quick heal without the Aura.
+**Anything that says it heals**, an item or a Resource, works the way it's written.
 
 A few archetypes have their own way past a hit. Whoever's holding a [Maker](#a-maker)'s item can break one of its tags instead of taking a hit, a [Shifter](#a-shifter) can strip an animal tag instead, and a Guardian can [stand firm](#a-guardian). A ward takes a hit instead of you as well.
 
-A few Boons and Burdens change how your points come back, or let you heal on your own. They're in [Boons and Burdens](#s-boons).
+A few Burdens change how your points come back, and a few abilities and awakenings let you heal on your own (see [Burdens](#s-boons) and [The Archetypes](#archetypes)).
 
 ## Social and Mental Conflict {#s-social}
 
 Social and mental conflict run on the same engine and the same dice. A threat has one Challenge whether you're trading blows or trading words. There are only two differences: its telegraphs come at your Mind or your Soul instead of your Body, and its *keeps-it-going* tags are the duty, pride and fear that keep it saying no. Strip them all and it gives in. Find what drives it and you might not need to strip anything.
 
 :::example[A social conflict, played out]
-A few sessions in, Dorrie's trying to talk a magistrate into releasing Vesk from a cell before the Vane Estate's lawyers arrive in the morning. Isolde's come along as her clerk. The magistrate is *The Honest Magistrate*, Challenge 5. *Duty-bound* and *Wary* keep him going, and one hidden tag drives him. Dorrie's in her court clothes, and they fit a hearing, so she's got a box of Mind armour.
+A few sessions in, Dorrie's trying to talk a magistrate into releasing Vesk from a cell before the Vane Estate's lawyers arrive in the morning. Isolde's come along as her clerk. The magistrate is *The Honest Magistrate*, Challenge 5. *Duty-bound* and *Wary* keep him going, and one hidden tag drives him. Dorrie's in her court clothes, and they fit a hearing, so they're armour on her Mind, soaking their tier.
 
 **Round 1.** The magistrate's been bitter since they walked in, and Dorrie wants to know who at. The GM telegraphs: *"Show me the law that lets her walk."* That's a d10 at Dorrie's Mind. Dorrie answers it, and Isolde puts her action into the same thing. Isolde digs up a harbour statute nobody's used in forty years, and Dorrie swears the court leaned on it only last spring. Dorrie rolls, on her Mind, 7 steps, and Isolde brings her Mind, 9 more. That's 16 steps between them, two d12s and a d8. One d12 goes on the answer, the other goes on Study (what's he so bitter about?), and the d8 has a go at *Wary*.
 
@@ -566,7 +573,7 @@ The bell's d10 rolls 5 and her first d12 rolls 12, a top face, so the bell's sto
 
 **Round 3.** He wavers: *"And why should I trust you?"* That's a d10 at her Mind, and she lets it ride. She goes at *Wary* instead with the story she told him in round one, so it's her Mind, 7 steps, a d12 and a d2, both on *Wary*. His d10 comes up 8, and her best is a 9. *Wary* is gone, and with it his last reason to say no. He releases Vesk on her own recognizance.
 
-His question never lands. A threat that gives in takes its telegraphs with it, and Dorrie knew it. She left the d10 alone because ending him was the best answer there was. If she'd missed, his question would only have met her Mind, a d12 and a d2, and her court clothes would have been there to take it if it got through.
+His question never lands. A threat that gives in takes its telegraphs with it, and Dorrie knew it. She left the d10 alone because ending him was the best answer there was. If she'd missed, his question would only have met her Mind, a d12 and a d2, and her court clothes would have soaked it if it got through.
 :::
 
 ## A Full Fight, Start to Finish {#s-fight}

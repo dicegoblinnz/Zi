@@ -5,8 +5,8 @@ slug: downtime
 order: 12
 part: "Play"
 partNumber: "Part I"
-source: 2026-10-02 rulebook, and Mo's chat decisions, 16 Nov 2026
-updated: 2026-11-16
+source: 2026-10-02 rulebook, and Mo's chat decisions, 16 and 17 Nov 2026
+updated: 2026-11-17
 ---
 :::quote
 Downtime's the half of the game where the world decides what it's been doing while you were bleeding in a warehouse.
@@ -33,7 +33,9 @@ If you ignore a pressure, it doesn't go away. It gets worse, and the GM brings i
 
 Every player gets **two personal slots**. The crew gets **one action**, the same as every faction on the board, and nothing buys it another. Put one of your personal slots into the crew's action and everything counts twice. A personal slot can also chase the Goal, work a project or support an Aspiration on its own, but it can never be a second move on a faction.
 
-Some things happen without costing a slot. **Every downtime starts with everything back**: every Root on its maximum, every wound cleared and your Toll gone (see [Healing](#s-healing)). Scars stay, and so do the points your awakenings lock. You never need a slot to heal.
+Some things happen without costing a slot. **Every downtime starts with everything back**: every Root on its maximum, every wound cleared, your Toll gone and your armour's soak full (see [Healing](#s-healing)). Scars stay, and so do the points your awakenings lock. You never need a slot to heal.
+
+**Your three Resources come back too**, since you've had time to restock (see [Resources](#s-resources)). Vesk ticked two last session, a bit of wire and a smoke bomb. The bomb's gone, since she threw it, but she's got all three to tick again next session. A vessel keeps its charge.
 
 ## What You Can Do With a Slot {#what-you-can-do-with-a-slot}
 
@@ -43,20 +45,21 @@ Some things happen without costing a slot. **Every downtime starts with everythi
 
 ### Mend {#recover}
 
--   **Mend something you carry that's broken**, usually for a purse of gold as well. Armour is the usual one, after it's taken a hit for you, and a piece with boxes ticked that hasn't broken is mended the same way, every box on it at once. Attuned things can't break.
+-   **Mend an item that's broken**, usually for a purse of gold as well. It's crossed out from when the GM named it broken till it's mended, and then it's back at its tier. Armour that's only soaked doesn't need mending, since its soak comes back every scene. Attuned things can't break.
 
 ### Grow {#grow}
 
-A slot buys what a point buys when you make your character: a permission, an ability, an awakening or something to carry. A new Title, archetype or attuned thing comes from your [Aspiration](#s-aspiration).
+A slot buys what a point buys when you make your character: a permission, an ability, an awakening, a new item at tier 2, or a tier on an item you've got. A new Title, archetype or attuned thing comes from your [Aspiration](#s-aspiration).
 
 -   **A new permission** on one of your Titles, up to six on it. It has to fit inside the Title, and the story should say where you learned it. It puts 1 on its Root, the same as the ones you started with, so that's a step more on every roll of that Root, a point more to take hits with and spend, and one more thing that can bring a Root in. See [Permissions](#s-writing-permissions).
 -   **A new ability** off one of your archetypes' lists, up to six on it. The story should say where it came from, the same as a permission. See [Abilities](#s-abilities).
+-   **Raise an item a tier**, as far as tier 3. Vesk's Trusty worn leathers, tier 2, become Named ones, tier 3, and soak 3 from now on. Tier 4 takes money, and tiers 5 and 6 only come out of the story, with a material, the way an attuned thing's stages do (see [Items](#s-items) and [Item tiers](#s-item-tiers)). An attuned thing's tier goes up the same way, and its awakenings don't change.
 -   **Put a point in your Aspiration.** Each slot's a point in it, and at 5 it comes good. There's no roll. See [Aspiration](#s-aspiration).
 -   **Grow a Scar.** A slot toward turning a Scar into a Trait. Three slots on it, in one downtime or across a few, and it's a Trait as well as a Scar. See [Wounds, Scars and the Blaze](#s-blaze).
 -   **Deepen a bond.** Write a new thread with someone, a bond thread or a hostile one, whichever the story's given you. If you've already got a bond with them, it goes under that one. If they're in the crew, it goes on both your sheets, so agree on it together.
--   **Get something** the story can give you, whether it's bought, made, won or owed: something to carry, a purse of gold, or the material an attuned thing needs for its next stage.
+-   **Get something** the story can give you, whether it's bought, made, won or owed: a new item, a purse of gold, or the material an attuned thing needs for its next stage. You carry six items at most, so a seventh means one goes.
 
-**Swapping.** In downtime you can also swap any of your permissions for others that fit your Title, as long as it makes sense for your character. Two permissions on one Title can go for a Boon the same way, and a Boon can go back for two (see [Boons and Burdens](#s-boons)). Wren's crew works the city now, so she swaps *ride hard over rough country* for *scout a building before we go in*.
+**Swapping.** In downtime you can also swap any of your permissions for others that fit your Title, as long as it makes sense for your character. A permission only ever swaps for another permission. Wren's crew works the city now, so she swaps *ride hard over rough country* for *scout a building before we go in*.
 
 ### Attunement {#s-downtime-attunement}
 
@@ -114,7 +117,7 @@ Vesk's only thread with Bram is a bond thread: the fire he carried her out of, a
 
 **Isolde:** I'll put *read how a spirit's been bound* on my first Title, on my Mind. I've spent the week with the Warden's empty armour. My other slot goes on my Aspiration, because whoever bound that Warden knew my order's work.
 
-**Bram:** The Warden's spear ticked my plate, so one slot mends it. My ribs'll knit on their own, so my other slot goes in with the crew's action. We're going at the Estate, and it's too big for the action on its own.
+**Bram:** My shield's taken a beating on that gate, so one slot goes to the smith to make it a proper one. My ribs'll knit on their own, so my other slot goes in with the crew's action. We're going at the Estate, and it's too big for the action on its own.
 :::
 
 **Resolution.** Vesk's slot pays the fence what he asked for. That's doing right by him, so her hostile thread with him, *I owe a debt I would rather not discuss*, is strained now, and one more good turn would snap it. *Haul someone up after me* is an active awakening: 1 Aura and a friend comes up the line with her, and each Aura more brings one more. It locks another point of her Body, so its maximum's 9 now.
@@ -123,6 +126,6 @@ Dorrie's slot is a roll at the Goal, sending Vane's investigators the wrong way:
 
 Isolde's other slot is a point in her Aspiration. She'd put two in it before, so it's 3 of 5 now. Her new permission puts her Mind up to 10 for next time.
 
-Bram's slot mends his plate. His ribs don't need one: he finished last session Bloodied, with no points of Body left, and downtime started by putting him back on 7 with the wound gone.
+Bram's slot raises his Trusty shield a tier, so it's a Named shield now, 3 steps on his Body when the blows land. His ribs don't need one: he finished last session Bloodied, with no points of Body left, and downtime started by putting him back on 7 with the wound gone.
 
 The Estate's Power is a d12 and the crew's is a d4, so the crew needs its action and a personal slot on the same move to go at it. Bram's other slot makes it two, and two slots count everything twice: the crew's d4 becomes a d8. They Obstruct, so the d8 has to beat the Estate's d12. The crew rolls 5 and the d12 rolls 9, so the action goes ahead: 9 against the agenda's d10, which rolls 4, and *Vane comes home* climbs to d12. And nobody touched the festival, so next session the law will be on every street.
