@@ -35,6 +35,9 @@ Mo's calls on the abilities, and the rest he handed to Fable, the lead designer.
 - The Bloodsworn can bleed as many points as they like on one roll.
 - The levers skill needs the quick heal, the Summoner's prices and the mechanics list updated.
 
+### The fight numbers after these calls
+The Hunter marking on a win makes hard play quicker. Rerun on the crew (`tools/fight_sim.py --gm hard`, 2,000 fights): played plain it's still 52 minutes (Bloodied 76%), played hard 34 minutes (was 42, Bloodied 2%). Redhand's multipliers a size up each (Armoured ×5, Feeds ×4, a Challenge less 1) gives 60 and 38; Armoured ×5 alone gives 56 and 36, the nearest to 45 on average. The book still says a Challenge less 2. Yours to pick: leave it, or a Challenge less 1.
+
 ## 18 Nov: the abilities rework
 
 Every archetype's ability list was reworked on 18 Nov (designed on Fable, written on Opus). These are the designers' calls that are yours, each with what they'd do. Nothing below is in the book yet unless it says so.
