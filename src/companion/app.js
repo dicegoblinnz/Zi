@@ -1075,11 +1075,18 @@ function chooseNote(ch, c) {
       const name = x.name ? `<em>${esc(x.name)}</em>, ${their} ${esc(x.lever)} Boon,` : `${cap(their)} ${esc(x.lever)} Boon`;
       return `<li class="cc-item"><p>${name} is gone, since Boons are. ${grown ? `The two permissions it took on ${their} ${(ORD[x.t] ?? "").toLowerCase()} Title are back.` : `It gave back the 2 points it cost, to spend on ${their} sheet.`}</p><div class="cc-row">${keep("Got it")}</div></li>`;
     }
+    // An ability the book's cut (18 Nov): off the sheet with its point back,
+    // unless it was the one the archetype came with.
+    if (x.k === "ability") {
+      const arch = c.archetypes[x.a]?.name ?? "archetype";
+      return `<li class="cc-item"><p><em>${esc(x.name)}</em> isn’t one of the ${esc(arch)}’s abilities any more, so it’s off ${their} sheet${x.free ? `. ${cap(their)} ${esc(arch)} comes with one, so pick another off its list.` : ` and the point it cost is back. Pick another off the ${esc(arch)}’s list, or keep the point for later.`}</p><div class="cc-row">${changeLink(ch, "Pick another")}${keep(x.free ? "Later" : "Keep the point")}</div></li>`;
+    }
     if (x.k === "items") return `<li class="cc-item"><p>${cap(their)} sheet has ${x.over === 1 ? "one item" : `${x.over} items`} past the six you can carry. Pick which ${x.over === 1 ? "goes" : "go"}.</p><div class="cc-row">${changeLink(ch, "Pick in Change")}${keep("Later")}</div></li>`;
     return "";
   }).join("");
   const fixes = s.choose.some((x) => ["boon", "items"].includes(x.k));
-  return `<section class="cc-note cc-choose" aria-labelledby="cc-choose-t"><h2 class="cc-h3"><span id="cc-choose-t">Yours to choose</span> ${tip("mv-choose", [...(fixes ? ["Boons are gone, since nothing trades permissions for an always-on effect any more, and a Trait comes only from an archetype. What a Boon cost is back.", "You carry six items at most, each with a tier that adds steps when it’s doing the work. What you carried besides is Resources now, said in the moment, and it’s in your Notes."] : []), "A Title puts 5 on your Roots, spread however you like. One that put 3 has had 2 more spread the way the 3 were, so check it suits them.", "An awakening locks a point of the Root it fits. One that didn’t say locks your biggest till you pick.", "An archetype that’s gone from the book does nothing till you swap it in Change.", link(fixes ? "s-items" : "s-step-roots", fixes ? "Items in the rules" : "Roots in the rules")], "What’s yours to choose")}</h2><ul class="cc-list">${rows}</ul></section>`;
+  const cut = s.choose.some((x) => x.k === "ability");
+  return `<section class="cc-note cc-choose" aria-labelledby="cc-choose-t"><h2 class="cc-h3"><span id="cc-choose-t">Yours to choose</span> ${tip("mv-choose", [...(cut ? ["Every archetype’s abilities have been reworked. One that’s gone comes off your sheet and gives back the point it cost, to spend on another or anything else. One that’s only been renamed comes across by itself."] : []), ...(fixes ? ["Boons are gone, since nothing trades permissions for an always-on effect any more, and a Trait comes only from an archetype. What a Boon cost is back.", "You carry six items at most, each with a tier that adds steps when it’s doing the work. What you carried besides is Resources now, said in the moment, and it’s in your Notes."] : []), "A Title puts 5 on your Roots, spread however you like. One that put 3 has had 2 more spread the way the 3 were, so check it suits them.", "An awakening locks a point of the Root it fits. One that didn’t say locks your biggest till you pick.", "An archetype that’s gone from the book does nothing till you swap it in Change.", link(fixes ? "s-items" : "s-step-roots", fixes ? "Items in the rules" : "Roots in the rules")], "What’s yours to choose")}</h2><ul class="cc-list">${rows}</ul></section>`;
 }
 
 // A character on the phone: the play screen first, and the rest of the sheet
@@ -1967,10 +1974,10 @@ function poolGroup(s, r) {
 // A Gambler's flip, inside a change: a die comes up its size plus 1, take
 // away what it rolled. A flipped die never pays Aura, so nothing's settled
 // again. which is a list of your dice, or "them:j" for what you're up against.
-function flipOn(which) {
+function flipOn(which, paid = false) {
   const r = roll;
   r.pick = null;
-  r.flips = (r.flips ?? 0) + 1;
+  if (!paid) r.flips = (r.flips ?? 0) + 1;
   if (typeof which === "string") {
     const f = r.foes[Number(which.split(":")[1] ?? 0)];
     if (!f?.size || f.v == null) return;
@@ -2462,8 +2469,8 @@ function defenceResult(c, s, ch) {
 // ---------------------------------------------------------------- abilities
 
 // Paying for an ability, away from a roll: its price in Aura, 1 for most.
-// Stand firm makes the next two hits that get through this round take 1
-// point between them.
+// Stand firm makes two hits that got through this round take 1 point
+// between them.
 function abilityView(c, s) {
   const r = roll;
   const a = R.archetypesOf(c, DATA.build).find((x) => x.name === r.a);
@@ -2666,7 +2673,7 @@ function saveBuilt(build, key, discard, basis) {
   const name = build.name.trim() || "Nameless";
   // What each line said when the change began, and which set actions a
   // rebuilt permission was on, only matter until it's saved.
-  const clean = JSON.parse(JSON.stringify(build, (k, v) => (k === "was" || k === "bagWas" || k === "from" ? undefined : v)));
+  const clean = JSON.parse(JSON.stringify(build, (k, v) => (k === "was" || k === "bagWas" || k === "from" || k === "cut" ? undefined : v)));
   let ch = key === "new" ? null : chars().find((x) => x.id === key);
   // They changed somewhere else while this was open (a downtime on another
   // phone or tab, say), so it starts again from them as they are now rather
@@ -3003,7 +3010,7 @@ function pickDie(i) {
   const p = roll?.pick;
   if (!p) return;
   if (p.type === "flip") return change("flipping a die", (s) => {
-    flipOn(typeof i === "string" ? i : [i]);
+    flipOn(typeof i === "string" ? i : [i], Boolean(p.paid));
     s.last = lastOf();
   }, { say: false });
   if (typeof i === "string") return;
@@ -3059,8 +3066,10 @@ function reroll(which) {
 }
 
 // An ability paid for in Aura: from the play screen's own card, or from
-// inside a roll. Stand firm makes the next two hits that get through take 1
-// point between them, and a Gambler's flips go on the roll they're paid in.
+// inside a roll. Stand firm makes two hits that got through this round take
+// 1 point between them, and a Gambler's paid flips go on the roll they're
+// paid in, on top of the free one (Another flip, Double or nothing).
+const FIRM = /\btwo hits that (?:get|got) through\b/i;
 function payAbility(from = "") {
   const inRoll = roll?.kind !== "ability";
   const p = inRoll ? roll?.pay : roll;
@@ -3077,19 +3086,19 @@ function payAbility(from = "") {
       if (s.aura < x.cost) return "";
       s.aura -= x.cost;
     }
-    if (/\bnext two hits that get through\b/i.test(x.text)) {
+    if (FIRM.test(x.text)) {
       s.firm = (s.firm ?? 0) + 2;
       delete s.firmPaid;
     }
-    message = `Paid ${v ? `${x.cost} charge from ${yours(v)}` : auraCost(x.cost)} for ${x.name}.${s.firm && /\bnext two hits\b/i.test(x.text) ? ` The next ${s.firm} hits that get through to you this round take 1 point between them.` : ""} ${v ? `It’s got ${R.chargeOf(c, s, v.key)} left.` : `Aura’s ${s.aura}.`}`;
+    message = `Paid ${v ? `${x.cost} charge from ${yours(v)}` : auraCost(x.cost)} for ${x.name}.${s.firm && FIRM.test(x.text) ? ` ${s.firm === 2 ? "Two hits that got through to you this round take 1 point between them" : `${s.firm} hits that got through to you this round take 1 point for every two`}. Settle them with Stand firm.` : ""} ${v ? `It’s got ${R.chargeOf(c, s, v.key)} left.` : `Aura’s ${s.aura}.`}`;
     if (inRoll) {
       roll.log.push(message);
       roll.pay = null;
       if (roll.kind === "action" && roll.dice?.length) {
         if (/\bflip every die\b/i.test(x.text)) {
-          flipOn(roll.dice.map((_, i) => i));
+          flipOn(roll.dice.map((_, i) => i), true);
           s.last = lastOf();
-        } else if (/\bflip one more die\b/i.test(x.text)) roll.pick = { type: "flip", die: null };
+        } else if (/\bflip one more die\b/i.test(x.text)) roll.pick = { type: "flip", die: null, paid: true };
       }
     }
     return message;
@@ -3232,7 +3241,8 @@ const ACT = {
     const i = Number(el.dataset.i);
     if (!s.choose?.[i]) return "";
     const [x] = s.choose.splice(i, 1);
-    return x.k === "spread" ? `It stays all 3 on your ${x.root}. You can spread it any time with Change.` : x.k === "boon" ? "Got it. You can spend what it gave back any time with Change." : x.k === "items" ? "They’ll wait. Pick which go any time with Change." : "They’ll wait. Spend them any time with Change.";
+    R.keepCut(s, x);
+    return x.k === "ability" ? (x.free ? "It’ll wait. Pick one any time with Change." : "The point’s yours to spend any time with Change.") : x.k === "spread" ? `It stays all 3 on your ${x.root}. You can spread it any time with Change.` : x.k === "boon" ? "Got it. You can spend what it gave back any time with Change." : x.k === "items" ? "They’ll wait. Pick which go any time with Change." : "They’ll wait. Spend them any time with Change.";
   }),
   gold(el) {
     const key = `g-${el.dataset.k}`;

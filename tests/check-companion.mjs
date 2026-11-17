@@ -2664,7 +2664,41 @@ if (part("4b")) {
   await page.goto(`${BASE}/characters/?c=own-old`);
   await page.waitForSelector(".cc-note");
   has(await page.textContent("#app"), "built before the Roots change", "Tamsin as she was, before Roots");
-  console.log("saved before: Vesk from stacking, Old Vesk from before Roots, Mara made 5, and Tamsin as she was");
+  // The 18 Nov abilities rework: a Guardian saved with Take it on the plate
+  // has Put it on me, quietly, and a Bloodsworn saved with Bleed out has it
+  // off with its point back, and a choice to pick another or keep the point.
+  const plate = fromCrew(book.crew.find((c) => c.id === "bram"), BUILD);
+  plate.have[0] = ["Push", "Take it on the plate"];
+  const bleed = fromCrew(vesk, BUILD);
+  bleed.archs[1] = "Bloodsworn";
+  bleed.have[1] = ["Bleed for it", "Bleed out"];
+  const plateSheet = rootsSheet(sheetOf({ id: "plate", name: "Plate", build: plate }, BUILD), [], BUILD);
+  same(plateSheet.archetypes[0].have, ["Push", "Put it on me"], "Take it on the plate carried across as Put it on me");
+  same(RS.choicesOf(plateSheet).filter((x) => x.k === "ability"), [], "with nothing to choose");
+  const bleedSheet = rootsSheet(sheetOf({ id: "bleed", name: "Bleed", build: bleed }, BUILD), [], BUILD);
+  same([bleedSheet.archetypes[1].have, bleedSheet.archetypes[1].cut], [["Bleed for it"], ["Bleed out"]], "Bleed out off the Bloodsworn");
+  same(RS.choicesOf(bleedSheet).filter((x) => x.k === "ability"), [{ k: "ability", a: 1, name: "Bleed out" }], "and a choice for it");
+  same(bleedSheet.points.spent, costOf({ ...bleedSheet, archetypes: bleedSheet.archetypes.map((a, i) => (i === 1 ? { name: a.name, have: ["Bleed for it"] } : a)) }).spent, "its point back through costOf()");
+  same(pointsOf(normalBuild(bleed, BUILD)).spent, bleedSheet.points.spent, "the builder counting it the same");
+  const grownBleed = rootsSheet(sheetOf({ id: "bleed2", name: "Bleed", build: { ...bleed, have: [bleed.have[0], ["Bleed for it"]] } }, BUILD), [{ k: "ability", a: 1, name: "Bleed out" }, { k: "ability", a: 0, name: "Take it on the plate" }], BUILD);
+  same([grownBleed.archetypes[1].cut, grownBleed.archetypes[0].have.includes("Take it on the plate")], [["Bleed out"], false], "Bleed out grown in downtime off too, and a cut name never grown onto another archetype");
+  same(RS.hadOf("Bloodsworn", BUILD.archetypes.find((a) => a.name === "Bloodsworn").abilities.map((x) => x.name)), ["Bleed for it", "Bleed out"], "hadOf() keeping Bleed out for the sheet to take off");
+  const reworked = { v: 1, characters: [
+    { id: "own-plate", crew: "own", name: "Plate", hash: "own", build: plate, state: { v: 5, aura: 5, conditions: [], threads: {}, crossed: {}, picked: [], grown: [], choose: [] } },
+    { id: "own-bleed", crew: "own", name: "Bleed", hash: "own", build: bleed, state: { v: 5, aura: 5, conditions: [], threads: {}, crossed: {}, picked: [], grown: [], choose: [] } },
+  ] };
+  await page.evaluate((json) => localStorage.setItem("zi-characters", json), JSON.stringify(reworked));
+  await page.goto(`${BASE}/characters/?c=own-plate`);
+  await page.waitForSelector(".tile[data-r]");
+  same(await page.$$eval(".cc-choose", (els) => els.length), 0, "the Guardian with nothing to choose");
+  await page.goto(`${BASE}/characters/?c=own-bleed`);
+  await page.waitForSelector(".cc-choose li");
+  has(await page.textContent(".cc-choose"), "Bleed out isn’t one of the Bloodsworn’s abilities any more, so it’s off", "the Bloodsworn told Bleed out's gone");
+  await page.click('.cc-choose button[data-act="choose"]:has-text("Keep the point")');
+  await page.reload();
+  await page.waitForSelector(".tile[data-r]");
+  same(await page.$$eval(".cc-choose", (els) => els.length), 0, "and keeping the point puts it away for good");
+  console.log("saved before: Vesk from stacking, Old Vesk from before Roots, Mara made 5, Tamsin as she was, and the abilities rework");
   await context.close();
 }
 

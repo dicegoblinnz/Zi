@@ -80,12 +80,27 @@ export const HAD_ABILITIES = {
   Shadow: ["Push", "Vanish"], Shifter: ["Push", "Become it"], Summoner: ["Push", "Call the horde"],
   Teleporter: ["Portal", "Swap"], Warrior: ["Push", "Opened"],
 };
-// The abilities one from before stacking had, out of the names on the list
-// now: the 16 Nov ones still there, or the whole list for an archetype that
-// came after.
+// The abilities one from before stacking had: the 16 Nov ones in the order
+// of the list now, then any the book's cut since (Bleed out), for the sheet
+// to take off and give the player a choice for (cutOf), or the whole list
+// for an archetype that came after.
 export function hadOf(name, names) {
-  const had = HAD_ABILITIES[name];
-  return (had ? names.filter((x) => had.includes(x)) : names).slice(0, MAX_ABILITIES);
+  const had = HAD_ABILITIES[name]?.map((x) => abilityNow(name, x));
+  return (had ? [...names.filter((x) => had.includes(x)), ...had.filter((x) => !names.includes(x))] : names).slice(0, MAX_ABILITIES);
+}
+// Abilities the 18 Nov rework renamed, by archetype: a saved character's
+// carried across to the new name quietly.
+export const RENAMED_ABILITIES = {
+  Guardian: { "Take it on the plate": "Put it on me" },
+  Healer: { "Share it": "Go round" },
+};
+export const abilityNow = (arch, name) => RENAMED_ABILITIES[arch]?.[name] ?? name;
+// An archetype's have, renamed, split into what's on the book's list
+// (names) and what it's cut. With no list to hand, nothing's cut.
+export function cutOf(arch, have, names) {
+  const now = [...new Set((have ?? []).map((n) => abilityNow(arch, n)))];
+  if (!names?.length) return { have: now, cut: [] };
+  return { have: now.filter((n) => names.includes(n)), cut: now.filter((n) => !names.includes(n)) };
 }
 export const STAGES = ["Awakened", "Tempered", "Perfected"];
 // What a Title puts on your Roots, and what it put before the new core.
@@ -346,7 +361,12 @@ const traitOf = (x) => (x && typeof x === "object" ? { name: text(x.name, 60), t
 function archOf(a, B) {
   const rule = (B?.archetypes ?? []).find((x) => x.name === a.name) ?? null;
   const abilities = rule?.abilities ?? (Array.isArray(a.abilities) ? a.abilities : []);
-  const have = Array.isArray(a.have) ? a.have : abilities.map((x) => x.name);
+  const names = abilities.map((x) => x.name);
+  const raw = Array.isArray(a.have) ? a.have : rule ? hadOf(a.name, names) : names;
+  // A renamed ability's carried across, and one the book's cut comes off,
+  // for the player to swap or keep the point (choicesOf). A build carries
+  // what normalBuild() has taken off already as cut.
+  const { have, cut } = cutOf(a.name, raw.map((n) => text(n, 60)).filter(Boolean), rule ? names : null);
   const out = {
     ...a,
     id: a.id ?? rule?.id ?? null,
@@ -354,9 +374,12 @@ function archOf(a, B) {
     for: rule?.for ?? a.for ?? "",
     trait: traitOf(rule?.trait ?? a.trait),
     abilities,
-    have: [...new Set(have.map((n) => text(n, 60)).filter(Boolean))],
+    have,
   };
   delete out.gone;
+  delete out.cut;
+  const gone = [...new Set([...(Array.isArray(a.cut) ? a.cut.map((n) => text(n, 60)) : []), ...cut])].filter((n) => n && !have.includes(n));
+  if (rule && gone.length) out.cut = gone;
   if (B?.archetypes?.length && !rule) out.gone = true;
   return out;
 }
@@ -467,7 +490,12 @@ export function growRoots(c, grown, B = null) {
       if (t && t.permissions[j]) t.permissions[j] = { text: words, root, g, was: t.permissions[j].text };
     } else if (x.k === "ability" && text(x.name, 60)) {
       const a = c.archetypes[int(x.a, -1)];
-      if (a && !a.have.includes(text(x.name, 60)) && a.have.length < MAX_ABILITIES) a.have.push(text(x.name, 60));
+      const name = a ? abilityNow(a.name, text(x.name, 60)) : "";
+      // One the book's cut since it was grown comes off, for the player to
+      // swap (choicesOf), and a renamed one comes across as its new name.
+      if (a && ARCH.has(a.name) && !(ARCH.get(a.name).abilities ?? []).some((y) => y.name === name)) {
+        if (!a.have.includes(name) && !(a.cut ?? []).includes(name)) (a.cut ??= []).push(name);
+      } else if (a && !a.have.includes(name) && a.have.length < MAX_ABILITIES) a.have.push(name);
     } else if (x.k === "awk" && text(x.name, 80)) {
       const a = c.attuned[int(x.a, 0)];
       if (!a) continue;
@@ -530,11 +558,18 @@ export function growRoots(c, grown, B = null) {
 //                                 and one swapped in downtime gives its permissions back
 //   { k: "items", over }          more than six items, for them to choose which go
 //   { k: "points", left }         points they've got left to spend
+//   { k: "ability", a, name }     an ability archetype a had that the book's cut (18
+//                                 Nov), off the sheet with its point back, to swap for
+//                                 another off the list or keep the point. free says it
+//                                 was the one the archetype came with, so no point's back
 export function choicesOf(c) {
   const out = [];
   // An archetype the book hasn't got any more, once however many times it's taken.
   (c.archetypes ?? []).forEach((a, i) => {
     if (a.gone && !out.some((x) => x.name === a.name)) out.push({ k: "arch", a: i, name: a.name });
+  });
+  (c.archetypes ?? []).forEach((a, i) => {
+    for (const name of a.cut ?? []) out.push({ k: "ability", a: i, name, ...(a.have?.length ? {} : { free: true }) });
   });
   (c.titles ?? []).forEach((t, i) => {
     if (t.fromRoot) out.push({ k: "spread", t: i, root: t.fromRoot });
@@ -552,7 +587,12 @@ export function choicesOf(c) {
   if (c.points && left > 0) out.push({ k: "points", left });
   return out;
 }
-const sameChoice = (x, y) => x?.k === y.k && (y.k !== "spread" && y.k !== "five" && y.k !== "boon" ? true : x.t === y.t) && (y.k !== "arch" || x.name === y.name) && (y.k !== "lock" || (x.a === y.a && x.name === y.name)) && (y.k !== "boon" || x.lever === y.lever);
+const sameChoice = (x, y) => x?.k === y.k && (y.k !== "spread" && y.k !== "five" && y.k !== "boon" ? true : x.t === y.t) && (y.k !== "arch" || x.name === y.name) && (y.k !== "lock" || (x.a === y.a && x.name === y.name)) && (y.k !== "boon" || x.lever === y.lever) && (y.k !== "ability" || (x.a === y.a && x.name === y.name));
+// A cut ability the player's said to keep the point for, so it isn't asked again.
+const cutKey = (y) => `${y.a}|${y.name}`;
+export function keepCut(s, y) {
+  if (y?.k === "ability") s.cutKept = [...new Set([...(Array.isArray(s.cutKept) ? s.cutKept : []), cutKey(y)])];
+}
 
 export const bestRoot = (c) => [...ROOTS].sort((a, b) => (c.roots?.[b] ?? 0) - (c.roots?.[a] ?? 0))[0];
 
@@ -746,8 +786,14 @@ export function normalCore(raw, c) {
   if (!moving) {
     const now = choicesOf(c);
     const kept = (Array.isArray(s.choose) ? s.choose : []).map((x) => now.find((y) => sameChoice(x, y))).filter(Boolean);
-    s.choose = fixing ? [...kept, ...now.filter((y) => ["boon", "items", "points"].includes(y.k) && !kept.some((x) => sameChoice(x, y)))] : kept;
-  }
+    // An ability the book's cut joins once, whenever the rules cut it, till
+    // it's swapped or they've said to keep the point (kept).
+    const told = (Array.isArray(s.cutKept) ? s.cutKept : []).filter((k) => now.some((y) => y.k === "ability" && cutKey(y) === k));
+    const adds = (y) => (fixing && ["boon", "items", "points"].includes(y.k)) || (y.k === "ability" && !told.includes(cutKey(y)));
+    s.choose = [...kept, ...now.filter((y) => adds(y) && !kept.some((x) => sameChoice(x, y)))];
+    if (told.length) s.cutKept = told;
+    else delete s.cutKept;
+  } else delete s.cutKept;
   if (s.seen && typeof s.seen !== "object") delete s.seen;
   // A Shadow's pool: the dice they rolled getting into hiding, there to add
   // to a roll later, one die at a time.

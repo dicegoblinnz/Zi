@@ -287,6 +287,20 @@ export function normalBuild(raw, B = null, { fresh = false } = {}) {
       return h === null || (before && !fresh) ? null : [];
     });
     dealAll(b, B);
+    // A renamed ability's carried across, and one the book's cut comes off,
+    // with its point. The sheet's told which (cut) so the phone can offer
+    // another in its place, and saving a change lets it go.
+    if (B?.archetypes?.length) {
+      const was = Array.isArray(r.cut) ? r.cut : [];
+      const cut = b.archs.map((name, i) => {
+        const rule = (B.archetypes ?? []).find((a) => a.name === name.trim());
+        if (!rule || !Array.isArray(b.have[i])) return [];
+        const x = R.cutOf(rule.name, b.have[i], rule.abilities.map((y) => y.name));
+        b.have[i] = x.have;
+        return [...new Set([...(Array.isArray(was[i]) ? was[i].map((n) => str(n, 60)) : []), ...x.cut])].filter((n) => n && !x.have.includes(n));
+      });
+      if (cut.some((x) => x.length)) b.cut = cut;
+    }
   }
   const titles = list(r.titles, MAX_TITLES);
   if (titles.length) {
@@ -461,7 +475,7 @@ function makeSheet(ch, b, B, { draft = false } = {}) {
     permissions: t.perms.filter((p) => p.text.trim()).map((p) => ({ text: p.text.trim(), root: p.root })),
     boons: draft ? [] : (t.boonsGone ?? []).map((x) => ({ lever: x.lever, name: x.name })),
   }));
-  const archetypes = b.archs.map((a, i) => ({ name: a.trim(), i })).filter((a) => a.name).map(({ name, i }) => ({ name, id: ARCH.get(name)?.id ?? null, ...(Array.isArray(b.have[i]) ? { have: [...b.have[i]] } : {}) }));
+  const archetypes = b.archs.map((a, i) => ({ name: a.trim(), i })).filter((a) => a.name).map(({ name, i }) => ({ name, id: ARCH.get(name)?.id ?? null, ...(Array.isArray(b.have[i]) ? { have: [...b.have[i]] } : {}), ...(!draft && b.cut?.[i]?.length ? { cut: [...b.cut[i]] } : {}) }));
   const things = b.attuned.filter(thingIn);
   const attuned = things.map((a) => ({
     name: thingName(a), props: a.kind === "weapon" && a.props.length ? a.props.join(", ") : null, stage: a.stage || "Awakened", catch: a.catch.trim() || null, burden: a.burden.trim() || null,
