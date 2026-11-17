@@ -1283,7 +1283,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       const k = have.indexOf(ab.name);
       const say = k === 0 ? "Comes with it" : k > 0 ? "1 point" : twin.has(ab.name) ? `On your other ${esc(a.name)}` : "";
       const aura = Math.max(1, Number(ab.cost) || 1);
-      return `<div class="bd-abil-row">${card(`bd-abil${twin.has(ab.name) && k < 0 ? " is-twin" : ""}`, `data-b="abil" data-t="${i}" data-v="${esc(ab.name)}"`, k >= 0, `<b>${esc(ab.name)}</b><small>${aura} Aura</small>${say ? `<span class="bd-badge">${say}</span>` : ""}`)}${tip(`bd-ab-${i}-${j}`, [...paras(ab.html ?? esc(ab.text)), `${aura} Aura each time you use it.`], ab.name)}</div>`;
+      return `<div class="bd-abil-row">${card(`bd-abil${twin.has(ab.name) && k < 0 ? " is-twin" : ""}`, `data-b="abil" data-t="${i}" data-v="${esc(ab.name)}"`, k >= 0, `<b>${esc(ab.name)}</b><small>${aura} Aura${ab.kind ? `, ${ab.kind}` : ""}</small>${say ? `<span class="bd-badge">${say}</span>` : ""}`)}${tip(`bd-ab-${i}-${j}`, [...paras(ab.html ?? esc(ab.text)), ab.kind === "held" ? `${aura} Aura to put it up. It stays up till the scene ends or you drop it, and while it’s up it’s off your Aura maximum.` : ab.kind === "signature" ? `${aura} Aura, once a scene. It’s the ${esc(a.name)}’s big one.` : `${aura} Aura each time you use it.`], ab.name)}</div>`;
     };
     const cost = have.length ? `${have.length} picked, ${pts(4 + have.length)} with the archetype` : "pick the one it comes with";
     return `<div class="bd-arch-what">

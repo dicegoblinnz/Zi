@@ -1207,9 +1207,9 @@ function abilitiesView(ch, c, s, look = false, where = "pl") {
     return `<div class="cc-arch"><p class="cc-arch-h">${sigilOf(a.name)}<b>${a.id ? link(a.id, esc(a.name)) : esc(a.name)}</b>${a.times > 1 ? ` <small>${TIMES[a.times] ?? `${a.times} times`}</small>` : ""}${gold(`arch:${a.name}`)}</p>${was(`arch:${a.name}`)}
     ${t.name ? `<p class="cc-trait"><span class="k">Trait</span> <b><em>${esc(t.name)}</em></b>${t.text ? ` ${t.text}` : ""}</p>` : ""}
     ${a.name === "Shadow" ? `<p class="cc-pool">${s.pool?.length ? `<b>${look ? "Their" : "Your"} shadow pool:</b> ${s.pool.map((d) => kitMini(d, { own: "you" })).join("")} ${esc(andList(s.pool.map((d) => `d${d}`)))}.${look ? "" : ` Add ${s.pool.length === 1 ? "it" : "them"} to any roll from the roll card.`}` : `<b>${look ? "Their" : "Your"} shadow pool’s empty.</b>`}</p>` : ""}
-    <ul class="cc-abils">${a.abilities.map((x, j) => `<li class="cc-abil"><p><b>${esc(x.name)}</b> <small>${x.push ? "on a die once you’ve rolled, " : ""}${auraCost(x.cost)}</small> ${x.html}</p>${look || x.push ? "" : `<div class="cc-row"><button type="button" class="button sm is-aura" data-act="ability" data-a="${esc(a.name)}" data-j="${j}"${off(s.aura < x.cost && !chargeFor(c, s, x.cost).length)}>Pay for ${esc(x.name)}: ${auraCost(x.cost)}</button></div>`}</li>`).join("")}</ul></div>`;
+    <ul class="cc-abils">${a.abilities.map((x, j) => `<li class="cc-abil"><p><b>${esc(x.name)}</b> <small>${x.push ? "on a die once you’ve rolled, " : ""}${priceOf(x)}</small> ${x.html}</p>${look ? (x.kind === "held" && R.isUp(s, R.heldKey(a.name, x.name)) ? `<p class="cc-small">It’s up.</p>` : "") : x.push ? "" : `<div class="cc-row">${abilBtn(c, s, a.name, x, j)}</div>`}</li>`).join("")}</ul></div>`;
   };
-  const ask = look ? "" : tip(`${where}-abil`, ["A Trait’s always on, and it’s free.", "Each ability’s paid in Aura, 1 for most, each time you use it. Pay again and you get it again.", "Push goes on a die once you’ve rolled, from the roll card or When it lands.", link("s-abilities", "Abilities in the rules")], "How archetypes work");
+  const ask = look ? "" : tip(`${where}-abil`, ["A Trait’s always on, and it’s free.", "Each ability’s paid in Aura, 1 for most, each time you use it. Pay again and you get it again.", "A held one’s paid once and stays up till the scene ends or you drop it, and while it’s up its Aura’s off your maximum. A signature’s once a scene.", "Push goes on a die once you’ve rolled, from the roll card or When it lands.", link("s-abilities", "Abilities in the rules")], "How archetypes work");
   return `<section class="cc-sec cc-abilities" aria-labelledby="${where}-ab-t"><h2 class="cc-h3"><span id="${where}-ab-t">${list.length > 1 ? "Your archetypes" : "Your archetype"}</span> ${ask}</h2>
     ${list.map(arch).join("")}</section>`;
 }
@@ -1712,11 +1712,11 @@ function itemView(c, s, g, key, where, { guards = false, tools = true, on = g.it
   const chip = (it) => {
     const broken = it.attuned == null && Boolean(s.crossed?.[it.key]);
     const now = on === it.key;
-    return `<button type="button" class="cc-pick k-item is-${now ? "in" : "out"}" data-act="item" data-g="${key}" data-k="${esc(it.key)}"${pressed(now)}${off(broken)}><em>${esc(cap(bareName(R.itemSaid(it))))}</em> <small>${broken ? "broken till it’s mended" : `+${it.tier}${it.kind === "guard" && tools ? ", only getting out of the way" : landing && it.kind === "weapon" ? ", Parry for 1 Aura" : landing && it.kind === "armour" ? ", Second Skin" : ""}`}</small></button>`;
+    return `<button type="button" class="cc-pick k-item is-${now ? "in" : "out"}" data-act="item" data-g="${key}" data-k="${esc(it.key)}"${pressed(now)}${off(broken)}><em>${esc(cap(bareName(R.itemSaid(it))))}</em> <small>${broken ? "broken till it’s mended" : `+${it.tier}${it.kind === "guard" && tools ? ", only getting out of the way" : landing && it.kind === "weapon" ? (R.isUp(s, R.PARRY) ? ", Parry’s up" : ", Parry for 1 Aura") : landing && it.kind === "armour" ? ", Second Skin" : ""}`}</small></button>`;
   };
   const ask = tools
     ? tip(`${where}-item`, ["One item a roll, the one doing the work, and it puts its tier on in steps when it fits. Vesk’s Proven set of picks is 3 more on a lock.", "A weapon or a tool goes on any roll it fits. A guard, like a shield, only goes on a roll that’s getting out of the way of harm.", "Armour, packs and vessels never add steps, and nor does anything broken.", link("s-items", "Items in the rules")], "The item doing the work")
-    : tip(`${where}-item`, ["A guard, like a shield, puts its tier on top when you’re getting out of the way, once a landing, on your Root’s roll or your Defend.", "Your weapons stay out of it, since what you’re doing is getting out of the way.", ...(skin ? ["You’re a Warrior, so your armour on this Root is a guard as well (Second Skin), and it still soaks."] : []), ...(parry ? ["With Parry, 1 Aura puts your weapon on instead."] : []), link("s-defending", "When it lands in the rules")], "Your guard");
+    : tip(`${where}-item`, ["A guard, like a shield, puts its tier on top when you’re getting out of the way, once a landing, on your Root’s roll or your Defend.", "Your weapons stay out of it, since what you’re doing is getting out of the way.", ...(skin ? ["You’re a Warrior, so your armour on this Root is a guard as well (Second Skin), and it still soaks."] : []), ...(parry ? [R.isUp(s, R.PARRY) ? "Parry’s up, so your weapon can go on instead." : "With Parry, 1 Aura puts your weapon on instead, and Parry stays up till the scene ends."] : []), link("s-defending", "When it lands in the rules")], "Your guard");
   return `<fieldset class="cc-group cc-itemgrp" aria-labelledby="${where}-it-t"><legend><span id="${where}-it-t">${tools ? "The item doing the work" : "Your guard"}</span> ${ask}</legend><div class="cc-picks">${list.map(chip).join("")}</div></fieldset>`;
 }
 // The split: how many dice, and how the steps are shared between them. More
@@ -1959,6 +1959,21 @@ const otherAbilities = (c) => R.archetypesOf(c, DATA.build).flatMap((a) => a.abi
 // A number said out loud: an 8, an 11, an 18, and a for the rest.
 const aNum = (n) => `${/^(8|11|18)$|^8\d$/.test(String(n)) ? "an" : "a"} ${n}`;
 const auraCost = (n) => `${n} Aura`;
+// An ability's price, and held or signature after it (18 Nov).
+const priceOf = (x) => `${auraCost(x.cost)}${x.kind ? `, ${x.kind}` : ""}`;
+// A signature at 5 can't be paid with a vessel's charge.
+const chargeOk = (x) => !(x.kind === "signature" && x.cost >= 5);
+// The button that pays for an ability: Put it up for a held one, Drop it
+// once it's up, and nothing more for a signature that's been used this scene.
+function abilBtn(c, s, arch, x, j) {
+  const key = R.heldKey(arch, x.name);
+  if (x.kind === "held" && R.isUp(s, key)) return `<span class="cc-small">It’s up, ${auraCost(s.up[key])} off your maximum.</span> <button type="button" class="button sm" data-act="drop" data-k="${esc(key)}">Drop ${esc(x.name)}</button>`;
+  if (x.kind === "signature" && R.sigUsed(s, key)) return `<button type="button" class="button sm is-aura" disabled>${esc(x.name)}’s used this scene</button>`;
+  const charge = chargeOk(x) ? chargeFor(c, s, x.cost) : [];
+  return `<button type="button" class="button sm is-aura" data-act="ability" data-a="${esc(arch)}" data-j="${j}"${off(s.aura < x.cost && !charge.length)}>${x.kind === "held" ? "Put up" : "Pay for"} ${esc(x.name)}: ${auraCost(x.cost)}</button>`;
+}
+// What a held or signature ability is, in a line.
+const kindSaid = (x) => (x.kind === "held" ? "It stays up till the scene ends or you drop it, and while it’s up its Aura’s off your maximum." : x.kind === "signature" ? `Once a scene, with no roll.${chargeOk(x) ? "" : " A vessel’s charge can’t pay for it."}` : "");
 
 // A Shadow's pool on the roll card: each die left out, as steps (a d8's 4),
 // or as its own die on the end.
@@ -2068,7 +2083,7 @@ function resultView(c, s, ch) {
     ${r.spinning ? "" : pickNote(c, s) || payNote(c, s)}
     ${offers ? `<div class="cc-row cc-offers">${offers}</div>` : ""}
     <p class="cc-small cc-left">You’ve got ${s.aura} Aura${s.acting ? ", and you’re acting" : ""}. ${glancePts(c, s)}.</p>
-    ${others.length && !r.spinning && !r.pick ? `<details class="cc-how" data-open="abil"${ui.open.has("abil") ? " open" : ""}><summary>Pay for an ability</summary>${others.map((x) => `<p><b>${esc(x.arch)}, ${esc(x.name)}:</b> ${x.html}</p><div class="cc-row"><button type="button" class="button sm is-aura" data-act="ability" data-a="${esc(x.arch)}" data-j="${x.j}"${off(s.aura < x.cost && !chargeFor(c, s, x.cost).length)}>Pay for ${esc(x.name)}: ${auraCost(x.cost)}</button></div>`).join("")}</details>` : ""}
+    ${others.length && !r.spinning && !r.pick ? `<details class="cc-how" data-open="abil"${ui.open.has("abil") ? " open" : ""}><summary>Pay for an ability</summary>${others.map((x) => `<p><b>${esc(x.arch)}, ${esc(x.name)}:</b> ${x.html}</p><div class="cc-row">${abilBtn(c, s, x.arch, x, x.j)}</div>`).join("")}</details>` : ""}
     ${how && !r.spinning ? `<details class="cc-how" data-open="how"${ui.open.has("how") ? " open" : ""}><summary>How it counted</summary>${how}</details>` : ""}
   </div>
   <div class="dlg-foot"><button type="button" class="button" data-act="undo"${off(!lastUndo(ch))}>Undo</button><button type="button" class="button primary" data-act="close">Done</button></div>`;
@@ -2171,7 +2186,8 @@ function guardOf(c, s, r, keys = defenceKeys(r)) {
   return best ? { g: best.g, key: best.it.key } : null;
 }
 // The Warrior's Parry: their weapon's tier on a roll as blows land at their
-// Body, for 1 Aura, the way a guard's would.
+// Body, the way a guard's would. It's held (18 Nov): 1 Aura puts it up for
+// the scene, and it's free on every landing after.
 const hasParry = (c) => (c.archetypes ?? []).some((a) => a.name === "Warrior" && (a.have ?? []).includes("Parry"));
 const parryOn = (c, guard) => (c.items ?? []).find((it) => it.key === guard?.key)?.kind === "weapon";
 const defenceKeys = (r) => [...R.ROOTS.filter((root) => r.incoming.some((x) => x.at === root && !x.nodef)), ...(r.defend ? ["defend"] : [])];
@@ -2183,8 +2199,10 @@ function defencePool(c, s, r) {
     const parry = guard?.g === key && parryOn(c, guard);
     const k = R.countRoll(c, s, asRoll(g, guard?.g === key ? { item: guard.key, avoid: true, parry } : { item: null }, c, s));
     const sh = shaped(k.total, g);
-    return { key, g, root: g.root, k, ...sh, dice: sh.split, aura: k.aura + borrowsOf(g) + (parry && k.item ? 1 : 0) };
+    const raise = Boolean(parry && k.item && !R.isUp(s, R.PARRY));
+    return { key, g, root: g.root, k, ...sh, dice: sh.split, raise, aura: k.aura + borrowsOf(g) + (raise ? 1 : 0) };
   });
+  const parryUp = groups.some((x) => x.raise);
   const points = Object.fromEntries(R.ROOTS.map((x) => [x, groups.reduce((t, x2) => t + (x2.k.points[x] ?? 0), 0)]));
   const aura = groups.reduce((t, x) => t + x.aura, 0);
   // The telegraphs land once you've finished acting, so Aura past your
@@ -2193,7 +2211,7 @@ function defencePool(c, s, r) {
   const need = groups.flatMap((x) => x.k.short.filter((y) => /^a permission/.test(y)));
   const charge = groups.flatMap((x) => x.k.charge ?? []);
   const short = [...need, ...R.ROOTS.filter((x) => points[x] > s.pts[x]).map((x) => `${points[x]} ${points[x] === 1 ? "point" : "points"} of ${x}`), ...(aura > have ? [`${aura} Aura`] : []), ...R.vesselsOf(c).filter((v) => charge.filter((x) => x.key === v.key).reduce((t, x) => t + x.n, 0) > R.chargeOf(c, s, v.key)).map((v) => `more charge in ${yours(v)}`)];
-  return { groups, guard, points, aura, charge, short: short.length ? `${/^a permission/.test(short[0]) ? "Name the permission that brings it in" : `You need ${andList(short)}`}.` : "" };
+  return { groups, guard, parryUp, points, aura, charge, short: short.length ? `${/^a permission/.test(short[0]) ? "Name the permission that brings it in" : `You need ${andList(short)}`}.` : "" };
 }
 
 // An intent like "pin" or "frighten" is a condition when it gets through, and
@@ -2275,8 +2293,9 @@ function defenceGo(real) {
     }
     if (p.aura) {
       s.aura -= p.aura;
-      r.log.push(`Paid ${p.aura} Aura for what you brought in and woke.`);
+      if (p.aura > (p.parryUp ? 1 : 0)) r.log.push(`Paid ${p.aura - (p.parryUp ? 1 : 0)} Aura for what you brought in and woke.`);
     }
+    if (p.parryUp && R.holdUp(c, s, R.PARRY, 1, { paid: true })) r.log.push(`Paid 1 Aura to put Parry up. It’s up till the scene ends, so your Aura maximum’s ${R.auraMax(c, s)}.`);
     for (const x of p.charge) R.spendCharge(c, s, x.key, x.n);
     if (p.charge.length) r.log.push(`Paid ${chargeSaid(c, p)} for the Aura on your awakenings.`);
     const guard = p.guard ? c.items.find((x) => x.key === p.guard.key) : null;
@@ -2460,7 +2479,7 @@ function defenceResult(c, s, ch) {
     <ul class="cc-hits">${hs.map(row).join("")}</ul>
     ${offers ? `<div class="cc-row cc-offers">${offers}</div>` : ""}
     <p class="cc-small cc-left">You’ve got ${s.aura} Aura. ${glancePts(c, s)}.</p>
-    ${others.length && !spin && !r.pick ? `<details class="cc-how" data-open="abil"${ui.open.has("abil") ? " open" : ""}><summary>Pay for an ability</summary>${others.map((x) => `<p><b>${esc(x.arch)}, ${esc(x.name)}:</b> ${x.html}</p><div class="cc-row"><button type="button" class="button sm is-aura" data-act="ability" data-a="${esc(x.arch)}" data-j="${x.j}"${off(s.aura < x.cost && !chargeFor(c, s, x.cost).length)}>Pay for ${esc(x.name)}: ${auraCost(x.cost)}</button></div>`).join("")}</details>` : ""}
+    ${others.length && !spin && !r.pick ? `<details class="cc-how" data-open="abil"${ui.open.has("abil") ? " open" : ""}><summary>Pay for an ability</summary>${others.map((x) => `<p><b>${esc(x.arch)}, ${esc(x.name)}:</b> ${x.html}</p><div class="cc-row">${abilBtn(c, s, x.arch, x, x.j)}</div>`).join("")}</details>` : ""}
     ${r.log.length && !spin ? `<details class="cc-how" data-open="how"${ui.open.has("how") ? " open" : ""}><summary>How it counted</summary><ul class="cc-log">${r.log.map((l) => `<li>${esc(l)}</li>`).join("")}</ul></details>` : ""}
   </div>
   <div class="dlg-foot"><button type="button" class="button" data-act="undo"${off(!lastUndo(ch))}>Undo</button><button type="button" class="button primary" data-act="close">Done</button></div>`;
@@ -2476,11 +2495,11 @@ function abilityView(c, s) {
   const a = R.archetypesOf(c, DATA.build).find((x) => x.name === r.a);
   const x = a?.abilities[r.j];
   if (!x) return "";
-  return `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">${esc(x.name)}</h2><p class="cc-small">${esc(a.name)}, ${auraCost(x.cost)}</p></div>
+  return `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">${esc(x.name)}</h2><p class="cc-small">${esc(a.name)}, ${priceOf(x)}</p></div>
     <button type="button" class="cc-x" data-act="close" aria-label="Close">${ICON.close}</button></div>
-  <div class="dlg-body"><p>${x.html}</p>
+  <div class="dlg-body"><p>${x.html}</p>${kindSaid(x) ? `<p class="cc-small">${kindSaid(x)}</p>` : ""}
     <p class="cc-small">You’ve got ${s.aura} Aura. ${ruleTip("s-abilities", "How abilities work", "ab-how")}</p>
-    ${s.aura >= x.cost || chargeFor(c, s, x.cost).length ? `<div class="cc-row">${s.aura >= x.cost ? `<button type="button" class="button is-aura" data-act="pay-way">Pay ${auraCost(x.cost)}</button>` : ""}${payCharge(c, s, x.cost)}</div>` : `<p class="cc-note is-warn">You need ${auraCost(x.cost)} for it, and you’ve got ${s.aura}.</p>`}</div>
+    ${x.kind === "signature" && R.sigUsed(s, R.heldKey(a.name, x.name)) ? `<p class="cc-note is-warn">You’ve used it this scene.</p>` : x.kind === "held" && R.isUp(s, R.heldKey(a.name, x.name)) ? `<p class="cc-note">It’s up.</p>` : s.aura >= x.cost || (chargeOk(x) && chargeFor(c, s, x.cost).length) ? `<div class="cc-row">${s.aura >= x.cost ? `<button type="button" class="button is-aura" data-act="pay-way">Pay ${auraCost(x.cost)}</button>` : ""}${chargeOk(x) ? payCharge(c, s, x.cost) : ""}</div>` : `<p class="cc-note is-warn">You need ${auraCost(x.cost)} for it, and you’ve got ${s.aura}.</p>`}</div>
   <div class="dlg-foot"><button type="button" class="button primary" data-act="close">Done</button></div>`;
 }
 
@@ -3078,8 +3097,11 @@ function payAbility(from = "") {
   const x = a?.abilities[p.j];
   if (!x) return;
   let message = "";
+  const key = R.heldKey(a.name, x.name);
   change(`paying for ${x.name}`, (s) => {
     const v = from ? c.items.find((it) => it.key === from) : null;
+    if (x.kind === "held" && R.isUp(s, key)) return "";
+    if (x.kind === "signature" && !R.sigOk(s, key, x.cost, { charge: Boolean(v) })) return "";
     if (v) {
       if (!R.spendCharge(c, s, v.key, x.cost)) return "";
     } else {
@@ -3090,7 +3112,9 @@ function payAbility(from = "") {
       s.firm = (s.firm ?? 0) + 2;
       delete s.firmPaid;
     }
-    message = `Paid ${v ? `${x.cost} charge from ${yours(v)}` : auraCost(x.cost)} for ${x.name}.${s.firm && FIRM.test(x.text) ? ` ${s.firm === 2 ? "Two hits that got through to you this round take 1 point between them" : `${s.firm} hits that got through to you this round take 1 point for every two`}. Settle them with Stand firm.` : ""} ${v ? `It’s got ${R.chargeOf(c, s, v.key)} left.` : `Aura’s ${s.aura}.`}`;
+    if (x.kind === "held") R.holdUp(c, s, key, x.cost, { paid: true });
+    if (x.kind === "signature") R.useSig(s, key, x.cost);
+    message = `Paid ${v ? `${x.cost} charge from ${yours(v)}` : auraCost(x.cost)} for ${x.name}.${x.kind === "held" ? ` It’s up till the scene ends or you drop it, so your Aura maximum’s ${R.auraMax(c, s)}.` : x.kind === "signature" ? " That’s it for this scene." : ""}${s.firm && FIRM.test(x.text) ? ` ${s.firm === 2 ? "Two hits that got through to you this round take 1 point between them" : `${s.firm} hits that got through to you this round take 1 point for every two`}. Settle them with Stand firm.` : ""} ${v ? `It’s got ${R.chargeOf(c, s, v.key)} left.` : `Aura’s ${s.aura}.`}`;
     if (inRoll) {
       roll.log.push(message);
       roll.pay = null;
@@ -3118,7 +3142,7 @@ const payNote = (c, s) => {
   const a = R.archetypesOf(c, DATA.build).find((x) => x.name === p.a);
   const x = a?.abilities[p.j];
   if (!x) return "";
-  return `<div class="cc-note" role="status"><p><b>${esc(x.name)}:</b> ${x.html}</p><div class="cc-row"><button type="button" class="button sm is-aura" data-act="pay-way"${off(s.aura < x.cost)}>Pay ${auraCost(x.cost)}</button>${payCharge(c, s, x.cost, " sm")}<button type="button" class="button sm" data-act="pick-cancel">Never mind</button></div></div>`;
+  return `<div class="cc-note" role="status"><p><b>${esc(x.name)}:</b> ${x.html}</p><div class="cc-row"><button type="button" class="button sm is-aura" data-act="pay-way"${off(s.aura < x.cost)}>Pay ${auraCost(x.cost)}</button>${chargeOk(x) ? payCharge(c, s, x.cost, " sm") : ""}<button type="button" class="button sm" data-act="pick-cancel">Never mind</button></div></div>`;
 };
 
 const ACT = {
@@ -3465,6 +3489,13 @@ const ACT = {
     openDialog();
   },
   "pay-way": (el) => payAbility(el.dataset.from || ""),
+  // Dropping a held ability: the maximum's back, the Aura paid isn't.
+  drop: (el) => {
+    const c = normal(current());
+    const key = el.dataset.k ?? "";
+    const name = key.split("|")[1] ?? "it";
+    if (c) change(`dropping ${name}`, (s) => (R.dropHeld(c, s, key) ? `Dropped ${name}. Your Aura maximum’s ${R.auraMax(c, s)} again.` : ""));
+  },
   // A Catch, a Scar, trouble or a hostile thread biting. A big bite gets a
   // point of Soul back instead of the Aura.
   bite: (el) => {

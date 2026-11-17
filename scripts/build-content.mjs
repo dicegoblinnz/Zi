@@ -379,8 +379,11 @@ function archetypesFrom(doc, inline, qr) {
   for (const m of doc.body.matchAll(/^## (.+?) \{#(a-[a-z-]+)\}\n([\s\S]*?)(?=^## |(?![\s\S]))/gm)) {
     const [, archetype, id, text] = m;
     if (/^\*\*Home track:\*\*/m.test(text)) companionWarn(`the ${archetype} archetype still has a home track, and abilities are paid in Aura now`);
-    const priced = [...text.matchAll(/^\*\*(.+?) \((\d+) (\w+)\):\*\* (.+)$/gm)];
-    const abilities = priced.map((a) => ({ name: curly(a[1]), cost: Number(a[2]), text: plain(a[4]), html: inline(a[4]) }));
+    // A held or signature ability says so after its price (18 Nov):
+    // **Its name (1 Aura, held):** or **Its name (4 Aura, signature):**, and a
+    // price can say what it's for each of (1 Aura for each tag).
+    const priced = [...text.matchAll(/^\*\*(.+?) \((\d+) (\w+)((?: for each [^,)]+)?)(?:, (held|signature))?\):\*\* (.+)$/gm)].map((a) => [a[0], a[1], a[2], a[3], a[6], a[5] ?? "", a[4].trim()]);
+    const abilities = priced.map((a) => ({ name: curly(a[1]), cost: Number(a[2]), ...(a[5] ? { kind: a[5] } : {}), ...(a[6] ? { each: a[6].replace(/^for each /, "") } : {}), text: plain(a[4]), html: inline(a[4]) }));
     for (const a of priced) if (a[3] !== "Aura") companionWarn(`the ${archetype}'s ${a[1]} costs ${a[2]} ${a[3]}, and abilities are paid in Aura`);
     // Its Trait, in the rule box as **Trait:** *Its name*. What it does.
     const traitLine = text.match(/^\*\*Trait:\*\* \*([^*\n]+)\*\.\s+(\S.*)$/m);
@@ -398,6 +401,11 @@ function archetypesFrom(doc, inline, qr) {
     // About ten to an archetype since 17 Nov: six is how many a character
     // holds, never the list. Every ability prints its Aura, and it's never 0.
     for (const a of abilities) if (!(a.cost >= 1)) companionWarn(`the ${archetype}'s ${a.name} costs ${a.cost} Aura, and an ability's 1 Aura at least`);
+    // A held one's 1 or 2 Aura, a signature 4 or 5, and an archetype has one
+    // signature at most.
+    for (const a of abilities) if (a.kind === "held" && !(a.cost >= 1 && a.cost <= 2)) companionWarn(`the ${archetype}'s ${a.name} is held at ${a.cost} Aura, and a held ability's 1 or 2`);
+    for (const a of abilities) if (a.kind === "signature" && !(a.cost >= 4 && a.cost <= 5)) companionWarn(`the ${archetype}'s ${a.name} is a signature at ${a.cost} Aura, and a signature's 4 or 5`);
+    if (abilities.filter((a) => a.kind === "signature").length > 1) companionWarn(`the ${archetype} has ${abilities.filter((a) => a.kind === "signature").length} signatures, and an archetype has one at most`);
     out[archetype] = { id, summary: inline(text.trim().split(/\n\s*\n/)[0]), for: forLine.get(archetype) ?? "", trait, abilities };
   }
   return out;
