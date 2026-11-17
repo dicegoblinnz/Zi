@@ -70,6 +70,14 @@ on from round 2, as Running the Game says now, puts it back in round 3 (31%
 at --reach 1, 3% in round 2, and 66% of fights played plain), with the same
 45 minutes, so the budgets stay.
 
+On 18 Nov (Mo's calls, 2,000 fights a setting): a Hunter's win Marks, once a
+roll, so hard play puts Wren's biggest die at Redhand and it does its harm as
+well as Marking him, where her marking roll used to do no harm. Hard goes from
+3.6 rounds and 41 minutes to 3.1 and 34, and someone's Bloodied in 2% of hard
+fights (7% before). Plain doesn't change (52 minutes). Redhand at Armoured x6
+and Feeds x4 puts hard back at 40. Everyone gets it is 1 Aura a step for one
+friend now, which only the old rules' lead plays (Fight.lead_share()).
+
   python3 tools/fight_sim.py                         the big fight on the fixes
   python3 tools/fight_sim.py --rules core            the same on 16 Nov's core
   python3 tools/fight_sim.py --gm even               the same at Even
@@ -554,11 +562,8 @@ class Fight:
             plan.setdefault("defending", set()).add(c.name)
             return
         if what == "lead":
-            steps = c.s["lead"]
-            for f in self.standing():
-                if f is not c:
-                    f.lead_steps += steps
-            c.tr["Soul"] = min(5, c.tr["Soul"] + 1)   # Everyone gets it, 1 Resolve
+            for f, n in self.lead_share(c, pay=True).items():
+                f.lead_steps += n
             return
         if what == "hide":
             seq = [t for t in self.living()]
@@ -642,6 +647,26 @@ class Fight:
             return "mark", c.s["attack"] + lead
         return "attack", c.s["attack"] + lead
 
+    def lead_share(self, c, pay=False):
+        """What Bram's order hands each friend standing: his lead's steps
+        shared out as evenly as they go, then Everyone gets it (18 Nov), 1
+        Aura for 1 step more for one friend, while he's Aura past the 1 he
+        keeps for Knock them flat, one a friend. pay spends the Aura."""
+        friends = [f for f in self.standing() if f is not c]
+        if not friends:
+            return {}
+        steps = c.s["lead"]
+        share = {f: steps // len(friends) + (1 if i < steps % len(friends) else 0) for i, f in enumerate(friends)}
+        aura = c.aura
+        for f in friends:
+            if aura < 2:
+                break
+            aura -= 1
+            share[f] += 1
+        if pay:
+            c.aura = aura
+        return share
+
     def leads_first(self, c):
         """Whether Bram's first action this round is an order, as choose() has it."""
         return (not self.plain and c.tr["Soul"] <= (1 if self.policy == "table" else 2)
@@ -676,10 +701,11 @@ class Fight:
             return
         crew = self.standing()
         # Bram acts first, so when his first action's an order, everyone else's
-        # first roll has its steps (Everyone gets it), and his isn't a roll.
+        # first roll has their share of it, and Everyone gets it's step on
+        # top, and his isn't a roll.
         bram = next((c for c in crew if c.name == "Bram"), None)
-        lead = bram.s["lead"] if bram and not plan["bram_defend"] and self.leads_first(bram) else 0
-        rolls = [[c, *self.first_roll(c, plan, lead), 0] for c in crew]   # [who, kind, steps, moved onto it]
+        share = self.lead_share(bram) if bram and not plan["bram_defend"] and self.leads_first(bram) else {}
+        rolls = [[c, *self.first_roll(c, plan, share.get(c, 0)), 0] for c in crew]   # [who, kind, steps, moved onto it]
         rolls = [r for r in rolls if r[1] != "lead"]
         for _ in range(len(crew)):
             best = None
@@ -1245,14 +1271,28 @@ class CoreFight:
                 wins += self.one_die(c, d, t, self.vuln(t, melee))
             return wins
         D = max(t.die for t in seq)
-        for d in list(shape(S, 1, D)) + list(extra):
+        # A Hunter's win Marks (18 Nov): once a roll, her biggest winning die
+        # at Redhand Marks him with that die, on top of the harm it does.
+        # Played hard, since plain play leaves the archetypes out.
+        # With people still standing she puts her biggest die at him for it.
+        mark = 0
+        hunt = c is self.hunter and not self.plain and self.boss.alive and self.boss.marked < 8
+        dice = list(shape(S, 2 if hunt and len(seq) > 1 else 1, D))
+        if hunt:
+            dice.sort(reverse=True)
+        for i, d in enumerate(dice + list(extra)):
             seq = self.targets()
             if not seq:
                 break
-            t = seq[0]
-            wins += self.one_die(c, d, t, self.vuln(t, melee))
+            t = self.boss if hunt and i == 0 else seq[0]
+            won = self.one_die(c, d, t, self.vuln(t, melee))
+            wins += won
+            if won and t is self.boss:
+                mark = max(mark, d)
         if self.boss.alive and self.boss.marked and seq and seq[0] is self.boss:
             wins += self.one_die(c, self.boss.marked, self.boss, self.vuln(self.boss, melee))
+        if mark and c is self.hunter and not self.plain and self.boss.alive:
+            self.boss.marked = max(self.boss.marked, mark)
         return wins
 
     def vuln(self, t, melee):
@@ -1345,21 +1385,6 @@ class CoreFight:
             self._choice += 1 + (item > 0)
             self.roll_at(c, S, True, extra=pool)
             return S + 2 * len(pool)
-        if n == "Wren" and not self.plain and self.boss.alive and self.boss.marked < 8:
-            S = self.spend_for_roll(c, c.steps(root) + awk + item)
-            self._choice += (awk > 0) + (item > 0)
-            D = self.defence(self.boss)
-            best = 0
-            for d in shape(S, 1, 12):
-                raw = self.throw(d)
-                if raw == d:
-                    self.gain(c, 1, True)
-                if raw > D:
-                    self.gain(c, 1, True)
-                    best = max(best, d)
-            if best:
-                self.boss.marked = best
-            return S
         S = c.steps(root) + awk + item
         self._choice += (awk > 0) + (item > 0)
         knock = (not self.plain) and n == "Bram" and self.boss.alive

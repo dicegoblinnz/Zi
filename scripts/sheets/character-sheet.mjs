@@ -116,7 +116,7 @@ const conditionsAndScars = () => `
       ${tab("Getting it back", "two rests")}
       <p class="hint"><b>When a scene ends:</b> roll each Root below what it holds, unsplit, d12s first (8 is a d12 and a d4), and get back what you roll · its top faces are Aura, what it heals never is · Toll down 1 · armour’s soak all back</p>
       <p class="hint"><b>Downtime:</b> everything back, every Root full, every wound and your Toll gone, and your Resources · a vessel keeps its charge · Scars stay, and 3 slots on one grow it into a Trait: tick a box for each</p>
-      <p class="hint"><b>A heal</b> (a Healer’s) is rolled unsplit, less 5 for each Toll, spread on any of your Roots · <b>quick heal:</b> 1 Aura and an action, 1 point back</p>
+      <p class="hint"><b>A heal</b> (a Healer’s) is rolled unsplit, less 5 for each Toll, spread on any of your Roots</p>
     </section>
   </div>`;
 

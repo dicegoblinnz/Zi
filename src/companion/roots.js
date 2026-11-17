@@ -1120,7 +1120,7 @@ export function fillVessel(c, s, key, n = 1, { from = "aura", root = null } = {}
 // Spend charge on one of their own abilities or awakenings' extra steps, a
 // charge for each Aura it'd cost. It's never Aura: it never counts towards
 // their maximum, never goes to a friend, and never pays for bringing in a
-// Root, a tie, an intercept, a quick heal, going beyond or borrowing.
+// Root, a tie, an intercept, going beyond or borrowing.
 // The points held in it go first, so each Root gets its point free again
 // (spent, so it comes back the usual way), then the charge from Aura.
 export function spendCharge(c, s, key, n = 1) {

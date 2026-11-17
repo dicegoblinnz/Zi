@@ -2763,16 +2763,16 @@ if (part("4b")) {
   plate.have[0] = ["Push", "Take it on the plate"];
   const bleed = fromCrew(vesk, BUILD);
   bleed.archs[1] = "Bloodsworn";
-  bleed.have[1] = ["Bleed for it", "Bleed out"];
+  bleed.have[1] = ["Push", "Bleed out"];
   const plateSheet = rootsSheet(sheetOf({ id: "plate", name: "Plate", build: plate }, BUILD), [], BUILD);
   same(plateSheet.archetypes[0].have, ["Push", "Put it on me"], "Take it on the plate carried across as Put it on me");
   same(RS.choicesOf(plateSheet).filter((x) => x.k === "ability"), [], "with nothing to choose");
   const bleedSheet = rootsSheet(sheetOf({ id: "bleed", name: "Bleed", build: bleed }, BUILD), [], BUILD);
-  same([bleedSheet.archetypes[1].have, bleedSheet.archetypes[1].cut], [["Bleed for it"], ["Bleed out"]], "Bleed out off the Bloodsworn");
+  same([bleedSheet.archetypes[1].have, bleedSheet.archetypes[1].cut], [["Push"], ["Bleed out"]], "Bleed out off the Bloodsworn");
   same(RS.choicesOf(bleedSheet).filter((x) => x.k === "ability"), [{ k: "ability", a: 1, name: "Bleed out" }], "and a choice for it");
-  same(bleedSheet.points.spent, costOf({ ...bleedSheet, archetypes: bleedSheet.archetypes.map((a, i) => (i === 1 ? { name: a.name, have: ["Bleed for it"] } : a)) }).spent, "its point back through costOf()");
+  same(bleedSheet.points.spent, costOf({ ...bleedSheet, archetypes: bleedSheet.archetypes.map((a, i) => (i === 1 ? { name: a.name, have: ["Push"] } : a)) }).spent, "its point back through costOf()");
   same(pointsOf(normalBuild(bleed, BUILD)).spent, bleedSheet.points.spent, "the builder counting it the same");
-  const grownBleed = rootsSheet(sheetOf({ id: "bleed2", name: "Bleed", build: { ...bleed, have: [bleed.have[0], ["Bleed for it"]] } }, BUILD), [{ k: "ability", a: 1, name: "Bleed out" }, { k: "ability", a: 0, name: "Take it on the plate" }], BUILD);
+  const grownBleed = rootsSheet(sheetOf({ id: "bleed2", name: "Bleed", build: { ...bleed, have: [bleed.have[0], ["Push"]] } }, BUILD), [{ k: "ability", a: 1, name: "Bleed out" }, { k: "ability", a: 0, name: "Take it on the plate" }], BUILD);
   same([grownBleed.archetypes[1].cut, grownBleed.archetypes[0].have.includes("Take it on the plate")], [["Bleed out"], false], "Bleed out grown in downtime off too, and a cut name never grown onto another archetype");
   same(RS.hadOf("Bloodsworn", BUILD.archetypes.find((a) => a.name === "Bloodsworn").abilities.map((x) => x.name)), ["Bleed for it", "Bleed out"], "hadOf() keeping Bleed out for the sheet to take off");
   const reworked = { v: 1, characters: [
@@ -4333,7 +4333,7 @@ if (part("9")) {
       { k: "perm", t: 0, text: "a new permission", root },
       { k: "thread", person: "Someone new", text: "They owe me.", kind: "hostile" },
       { k: "title", text: "A Title from an Aspiration", roots: { Body: 0, Mind: 2, Soul: 3 }, perm: { text: "its permission", root: "Soul" } },
-      { k: "arch", arch: "Healer", have: ["Pull them back"] },
+      { k: "arch", arch: "Healer", have: ["Push"] },
       { k: "attune", name: "A new thing", awk: { name: "Its awakening", root: "Mind", text: "2 steps on every roll you make with it" } },
       { k: "awk", a: 0, name: "Another awakening", root: "Mind", text: "1 Aura and it does something", catch: "Loud" },
     ];
@@ -4344,7 +4344,7 @@ if (part("9")) {
     roots.Soul += 4;
     same(c.roots, roots, `${base.name}'s Roots with a permission and a new Title spread Mind 2 and Soul 3`);
     same("specialties" in c, false, `${base.name} with no specialties`);
-    same([c.titles.length, c.archetypes.length, c.archetypes.at(-1).have, c.attuned.length, c.attuned[0].awakenings.length, c.numbers.aura, c.attuned.at(-1).awakenings.map((w) => w.root)], [c0.titles.length + 1, c0.archetypes.length + 1, ["Pull them back"], c0.attuned.length + 1, c0.attuned[0].awakenings.length + 1, c0.numbers.aura, ["Mind"]], `${base.name}'s Titles, archetypes with the one ability, a new attuned thing with no Aura of its own, and awakenings on their Roots`);
+    same([c.titles.length, c.archetypes.length, c.archetypes.at(-1).have, c.attuned.length, c.attuned[0].awakenings.length, c.numbers.aura, c.attuned.at(-1).awakenings.map((w) => w.root)], [c0.titles.length + 1, c0.archetypes.length + 1, ["Push"], c0.attuned.length + 1, c0.attuned[0].awakenings.length + 1, c0.numbers.aura, ["Mind"]], `${base.name}'s Titles, archetypes with the one ability, a new attuned thing with no Aura of its own, and awakenings on their Roots`);
     same(RS.lockedOf(c).Mind, RS.lockedOf(c0).Mind + 2, `${base.name}'s two new awakenings each locking a point of their Mind`);
     same(c.threads.find((p) => p.person === "Someone new")?.threads[0]?.kind, "hostile", `${base.name}'s new hostile thread`);
     // A seventh permission never gets on a Title.
