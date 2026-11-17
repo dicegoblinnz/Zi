@@ -395,7 +395,6 @@ function archetypesFrom(doc, inline, qr) {
     }
     if (!forLine.get(archetype)) companionWarn(`the ${archetype} archetype isn't in the table in Picking Your Archetypes, so its card in the builder has nothing to say what it's for`);
     if (!abilities.length) companionWarn(`the ${archetype} archetype has no abilities I can read (**Its name (1 Aura):** what it does)`);
-    if (abilities.length > 6) companionWarn(`the ${archetype} archetype has ${abilities.length} abilities, and an archetype holds six at most`);
     out[archetype] = { id, summary: inline(text.trim().split(/\n\s*\n/)[0]), for: forLine.get(archetype) ?? "", trait, abilities };
   }
   return out;

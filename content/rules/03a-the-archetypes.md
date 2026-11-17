@@ -105,6 +105,22 @@ The Bard's for nerve. You're the one keeping the crew's heads straight, and Defe
 **Push (1 Aura):** +2 to one of your song dice.
 
 **Crescendo (1 Aura):** this time your Lift gives everyone who hears you 2 points back, not 1. Pay again and it's 3.
+
+**Hymn (1 Aura):** this time your Lift puts the points back on everyone's Soul instead of their Mind. It's still not a heal.
+
+**Marching song (1 Aura):** sing as you go, and everyone who can hear you strides 2 units further this round, you included. Pay again for 2 more.
+
+**Keep them watching (1 Aura):** one scream or blade behind your back doesn't turn round the threats watching you for *All Eyes on Me*. Pay again for another.
+
+**Old songs (1 Aura):** say there's a song about the place, the person or the thing in front of you, and ask the GM one question about it. She answers it truthfully, the way the song tells it.
+
+**Shake it off (1 Aura):** one of your song dice can break *Frightened*, *Charmed*, *Taunted* or *Shaken* on anyone who can hear you, if it beats that condition's die. Pay again for another die.
+
+**Soul song (1 Aura):** this time your Hold them stops despair, temptation and curses as well, at your Soul and the Souls of everyone who can hear you.
+
+**Answer back (1 Aura):** when one of your song dice stops something at a friend's Mind, it goes back at whoever sent it. If it beats that threat's roll for the round, it strips one of its tags, the kind a word can take.
+
+**A song about them (1 Aura):** sing about a faction where a crowd can hear you, as your action, and roll it against the Challenge of that faction's face. A win's an Influence or an Undermine on that faction, your pick, the way the crew's would be (see [The Six Outcomes](#s-faction-outcomes)), and it doesn't cost the crew its action.
 :::
 
 :::example[A dragon roars]
@@ -128,7 +144,23 @@ The Bloodsworn gets more dangerous every time they bleed.
 :::rule
 **Trait:** *Paid in Blood*. Every point your Body loses gives you 1 Aura, whether a hit took it or you spent it yourself.
 
+**Push (1 Aura):** +2 to one die on a roll your blood's put steps on.
+
 **Bleed for it (1 Aura):** spend a point of your Body as you act, for nothing but the blood, and your mechanic puts 3 steps on this roll. Pay again for 3 more.
+
+**Scab over (1 Aura):** your Body gets a point back at the end of this round, as far as half its maximum, rounded up. It isn't a heal, so it adds no Toll. Pay again for another.
+
+**Scent of blood (1 Aura):** till the scene ends you can smell blood. You know where anything that's bleeding is, a long way off, and you can follow a blood trail at a run.
+
+**Blood oath (1 Aura):** cut your palm as you swear something, and spend a point of your Body. Everyone who sees it knows you mean every word, though they can still say no, and your mechanic puts the point's 3 steps on your next action.
+
+**Red mist (1 Aura):** this round, fear, lies and pressure landing at your Mind land at your Body instead, and your Body rolls against them.
+
+**Make them bleed (1 Aura):** when one of your dice wins on a roll your blood's put steps on, whatever it beat is *Bleeding* at that die's size, on top of whatever the die was for. Pay again for another die.
+
+**Mine to take (1 Aura):** when a hit gets through to the Body of a friend within your stride, take it yourself, after it's landed. It's a point off your Body instead of theirs. Pay again for another hit.
+
+**Through the mail (1 Aura):** this round, every point your armour soaks counts as a point your Body lost for your mechanic, though not for *Paid in Blood*.
 
 **Bleed out (1 Aura):** one roll gets 3 steps for every point your Body's down from what it can hold.
 :::
@@ -159,6 +191,22 @@ It doesn't cost Aura. Everyone the story puts in it defends against your other d
 **Push (1 Aura):** +2 to your area die.
 
 **Sculpt (1 Aura):** your area skips one person you choose. Pay again for each one more.
+
+**Throw it (1 Aura):** your cone or your line starts anywhere you can see, facing whichever way you like.
+
+**Ride the line (1 Aura):** you go with your line, and end up anywhere along it as part of your stride: over water, up a wall or across a gap.
+
+**Raise it (1 Aura):** your area raises ground instead of catching anyone, like a wall of ice, a ditch, a bank of fog or a bridge of stone, the size the die rolled. It stays till the scene ends.
+
+**Change the weather (1 Aura):** your element fills the place you're in, a fog off the water, a gale or a hard frost, and it's part of the ground for everyone till the scene ends.
+
+**Walk with me (1 Aura):** till the scene ends, your element loose in the scene can't hurt a friend you can touch, the same as it can't hurt you. Pay again for another friend.
+
+**Linger (1 Aura):** your area stays where it is till the end of next round, and anyone who comes into it before then defends against the number your other die rolled. Pay again for another round.
+
+**Two shapes (1 Aura):** one more of your dice can be an area, with its own shape and its own die going at everyone in it. Pay again for another.
+
+**Shield of the storm (2 Aura):** when you [Defend](#s-defend), one of your dice can be your area, and another stops every blow at anyone in it that it meets or beats, not just one.
 :::
 
 :::example[Five guards]
@@ -181,6 +229,22 @@ Spend your action and build your dice the usual way, but don't roll them. Put th
 **Push (1 Aura):** +2 to one of your influence dice.
 
 **Turn them (1 Aura):** when your influence takes one of a Mook's or a Named threat's dice, the threat fights for the crew till the round ends. Pay again for another threat your influence took a die from.
+
+**Play them off (1 Aura):** your influence can sit on one more threat, your dice shared between them however you like. Pay again for another.
+
+**Know their price (1 Aura):** when your influence takes one of a threat's dice, the GM tells you what drives it as well, one of its hidden tags.
+
+**Old favour (1 Aura):** whoever turns up for *I Know a Guy* has something on them you need. Say it the way you'd say a Resource, and don't tick one.
+
+**Grease the palm (1 Aura):** tick a Resource that'd tempt them, like a purse, a bottle or a favour owed, and one of a threat's dice this round is yours as if your influence had taken it, with no roll. It has to be someone who can be bought.
+
+**Keep them sweet (1 Aura):** once you've rolled your influence, it stays on the threat instead of being spent, and you can roll it again before one of its later telegraphs this scene.
+
+**Word gets round (1 Aura):** when someone believes something you've told them, it spreads. By the next scene everyone they'd talk to has heard it, and believes it as much as they do.
+
+**Shake them (1 Aura):** when your influence takes one of a threat's dice, your best influence die goes at the threat as well, for any intent you like, against its roll for the round.
+
+**Friends in high places (2 Aura):** put your influence on a faction's face in a scene, and it stays on that faction till the next [faction turn](#s-faction-turn). When that faction's action is telegraphed, roll your influence against it. Each of its dice your best beats is yours, and you say what it does instead, as long as the story allows.
 :::
 
 :::example[The bandit captain]
@@ -202,9 +266,25 @@ The Gambler turns a die over after it lands, whoever's it is.
 :::rule
 **Trait:** *Bad Luck Pays*. Every die of yours that comes up 1 gives you 1 Aura, as long as it stays a 1.
 
+**Push (1 Aura):** +2 to a die of yours or a friend's that you've just flipped.
+
 **Another flip (1 Aura):** flip one more die this round. Pay again for another.
 
 **Double or nothing (1 Aura):** flip every die in one roll, all at once.
+
+**Roll it again (1 Aura):** any one die you can see rolls again, a threat's or a friend's as well as yours, and the new number stands.
+
+**Luck of the draw (1 Aura):** flip something in the story that comes down to luck, like a coin, a card, a drawn lot or which door the guard tries first, and it goes the other way.
+
+**Won it at cards (1 Aura):** say you won it off someone last night, and get back one of your Resources you've ticked.
+
+**Fold (1 Aura):** once your dice have landed, take back any that answered a telegraph and lost. They don't count, and those telegraphs don't land on you then and there. They land at the end of the round with the rest, and your defence gets its go at them.
+
+**Their bad luck (1 Aura):** when a threat's die comes up 1, you say what it does instead, as long as the story allows, like hitting one of its own or the ground.
+
+**Side bet (1 Aura):** before the scene ends, name a faction in it. At the next [faction turn](#s-faction-turn) you can flip one die that faction rolls, or one rolled against it.
+
+**House rules (2 Aura):** till the round ends, every tie you're in goes your way, acting or not, with no Aura to pay for it.
 :::
 
 :::example[The guard's lucky night]
@@ -229,6 +309,22 @@ If you're a Teleporter as well, you intercept for every friend within 10 units (
 **Push (1 Aura):** +2 to one of your defence dice.
 
 **Stand firm (1 Aura):** the next two hits that get through to you this round take 1 point between them, not 2. Pay again for two more.
+
+**Reach them (1 Aura):** intercept for a friend out past your stride, as long as you can see them and get to them this round. Pay again for another.
+
+**Carry them (1 Aura):** a friend you can reach comes with you when you move this round, carried or dragged, as far as your stride and any dice you put on moving.
+
+**My charge (1 Aura):** name someone who isn't in the crew, like a witness, a prisoner or a child. Till the scene ends, they count as a friend for your intercepts.
+
+**In the way (1 Aura):** intercept a telegraph aimed at a stake, a place or a clock, if you can get in front of it. It comes at your Body instead. Pay again for another.
+
+**Knock it back (1 Aura):** when one of your dice stops a blow you intercepted, whoever threw it is *Staggered* at that die's size. Pay again for another die.
+
+**Lend your shield (1 Aura):** a friend within your stride gets your guard's tier on their rolls avoiding harm this round, as if they were holding it, and it's the one item on those rolls.
+
+**Take it on the plate (1 Aura):** when a hit gets through to the Body of a friend within your stride, your armour soaks it instead of them, after it's landed, as long as it's got soak left. Pay again for another hit.
+
+**Back on my feet (1 Aura):** when the scene ends, roll your Body twice to get its points back, and keep the better roll.
 :::
 
 :::example[Three goblins]
