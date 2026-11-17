@@ -306,25 +306,25 @@ If you're a Teleporter as well, you intercept for every friend within 10 units (
 :::rule
 **Trait:** *Better Me Than You*. Every blow you intercept for a friend gives you 1 Aura, whether it gets through to you or not.
 
-**Push (1 Aura):** +2 to one of your defence dice.
+**Push (1 Aura):** +2 to one of your defence dice, the ones you roll when blows land or on a Defend.
 
-**Stand firm (1 Aura):** the next two hits that get through to you this round take 1 point between them, not 2. Pay again for two more.
+**Stand firm (1 Aura):** once the dice are down and you can see what's got through, two hits that got through to you this round take 1 point between them, not 2. Pay again for two more.
 
-**Reach them (1 Aura):** intercept for a friend out past your stride, as long as you can see them and get to them this round. Pay again for another.
+**Reach them (1 Aura):** intercept for a friend out past your stride, as long as you can see them and could get to them this round. You're beside them when the blows land. Pay again for another friend.
 
-**Carry them (1 Aura):** a friend you can reach comes with you when you move this round, carried or dragged, as far as your stride and any dice you put on moving.
+**Carry them (1 Aura):** a friend you can reach comes with you when you move this round, carried or dragged, as far as your stride and any dice you put on moving. It costs them nothing. Pay again for another friend.
 
-**My charge (1 Aura):** name someone who isn't in the crew, like a witness, a prisoner or a child. Till the scene ends, they count as a friend for your intercepts.
+**My charge (1 Aura):** name someone who isn't in the crew, like a witness, a prisoner or a child. Till the scene ends, they're a friend for your intercepts and everything else you do as a Guardian. Pay again for another.
 
-**In the way (1 Aura):** intercept a telegraph aimed at a stake, a place or a clock, if you can get in front of it. It comes at your Body instead. Pay again for another.
+**In the way (1 Aura):** intercept a telegraph aimed at a stake, a place or a clock, if you can get in front of it, like the runner going for the bell or the ram at the gate. It comes at your Body as a blow. Stop it and it doesn't happen, and if it gets through you take its hits, but it still doesn't do what it said. Pay again for another.
 
 **Knock it back (1 Aura):** when one of your dice stops a blow you intercepted, whoever threw it is *Staggered* at that die's size. Pay again for another die.
 
-**Lend your shield (1 Aura):** a friend within your stride gets your guard's tier on their rolls avoiding harm this round, as if they were holding it, and it's the one item on those rolls.
+**Your turn (1 Aura):** when one of your dice stops a blow you intercepted, the friend it was meant for gets a die that size, to roll fresh with their next roll as one more die with an intent of its own. It's gone once it's rolled or the scene ends, and they hold one of these from you at a time. Pay again for another die.
 
-**Take it on the plate (1 Aura):** when a hit gets through to the Body of a friend within your stride, your armour soaks it instead of them, after it's landed, as long as it's got soak left. Pay again for another hit.
+**Put it on me (1 Aura):** when a hit gets through to the Body of a friend within your stride, or one of them misses and the GM names what it costs them, it's yours instead. A hit comes off you the usual way, soak first, and a cost has to be one you could take standing there, like the guard grabbing you instead of them. It isn't an intercept, so *Better Me Than You* doesn't pay. Pay again for another hit or cost.
 
-**Back on my feet (1 Aura):** when the scene ends, roll your Body twice to get its points back, and keep the better roll.
+**Keep watch (1 Aura):** in the last scene before downtime, say what you're guarding: one of the crew, or an asset or resource on the party sheet. If a faction's action goes at it in the next faction turn, you Obstruct it with your Body at full (see [The Six Outcomes](#s-faction-outcomes)), and it doesn't cost the crew its action. Pay again to guard another.
 :::
 
 :::example[Three goblins]
@@ -344,25 +344,27 @@ A heal reaches one person. Anyone can [quick heal](#s-healing) for 1 Aura, thoug
 :::rule
 **Trait:** *Good Hands*. Your heals ignore a step of Toll: each one loses 5 less for the Toll your patient's got, so a heal from you on someone with 1 Toll is whole.
 
-**Push (1 Aura):** +2 to one of your dice when you heal.
+**Push (1 Aura):** +2 to one of your dice when you heal, so 2 more points for your patient.
 
 **Talk them through it (1 Aura):** your heal reaches someone who can see and hear you, not just someone you can reach. They do the stitching while you tell them how.
 
-**Take the Toll (1 Aura):** the 1 Toll this heal gives goes on you instead of your patient. The heal still loses 5 for each Toll they've got already.
+**Clean it out (1 Aura):** your heal also ends a condition a healer could treat on your patient, like *Bleeding*, *Burning*, *Poisoned*, *Blinded* or *Stunned*, with no roll. It goes on a heal roll, never a quick heal. Pay again for another.
 
-**Rest easy (1 Aura):** when the scene ends, one Root of yours or of a friend you can reach rolls its rest twice and keeps the better. Pay again for another Root, or another friend.
-
-**What did this (1 Aura):** when you win a [Study](#s-study) on someone hurt, sick or dead, you get two of its picks instead of one: two straight answers, or an answer and a hidden tag.
-
-**Owed (1 Aura):** someone you've healed or patched up, the GM's people included, does one thing for you that they'd do for whoever saved their life. There's no roll, and it's once for each of them.
-
-**Share it (1 Aura):** your heal reaches one more person you can reach. Roll it once and share what it rolls out between them, and each share loses 5 for each Toll that patient's got already and gives them 1 Toll. Pay again for one more.
+**Go round (1 Aura):** split your heal like any other roll, and give each die to a different patient you can reach. The dice aren't filled to a d12 first, since you're shaping them yourself. Each patient gets what their die rolls, less 5 for each Toll they've got, and takes 1 Toll.
 
 **On the move (1 Aura):** your heal can be one die of a roll instead of your whole action, so the rest of your dice can do whatever else you're up to. Make that die as big as you like.
 
+**Up you get (1 Aura):** your patient's *Blessed* with the die that healed them, the biggest if more than one did, on the next thing they've told the table they're about to do. It works even if their Toll ate the whole heal. With Go round, pay for each patient.
+
+**What did this (1 Aura):** when you win a [Study](#s-study) on someone hurt, sick or dead, you get two of its picks instead of one: two straight answers, or an answer and a hidden tag. Pay once you've won.
+
+**Owed (1 Aura):** someone you've healed or patched up, the GM's people included, does one thing for you that they'd do for whoever saved their life. There's no roll, and it's once for each of them.
+
+**Rest easy (1 Aura):** when the scene ends, one Root of yours or of a friend you can reach rolls its rest twice and keeps the better. Pay again for another Root, or another friend.
+
 **Pull them back (1 Aura):** when someone you can reach takes a Scar, they stay in the scene instead of leaving it. It costs no action. That Root's still wounded and on 0, so they'll want to keep their head down. Pay again for another.
 
-**Close the wound (2 Aura):** your heal clears a wound as well, so that Root can heal to its maximum again. It's still a heal, so it gives Toll and loses for Toll the same as any other.
+**Close the wound (2 Aura):** your heal clears a wound as well, so that Root can heal to its maximum again, starting with this heal. It's still a heal, so it gives Toll and loses for Toll the same as any other.
 :::
 
 :::example[Healing Vesk]
@@ -382,25 +384,25 @@ Put one of your dice on a creature to mark it. Win and it's ***Marked***, a spec
 :::rule
 **Trait:** *Good Hunting*. Every die a friend wins against a creature you've *Marked*, going at it or stopping it, gives you 1 Aura as well as them.
 
-**Push (1 Aura):** +2 to the Mark die when it's rolled. It's your Aura, whoever's rolling.
+**Push (1 Aura):** +2 to the Mark die once it's rolled. It's your Aura, whoever's rolling.
 
-**Hold the scent (1 Aura):** the Mark doesn't fade at the end of this round. Pay again for another round.
+**Draw blood (1 Aura):** before you roll, give your marking die a second intent at the same creature. If it wins, the creature's *Marked* and the other intent lands too. If that drops it, the Mark jumps straight on, at that die.
 
-**Mark the pack (1 Aura):** your roll to mark goes at two more creatures you can see, and each one it beats is *Marked* with it. Pay again for two more.
+**Mark the pack (1 Aura):** your roll to mark goes at two more creatures you can see, and each one it beats is *Marked* with it. Each Mark fades and jumps on its own. Pay again for two more.
 
-**Point it out (1 Aura):** a friend can give one of their dice the intent to mark a creature for you. If it wins, the creature's *Marked* with that die, the same as if you'd marked it yourself.
+**Watch its hands (1 Aura):** when a *Marked* creature's telegraphs land this round, whoever they land on rolls the Mark die with their defence, as one more die that can stop one. Pay any time before they land.
 
-**Where it's soft (1 Aura):** the first time the Mark die wins this round, the GM tells you one of the creature's hidden tags as well, if it's got one.
+**Where it's soft (1 Aura):** when the Mark die wins, the GM tells you one of the creature's hidden tags, its weak point first if it's got one. Pay once it's won, and if there's nothing hidden she says so and you keep your Aura. Once a round for each creature.
 
-**Watch its hands (1 Aura):** when a *Marked* creature's telegraphs land this round, whoever they land on rolls the Mark die with their defence, as one more die that can stop one.
-
-**Run it down (1 Aura):** this round, anyone chasing a *Marked* creature can roll the Mark die with the dice they put on moving, and it adds like they do.
+**One by one (1 Aura):** when the Mark jumps, roll the Mark die there and then at the creature it jumped to, on its own, with an intent you give it, against that creature's roll for the round. It costs no action. Pay again each time it jumps.
 
 **Mark the way (1 Aura):** your die to mark can go at a stake or an event instead of a creature. Win and it's *Marked*, and anyone who works it rolls the Mark die too. It doesn't jump.
 
-**On its trail (1 Aura):** when a *Marked* creature gets away, you know which way it went and how far ahead it is till the next downtime, and when you catch up with it, it's *Marked* again at the die it had.
+**Set the snare (1 Aura):** your marking die goes on a spot instead of a creature, like a doorway or the gap they'll run for, or a name dropped in a conversation. Nothing pushes back, so you don't roll it, and it waits there without fading till the scene ends. The first creature to cross it, or flinch at the name, is *Marked* with that die. Pay again for another spot.
 
-**Hunt them down (1 Aura):** when a scene ends with a *Marked* creature that answers to a faction, the Mark goes on that faction in the next faction turn, at the die it ended the scene on. The crew's roll against that faction rolls the Mark die too.
+**On its trail (1 Aura):** put your marking die on what something left behind, like its footprints or the knife it dropped, against its Challenge. Win and you know which way it went and how far ahead it is till the next downtime, and it's *Marked* with that die when you find it. A *Marked* creature that gets away works the same with no roll, and it's *Marked* again at the die it had when you catch up.
+
+**Hunt them down (1 Aura):** when a scene ends with a *Marked* creature that answers to a faction, the Mark goes on that faction in the next faction turn, at the die it ended the scene on. The crew's roll against that faction rolls the Mark die too. A creature you're on the trail of counts.
 :::
 
 :::example[Marking the Warden]
@@ -420,25 +422,27 @@ Spend your action and roll your illusion dice against the threats' Challenge. **
 :::rule
 **Trait:** *Made You Look*. When a threat swings at one of your illusions, talks to it or tries to get through it, take 1 Aura.
 
-**Push (1 Aura):** +2 to one of your illusion dice.
+**Push (1 Aura):** +2 to one of your illusion dice, which raises what a threat has to beat to see through it.
 
-**Wear it (1 Aura):** your illusion goes on you or a friend you can touch: another face, or a guard's coat. It holds up when someone talks to them close up, and only beating what you rolled sees through it.
-
-**For their eyes (1 Aura):** one of your illusions shows only to the people you choose. Everyone else sees what's really there.
+**Wear it (1 Aura):** your illusion goes on you or a friend you can touch: another face, or a guard's coat. It holds up when someone talks to them close up, and only beating what you rolled sees through it. Pay again for another person.
 
 **Nothing there (1 Aura):** your illusion hides something that's there instead of showing something that isn't, like a friend in a doorway or the blood on the floor. Pay again for another.
 
-**Solid enough (1 Aura):** a threat that touches one of your illusions or talks to it still believes it. Only beating what you rolled sees through it now.
+**For their eyes (1 Aura):** one of your illusions shows only to the people you choose. Everyone else sees what's really there.
 
-**It moves (1 Aura):** one of your illusions moves and acts like the real thing till the round ends, a clone running for the gate or a guard waving the others on. Pay again for another round.
+**Solid enough (1 Aura):** one of your illusions passes for the real thing up close, so it moves, answers back and holds up to a touch. A threat that touches it or talks to it still believes it, and only beating what you rolled sees through it. It still does nothing real, so a guard who throws his whole weight at the wall goes through.
 
-**Decoy (1 Aura):** a telegraph at someone your illusion's copied lands on the illusion instead, as long as the threat believes it, and the illusion's gone.
+**Decoy (1 Aura):** when a blow's about to land on someone your illusion's copied, it lands on the illusion instead, as long as the threat still believes it, and the illusion's gone. The copy has to be standing there already.
 
-**Takes one to know one (1 Aura):** you know an illusion, a disguise or a forgery when you see one, with no roll, and the GM tells you what it's hiding.
+**Fell for it (1 Aura):** when a threat swings at one of your illusions, talks to it or tries to get through it, it takes the condition your illusion would leave it with, at the size of your biggest illusion die: *Taunted* by the clone, *Frightened* by the monster or *Blinded* by the flash. Never a vulnerability like *Prone*.
 
-**Leave it standing (1 Aura):** one of your illusions stays after you've gone, till someone sees through it or the next downtime ends.
+**Takes one to know one (1 Aura):** you know an illusion, a disguise or a forgery when you see one, with no roll, and the GM tells you what it's hiding. If it's none of those, she says so and you keep your Aura.
 
-**Make it real (1 Aura):** one illusion's real till the round ends. The wall stops them, and the clone hits back. Pay again for another round, or another illusion.
+**That was never me (1 Aura):** the you everyone's been watching was an illusion, and you've been somewhere else in the scene all along, anywhere you could have walked to unseen since the scene began or since you were last touched or hit. Nothing you've done or taken is undone, and a telegraph already aimed at you still follows you.
+
+**Leave it standing (1 Aura):** one of your illusions stays after you've gone, till someone sees through it or the next downtime ends. A faction's action in the next faction turn aimed at what it shows or hides has to beat what you rolled first, or it's wasted on the illusion.
+
+**Make it real (1 Aura):** one illusion's real till the round ends: the wall stops them, the bridge takes your weight, the door locks. It does what the real thing would and nothing more, so a clone can be stood behind and takes one blow before it's gone, but it won't swing for you. Pay again for another round, or another illusion. When the round ends it's an illusion again, so get everyone off the bridge first.
 :::
 
 :::example[A wall across the corridor]
