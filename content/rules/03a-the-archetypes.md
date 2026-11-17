@@ -548,9 +548,9 @@ Your foresight's two numbers at most, however many steps you've got, so make the
 :::rule
 **Trait:** *Seen It Coming*. Each round, once the telegraphs are out and before anyone does anything else, you can roll up to 3 of the threats' dice: their telegraphs, or a threat's one roll for the round. They stay as they landed, face up, so the crew knows where to put its dice before anyone commits.
 
-**Push (1 Aura):** +2 to one of your foresight numbers, when you roll them. A 12 on your d12 can be a 14 this way, and it still fits a d12.
+**Push (1 Aura):** +2 to one of your foresight numbers, when you roll them.
 
-**Hold it (1 Aura):** your foresight lasts till you use it or the scene ends. You never hold more numbers than one foresight roll gives you, so if you roll it again while you're holding some, keep whichever you like, up to that many.
+**Hold it (1 Aura):** your foresight lasts till you use it or the scene ends.
 
 **Another glimpse (1 Aura):** your foresight's one number more this time. Pay again for another.
 
