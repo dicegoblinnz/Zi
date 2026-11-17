@@ -5,8 +5,8 @@ slug: title-ideas-and-the-crew
 order: 3.5
 part: "Play"
 partNumber: "Part I"
-source: 2026-10-02 rulebook (split out of Building Your Character), and Mo's chat decisions, 6 to 8, 14 and 16 Nov 2026
-updated: 2026-11-16
+source: 2026-10-02 rulebook (split out of Building Your Character), and Mo's chat decisions, 6 to 8, 14, 16 and 17 Nov 2026
+updated: 2026-11-17
 ---
 ## Quick Build {#s-quick}
 
@@ -14,22 +14,22 @@ updated: 2026-11-16
 Ten minutes, and you're playing.
 :::
 
-The quick build is the fast way to spend your 35 points, with most of the thinking done for you. You pick two archetypes and two Titles, take what you need from the [Title ideas](#s-title-ideas), attune one thing, and spend what's left on permissions and what you carry, the way the [six ready-made characters](#s-pregens) did. Then you bring the parts that make the character yours: the people and what you want. Each step says what it costs and where it's explained in full.
+The quick build is the fast way to spend your 35 points, with most of the thinking done for you. You pick two archetypes and two Titles, take what you need from the [Title ideas](#s-title-ideas), attune one thing, and spend what's left on permissions and items, the way the [six ready-made characters](#s-pregens) did. Then you bring the parts that make the character yours: the people and what you want. Each step says what it costs and where it's explained in full.
 
 You don't have to spend your points this way. Everything's priced in [Building Your Character](#building-character), and you can build whatever you like with them. I'd still take at least a Title, an archetype and an attuned thing. For a one-shot, or to catch someone up with the crew, the GM can give you more.
 
-1.  **Pick two archetypes, for 12 points.** Each one has a mechanic, something only it can do, a Trait that's always true of you, and abilities you pay for in Aura when you use them, and most of them have a Push: +2 to one die on the mechanic. An archetype's 5 points and comes with one of its abilities, your pick, and the quick build takes a second for 1 more. You can take the same archetype twice, and then that +2 is a +3. Each of the two comes with its own ability, so you've got two abilities for 10 points, and 2 more points for what you carry. Every Title idea says which archetypes suit it. See [How archetypes work](#s-how-archetypes).
+1.  **Pick two archetypes, for 12 points.** Each one has a mechanic, something only it can do, a Trait that's always true of you, and abilities you pay for in Aura when you use them, and most of them have a Push: +2 to one die on the mechanic. An archetype's 5 points and comes with one of its abilities, your pick, and the quick build takes a second for 1 more. You can take the same archetype twice, and then that +2 is a +3. Each of the two comes with its own ability, so you've got two abilities for 10 points, and 2 more points for your items. Every Title idea says which archetypes suit it. See [How archetypes work](#s-how-archetypes).
 2.  **Write two Titles, with three permissions on each, for 14 points.** A Title's 5 points and comes with one permission, and every one after that is 1. Take a Title off one of the ideas or write your own, and make it specific: *the best blade in the city* is fine, and *the best blade in the Low Market* is better. A Title puts 5 on your Roots, spread however you like: all 5 on one Root, 3 on one and 2 on another, or any mix you want. Then take three permissions that fit inside it, so you've got six, and give each one the Root it builds: *pick a mechanical lock* (Body). Change the words to suit your character, or write one that isn't on the list. See [Titles](#s-title) and [Permissions](#s-writing-permissions).
 3.  **Add up your Roots.** Each Root's what your Titles put on it and 1 for every permission on it. That number's three things at once: the steps you roll, the points you can lose before you're hurt, and the points you can spend. A roll's one Root at full, and your permissions are what let you bring another Root in. See [Roots](#s-step-roots).
-4.  **Attune one thing for 5 points, and take what you carry with the last 4.** Your attuned thing starts at Awakened with one awakening. An awakening locks a point of the Root it fits, and it's 2 steps on any roll it fits, and 2 more for each Aura you spend on it. If there's trouble you'd like on it, give it a Catch and it gets a second awakening, free, which locks a point of its own. Everything you carry is 1 point, bar your keepsake, which is free. You carry 3 equipment, 3 utility items and a keepsake, and your bag holds 10 more. Armour goes on the Root it guards, Common with 1 box, and one piece can be Fine, with 2. Getting your Aspiration can bring you another attuned thing. See [What you carry](#s-carrying) and [Attunement](#s-attunement).
+4.  **Attune one thing for 5 points, and spend the last 4 on items.** Your attuned thing is one of your items, at tier 2, and it starts at Awakened with one awakening. An awakening locks a point of the Root it fits, and it's 2 steps on any roll it fits, and 2 more for each Aura you spend on it. If there's trouble you'd like on it, give it a Catch and it gets a second awakening, free, which locks a point of its own. Every other item's a point and comes at tier 2, and a point more puts any of them up to tier 3. When an item fits a roll it's that many steps, one item a roll. You carry six at most, and your keepsake's free and on top. Armour soaks its tier on the Root it's on, and a shield's a guard, steps only when you're getting out of the way. Getting your Aspiration can bring you another attuned thing. See [Items](#s-items) and [Attunement](#s-attunement).
 5.  **Write your threads.** They cost nothing, and nor do your answers or your Aspiration. Answer at least two of the [ten crew questions](#s-connect), and turn two of your answers into **bond threads** with the crew, something good between you. A thread with someone in the crew goes on both your sheets, so agree on it together. Write a **hostile thread** as well, with anyone, and you can write a third bond thread. With two players, one of your bond threads goes to someone outside the crew, and playing alone, both do. See [Bonds and threads](#s-bonds).
 6.  **Write your Aspiration.** It's one thing you want, and it takes 5 points to get there, a downtime slot at a time. When it's got all 5 you get it, so make it something you'd know the day it's done: *be a hero again* is too vague, and *earn back the rank they stripped from me* is better. See [Aspiration](#s-aspiration) and [A good Aspiration](#s-good-aspiration).
-7.  **Check the numbers.** That's your 35 points. You've got 5 Aura and a stride of 3, and every Root starts full, less a point for each awakening. Each hit that gets through to a Root takes a point off it, and one that gets through when it's got none left wounds it. At the end of every scene, each Root rolls and gets back what it rolls. See [Roots](#s-roots), [Wounds and Scars](#s-blaze) and [Aura](#s-aura).
+7.  **Check the numbers.** That's your 35 points. You've got 5 Aura, 3 [Resources](#s-resources) to say when you need them, and a stride of 3, and every Root starts full, less a point for each awakening. Each hit that gets through to a Root takes a point off it, after its armour's soaked what it can, and one that gets through when it's got none left wounds it. At the end of every scene, each Root rolls and gets back what it rolls. See [Roots](#s-roots), [Wounds and Scars](#s-blaze) and [Aura](#s-aura).
 
 :::example[Wren, the quick way]
 Wren takes Hunter twice, for 10 points. The first comes with *Push* and the second with *Mark the pack*, so she's got both, and her Push is a +3. She starts both Titles from the Ranger idea, for 10 more, and they're both examples off its list. *The hunter who has never lost a trail* puts all 5 on her Mind, and *an outrider from the border war* puts all 5 on her Body. Her first Title comes with *follow any trail* (Mind), and she takes *move through the wild unseen* (Body) and *know a beast's habits* (Mind) off the list as well. Her second comes with *scout ahead of an army* (Body), and her other two aren't on the list at all: *ride hard over rough country* (Body) and *read the land for an ambush* (Mind). Those four are a point each.
 
-That's a Body of 8 and a Mind of 8. She attunes her longbow for 5 points, with *Long shot* as its awakening, and gives it the Catch *Wanted* for a second, *Hit anything I can see*. They're both about shooting, so they lock 2 of her Body's points, and she can hold 6 of its 8. Her last 6 points go on what she carries: her hooded cloak, a hunting knife, rations, a waterskin, a snare kit and a coil of rope in her pack. Following a trail is her Mind, 8 steps, a d12 and a d4. Shooting from cover is her Body and *Long shot*'s 2, 10 steps, a d12 and a d8. Her whole sheet's [further down](#s-pregens).
+That's a Body of 8 and a Mind of 8. She attunes her longbow for 5 points, with *Long shot* as its awakening, and gives it the Catch *Wanted* for a second, *Hit anything I can see*. They're both about shooting, so they lock 2 of her Body's points, and she can hold 6 of its 8. Her last 6 points go on items: the longbow up to tier 3, her hooded cloak at tier 3, a hunting knife at tier 3 and a snare kit at tier 2. Rations, a waterskin and rope are things she'll say she's got when she needs them, with her Resources. Following a trail is her Mind, 8 steps, a d12 and a d4. Shooting from cover is her Body, the bow's tier 3 and *Long shot*'s 2, 13 steps, two d12s and a d2. Her whole sheet's [further down](#s-pregens).
 :::
 
 A quick-built character is every bit as real as one built the long way, and everything about it grows the same way. In more of a hurry than that? Take one of the [six ready-made characters](#s-pregens) and play.
@@ -486,11 +486,11 @@ Pick one and play tonight.
 
 These are the same six you can choose in the Player Companion app. Take one as written, or copy one and change anything you like. They're the crew as they start out. The examples elsewhere in this book sometimes show them later in their careers, with more Titles, more permissions and new tricks.
 
-Each of them is 35 points, and their Points line says where it went: two Titles built from a [Title idea](#s-title-ideas) with three permissions on each, two archetypes, one attuned thing, and the rest on what they carry. How each Title spreads its 5 Root points is in brackets after it, and so is each permission's Root, and their Roots are already added up: Vesk's Body is her first Title's 5, her second's 2 and four permissions, 11. Each archetype has the abilities they've got of it in brackets, the one it came with first.
+Each of them is 35 points, and their Points line says where it went: two Titles built from a [Title idea](#s-title-ideas) with three permissions on each, two archetypes, one attuned thing, and the rest on items and their tiers. How each Title spreads its 5 Root points is in brackets after it, and so is each permission's Root, and their Roots are already added up: Vesk's Body is her first Title's 5, her second's 2 and four permissions, 11. Each archetype has the abilities they've got of it in brackets, the one it came with first.
 
-A roll's one Root at full, so Vesk picking a lock is her Body, 11 steps, a d12 and a d10. Over Lord Vane's roof she's swinging on her grappling line, and its awakening's 2 steps more, so that's 13, two d12s and a d2.
+A roll's one Root at full, and one item that fits adds its tier, so Vesk picking a lock is her Body and her picks at tier 3, 14 steps, two d12s and a d4. Over Lord Vane's roof she's swinging on her grappling line, which is tier 2, and its awakening's 2 steps more, so that's 15, two d12s and a d6.
 
-They've each got one attuned thing, at Awakened, and every awakening locks a point of the Root it fits, the one in brackets after it. Vesk's hook is Body, so she can hold 10 of her Body's 11, and she still rolls all 11. Wren's longbow and Bram's war hammer have each taken a Catch for a second awakening, so they've got two points locked. Everyone's Aura is 5. Everyone's got room for more in what they carry, so pick things up in play. A piece of armour's [quality](#s-armour-quality) comes first, and the Armour line says which Root it guards, so Bram's Fine plate armour has two boxes on his Body, and his Common shield has one.
+They've each got one attuned thing, at Awakened, and every awakening locks a point of the Root it fits, the one in brackets after it. Vesk's hook is Body, so she can hold 10 of her Body's 11, and she still rolls all 11. Wren's longbow and Bram's war hammer have each taken a Catch for a second awakening, so they've got two points locked. Everyone's Aura is 5, and everyone's got 3 [Resources](#s-resources), the small stuff they'll say they've got when they need it. Their Items line has each item's kind and [tier](#s-item-tiers) in brackets, and the attuned thing's among them. Everyone's got room for more items, up to six, so pick things up in play. A piece of armour says the Root it soaks on, so Bram's plate at tier 3 [soaks](#s-armour-quality) 3 on his Body and his helmet 2, and his shield's a guard at tier 2.
 
 Their [threads](#s-bonds) are laid out by bond, and each one says whether it's a bond thread or a hostile one. Each of them wrote two bond threads with the crew and one hostile thread, so they've each got room for a third bond thread. A thread with someone in the crew goes on both sheets, so most of them have more than that. Where a thread's in someone else's words, it says whose. None of them is strained yet.
 
@@ -501,7 +501,7 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Plays like:** a cat burglar, thief or scout. She's a [Shadow](#a-shadow) twice, so her Push is +3, and both her Titles come from the [Rogue](#k-rogue) idea.
 
-**Points:** 35. Two Titles 10, four more permissions 4, Shadow twice 10 (*Push* and *Vanish* come with them), her grappling line 5, and six things she carries 6.
+**Points:** 35. Two Titles 10, four more permissions 4, Shadow twice 10 (*Push* and *Vanish* come with them), her grappling line 5, four items 4, and two tiers up 2.
 
 **First Title:** *The best cat burglar in the city* (Body 5). Permissions: *move unseen* (Body), *run the rooftops* (Body), *pick a mechanical lock* (Body).
 
@@ -511,9 +511,11 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Archetypes:** [Shadow](#a-shadow) (*Push*) · [Shadow](#a-shadow) (*Vanish*).
 
-**Carries:** Common worn leathers, a knife, soft-soled boots (equipment, 3 of 3) · a purse of gold, a smoke bomb, a perfect set of picks (utility, 3 of 3) · the first coin she ever stole (keepsake) · an empty bag (0 of 10).
+**Items:** worn leathers (armour, Body, tier 2) · a knife (weapon, tier 2) · soft-soled boots (tool, tier 3) · a set of picks (tool, tier 3) · her grappling line (tool, tier 2, attuned) · 5 of 6.
 
-**Armour:** Common worn leathers (Body, 1 box).
+**Keepsake:** the first coin she ever stole.
+
+**Resources:** 3.
 
 **Attuned (Awakened):** A grappling line.
 
@@ -535,7 +537,7 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Plays like:** a con artist, courtier or spy. She's a [Face](#a-face) and a [Shadow](#a-shadow), and she took both her Titles off the [Face](#k-face) idea's list.
 
-**Points:** 35. Two Titles 10, four more permissions 4, Face and Shadow 10, a second ability for each 2, her signet pin 5, and four things she carries 4.
+**Points:** 35. Two Titles 10, four more permissions 4, Face and Shadow 10, a second ability for each 2, her signet pin 5, three items 3, and a tier up 1.
 
 **First Title:** *The voice that talked a duke out of his own house* (Soul 5). Permissions: *talk my way past a door* (Soul), *read a room in a glance* (Mind), *make a lie sound like old news* (Mind).
 
@@ -545,9 +547,11 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Archetypes:** [Face](#a-face) (*Push*, *Turn them*) · [Shadow](#a-shadow) (*Push*, *Vanish*).
 
-**Carries:** Common court clothes (equipment, 1 of 3) · a fine bottle of wine, a deck of marked cards, a forger's kit (utility, 3 of 3) · a letter of introduction (keepsake) · an empty bag (0 of 10).
+**Items:** court clothes (armour, Mind, tier 2, when they fit the scene) · a forger's kit (tool, tier 3) · a deck of marked cards (tool, tier 2) · her signet pin (tool, tier 2, attuned) · 4 of 6.
 
-**Armour:** Common court clothes (Mind, 1 box, when they fit the scene).
+**Keepsake:** a letter of introduction.
+
+**Resources:** 3.
 
 **Attuned (Awakened):** A signet pin.
 
@@ -569,7 +573,7 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Plays like:** a bodyguard, shield-bearer or man-at-arms. He's a [Guardian](#a-guardian) and a [Leader](#a-leader), and his Titles come from the [Guardian](#k-guardian) and [Captain](#k-captain) ideas.
 
-**Points:** 35. Two Titles 10, four more permissions 4, Guardian and Leader 10, a second ability for each 2, his war hammer 5 (its Catch brings *Knock them flat*), and four things he carries 4.
+**Points:** 35. Two Titles 10, four more permissions 4, Guardian and Leader 10, a second ability for each 2, his war hammer 5 (its Catch brings *Knock them flat*), three items 3, and a tier up 1.
 
 **First Title:** *The wall that held the harbour gate* (Body 5). Permissions: *hold the line* (Body), *guard one person* (Body), *lift what two men can't* (Body).
 
@@ -579,9 +583,11 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Archetypes:** [Guardian](#a-guardian) (*Push*, *Stand firm*) · [Leader](#a-leader) (*Push*, *Everyone gets it*).
 
-**Carries:** Fine plate armour, a Common shield (equipment, 2 of 3) · a medical kit, his coin from home (utility, 2 of 3) · his old sergeant's stripes (keepsake) · an empty bag (0 of 10).
+**Items:** plate armour (armour, Body, tier 3) · a helmet (armour, Body, tier 2) · a shield (guard, tier 2) · his war hammer (weapon, tier 2, Breaker, attuned) · 4 of 6.
 
-**Armour:** Fine plate armour (Body, 2 boxes) · a Common shield (Body, 1 box).
+**Keepsake:** his old sergeant's stripes.
+
+**Resources:** 3.
 
 **Attuned (Awakened):** His war hammer (Breaker), with its Catch, *Marked*.
 
@@ -603,7 +609,7 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Plays like:** a mage, sage or medium. She's an [Oracle](#a-oracle) twice over, and her Titles come from the [Medium](#k-medium) and [Scholar](#k-scholar) ideas.
 
-**Points:** 35. Two Titles 10, four more permissions 4, Oracle twice 10 (*Push* and *Foretold* come with them), *Hold it* 1, her chalk and salt 5, and five things she carries 5.
+**Points:** 35. Two Titles 10, four more permissions 4, Oracle twice 10 (*Push* and *Foretold* come with them), *Hold it* 1, her chalk and salt 5, three items 3, and two tiers up 2.
 
 **First Title:** *The last student of a dead order* (Soul 5). Permissions: *speak with the recently dead* (Soul), *draw a ward the dead can't cross* (Soul), *read the order's old script* (Mind).
 
@@ -613,9 +619,11 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Archetypes:** [Oracle](#a-oracle) (*Push*, *Hold it*) · [Oracle](#a-oracle) (*Foretold*).
 
-**Carries:** a Common coat with silver thread, a deck of the order's cards (equipment, 2 of 3) · a salt packet, a book she never finished, a reading lens (utility, 3 of 3) · an old letter (keepsake) · an empty bag (0 of 10).
+**Items:** a coat with silver thread (armour, Mind, tier 2, when it fits the scene) · a deck of the order's cards (tool, tier 3) · a reading lens (tool, tier 3) · her chalk and salt (tool, tier 2, attuned) · 4 of 6.
 
-**Armour:** a Common coat with silver thread (Mind, 1 box, when it fits the scene).
+**Keepsake:** an old letter.
+
+**Resources:** 3.
 
 **Attuned (Awakened):** Chalk and salt.
 
@@ -637,7 +645,7 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Plays like:** a hunter, archer or tracker. She's a [Hunter](#a-hunter) twice, so her Push is +3, and both her Titles come from the [Ranger](#k-ranger) idea.
 
-**Points:** 35. Two Titles 10, four more permissions 4, Hunter twice 10 (*Push* and *Mark the pack* come with them), her longbow 5 (its Catch brings *Hit anything I can see*), and six things she carries 6.
+**Points:** 35. Two Titles 10, four more permissions 4, Hunter twice 10 (*Push* and *Mark the pack* come with them), her longbow 5 (its Catch brings *Hit anything I can see*), three items 3, and three tiers up 3.
 
 **First Title:** *The hunter who has never lost a trail* (Mind 5). Permissions: *follow any trail* (Mind), *move through the wild unseen* (Body), *know a beast's habits* (Mind).
 
@@ -647,7 +655,11 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Archetypes:** [Hunter](#a-hunter) (*Push*) · [Hunter](#a-hunter) (*Mark the pack*).
 
-**Carries:** her hooded cloak, a hunting knife (equipment, 2 of 3) · rations, a waterskin, a snare kit (utility, 3 of 3) · a torn map (keepsake) · her hunter's pack, with a coil of rope (1 of 10).
+**Items:** her longbow (weapon, tier 3, Long, Two-Handed, attuned) · her hooded cloak (tool, tier 3) · a hunting knife (weapon, tier 3) · a snare kit (tool, tier 2) · 4 of 6.
+
+**Keepsake:** a torn map.
+
+**Resources:** 3.
 
 **Attuned (Awakened):** Her longbow (Long, Two-Handed), with its Catch, *Wanted*.
 
@@ -669,7 +681,7 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Plays like:** a pyromancer or wild mage. She's an [Elementalist](#a-elementalist) and a [Face](#a-face), and her Titles come from the [Fire](#k-sorcerer) and [Courtier](#k-courtier) ideas.
 
-**Points:** 35. Two Titles 10, four more permissions 4, Elementalist and Face 10, a second ability for each 2, her ember stone 5, and four things she carries 4.
+**Points:** 35. Two Titles 10, four more permissions 4, Elementalist and Face 10, a second ability for each 2, her ember stone 5, three items 3, and a tier up 1.
 
 **First Title:** *The last fire-speaker of the Ember Court* (Soul 5). Permissions: *throw fire* (Soul), *make a threat stick* (Soul), *feel every flame in a room* (Mind).
 
@@ -679,7 +691,11 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Archetypes:** [Elementalist](#a-elementalist) (*Push*, *Sculpt*) · [Face](#a-face) (*Push*, *Turn them*).
 
-**Carries:** a scorched coat (equipment, 1 of 3) · a tinderbox, flash powder, a flask of lamp oil (utility, 3 of 3) · a silver locket (keepsake) · an empty bag (0 of 10).
+**Items:** a scorched coat (armour, Body, tier 2) · a coal horn (vessel, tier 3) · the Ember Court's seal (tool, tier 2) · her ember stone on a chain (tool, tier 2, attuned) · 4 of 6.
+
+**Keepsake:** a silver locket.
+
+**Resources:** 3.
 
 **Attuned (Awakened):** An ember stone on a chain. She can call fire with it without a word or a gesture.
 

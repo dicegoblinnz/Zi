@@ -29,7 +29,7 @@ import { bookFor, compileTables, readTablesDir } from "./world-tables.mjs";
 import { checkYears, compileWorld, readWorldsDir } from "./worlds.mjs";
 import { sealIn, sealKey } from "../src/kit/seals.js";
 import { diceCells, exampleCrews, ruleNames, statBlocks } from "./book-blocks.mjs";
-import { checkMirrors, crewFrom, qualitiesFrom } from "./crew-sheets.mjs";
+import { checkMirrors, crewFrom, KINDS, tiersFrom } from "./crew-sheets.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const RULES = join(ROOT, "content", "rules");
@@ -981,29 +981,31 @@ function buildFrom(rulesDoc, ideasDoc, archetypes, inline, warn) {
     archetypes: Object.entries(archetypes).map(([name, a]) => ({ name, ...a })),
     ideas,
     items: tableRows(sectionOf(body, "the-item-list")).map((r) => ({ group: plain(r[0]), items: dots(r[1]).map(plain) })),
-    usedUp: tableRows(sectionOf(body, "consumables-20")).map((r) => ({ name: plain(r[0]), html: inline(r[1]) })),
+    // The kinds of item, each with what its tier does (#s-item-kinds).
+    kinds: tableRows(sectionOf(body, "s-item-kinds")).map((r) => ({ kind: plain(r[0]).toLowerCase(), name: plain(r[0]), html: inline(r[1]), examples: plain(r[2] ?? "") })),
+    // Resource ideas, the things you use up among them (#consumables-20).
+    resources: tableRows(sectionOf(body, "consumables-20")).map((r) => ({ name: plain(r[0]), html: inline(r[1]) })),
     keepsakes: tableRows(sectionOf(body, "keepsakes-10")).map((r) => ({ name: plain(r[0]), text: plain(r[1]) })),
     catches: tableRows(sectionOf(body, "catches-12")).map((r) => ({ name: plain(r[1]), text: plain(r[2]) })),
+    // Weapons and their properties (#s-weapon-props): the properties, then
+    // each weapon with its own.
+    props: tableRows(sectionOf(body, "s-weapon-props")).filter((r) => r.length === 2 && /^\*\*/.test(r[0])).map((r) => ({ name: plain(r[0]), html: inline(r[1]) })),
+    weapons: tableRows(sectionOf(body, "s-weapon-props")).filter((r) => r.length === 2 && !/^\*\*/.test(r[0])).map((r) => ({ name: plain(r[0]), props: /^None\b|Whatever/.test(plain(r[1])) ? [] : plain(r[1]).split(/,\s*/) })),
     quickTest: listItems(sectionOf(body, "the-quick-test")).map(inline),
     permIdeas: tableRows(sectionOf(body, "permission-ideas")).map((r) => ({ for: plain(r[0]), perms: italics(r[1]) })),
     connect: listItems(sectionOf(body, "s-connect")).map(curly),
   };
-  // Boons and Burdens: each lever's Boon and Burden off the table (a Boon
-  // that starts "none" isn't one you can take), then the Boons that get you
-  // Aura back, which have no Burden. A Boon takes two permission slots.
-  const boonSec = sectionOf(body, "s-boons");
-  const none = (s) => /^none\b/i.test(plain(s));
-  build.boons = [
-    ...tableRows(boonSec).filter((r) => r.length === 3 && !none(r[1])).map((r) => ({ lever: plain(r[0]), text: plain(r[1]), burden: none(r[2]) ? "" : plain(r[2]) })),
-    ...[...(boonSec.split(/\*\*Boons that get you Aura back\.\*\*/)[1] ?? "").split(/\n\n(?!-)/)[0].matchAll(/^-\s+\*\*([^*:]+):\*\* (.+)$/gm)].map((m) => ({ lever: plain(m[1]), text: plain(m[2]).replace(/\.$/, ""), burden: "", aura: true })),
-  ];
-  if (build.boons.length < 12) warn(`expected the Boons table and the Aura Boons, found ${build.boons.length} Boons`);
-  for (const lever of ["Toughness", "Aura", "Stride", "Kit", "Ties", "Armour", "Recovery", "Regen"]) if (!build.boons.some((b) => b.lever === lever)) warn(`the builder needs the ${lever} Boon, and Boons and Burdens hasn't got it`);
-  // Splitting has no limit and there are no extra actions on the new core.
-  for (const lever of ["Splits", "Extra action"]) if (build.boons.some((b) => b.lever === lever)) warn(`Boons and Burdens still has the ${lever} Boon, and the new core hasn't got one`);
+  // The screens from before the fixes read these. Boons are gone, and the
+  // things you use up are Resource ideas now. Prompts 5 and 6 of
+  // notes/fixes-plan.md move the screens off them.
+  build.boons = [];
+  build.usedUp = build.resources;
+  for (const k of KINDS) if (!build.kinds.some((x) => x.kind === k)) warn(`Kinds of item hasn't got ${k}`);
+  for (const x of build.kinds) if (!KINDS.includes(x.kind)) warn(`Kinds of item has ${x.name}, and the kinds are ${KINDS.join(", ")}`);
+  if (/\bBoons?\b/.test(sectionOf(body, "s-boons"))) warn("Burdens still talks about Boons, and there aren't any since the 17 Nov fixes");
   const expect = { quick: 7, quickTest: 4, catches: 12, connect: 10 };
   for (const [key, n] of Object.entries(expect)) if (build[key].length !== n) warn(`the builder expected ${n} ${key}, found ${build[key].length}`);
-  for (const [key, n] of Object.entries({ archetypes: 10, ideas: 20, items: 4, usedUp: 10, keepsakes: 5, permIdeas: 4 })) {
+  for (const [key, n] of Object.entries({ archetypes: 10, ideas: 20, items: 4, resources: 10, keepsakes: 5, permIdeas: 4, props: 10, weapons: 10 })) {
     if (build[key].length < n) warn(`the builder found only ${build[key].length} ${key}`);
   }
   return build;
@@ -1053,7 +1055,9 @@ const ctx = {
   warn: companionWarn,
   inline,
   archetypes: docWith("{#s-how-archetypes}") ? archetypesFrom(docWith("{#s-how-archetypes}"), inline, docWith("{#s-qr-archetypes}")) : {},
-  qualities: qualitiesFrom(docWith("{#s-armour-quality}"), (msg) => companionWarn(msg)),
+  tiers: tiersFrom(docWith("{#s-item-tiers}"), (msg) => companionWarn(msg)),
+  // The weapon properties' names, so a crew member's weapon's are checked.
+  props: tableRows(sectionOf(docWith("{#s-weapon-props}")?.body ?? "", "s-weapon-props")).filter((r) => r.length === 2 && /^\*\*/.test(r[0])).map((r) => plain(r[0])),
 };
 const crewDoc = docWith("{#s-pregens}");
 // The crew on the new core (notes/core-plan.md), every sheet checked as it's
@@ -1065,7 +1069,14 @@ const buildDoc = docWith("{#s-step-roots}");
 const ideasDoc = docWith("{#s-quick}");
 const rootsBuild = buildDoc && ideasDoc ? buildFrom(buildDoc, ideasDoc, ctx.archetypes, inline, (msg) => companionWarn(`builder: ${msg}`)) : null;
 if (!rootsBuild) companionWarn("can't find Building Your Character or the Quick Build for the builder");
-else rootsBuild.qualities = ctx.qualities;
+else {
+  // The tiers off the table in Items, so Mo's pick of a set is one edit, and
+  // for the screens from before the fixes, the first three as armour's
+  // qualities, its tier as its boxes.
+  rootsBuild.tiers = ctx.tiers;
+  rootsBuild.qualities = ctx.tiers.slice(0, 3).map((t) => ({ tier: t.n, name: t.name, boxes: t.n, text: t.text }));
+}
+
 // The book's attuned things from the story (Coin and Kit), each with its
 // awakenings, for random characters to start from. Since 16 Nov each
 // awakening names the Root whose point it locks, *Its name* (Body): what it
@@ -1078,7 +1089,12 @@ function thingsFrom(doc, warn) {
       const wakes = m[2].match(/^\*\*(?:Tempered|Perfected)\*\* (.+)$/m)?.[1] ?? "";
       const awakenings = dots(wakes).map((w) => w.match(/^\*([^*]+)\* \((Body|Mind|Soul)\): (.+)$/)).filter(Boolean).map((x) => ({ name: plain(x[1]), root: x[2], text: plain(x[3]).replace(/\.$/, "") }));
       if (!awakenings.length || awakenings.length !== dots(wakes).length) warn(`can't read ${m[1]}'s awakenings in Coin and Kit: each one's *its name* (the Root it locks): what it does`);
-      if (awakenings.length) out.push({ name: curly(m[1]), aura: "", awakenings });
+      // Every attuned thing's an item, with its kind and tier (17 Nov).
+      const item = m[2].match(/^\*\*Item\*\* (\w+)(?:, (Body|Mind|Soul))?, tier (\d)\.?$/m);
+      if (!item || !KINDS.includes(item[1])) warn(`${m[1]} in Coin and Kit needs its Item line, its kind and tier: **Item** weapon, tier 4.`);
+      const stage = m[2].match(/^\*\*(Tempered|Perfected)\*\*/m)?.[1] ?? null;
+      const props = m[2].match(/^\*\*Properties\*\* (.+)$/m)?.[1]?.split(/,\s*/).map(plain) ?? [];
+      if (awakenings.length) out.push({ name: curly(m[1]), aura: "", awakenings, stage, kind: item?.[1] ?? "tool", tier: Number(item?.[3] ?? 2), ...(item?.[2] ? { root: item[2] } : {}), props });
     }
   }
   if (out.length < 12) warn(`found only ${out.length} attuned things in Coin and Kit`);
@@ -1169,7 +1185,7 @@ const blockHtml = (text) => {
 };
 const rules = {};
 for (const id of ["s-roots", "s-permissions", "how-permissions-stack", "s-building-die", "s-round", "s-telegraphs", "s-actions", "s-answering", "s-the-roll", "s-intents", "s-splitting", "s-going-beyond", "s-teamwork", "s-extra-actions",
-  "s-aura", "getting-it-back", "s-tracks", "s-abilities", "s-how-archetypes", "s-attunement", "attunement-stages", "s-armour", "s-armour-quality", "s-defending", "s-defend", "s-intercept", "s-consequences", "s-fear-gets-through",
+  "s-aura", "getting-it-back", "s-tracks", "s-abilities", "s-how-archetypes", "s-attunement", "attunement-stages", "s-armour", "s-armour-quality", "s-resources", "s-item-tiers", "s-item-kinds", "s-vessels", "s-defending", "s-defend", "s-intercept", "s-consequences", "s-fear-gets-through",
   "s-blaze", "s-healing", "s-vulnerable", "s-conditions", "s-bonds", "s-trouble", "s-aspiration", "s-good-aspiration", "your-slots", "recover", "grow", "s-downtime-attunement", "s-downtime-threads", "s-downtime-rolls",
   "s-goal", "s-good-goal", "s-climb", "s-projects", "s-crew-size", "s-crew-tags", "s-crew-wealth", "s-crew-grows", "s-party-resources",
   "s-faction-board", "s-wealth", "s-faction-bonds", "s-agendas", "when-an-agenda-happens", "s-standing", "s-mini-factions", "s-faction-build",
@@ -1195,7 +1211,7 @@ const companionLinks = Object.fromEntries(
   ["s-round", "s-telegraphs", "s-answering", "s-aura", "getting-it-back", "s-tracks", "s-roots", "s-permissions", "s-building-die", "s-armour", "s-armour-quality", "s-blaze", "s-healing", "s-conditions", "s-bonds", "s-trouble", "steps-into-dice",
     "s-splitting", "s-teamwork", "s-extra-actions", "s-going-beyond", "s-the-roll", "s-defending", "s-defend", "s-intercept", "s-vulnerable", "s-fear-gets-through", "s-actions",
     "s-consequences", "s-aspiration", "s-pregens", "s-how-archetypes", "s-abilities", "s-attunement", "attunement-stages", "s-carrying", "s-intents", "how-permissions-stack",
-    "s-quick", "s-title-ideas", "s-title", "s-writing-permissions", "the-quick-test", "permission-ideas", "s-step-roots", "s-items", "s-boons",
+    "s-quick", "s-title-ideas", "s-title", "s-writing-permissions", "the-quick-test", "permission-ideas", "s-step-roots", "s-items", "s-boons", "s-resources", "s-item-tiers", "s-item-kinds", "s-vessels", "consumables-20",
     "the-item-list", "catches-12", "s-starting-numbers", "s-connect", "what-you-can-do-with-a-slot", "recover", "grow", "s-downtime-attunement", "s-downtime-threads", "s-playing-the-strain", "s-summoning"]
     .map((id) => [id, linkTo(id)]),
 );

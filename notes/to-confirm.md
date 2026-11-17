@@ -16,6 +16,24 @@ Part 3 of the rework (`notes/fixes-plan.md`), from your 17 Nov chat (`notes/play
 8. **Packs give Resources**, half their tier rounded up.
 9. **A vessel holds its tier in charge**, filled only with Aura you'd lose or a point at a time mid-scene, and spent only on your own abilities and awakenings.
 
+### 2. The character
+
+Written into Building Your Character (03), Title Ideas and the Crew (03b) and Coin and Kit (18) on 17 Nov, on `rules/2026-11-17-fixes-character`.
+
+1. **Tier 3 is Proven**, not Named, since Named is already a threat's rank. So the book's set is Plain, Trusty, Proven, Storied, Sung and Mythic.
+2. **The tiers' names are only in the table** (`#s-item-tiers`). Everywhere else, the crew's sheets included, an item says "tier 3", so swapping in the Forged or Souled set really is one edit. The companion says the name ("a Proven set of picks").
+3. **An attuned thing's 5 points are the thing at tier 2 and its first awakening**, the way a Title's 5 includes its permission. A tier up on it is a point, like any item.
+4. **A shield's a guard, not armour.** It's steps when you're getting out of the way and never soaks. A helmet's still armour.
+5. **Two pieces of armour on one Root both soak**, one after the other, so Bram's plate (3) and helmet (2) soak 5 on his Body a scene. The play screen counts Mind armour "when it fits the scene" always, and the player says when it doesn't.
+6. **A Resource is never steps**, so a purse of gold buys, pays a fine or greases a palm, and no longer adds a step to a social roll. Rations and the waterskin are one Resource idea now, and rope's on the list, staying yours once you've said it.
+7. **Picking something up makes it one of your six**, and something grabbed mid-fight, like a chair leg, is tier 1. Bare hands aren't an item, so they're never steps.
+8. **Money and tiers:** a purse of gold buys a tier 2 item, several purses a tier 3, and a small fortune a tier 4. Grow takes one to tier 3, and 5 and 6 come out of the story with a material.
+9. **The Burdens keep every lever that had one.** Armour's Burden is "your armour soaks 1 less, each piece", Kit's is five items, and there's a new Resources Burden, one fewer Resource. Regen and Going beyond had no Burden, so they're off the table.
+10. **The Fussy Catch says uses**, so "charge" only ever means what's in a vessel.
+11. **Coin and Kit's twenty attuned things each have a kind and a tier**: the Tempered ones 3 or 4, the Perfected ones 4 to 6, with the Fallen Champion's Sword the one tier 6. The Ferryman's Lantern is a vessel, the Dancing Master's Coat is Mind armour, and Tench's Brigandine and the Gatekeeper's Plate are Body armour.
+12. **The crew**, each on 35 with the same Points shape, their utility items and bags now Resources and the points that freed on tiers: Vesk's boots and picks tier 3, Bram's plate tier 3 and a helmet, Dorrie's forger's kit tier 3, Isolde's deck of cards and reading lens tier 3, Wren's longbow, cloak and knife tier 3, and Ash's scorched coat as Body armour, a coal horn (a vessel) at tier 3 and the Ember Court's seal. All of them have 3 Resources. Say if any of them should look different.
+13. **A saved character's Boons:** one built in gives its 2 points back to spend, and one swapped in downtime gives its permissions back, and both are flagged once. Its equipment's items at tier 2 (a shield or a buckler a guard, a weapon's name a weapon, the rest tools for the player to change), and its utility items and bag go into its notes.
+
 ## 16 Nov: the new core
 
 **Not built yet.** Part 2 of the rework (`notes/core-plan.md`), from your 16 Nov chat (`notes/playtest-sheets/2026-11-16-chat-decisions.md`). These are the calls Claude made writing it down, before any chat built it. Each chat adds its own in a subsection below.

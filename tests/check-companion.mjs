@@ -46,20 +46,18 @@
 //    swap in one leaving the rest alone, Bram's four dice for three blows, an
 //    area die paying once, a tie paying nothing, and what's kept on the phone
 //    between rolls, a set-up from before there were actions coming back as one.
-// 1e. The crew and the character on stacking (notes/stacking-plan.md), with
-//    no browser: every crew member's Roots, Titles spread the plan's way, the
-//    abilities each archetype has, 35 points at Mo's prices and Aura's 7, the
-//    plan's two rolls for each of them, a case and going beyond paid in Aura,
-//    every thing on a sheet with a key of its own that lasts a reload, extra
-//    actions at 3, 4 and 5 Aura and back to 3 next round with the free ones on
-//    top, Aura's maximum as Vesk powers her hook (and what the same awakening
-//    twice, a second attuned thing and the Aura Boon do to it), saves from
-//    before coming across (Vesk keeping her play with her hook's Aura powering
-//    it, Old Vesk from before Roots, and Tamsin, built on the phone, recounted
-//    with her spreads and her last point flagged, and with a Scholar, which
-//    the book hasn't got any more, flagged first, for her to swap), nothing
-//    left on a sheet from specialties or the old cap, and the build stopping
-//    on a crew sheet that doesn't add up.
+// 1e. The crew and the character on the new core and the 17 Nov fixes, with
+//    no browser: every crew member's Roots, Titles spread 5, abilities, items
+//    (the attuned thing among them), keepsake and 3 Resources, 35 points at
+//    Mo's prices with items at tier 2 and a point a tier up, their rolls with
+//    one item a roll (a guard only avoiding harm, armour and a vessel never,
+//    a broken one never), hits soaked by armour first (2 for 1 and a deadly
+//    threat's hits included) and soak back every scene, wounds, Scars,
+//    healing and Toll, Resources said and back in downtime, a pack's, Ash's
+//    coal horn filled with Aura she'd lose and a point mid-scene and spent on
+//    her awakening, saves from before coming across (v3 and v4, a Boon gone
+//    with its points, utility items in the notes, crossed items by their key),
+//    and the build stopping on a crew sheet that doesn't add up.
 // 1f. Print, with no browser: the blank sheet holds exactly the fields
 //    src/companion/sheet-fields.js lists, and every crew member printed reads
 //    back field by field (each Root and where its points came from, adding up
@@ -1087,13 +1085,12 @@ if (part("1d")) {
   console.log("the dice roller's rules checked");
 }
 
-// 1e. The crew and the character on stacking (Mo's 14 Nov rework, the crew on
-// 35 points in notes/stacking-plan.md, with his yes). Each number here is the
-// plan's, written down from its words rather than worked out by the code:
-// their Roots, their 35 points, Aura's 7, and the two rolls the plan counts
-// for each of them. Then the price of extra actions (3, then 4, then 5, back
-// to 3 next round), Aura's maximum as an awakening's powered, and saves from
-// before the rework coming across. None of it needs a browser.
+// 1e. The crew and the character on the new core (notes/core-plan.md) and
+// the 17 Nov fixes (notes/fixes-plan.md). Each number here is written down
+// from the chapter's words rather than worked out by the code: their Roots,
+// their 35 points, their items, and the rolls the book counts for them. Then
+// soak, Resources, vessels and saves from before coming across. None of it
+// needs a browser.
 if (part("1e")) {
   const looks = (s) => String(s ?? "").replace(/[’‘]/g, "'").trim().toLowerCase();
   const tryIt = (what, fn) => {
@@ -1134,6 +1131,9 @@ if (part("1e")) {
     wren: [{ Mind: 3 }, { Body: 3 }],
     ash: [{ Soul: 3 }, { Mind: 2, Soul: 1 }],
   };
+  // How many items each has, the attuned thing among them (prompt 2 of
+  // notes/fixes-plan.md).
+  const ITEMS = { vesk: 5, bram: 4, dorrie: 4, isolde: 4, wren: 4, ash: 4 };
   const LOCKS = {
     vesk: { Body: 1 }, bram: { Body: 2 }, dorrie: { Mind: 1 }, isolde: { Soul: 1 }, wren: { Body: 2 }, ash: { Soul: 1 },
   };
@@ -1164,36 +1164,43 @@ if (part("1e")) {
       const s = RS.freshCore(c);
       same(RS.lockedOf(c, s), full(LOCKS[id]), `${id}'s awakenings lock their points`);
       same(s.pts, Object.fromEntries(RS.ROOTS.map((r) => [r, roots[r] - (LOCKS[id][r] ?? 0)])), `${id} starts with every Root full, less what's locked`);
-      same([s.v, s.aura, s.toll, s.wound, s.scars], [4, 5, 0, { Body: false, Mind: false, Soul: false }, { Body: [], Mind: [], Soul: [] }], `${id} starts a scene on 5 Aura with nothing wounded, no Toll and no Scars`);
+      same([s.v, s.aura, s.toll, s.wound, s.scars], [5, 5, 0, { Body: false, Mind: false, Soul: false }, { Body: [], Mind: [], Soul: [] }], `${id} starts a scene on 5 Aura with nothing wounded, no Toll and no Scars`);
+      same([s.soak, s.res, s.charge, "boxes" in s], [{}, [], {}, false], `${id} starts with all their soak, all their Resources and empty vessels`);
+      same([c.items.length, c.items.filter((it) => it.attuned === 0).length, c.items.every((it) => it.tier >= 1 && it.tier <= 3 && RS.KINDS.includes(it.kind)), Boolean(c.keepsake), RS.resOf(c)], [ITEMS[id], 1, true, true, 3], `${id}'s items, the attuned one among them, a keepsake and 3 Resources`);
+      same(c.titles.some((t) => "boons" in t), false, `${id} has no Boons`);
       const cost = costOf(c);
       same(cost.spent, 35, `${id}'s points`);
       same(c.points, { start: 35, spent: 35 }, `${id}'s points on the sheet`);
       same(cost.lines.reduce((t, x) => t + x.cost, 0), cost.spent, `${id}'s points, line by line`);
     });
   }
-  // Mo's prices: a Title, archetype or attuned thing is 5 with its one, and
-  // everything else is 1, the keepsake free.
+  // Mo's prices: a Title, archetype or attuned thing is 5 with its one, an
+  // item 1 at tier 2 and 1 for each tier above, and everything else is 1, the
+  // keepsake free.
   tryIt("Mo's prices", () => {
     const bram = costOf(sheet("bram")).lines;
     const of = (kind) => bram.filter((x) => x.kind === kind).reduce((t, x) => t + x.cost, 0);
-    same(["title", "perm", "arch", "ability", "attuned", "awk", "item"].map(of), [10, 4, 10, 2, 5, 0, 4], "Bram's 35: Titles 10, permissions 4, archetypes 10, abilities 2, his hammer 5 with its Catch's awakening free, and four things he carries 4");
+    same(["title", "perm", "arch", "ability", "attuned", "awk", "item", "tier"].map(of), [10, 4, 10, 2, 5, 0, 3, 1], "Bram's 35: Titles 10, permissions 4, archetypes 10, abilities 2, his hammer 5 at tier 2 with its Catch's awakening free, three items 3 and his plate a tier up 1");
     same(costOf(sheet("vesk")).lines.some((x) => /coin she ever stole/.test(x.what)), false, "Vesk's keepsake is free");
-    same(costOf({ archs: ["Shadow", "Shadow"], titles: [{ text: "A", perms: [{ text: "a" }, { text: "b" }, { text: "" }], boons: [] }], attuned: [{ name: "x", catch: "", awk: [{ name: "w" }, { name: "" }] }], equipment: [{ text: "a knife" }, { text: "" }], utility: [{ text: "rope" }], keepsake: { text: "a coin" }, bag: "chalk\n\n" }).spent, 5 + 1 + 10 + 5 + 3, "a build: a Title with two permissions, Shadow twice, an attuned thing and three things carried");
-    same(costOf(sheet("vesk", [{ k: "boon", t: 0, lever: "Aura", name: "", on: "", drop: [1, 2] }])).spent, 35, "two of Vesk's permissions swapped for a Boon is still 35");
-    same(sheet("vesk", [{ k: "boon", t: 0, lever: "Aura", name: "", on: "", drop: [1, 2] }]).numbers.aura, 7, "the Aura Boon puts her maximum at 7");
+    same(costOf({ archs: ["Shadow", "Shadow"], titles: [{ text: "A", perms: [{ text: "a" }, { text: "b" }, { text: "" }], boons: [] }], attuned: [{ name: "x", catch: "", awk: [{ name: "w" }, { name: "" }] }], equipment: [{ text: "a knife" }, { text: "" }], utility: [{ text: "rope" }], keepsake: { text: "a coin" }, bag: "chalk\n\n" }).spent, 5 + 1 + 10 + 5 + 1, "a build from before the fixes: its equipment's items at tier 2, and its utility and bag cost nothing");
+    same(costOf({ titles: [], items: [{ name: "a sword", tier: 3 }, { name: "a pack", tier: 2, kind: "pack" }, { name: "a hook", tier: 3, attuned: 0 }, { name: "plate", tier: 4 }] }).spent, 2 + 1 + 1 + 3, "items: 1 at tier 2 and 1 a tier above, an attuned one's first point in its 5");
+    same([costOf(sheet("vesk", [{ k: "boon", t: 0, lever: "Aura", name: "", on: "", drop: [1, 2] }])).spent, sheet("vesk", [{ k: "boon", t: 0, lever: "Aura", name: "", on: "", drop: [1, 2] }]).titles[0].permissions.length, sheet("vesk", [{ k: "boon", t: 0, lever: "Aura", name: "", on: "", drop: [1, 2] }]).numbers.aura], [35, 3, 5], "a Boon she swapped in downtime is gone: her permissions stay and her Aura's 5");
+    same([RS.boonsOf(sheet("vesk")), RS.boonCount(sheet("vesk"), "Aura"), RS.restBonus(sheet("vesk")), RS.slotsOf(sheet("vesk").titles[0])], [[], 0, 0, 3], "the Boon stubs give nothing, so the screens that haven't moved still draw");
     // An archetype's abilities cost Aura, and none has a home track.
     for (const a of BUILD.archetypes) {
       if ("home" in a) note(`the ${a.name} still has a home track in book.json`);
       for (const x of a.abilities) if (!(x.cost >= 1)) note(`the ${a.name}'s ${x.name} has no price in Aura`);
     }
     same([BUILD.archetypes.find((a) => a.name === "Healer")?.trait?.name, /\bToll\b/.test(BUILD.archetypes.find((a) => a.name === "Healer")?.trait?.text ?? "")], ["Good Hands", true], "the Healer's Trait, Good Hands, eases Toll");
-    same(["Splits", "Extra action"].filter((l) => BUILD.boons.some((b) => b.lever === l)), [], "there's no Splits or Extra action Boon");
+    same(BUILD.boons, [], "there are no Boons in book.json");
   });
 
   // Coin and Kit: every awakening locks a Root, one thing eases Toll and one
-  // adds a flat bonus to heals.
+  // adds a flat bonus to heals, and every one's an item with a kind and tier.
   tryIt("Coin and Kit", () => {
     same(BUILD.things.length, 20, "twenty attuned things in Coin and Kit");
+    for (const t of BUILD.things) if (!RS.KINDS.includes(t.kind) || !(t.tier >= 3 && t.tier <= 6)) note(`${t.name} in Coin and Kit hasn't got a kind and a tier from 3 to 6`);
+    if (!BUILD.things.some((t) => t.kind === "vessel")) note("no attuned thing in Coin and Kit is a vessel");
     for (const t of BUILD.things) for (const w of t.awakenings) if (!RS.ROOTS.includes(w.root)) note(`${t.name}'s ${w.name} hasn't got a Root`);
     if (!BUILD.things.some((t) => t.awakenings.some((w) => /\bToll\b/.test(w.text)))) note("no attuned thing in Coin and Kit eases Toll");
     if (!BUILD.things.some((t) => t.awakenings.some((w) => /\badd \d+ to what\b[^.]*\bheal\b/.test(w.text)))) note("no attuned thing in Coin and Kit adds a flat bonus to heals");
@@ -1202,23 +1209,27 @@ if (part("1e")) {
   // Rolls on the new core: one Root at full, each Root brought in at full,
   // and 2 for each awakening and 2 more for each Aura on it.
   const awkKey = (c, name) => RS.awakeningsOf(c).find((w) => looks(w.name) === looks(name))?.key;
+  const itemKey = (c, name) => c.items.find((it) => looks(it.name).includes(looks(name)))?.key;
   const permKey = (c, text) => RS.thingsOf(c).find((x) => x.kind === "perm" && looks(x.name) === looks(text))?.key;
   const ROLLS = [
-    ["vesk", "Picking a lock", { root: "Body" }, 11, "d12 + d10", 0],
-    ["vesk", "Over Lord Vane's roof", { root: "Body", awk: [["Anywhere I can throw a hook", 0]] }, 13, "2d12 + d2", 0],
-    ["vesk", "Over the roof with 2 Aura on her hook", { root: "Body", awk: [["Anywhere I can throw a hook", 2]] }, 17, "2d12 + d10", 2],
-    ["bram", "Defending behind his shield", { root: "Body" }, 9, "d12 + d6", 0],
-    ["bram", "Swinging his hammer", { root: "Body", awk: [["Ring the bell", 0]] }, 11, "d12 + d10", 0],
+    ["vesk", "Picking a lock with her picks", { root: "Body", item: "set of picks" }, 14, "2d12 + d4", 0],
+    ["vesk", "Over Lord Vane's roof", { root: "Body", item: "grappling line", awk: [["Anywhere I can throw a hook", 0]] }, 15, "2d12 + d6", 0],
+    ["vesk", "Over the roof with 2 Aura on her hook", { root: "Body", item: "grappling line", awk: [["Anywhere I can throw a hook", 2]] }, 19, "3d12 + d2", 2],
+    ["bram", "Getting out of the way behind his shield", { root: "Body", item: "shield", avoid: true }, 11, "d12 + d10", 0],
+    ["bram", "His shield on a swing adds nothing", { root: "Body", item: "shield" }, 9, "d12 + d6", 0],
+    ["bram", "His plate never adds a step", { root: "Body", item: "plate armour", avoid: true }, 9, "d12 + d6", 0],
+    ["bram", "Swinging his hammer", { root: "Body", item: "war hammer", awk: [["Ring the bell", 0]] }, 13, "2d12 + d2", 0],
     ["bram", "Barking an order", { root: "Soul" }, 4, "d8", 0],
     ["bram", "An order with his Body brought in on a point", { root: "Soul", bring: [["Body", "fight in a shield wall", "pt"]] }, 13, "2d12 + d2", 0],
     ["dorrie", "Lying past the gate guard", { root: "Mind" }, 7, "d12 + d2", 0],
-    ["dorrie", "Passing as someone of rank", { root: "Mind", awk: [["Someone who matters", 0]] }, 9, "d12 + d6", 0],
-    ["isolde", "Reading the order's old script", { root: "Mind" }, 9, "d12 + d6", 0],
-    ["isolde", "Drawing a ward", { root: "Soul", awk: [["A circle anywhere I can kneel", 0]] }, 9, "d12 + d6", 0],
-    ["wren", "Shooting from cover", { root: "Body", awk: [["Long shot", 0]] }, 10, "d12 + d8", 0],
-    ["wren", "Shooting at something a long way off", { root: "Body", awk: [["Long shot", 0], ["Hit anything I can see", 0]] }, 12, "2d12", 0],
+    ["dorrie", "Passing as someone of rank", { root: "Mind", item: "signet pin", awk: [["Someone who matters", 0]] }, 11, "d12 + d10", 0],
+    ["isolde", "Reading the order's old script with her lens", { root: "Mind", item: "reading lens" }, 12, "2d12", 0],
+    ["isolde", "Drawing a ward", { root: "Soul", item: "chalk and salt", awk: [["A circle anywhere I can kneel", 0]] }, 11, "d12 + d10", 0],
+    ["wren", "Shooting from cover", { root: "Body", item: "longbow", awk: [["Long shot", 0]] }, 13, "2d12 + d2", 0],
+    ["wren", "Shooting at something a long way off", { root: "Body", item: "longbow", awk: [["Long shot", 0], ["Hit anything I can see", 0]] }, 15, "2d12 + d6", 0],
     ["wren", "Following a trail", { root: "Mind" }, 8, "d12 + d4", 0],
-    ["ash", "Throwing fire", { root: "Soul", awk: [["Fire without a word", 0]] }, 13, "2d12 + d2", 0],
+    ["ash", "Throwing fire", { root: "Soul", item: "ember stone", awk: [["Fire without a word", 0]] }, 15, "2d12 + d6", 0],
+    ["ash", "Her coal horn adds no steps", { root: "Soul", item: "coal horn" }, 11, "d12 + d10", 0],
     ["ash", "Commanding a room", { root: "Soul" }, 11, "d12 + d10", 0],
   ];
   for (const [id, what, r, steps, dice, aura] of ROLLS) {
@@ -1226,7 +1237,8 @@ if (part("1e")) {
     tryIt(`${id}, ${what}`, () => {
       const c = sheet(id);
       const s = RS.freshCore(c);
-      const roll = { root: r.root, awk: (r.awk ?? []).map(([n, a]) => ({ key: awkKey(c, n), aura: a })), bring: (r.bring ?? []).map(([root, perm, pay]) => ({ root, perm: permKey(c, perm), pay })) };
+      const roll = { root: r.root, item: r.item ? itemKey(c, r.item) : null, avoid: Boolean(r.avoid), awk: (r.awk ?? []).map(([n, a]) => ({ key: awkKey(c, n), aura: a })), bring: (r.bring ?? []).map(([root, perm, pay]) => ({ root, perm: permKey(c, perm), pay })) };
+      if (r.item && !roll.item) note(`${id}, ${what}: the item isn't on the sheet`);
       for (const w of roll.awk) if (!w.key) note(`${id}, ${what}: an awakening isn't on the sheet`);
       for (const b of roll.bring) if (!b.perm) note(`${id}, ${what}: the permission isn't on the sheet`);
       const k = RS.countRoll(c, s, roll);
@@ -1279,18 +1291,34 @@ if (part("1e")) {
   tryIt("hits", () => {
     const c = sheet("bram");
     const s = RS.freshCore(c);
-    same([RS.takeHits(c, s, "Body", 1), s.pts.Body], [{ root: "Body", on: null, lost: 1, wound: false, scar: false, ok: true }, 6], "a hit takes a point off his Body");
-    same([RS.takeHits(c, s, "Body", 1, { on: "Soul" }).lost, s.pts.Soul, s.pts.Body], [2, 2, 6], "taken on his Soul it's 2 points, and his Body keeps its point");
+    const plate = itemKey(c, "plate armour");
+    const helm = itemKey(c, "helmet");
+    same([RS.soakOf(c, s, "Body"), RS.soakOf(c, s, "Mind")], [5, 0], "his plate soaks 3 and his helmet 2, on his Body");
+    same([RS.takeHits(c, s, "Body", 1), s.pts.Body], [{ root: "Body", on: null, lost: 0, soaked: [{ key: plate, n: 1 }], wound: false, scar: false, ok: true }, 7], "a hit on his Body is soaked by his plate first");
+    same([RS.takeHits(c, s, "Body", 1, { on: "Soul" }).lost, s.pts.Soul, s.pts.Body], [2, 2, 7], "taken on his Soul, with no armour there, it's 2 points, and his Body keeps its point");
     same([RS.takeHits(c, s, "Body", 2, { on: "Mind" }).ok, s.pts.Mind], [false, 3], "and he can't take two on his Mind's 3, so nothing changes");
+    const twoForOne = RS.takeHits(c, s, "Mind", 1, { on: "Body" });
+    same([twoForOne.lost, twoForOne.soaked, s.pts.Body], [0, [{ key: plate, n: 2 }], 7], "a hit at his Mind taken on his Body is 2 points there, and his plate soaks both");
+    const deadly = RS.takeHits(c, s, "Body", 3);
+    same([deadly.soaked, deadly.lost, RS.soakOf(c, s, "Body"), s.pts.Body], [[{ key: helm, n: 2 }], 1, 0, 6], "a deadly 3 hits: his helmet soaks 2, and the third takes a point");
+    same([RS.sceneEnd(c, s, {}).toll, RS.soakOf(c, s, "Body"), s.soak], [0, 5, {}], "and every piece's soak is back at the end of the scene");
+    s.crossed[plate] = true;
+    same(RS.soakOf(c, s, "Body"), 2, "a broken piece doesn't soak till it's mended");
+    delete s.crossed[plate];
+    s.soak = { [plate]: 3, [helm]: 2 };
     s.pts.Body = 1;
     const three = RS.takeHits(c, s, "Body", 3);
-    same([three.lost, three.wound, three.scar, s.pts.Body, s.wound.Body, s.blaze], [1, true, true, 0, true, "Body"], "a ×3 hit on Body 1 empties it, then wounds it, then Scars it");
+    same([three.lost, three.wound, three.scar, s.pts.Body, s.wound.Body, s.blaze], [1, true, true, 0, true, "Body"], "with his soak gone, a ×3 hit on Body 1 empties it, then wounds it, then Scars it");
     same(RS.takeHits(c, s, "Mind", 1).lost, 0, "with a Scar waiting for its words, nothing more lands");
     const gone = RS.freshCore(c);
     gone.out = true;
-    same([RS.takeHits(c, gone, "Body", 1).lost, gone.pts.Body], [0, 7], "and nothing lands on someone who's left the scene");
+    same([RS.takeHits(c, gone, "Body", 1).lost, gone.pts.Body, gone.soak], [0, 7, {}], "and nothing lands on someone who's left the scene");
     same([RS.takeScar(c, s, "Body", "a spear through the shoulder"), s.scars.Body, s.out, s.blaze], [{ last: false }, ["a spear through the shoulder"], true, null], "the Scar's on his Body, and he leaves the scene");
     same([RS.lockedOf(c, s).Body, RS.capOf(c, s, "Body")], [3, 3], "the Scar locks a point for good, and wounded he can hold half of what's left, rounded up");
+    // Dorrie's court clothes soak on her Mind.
+    const d = sheet("dorrie");
+    const ds = RS.freshCore(d);
+    same([RS.soakOf(d, ds, "Mind"), RS.takeHits(d, ds, "Mind", 3).lost, ds.pts.Mind], [2, 1, 5], "Dorrie's court clothes soak 2 on her Mind, and the third hit takes a point");
     // A Root at 0 has nothing to lose but its wound.
     const i = sheet("isolde");
     const is = RS.freshCore(i);
@@ -1306,6 +1334,69 @@ if (part("1e")) {
     const vs = RS.freshCore(v);
     vs.scars.Mind = ["a", "b", "c", "d"];
     same(RS.lastScar(v, vs, "Mind"), true, "Vesk's fifth Scar on her Mind of 5 would be her last");
+  });
+
+  // Items on a roll: one item a roll, the one doing the work, its tier only
+  // when it can, never a broken one, and Resources and vessels.
+  tryIt("items", () => {
+    same([RS.TIERS.map((t) => t.name), BUILD.tiers.map((t) => t.name), RS.tierName(3)], [BUILD.tiers.map((t) => t.name), ["Plain", "Trusty", "Proven", "Storied", "Sung", "Mythic"], "Proven"], "the tiers' names come off the table in Items");
+    same(BUILD.kinds.map((k) => k.kind), RS.KINDS, "the six kinds of item, off the table in Items");
+    if (BUILD.resources.length < 20) note(`only ${BUILD.resources.length} Resource ideas`);
+    same(BUILD.weapons.find((w) => w.name === "Longbow")?.props, ["Long", "Two-Handed"], "the weapons come with their properties");
+    const v = sheet("vesk");
+    const vs = RS.freshCore(v);
+    const picks = itemKey(v, "set of picks");
+    same(RS.itemSaid(v.items.find((it) => it.key === picks)), "a Proven set of picks", "an item's said with its tier's name first");
+    same(RS.countRoll(v, vs, { root: "Body", item: picks }).item, { key: picks, name: "a set of picks", tier: 3, steps: 3 }, "the roll says which item and what it added");
+    vs.crossed[picks] = true;
+    same([RS.countRoll(v, vs, { root: "Body", item: picks }).total, RS.countRoll(v, vs, { root: "Body", item: picks }).item], [11, null], "a broken set of picks adds nothing");
+    const line = itemKey(v, "grappling line");
+    vs.crossed[line] = true;
+    same(RS.normalCore(vs, v).crossed, { [picks]: true }, "an attuned thing can't be crossed out");
+    // Resources.
+    const s = RS.freshCore(v);
+    same([RS.resOf(v), RS.resLeft(v, s)], [3, 3], "Vesk's got 3 Resources");
+    same([RS.sayRes(v, s, "rope"), RS.sayRes(v, s, "a smoke bomb"), RS.sayRes(v, s, "a purse of gold"), RS.sayRes(v, s, "a lantern"), s.res, RS.resLeft(v, s)], [true, true, true, false, ["rope", "a smoke bomb", "a purse of gold"], 0], "she says three, and there isn't a fourth");
+    same([RS.sceneEnd(v, s, {}) && s.res.length, RS.downtimeRest(v, s) && s.res], [3, []], "a scene's end doesn't put them back, and downtime does");
+    const packed = rootsSheet({ ...sheets.vesk, items: [...sheets.vesk.items, { name: "a quartermaster's pack", kind: "pack", tier: 3 }] }, [], BUILD);
+    same(RS.resOf(packed), 5, "a tier 3 pack is 2 more Resources, half its tier rounded up");
+    // Vessels: Ash's coal horn holds 3.
+    const a = sheet("ash");
+    const as = RS.freshCore(a);
+    const horn = itemKey(a, "coal horn");
+    same([RS.chargeOf(a, as, horn), RS.fillVessel(a, as, horn, 2, { from: "aura" })], [0, 0], "her horn starts empty, and Aura she wouldn't lose can't go in");
+    as.acting = true;
+    as.aura = 7;
+    same([RS.fillVessel(a, as, horn, 3, { from: "aura" }), as.aura, RS.chargeOf(a, as, horn)], [2, 5, 2], "the 2 past her 5 while she's acting go in");
+    as.acting = false;
+    same([RS.fillVessel(a, as, horn, 1, { from: "aura", spill: 1 }), RS.chargeOf(a, as, horn), as.aura], [1, 3, 5], "and Aura that would stop at her maximum");
+    same(RS.fillVessel(a, as, horn, 1, { from: "pt", root: "Soul" }), 0, "a full horn takes nothing");
+    as.charge[horn] = 1;
+    same([RS.fillVessel(a, as, horn, 1, { from: "pt", root: "Soul" }), as.pts.Soul, RS.chargeOf(a, as, horn)], [1, 9, 2], "a point of her Soul's a charge, mid-scene");
+    as.out = true;
+    same(RS.fillVessel(a, as, horn, 1, { from: "pt", root: "Soul" }), 0, "never once she's left the scene");
+    delete as.out;
+    as.charge[horn] = 3;
+    as.aura = 0;
+    const stone = itemKey(a, "ember stone");
+    const fire = { root: "Soul", item: stone, awk: [{ key: awkKey(a, "Fire without a word"), aura: 2 }], charge: [{ key: horn, n: 2 }] };
+    const k = RS.countRoll(a, as, fire);
+    same([k.total, diceLabel(k.dice), k.aura, k.charge, k.ok], [19, "3d12 + d2", 0, [{ key: horn, n: 2 }], true], "2 charge pays for the 2 Aura on Fire without a word, so she throws 19 on no Aura");
+    same([RS.payFor(a, as, k), RS.chargeOf(a, as, horn)], [true, 1], "and paying spends the charge");
+    same(RS.countRoll(a, as, { root: "Soul", charge: [{ key: horn, n: 1 }] }).charge, [], "charge only pays for an awakening's Aura");
+    same([RS.spendCharge(a, as, horn, 2), RS.spendCharge(a, as, horn, 1), RS.chargeOf(a, as, horn)], [false, true, 0], "spending charge on an ability, never more than's there");
+    const end = RS.freshCore(a);
+    end.aura = 3;
+    same([RS.sceneEnd(a, end, {}, { fill: { [horn]: 5 } }).filled, RS.chargeOf(a, end, horn), end.aura], [[{ key: horn, n: 3 }], 3, 5], "Aura left at a scene's end goes in, never past its tier, and then Aura's full");
+    RS.downtimeRest(a, end);
+    same(RS.chargeOf(a, end, horn), 3, "it keeps its charge through downtime");
+    // Six items at most.
+    const many = rootsSheet({ ...sheets.vesk, items: [...sheets.vesk.items, { name: "a lantern", tier: 2 }, { name: "a crowbar", tier: 2 }] }, [], BUILD);
+    same([many.items.length, RS.choicesOf(many).find((x) => x.k === "items")], [7, { k: "items", over: 1 }], "a seventh item is theirs to choose which goes");
+    // What downtime grows: a tier, an item, and one let go.
+    const grown = sheet("vesk", [{ k: "tier", key: itemKey(v, "knife"), to: 3 }, { k: "item", name: "a spyglass", kind: "tool", tier: 2 }, { k: "drop", key: itemKey(v, "soft-soled boots") }]);
+    same(grown.items.map((it) => [it.name, it.tier]), [["worn leathers", 2], ["a knife", 3], ["a set of picks", 3], ["her grappling line", 2], ["a spyglass", 2]], "Grow puts her knife up a tier, she gets a spyglass and lets her boots go");
+    same(costOf(grown).spent, 35, "and what downtime grows never counts against her 35");
   });
 
   // Healing, Toll and rests.
@@ -1332,15 +1423,13 @@ if (part("1e")) {
     e.out = true;
     same([RS.sceneEnd(c, e, { Body: 9, Mind: 2 }).healed, e.pts, e.toll, "out" in e], [{ Body: 6, Mind: 2, Soul: 0 }, { Body: 10, Mind: 3, Soul: 0 }, 1, false], "the end of a scene gets back what each Root rolls, Toll drops 1, and she's back for the next");
     same(RS.restOf(c, RS.freshCore(c)), [], "a full character rolls nothing at the end of a scene");
-    const rb = sheet("vesk", [{ k: "boon", t: 0, lever: "Recovery", name: "", on: "", drop: [1, 2] }]);
-    const rs = RS.freshCore(rb);
-    rs.pts.Mind = 0;
-    same([RS.sceneEnd(rb, rs, { Mind: 2 }).healed.Mind], [4], "the Recovery Boon's 2 more on each Root's roll");
     const d = RS.freshCore(c);
     Object.assign(d, { pts: { Body: 0, Mind: 0, Soul: 0 }, wound: { Body: true, Mind: false, Soul: false }, toll: 3 });
     d.scars.Body = ["a burn"];
     RS.downtimeRest(c, d);
     same([d.pts, d.wound.Body, d.toll, d.scars.Body.length], [{ Body: 9, Mind: 5, Soul: 0 }, false, 0, 1], "downtime puts everything back but the Scar, which keeps its point");
+    d.soak = { [itemKey(c, "worn leathers")]: 2 };
+    same(RS.downtimeRest(c, d).soak, {}, "and her leathers' soak");
   });
 
   // Saves from before: stacking (v3), Roots (v2) and before Roots, all onto
@@ -1353,24 +1442,29 @@ if (part("1e")) {
       v: 3, aura: 7, acting: false, tracks: { stamina: 8, confidence: 12, resolve: 10 }, bought: 2, power: { "0|Anywhere I can throw a hook": 2 },
       scars: { stamina: ["a burn across her back"], confidence: [], resolve: [] }, blaze: null, dead: false, stacked: true,
       conditions: [{ name: "Burning", die: 6, kind: "against" }], threads: { dorrie: "strained" },
-      crossed: { "utility|a smoke bomb": true }, boxes: {}, picked: [{ name: "a lantern", where: "bag" }],
+      crossed: { "utility|a smoke bomb": true, "equipment|a knife": true }, boxes: { "equipment|worn leathers": 1 }, picked: [{ name: "a lantern", where: "bag" }],
       asp: 4, aspText: "", notes: "Owes Mara a favour.", last: null, grown, tele: { c: "abc", r: 2 },
     };
     const s = RS.normalCore(JSON.parse(JSON.stringify(raw)), c);
-    same(s.v, 4, "a save from stacking is on v4");
+    same(s.v, 5, "a save from stacking is on v5");
+    same([s.soak, s.res, s.charge, "boxes" in s, s.crossed], [{}, [], {}, false, { "item|a knife": true }], "her soak's all there, her boxes are gone, and her knife's still crossed out by its own key");
     same(["tracks", "power", "bought", "stacked", "store"].filter((k) => k in s), [], "the tracks, powering and extra actions are gone");
     same([s.scars, RS.lockedOf(c, s).Body, s.pts, s.wound, s.toll], [{ Body: ["a burn across her back"], Mind: [], Soul: [] }, 2, { Body: 10, Mind: 5, Soul: 0 }, { Body: false, Mind: false, Soul: false }, 0], "her Stamina's Scar is on her Body, locking a point, and every Root's full");
-    same([s.conditions.map((x) => x.name), s.threads, s.crossed, s.picked.map((p) => p.name), s.asp, s.notes, s.tele, s.grown.length], [["Burning"], raw.threads, raw.crossed, ["a lantern"], 4, raw.notes, raw.tele, 1], "she keeps her play");
+    same([s.conditions.map((x) => x.name), s.threads, s.picked.map((p) => p.name), s.asp, s.notes, s.tele, s.grown.length], [["Burning"], raw.threads, ["a lantern"], 4, raw.notes, raw.tele, 1], "she keeps her play");
     same([s.aura, s.core, s.choose], [5, true, []], "her Aura's inside the new maximum, she's told once, and there's nothing for her player to choose");
     same(RS.normalCore(JSON.parse(JSON.stringify(s)), c).core, true, "and it stays till she's seen it");
     same(RS.normalCore({ ...JSON.parse(JSON.stringify(s)), core: false }, c).core, undefined, "and goes once she has");
-    same([RS.normalCore({}, c).core, RS.normalCore(undefined, c).v], [undefined, 4], "a new character's fresh, with nothing to tell");
+    same([RS.normalCore({}, c).core, RS.normalCore(undefined, c).v], [undefined, 5], "a new character's fresh, with nothing to tell");
     // A Blaze waiting on a track is a Scar waiting on its Root.
     same(RS.normalCore({ ...raw, blaze: "resolve" }, c).blaze, "Soul", "a Blaze waiting on her Resolve is a Scar waiting on her Soul");
     // From Roots (v2), and from before Roots, all the way.
     same(RS.normalCore({ v: 2, aura: 3, tracks: { stamina: 6, confidence: 12, resolve: 12 }, scars: { stamina: ["x"], confidence: [], resolve: [] }, store: {} }, c).scars.Body, ["x"], "a save from Roots comes across too");
     const old = RS.normalCore(RS.fromOld({ wound: 8, conf: 3, resolve: 2, scars: 1, notes: "Old notes.", threads: { dorrie: "strained" } }, c), c);
-    same([old.v, old.moved, old.core, old.scars.Body.length, old.notes], [4, true, true, 1, "Old notes."], "Old Vesk moves from before Roots onto the new core at once");
+    same([old.v, old.moved, old.core, old.scars.Body.length, old.notes], [5, true, true, 1, "Old notes."], "Old Vesk moves from before Roots onto the new core at once");
+    // A v4 save from the new core moves onto the fixes.
+    const v4 = { ...RS.freshCore(c), v: 4, boxes: { "equipment|worn leathers": 1 }, crossed: { "equipment|a knife": true }, choose: [], res: undefined, soak: undefined, charge: undefined };
+    const v5 = RS.normalCore(v4, c);
+    same([v5.v, v5.soak, v5.res, v5.charge, "boxes" in v5, v5.crossed, v5.choose, "core" in v5], [5, {}, [], {}, false, { "item|a knife": true }, [], false], "a v4 save from the new core moves onto the fixes with nothing for her to choose");
     same(RS.normalCore({ wound: 8, conf: 3, resolve: 2, scars: 1 }, c).scars.Body.length, 1, "and normalCore() takes her that way on its own");
 
     // Mara, built on the phone on stacking: each Title's 3 is 5, spread the
@@ -1395,9 +1489,18 @@ if (part("1e")) {
     same([m.roots, m.numbers.aura, "stamina" in m.numbers], [{ Body: 6, Mind: 6, Soul: 4 }, 5, false], "her Roots recounted, Aura 5 and no tracks");
     same([m.attuned[0].awakenings[0].root, m.attuned[0].awakenings[0].guessed, "kind" in m.attuned[0].awakenings[0]], ["Body", true, false], "her rapier's awakening locks her biggest Root's point till she says");
     const ms = RS.normalCore({ v: 3, aura: 7, tracks: { stamina: 12, confidence: 12, resolve: 12 } }, m);
-    same(ms.choose, [{ k: "five", t: 0, was: full({ Body: 2, Mind: 1 }) }, { k: "five", t: 1, was: full({ Body: 1, Mind: 1, Soul: 1 }) }, { k: "lock", a: 0, name: "Riposte", root: "Body" }, { k: "points", left: 3 }], "what her player's asked: each Title's spread, the Root her awakening locks, and the 3 points she's got left");
+    same(m.items.map((it) => [it.name, it.kind, it.tier, it.attuned]), [["a duelling sword", "weapon", 2, null], ["a buckler", "guard", 2, null], ["Her rapier", "weapon", 2, 0]], "her equipment's items at tier 2, her buckler a guard, and her rapier one of them, attuned");
+    same([m.carry.utility, m.was], [[], { utility: ["a whetstone"], bag: [] }], "her whetstone isn't an item, since it's a Resource now");
+    same(ms.choose, [{ k: "five", t: 0, was: full({ Body: 2, Mind: 1 }) }, { k: "five", t: 1, was: full({ Body: 1, Mind: 1, Soul: 1 }) }, { k: "lock", a: 0, name: "Riposte", root: "Body" }, { k: "points", left: 4 }], "what her player's asked: each Title's spread, the Root her awakening locks, and the 4 points she's got left, her whetstone's among them");
+    has(ms.notes, "a whetstone", "her whetstone's in her notes");
     // A choice she's seen goes for good, and one that no longer applies goes.
     same(RS.normalCore({ ...ms, choose: ms.choose.slice(1) }, m).choose.map((x) => x.k), ["five", "lock", "points"], "once she's checked her first Title, it isn't asked again");
+    // A Boon she built in is gone, with its 2 points to spend, and asked once.
+    const boony = rootsSheet({ ...mara, core: true, titles: [{ ...mara.titles[0], roots: { Body: 3, Mind: 2, Soul: 0 }, boons: [{ lever: "Toughness", name: "Iron Lungs" }] }, { ...mara.titles[1], roots: { Body: 2, Mind: 2, Soul: 1 } }] }, [], BUILD);
+    same([boony.titles[0].boonsGone, "boons" in boony.titles[0], boony.points.spent], [[{ lever: "Toughness", name: "Iron Lungs" }], false, 31], "a Boon on a saved sheet is gone, and costs nothing");
+    const bs = RS.normalCore({ ...RS.freshCore(boony), v: 4, choose: [] }, boony);
+    same(bs.choose.filter((x) => x.k === "boon" || x.k === "points"), [{ k: "boon", t: 0, lever: "Toughness", name: "Iron Lungs" }, { k: "points", left: 4 }], "moving onto the fixes asks her about it, with the points it gives back");
+    same(RS.normalCore({ ...bs, choose: bs.choose.filter((x) => x.k !== "boon") }, boony).choose.some((x) => x.k === "boon"), false, "and once she's seen it, it's gone");
     const fixed = rootsSheet({ ...mara, titles: [{ ...mara.titles[0], roots: { Body: 3, Mind: 2, Soul: 0 } }, mara.titles[1]], attuned: [{ ...mara.attuned[0], awakenings: [{ ...mara.attuned[0].awakenings[0], root: "Body" }] }] }, [], BUILD);
     same(RS.normalCore(ms, fixed).choose.map((x) => x.k), ["five", "points"], "spreading a Title and giving her awakening a Root clears their flags");
     // A sheet made on the new core keeps a Title spread 3 as it is.
@@ -1425,7 +1528,7 @@ if (part("1e")) {
     const archetypes = Object.fromEntries(BUILD.archetypes.map((a) => [a.name, a]));
     const read = (body) => {
       const said = [];
-      const crew = crewSheets.crewFrom({ body }, { warn: (m) => said.push(m), inline: (s) => s, archetypes, qualities: BUILD.qualities });
+      const crew = crewSheets.crewFrom({ body }, { warn: (m) => said.push(m), inline: (s) => s, archetypes, tiers: BUILD.tiers, props: BUILD.props.map((p) => p.name) });
       return { crew, said };
     };
     const real = read(text);
@@ -1445,7 +1548,20 @@ if (part("1e")) {
       ["a specialty back on a permission", "*move unseen* (Body)", "*move unseen* (Body, Stealth)"],
       ["a Specialties line", "**Roots:** Body 11 · Mind 5 · Soul 0.", "**Roots:** Body 11 · Mind 5 · Soul 0.\n\n**Specialties:** Locks 4."],
       ["an attuned thing's own way to Aura", "**Attuned (Awakened):** A grappling line.", "**Attuned (Awakened):** A grappling line.\n\n**Its Aura:** 1 the first time each scene she gets somewhere nobody else could follow."],
-      ["a bag that says it holds more than it lists", "her hunter's pack, with a coil of rope (1 of 10)", "her hunter's pack, with a coil of rope (2 of 10)"],
+      ["an Items line whose count's wrong", "her grappling line (tool, tier 2, attuned) · 5 of 6.", "her grappling line (tool, tier 2, attuned) · 4 of 6."],
+      ["a seventh item", "her grappling line (tool, tier 2, attuned) · 5 of 6.", "her grappling line (tool, tier 2, attuned) · a lantern (tool, tier 2) · a crowbar (tool, tier 2) · 7 of 6."],
+      ["an item past tier 3 at the start", "a set of picks (tool, tier 3)", "a set of picks (tool, tier 4)"],
+      ["an item with no tier", "a set of picks (tool, tier 3)", "a set of picks (tool)"],
+      ["an item of no kind there is", "a set of picks (tool, tier 3)", "a set of picks (trinket, tier 3)"],
+      ["armour with no Root", "worn leathers (armour, Body, tier 2)", "worn leathers (armour, tier 2)"],
+      ["a tier's name that isn't its tier", "a set of picks (tool, tier 3)", "a Trusty set of picks (tool, tier 3)"],
+      ["a weapon property that isn't one", "his war hammer (weapon, tier 2, Breaker, attuned)", "his war hammer (weapon, tier 2, Smashing, attuned)"],
+      ["an attuned item that isn't the attuned thing", "her grappling line (tool, tier 2, attuned)", "her grappling line (tool, tier 2)"],
+      ["Resources that aren't 3", "**Resources:** 3.\n\n**Attuned (Awakened):** A grappling line.", "**Resources:** 4.\n\n**Attuned (Awakened):** A grappling line."],
+      ["no keepsake", "**Keepsake:** the first coin she ever stole.\n\n", ""],
+      ["a Carries line back", "**Keepsake:** the first coin she ever stole.", "**Keepsake:** the first coin she ever stole.\n\n**Carries:** a purse of gold (utility, 1 of 3)."],
+      ["a Boons line", "**Keepsake:** the first coin she ever stole.", "**Keepsake:** the first coin she ever stole.\n\n**Boons:** *Iron Lungs* (Toughness)."],
+      ["a tier up missing from the points", "four items 4, and two tiers up 2.", "four items 4, and two tiers up 1."],
       ["an awakening with no Root, the old way", "*Anywhere I can throw a hook* (Body):", "*Anywhere I can throw a hook* (passive):"],
       ["an awakening locking a point its Root hasn't got", "*A circle anywhere I can kneel* (Soul):", "*A circle anywhere I can kneel* (Body):"],
     ];

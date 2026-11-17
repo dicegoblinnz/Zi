@@ -4,27 +4,35 @@
 // reads into book.json, and tests/check-companion.mjs breaks copies of the
 // chapter to make sure it stops on a sheet that doesn't add up.
 //
-// Since Mo's 16 Nov rework (the new core, notes/core-plan.md) a sheet reads:
-//   **Points:** 35. Two Titles 10, four more permissions 4, …, and six things she carries 6.
+// Since Mo's 16 Nov rework (the new core, notes/core-plan.md) and the 17 Nov
+// fixes (notes/fixes-plan.md) a sheet reads:
+//   **Points:** 35. Two Titles 10, four more permissions 4, …, four items 4, and two tiers up 2.
 //   **First Title:** *The best cat burglar in the city* (Body 5). Permissions: *move unseen* (Body), …
 //   **Second Title:** *Raised by the Guild* (Mind 3, Body 2). Permissions: …
 //   **Roots:** Body 11 · Mind 5 · Soul 0.
 //   **Archetypes:** [Shadow](#a-shadow) (*Push*) · [Shadow](#a-shadow) (*Vanish*).
-//   **Carries:** … (equipment, 3 of 3) · … (utility, 3 of 3) · … (keepsake) · her pack, with a coil of rope (1 of 10).
-//   **Armour:** Common worn leathers (Body, 1 box).
+//   **Items:** worn leathers (armour, Body, tier 2) · a set of picks (tool, tier 3) · her grappling line (tool, tier 2, attuned) · 5 of 6.
+//   **Keepsake:** the first coin she ever stole.
+//   **Resources:** 3.
 //   **Attuned (Awakened):** A grappling line.
 //   **Awakenings:** *Anywhere I can throw a hook* (Body): …
 //   **Numbers:** Aura 5 · Stride 3.
 // and its threads, crew answers, Aspiration and the trouble that follows
-// them. Every number's checked: a Title's spread adds up to 5, the Roots
-// line is what the Titles and permissions put on each Root, the points are
-// what points.js says they cost and what the Points line's parts add up to,
-// every ability's one of its archetype's, armour has a quality and a Root
-// and is something they carry, the attuned thing has the awakenings its
-// stage and its Catch give it, each awakening names the Root whose point it
-// locks and that Root's got the point, and Aura's 5. There are no tracks, no
-// specialties, and an attuned thing gets no Aura, so a track in the numbers,
-// a Specialties line or an Its Aura line stops it.
+// them. An item's brackets are its kind, the Root armour soaks on, its tier,
+// attuned if it is, a weapon's properties, and when armour counts (when they
+// fit the scene). Its tier's name can go before it (a Proven set of picks),
+// and if it does it has to be that tier's, off the table in Items. Every
+// number's checked: a Title's spread adds up to 5, the Roots line is what
+// the Titles and permissions put on each Root, the points are what points.js
+// says they cost and what the Points line's parts add up to, every ability's
+// one of its archetype's, there are six items at most and the count says how
+// many, every item's tier is 1 to 3 at the start, armour has a Root, the one
+// attuned item is the attuned thing, the Resources are 3 and what packs add,
+// the attuned thing has the awakenings its stage and its Catch give it, each
+// awakening names the Root whose point it locks and that Root's got the
+// point, and Aura's 5. There are no tracks, no specialties, no Boons and no
+// carrying the old way, so a track in the numbers, a Specialties, Its Aura,
+// Carries, Armour or Boons line stops it.
 import { createHash } from "node:crypto";
 import { costOf } from "../src/companion/points.js";
 import { threadNote } from "../src/companion/threads.js";
@@ -66,28 +74,33 @@ const TITLE_ROOTS = 5;
 const AURA = 5;
 const TRACKS = ["Stamina", "Confidence", "Resolve"];
 
-// Armour's quality, from the table in Quality: Common, Fine and Masterwork,
-// with 1, 2 and 3 boxes. A tier is its place in the table, so a saved
-// character keeps its armour's quality if a name changes.
-export function qualitiesFrom(doc, warn) {
-  const out = tableRows(sectionOf(doc?.body ?? "", "s-armour-quality")).map((r, i) => ({ tier: i + 1, name: plain(r[0]), boxes: Number(r[1]), text: plain(r[2] ?? "") }));
-  if (out.length !== 3 || out.some((q) => !(q.boxes >= 1))) warn(`armour should have three qualities, each with its boxes, and Quality has ${out.map((q) => `${q.name} ${q.boxes}`).join(", ") || "none"}`);
+// The tiers, from the table in Items (#s-item-tiers): six of them, 1 to 6,
+// each with its name.
+export function tiersFrom(doc, warn) {
+  const rows = tableRows(sectionOf(doc?.body ?? "", "s-item-tiers"));
+  const out = rows.map((r, i) => ({ n: i + 1, name: plain(r[1] ?? ""), text: plain(r[3] ?? "") }));
+  if (out.length !== 6 || out.some((t, i) => !t.name || Number(rows[i][0]) !== t.n)) warn(`items should have six tiers, 1 to 6, each with its name, and the table in Items has ${out.map((t) => `${t.n} ${t.name}`).join(", ") || "none"}`);
   return out;
 }
-// "Fine plate armour" is plate armour, Fine, and "a Common shield" is a
-// shield, Common.
-export function qualityOf(text, qualities = []) {
+// "a Proven set of picks" is a set of picks at tier 3, against the tiers'
+// names, and null if it hasn't got a tier's name first.
+export function tierOf(text, tiers = []) {
   const art = text.match(/^(a|an|the|her|his|their) /i)?.[0] ?? "";
   const rest = text.slice(art.length);
-  const q = qualities.find((x) => rest.startsWith(`${x.name} `));
-  if (!q) return null;
-  const noun = rest.slice(q.name.length + 1);
+  const t = tiers.find((x) => rest.startsWith(`${x.name} `));
+  if (!t) return null;
+  const noun = rest.slice(t.name.length + 1);
   const a = /^an? $/i.test(art) ? (/^[aeiou]/i.test(noun) ? "an " : "a ") : art;
-  return { name: `${a}${noun}`, tier: q.tier };
+  return { name: `${a}${noun}`, tier: t.n };
 }
+export const KINDS = ["weapon", "tool", "guard", "armour", "pack", "vessel"];
+const MAX_ITEMS = 6;
+const START_TIERS = [1, 2, 3];
+const RES_BASE = 3;
 
 // Every crew sheet in the chapter. ctx is { warn, inline, archetypes (by
-// name, each with its abilities), qualities }.
+// name, each with its abilities), tiers, props (the weapon properties'
+// names) }.
 export function crewFrom(doc, ctx) {
   const out = [];
   for (const m of doc.body.matchAll(/^:::sheet\[([^:\]]+): ([^\]]+)\]\n([\s\S]*?)\n:::$/gm)) out.push(crewSheet(m[1], m[2], m[3], m[0], ctx));
@@ -103,9 +116,10 @@ function crewSheet(name, titleText, body, block, ctx) {
     if (f) field[f[1]] = f[2].trim();
   }
   const labelled = (re) => Object.keys(field).find((k) => re.test(k));
-  for (const label of ["Plays like", "Points", "Roots", "Archetypes", "Carries", "Awakenings", "Numbers", "Threads", "Aspiration"]) {
+  for (const label of ["Plays like", "Points", "Roots", "Archetypes", "Items", "Keepsake", "Resources", "Awakenings", "Numbers", "Threads", "Aspiration"]) {
     if (!(label in field)) warn(`there's no ${label} line`);
   }
+  for (const label of ["Carries", "Armour", "Boons", "Bag", "Equipment", "Utility"]) if (label in field) warn(`there's a ${label} line, and since the 17 Nov fixes what they've got is the Items line, the Keepsake line and the Resources line`);
   if ("Specialties" in field) warn("there's a Specialties line, and specialties are gone: a roll's a Root and everything on the sheet that fits");
   if ("Its Aura" in field) warn("there's an Its Aura line, and an attuned thing gets no Aura any more: each awakening locks a point of its Root instead");
   const rootOf = (s, what) => {
@@ -176,42 +190,51 @@ function crewSheet(name, titleText, body, block, ctx) {
   });
   if (archetypes.length < 1) warn("there are no archetypes on the Archetypes line");
 
-  // What they carry: each part's list and how much of it there's room for.
-  const carry = { equipment: [], utility: [], keepsake: null, bag: { name: "a bag", max: 10, items: [] } };
-  for (const seg of dropStop(field.Carries ?? "").split(" · ").filter(Boolean)) {
-    const c = seg.match(/^(.+) \(([^()]+)\)$/);
-    const info = c?.[2] ?? "";
-    const kind = info.match(/^(equipment|utility|keepsake)\b/)?.[1] ?? (/\bof 10$/.test(info) ? "bag" : null);
-    if (!c || !kind) {
-      warn(`can't read "${seg}" in what they carry`);
-      continue;
-    }
-    const count = Number(info.match(/(\d+) of \d+$/)?.[1]);
-    if (kind === "keepsake") carry.keepsake = plain(c[1]);
-    else if (kind === "bag") {
-      const inside = c[1].match(/^(.+?), with (.+)$/);
-      const items = inside ? inside[2].split(/, | and /).map((x) => plain(x)).filter(Boolean) : [];
-      carry.bag = { name: plain(inside ? inside[1] : c[1]), max: Number(info.match(/\bof (\d+)$/)?.[1] ?? 10), items };
-      if (count !== items.length) warn(`the bag says ${info}, and it's got ${items.length} in it`);
-    } else {
-      carry[kind] = c[1].split(", ").map((x) => plain(x));
-      if (count !== carry[kind].length) warn(`their ${kind} says ${info}, and it's got ${carry[kind].length}`);
-    }
-  }
-
-  // Armour: each piece on a Root, its quality first and its boxes by it.
-  const armour = dots(dropStop(field.Armour ?? "")).map((seg) => {
-    const a = seg.match(/^(.+?) \((\w+), (\d+) box(?:es)?(?:, (when [^)]+))?\)$/);
-    if (!a) {
-      warn(`can't read the armour "${seg}": it's the piece, quality first, then (Root, its boxes)`);
+  // Items: six at most, each with its kind, tier and the rest in brackets,
+  // then how many of six.
+  const segs = dots(dropStop(field.Items ?? ""));
+  const count = segs.length && /^\d+ of \d+$/.test(segs[segs.length - 1]) ? segs.pop() : null;
+  if (!count) warn("the Items line ends with how many of six they've got: 5 of 6");
+  else if (Number(count.split(" ")[0]) !== segs.length || Number(count.split(" ").pop()) !== MAX_ITEMS) warn(`the Items line says ${count}, and it's got ${segs.length} of ${MAX_ITEMS}`);
+  if (segs.length > MAX_ITEMS) warn(`they've got ${segs.length} items, and it's six at most`);
+  const items = segs.map((seg) => {
+    const m = seg.match(/^(.+?) \(([^()]+)\)$/);
+    if (!m) {
+      warn(`can't read the item "${seg}": it's the item, then (its kind, tier 2) or (armour, its Root, tier 2)`);
       return null;
     }
-    const q = qualityOf(plain(a[1]), ctx.qualities);
-    if (!q) warn(`${a[1]} is armour, and it needs its quality first: ${ctx.qualities.map((x) => x.name).join(", ")}`);
-    else if (ctx.qualities[q.tier - 1]?.boxes !== Number(a[3])) warn(`${a[1]} says ${a[3]} boxes, but ${ctx.qualities[q.tier - 1]?.name} has ${ctx.qualities[q.tier - 1]?.boxes}`);
-    if (!carry.equipment.some((e) => plain(e) === plain(a[1]))) warn(`${a[1]} is armour, so it's one of their equipment, and it isn't`);
-    return { name: q ? q.name : plain(a[1]), root: rootOf(a[2], a[1]), quality: q ? ctx.qualities[q.tier - 1].name : null, boxes: Number(a[3]), when: a[4] ? curly(a[4]) : null };
+    const parts = m[2].split(/,\s*/);
+    const kind = parts.shift();
+    if (!KINDS.includes(kind)) warn(`${m[1]} is a ${kind}, and an item's a ${KINDS.join(", ")}`);
+    let root = null;
+    let tier = null;
+    let attuned = false;
+    let when = null;
+    const props = [];
+    for (const p of parts) {
+      if (ROOT_NAMES.includes(p)) root = p;
+      else if (/^tier \d+$/.test(p)) tier = Number(p.slice(5));
+      else if (p === "attuned") attuned = true;
+      else if (/^when /.test(p)) when = curly(p);
+      else props.push(p);
+    }
+    if (tier == null) warn(`${m[1]} hasn't got its tier: (${kind}, tier 2)`);
+    else if (!START_TIERS.includes(tier)) warn(`${m[1]} is tier ${tier}, and an item starts at tier 1 to 3`);
+    const named = tierOf(plain(m[1]), ctx.tiers ?? []);
+    if (named && named.tier !== tier) warn(`${m[1]} has the name of tier ${named.tier} before it, and it says tier ${tier}`);
+    if (kind === "armour" && !root) warn(`${m[1]} is armour, and it needs the Root it soaks on: (armour, Body, tier 2)`);
+    if (kind !== "armour" && root) warn(`${m[1]} has a Root, and only armour soaks on one`);
+    if (kind !== "armour" && when) warn(`${m[1]} says ${when}, and only armour counts only in the right place`);
+    if (props.length && kind !== "weapon") warn(`${m[1]} has ${props.join(", ")}, and only a weapon has properties`);
+    for (const p of props) if (ctx.props?.length && !ctx.props.includes(p)) warn(`${m[1]} has ${p}, and that isn't one of the weapon properties`);
+    return { name: named ? named.name : plain(m[1]), tier: tier ?? 2, kind: KINDS.includes(kind) ? kind : "tool", root: kind === "armour" ? root ?? "Body" : null, props, attuned, ...(when ? { when } : {}) };
   }).filter(Boolean);
+  const keepsake = field.Keepsake ? plain(dropStop(field.Keepsake)) : null;
+  if (!keepsake) warn("there's no keepsake");
+  // Resources: everyone's 3, and half each pack's tier, rounded up.
+  const res = Number(dropStop(field.Resources ?? "").match(/^(\d+)$/)?.[1]);
+  const resWant = RES_BASE + items.filter((it) => it.kind === "pack").reduce((t, it) => t + Math.ceil(it.tier / 2), 0);
+  if (res !== resWant) warn(`the Resources line says ${field.Resources ?? "nothing"}, and it's ${resWant}: 3, and half each pack's tier, rounded up`);
 
   // The attuned thing: its stage and its awakenings.
   const attunedLabel = labelled(/^Attuned\b/);
@@ -229,6 +252,15 @@ function crewSheet(name, titleText, body, block, ctx) {
   const room = (STAGE_AWAKENINGS[stage] ?? 1) * (caught ? 2 : 1);
   if (awakenings.length !== room) warn(`the attuned thing has ${awakenings.length} awakenings, and at ${stage}${caught ? " with its Catch" : ""} it's got ${room}`);
   const attuned = { name: plain(thing.replace(/\..*$/, "").replace(/, with its Catch.*$/, "").replace(/ \([^)]*\)$/, "")), props: thing.match(/^[^(.]+\(([^)]+)\)/)?.[1] ?? null, stage, catch: caught ? plain(caught[1]) : null, burden: null, awakenings };
+  // The attuned thing's one of their items, marked attuned, by its name.
+  const bare = (x) => String(x ?? "").toLowerCase().replace(/^(a|an|the|her|his|their) /, "").trim();
+  const marked = items.filter((it) => it.attuned);
+  if (attunedLabel && marked.length !== 1) warn(`${marked.length} items are marked attuned, and the attuned thing's one of them: (tool, tier 2, attuned)`);
+  for (const it of marked) {
+    if (bare(it.name) !== bare(attuned.name)) warn(`${it.name} is marked attuned, and the attuned thing's ${attuned.name}`);
+    it.attuned = 0;
+  }
+  for (const it of items) if (it.attuned === false) it.attuned = null;
   // Each awakening locks a point of its Root, so the Root has to have it.
   for (const r of ROOT_NAMES) {
     const locks = awakenings.filter((w) => w.root === r).length;
@@ -283,7 +315,7 @@ function crewSheet(name, titleText, body, block, ctx) {
     core: true,
     archetypes, titles,
     roots: Object.fromEntries(ROOT_NAMES.map((r) => [r, roots[r]])),
-    carry, armour, attuned, numbers, threads, crewQs,
+    items, keepsake, attuned, numbers, threads, crewQs,
     aspiration: { text: curly(asp?.[1] ?? ""), pts: Math.min(5, Number(asp?.[2] ?? 0)) },
     trouble: troubleLabel ? italics(field[troubleLabel]) : [],
   };

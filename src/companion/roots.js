@@ -15,29 +15,46 @@
 // scene. A heal recovers what it rolls, less 5 for each Toll, and every heal
 // from someone or something else adds 1 Toll. The end of a scene rolls each
 // Root unsplit and recovers what it rolls, and drops Toll by 1, and downtime
-// puts everything back. Aura's 5 (and 2 for each Aura Boon), full every scene,
-// 1 back for every die that wins and every top face, and past the maximum
-// while you're acting. There are no tracks and no extra actions.
+// puts everything back. Aura's 5, full every scene, 1 back for every die that
+// wins and every top face, and past the maximum while you're acting. There
+// are no tracks and no extra actions.
 //
-// A character's state (state.v === 4):
+// Since the 17 Nov fixes (notes/fixes-plan.md) there are no Boons. A
+// character has six items at most (c.items), each with a tier from 1 to 6
+// that's how many steps it adds to a roll it fits, one item a roll: a weapon
+// or a tool on anything it fits, a guard only avoiding harm, and armour, a
+// pack or a vessel never. Armour soaks its tier on its Root before a hit
+// takes points, and it's all back at the end of every scene. A pack gives
+// more Resources, half its tier rounded up, on top of everyone's 3, said in
+// the moment and all back in downtime. A vessel holds its tier in charge,
+// filled only with Aura you'd lose or a point at a time mid-scene, and spent
+// only on your own abilities and awakenings. Attuned things are items too,
+// and count. The keepsake's free and on top.
+//
+// A character's state (state.v === 5):
 //   { v, aura, acting, pts: { Body, Mind, Soul }, wound: { Body, Mind, Soul },
 //     toll, scars: { Body: [words], Mind: [], Soul: [] }, blaze, out, dead,
-//     conditions, threads, crossed, boxes, picked, asp, aspText, notes, last,
-//     grown, before, moved, core, choose, seen, tele, tough, beyond, elem, pool }
+//     soak: { [itemKey]: used }, res: [words], charge: { [itemKey]: n },
+//     conditions, threads, crossed, picked, asp, aspText, notes, last,
+//     grown, before, moved, core, choose, seen, tele, pool }
 // pts is what each Root's got now, full on a new character (capOf). wound
 // says which Roots are wounded, toll is how many heals from someone else
 // they've had since it last cleared, and scars are the words of each Root's
 // Scars left. blaze is a Root whose Scar is waiting for its words (a hit on
 // it wounded at 0, or the Blaze taken), and out says they've left the scene.
-// core is there till the player's seen that the character moved onto the new
-// core, and choose is what that move left for them to choose (choicesOf).
-// grown is what downtime gave them, in the shapes growRoots() reads, and
-// before is what they grew before the Roots change, waiting to be put back.
+// soak is how much of each piece of armour's soak is used this scene, res
+// is the Resources they've said since downtime, in their words, and charge
+// is what's in each vessel. crossed is the items that are broken till
+// they're mended. core is there till the player's seen that the character
+// moved onto the new core, and choose is what a move left for them to choose
+// (choicesOf). grown is what downtime gave them, in the shapes growRoots()
+// reads, and before is what they grew before the Roots change, waiting to be
+// put back.
 //
-// At the bottom is what the screens that haven't moved onto the new core yet
-// still use (the tracks, powering awakenings and extra actions, on a v3
-// state). Prompts 4 to 6 of notes/core-plan.md move them off it, and prompt 7
-// takes it out.
+// At the bottom is what the screens that haven't moved onto the fixes or the
+// new core yet still use: the Boons as stubs that give nothing, and the
+// tracks from stacking on a v3 state. Prompts 5 and 6 of notes/fixes-plan.md
+// move the screens off them, and prompt 8 takes them out.
 
 import { sizeDown, sizeUp, stepsToDice, SIZES } from "./dice.js";
 import { START, costOf } from "./points.js";
@@ -51,8 +68,8 @@ export const STAGES = ["Awakened", "Tempered", "Perfected"];
 // What a Title puts on your Roots, and what it put before the new core.
 export const TITLE_ROOTS = 5;
 export const OLD_TITLE_ROOTS = 3;
-// Aura's maximum: 5, and 2 for each Aura Boon. An attuned thing puts nothing
-// on it any more.
+// Aura's maximum: 5. An attuned thing puts nothing on it any more, and
+// there are no Boons.
 export const BASE_AURA = 5;
 export const ATTUNED_AURA = 0;
 // An awakening's 2 steps on a roll it fits, and 2 more for each Aura on it.
@@ -62,8 +79,16 @@ export const BRING_PTS = 1;
 export const BRING_AURA = 3;
 // Each Toll takes 5 off a heal.
 export const TOLL_STEP = 5;
-// The Recovery Boon puts 2 on each Root's roll at the end of a scene.
-export const REST_BOON = 2;
+// Items (Building Your Character, Items): six at most, the keepsake on top
+// and free. An item comes at tier 2 and can be raised to tier 3 when you make
+// a character, and tiers run 1 to 6.
+export const MAX_ITEMS = 6;
+export const START_TIER = 2;
+export const MAX_START_TIER = 3;
+export const MAX_TIER = 6;
+export const KINDS = ["weapon", "tool", "guard", "armour", "pack", "vessel"];
+// Everyone's 3 Resources.
+export const RES_BASE = 3;
 // An Aspiration takes 5 points, put in a downtime slot at a time, and a Scar
 // grows into a Trait with 3 slots on it (Mo's 16 Nov answers, after the core).
 export const ASP_PTS = 5;
@@ -76,6 +101,122 @@ const text = (v, n = 80) => String(v ?? "").trim().slice(0, n);
 const obj = (v) => (v && typeof v === "object" && !Array.isArray(v) ? v : {});
 const zero = () => ({ Body: 0, Mind: 0, Soul: 0 });
 export const specKey = (name) => String(name ?? "").trim().toLowerCase().replace(/\s+/g, " ");
+
+// ---------------------------------------------------------------- items
+
+// The tiers' names, off the table in Items (#s-item-tiers), which the build
+// reads into companion.build.tiers. These are the book's own set till a
+// sheet's made with the book to hand (rootsSheet calls useTiers), so Mo's
+// pick of a set is one edit to that table.
+export let TIERS = ["Plain", "Trusty", "Proven", "Storied", "Sung", "Mythic"].map((name, i) => ({ n: i + 1, name }));
+export function useTiers(list) {
+  if (!Array.isArray(list) || list.length !== MAX_TIER || list.some((t) => !t || !text(t.name, 40))) return TIERS;
+  TIERS = list.map((t, i) => ({ n: i + 1, name: text(t.name, 40) }));
+  return TIERS;
+}
+export const tierName = (n) => TIERS[clamp(n, 1, MAX_TIER) - 1]?.name ?? `Tier ${n}`;
+// An item said the way a sheet writes it, its tier's name first: a Proven
+// set of picks, her Trusty grappling line, Proven plate armour.
+export function itemSaid(it) {
+  const name = String(it?.name ?? "");
+  const art = name.match(/^(a|an|the|her|his|their|your|my) /i)?.[0] ?? "";
+  const rest = name.slice(art.length);
+  const tier = tierName(it?.tier ?? START_TIER);
+  const a = /^an? $/i.test(art) ? (/^[aeiou]/i.test(tier) ? `${art[0] === "A" ? "An" : "an"} ` : `${art[0] === "A" ? "A" : "a"} `) : art;
+  return `${a}${tier} ${rest}`;
+}
+// "a Proven set of picks" is a set of picks at tier 3, and "Trusty worn
+// leathers" is worn leathers at tier 2, against the tiers' names.
+export function tierIn(said, tiers = TIERS) {
+  const art = String(said).match(/^(a|an|the|her|his|their|your|my) /i)?.[0] ?? "";
+  const rest = String(said).slice(art.length);
+  const t = tiers.find((x) => rest.startsWith(`${x.name} `));
+  if (!t) return null;
+  const noun = rest.slice(t.name.length + 1);
+  const a = /^an? $/i.test(art) ? (/^[aeiou]/i.test(noun) ? "an " : "a ") : art.toLowerCase();
+  return { name: `${a}${noun}`, tier: t.n };
+}
+// What each kind's tier does on a roll: a weapon or a tool on anything it
+// fits, a guard only on a roll avoiding harm, and armour, a pack or a vessel
+// never.
+export const addsSteps = (it, avoid = false) => (it?.kind === "weapon" || it?.kind === "tool" ? true : it?.kind === "guard" ? Boolean(avoid) : false);
+// An item's name without its article, for matching an attuned thing to it.
+const bareItem = (name) => specKey(String(name ?? "").replace(/^(a|an|the|her|his|their|your|my) /i, "").replace(/\s*\([^)]*\)\s*$/, ""));
+// Each item's key lasts a reload: item|its name, and a second of the same
+// name item|its name|2.
+function keyItems(list) {
+  const seen = new Map();
+  for (const it of list) {
+    const base = `item|${it.name}`;
+    const n = (seen.get(base) ?? 0) + 1;
+    seen.set(base, n);
+    it.key = n > 1 ? `${base}|${n}` : base;
+  }
+  return list;
+}
+// One item tidied: its words, tier, kind, the Root armour soaks on (Body
+// unless it says), a weapon's properties, which attuned thing it is (an
+// index into c.attuned, or null) and, for armour that only counts in the
+// right place, when.
+export function itemOf(x) {
+  const kind = KINDS.includes(x?.kind) ? x.kind : "tool";
+  const props = (Array.isArray(x?.props) ? x.props : String(x?.props ?? "").split(/,\s*/)).map((p) => text(p, 30)).filter(Boolean);
+  const out = { key: "", name: text(x?.name, 80), tier: clamp(x?.tier ?? START_TIER, 1, MAX_TIER), kind, root: kind === "armour" ? (ROOTS.includes(x?.root) ? x.root : "Body") : null, props, attuned: Number.isInteger(x?.attuned) && x.attuned >= 0 ? x.attuned : null };
+  if (kind === "armour" && text(x?.when, 80)) out.when = text(x.when, 80);
+  if (x?.g != null) out.g = x.g;
+  return out;
+}
+// A thing from before items had kinds: armour's what the sheet said was
+// armour, a shield or a buckler's a guard, anything with a weapon's
+// properties or a weapon's name is a weapon, and the rest are tools, for the
+// player to change.
+function guessKind(name, props, B) {
+  const n = specKey(name);
+  if (/\b(shield|buckler|parrying)\b/.test(n)) return "guard";
+  if (props?.length) return "weapon";
+  const weapons = (B?.weapons ?? []).flatMap((w) => String(w.name).toLowerCase().split(/,| or /)).map((w) => w.trim()).filter((w) => w && !/improvised|bare hands/.test(w));
+  if (weapons.some((w) => new RegExp(`\\b${w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`).test(n))) return "weapon";
+  if (/\b(sword|knife|dagger|axe|bow|spear|hammer|mace|club|whip|staff|rapier|sling|crossbow|blade|pistol)\b/.test(n)) return "weapon";
+  return "tool";
+}
+// The items on a sheet. A sheet with items (the crew's, or one the builder's
+// made since the fixes) has them tidied, each attuned one matched to its
+// attuned thing. One from before the fixes (carry and armour) moves across
+// the way the plan says a saved character does: each piece of equipment's an
+// item at tier 2, armour's quality a tier up from that (Common 2, Fine 3,
+// Masterwork 4), and its utility items and bag go, kept in was for normalCore
+// to write into their notes, since they're Resources now. Every attuned thing
+// is an item, tier 2 if it wasn't one already. Past six stays, for the player
+// to choose (choicesOf).
+function itemsFrom(c, B) {
+  let items;
+  if (Array.isArray(c.items)) items = c.items.filter((x) => x && typeof x === "object" && text(x.name)).map(itemOf);
+  else {
+    const carry = obj(c.carry);
+    const list = (v) => (Array.isArray(v) ? v : Array.isArray(v?.items) ? v.items : []).map((x) => text(typeof x === "string" ? x : x?.text ?? x?.name, 80)).filter(Boolean);
+    const bare = (x) => String(x).replace(/\b(Common|Fine|Masterwork)\s+/, "");
+    const armour = Array.isArray(c.armour) ? c.armour : [];
+    items = list(carry.equipment).map((name) => {
+      const piece = armour.find((a) => a.name === name || a.name === bare(name));
+      if (piece) {
+        const q = clamp(piece.q ?? piece.tier ?? (["Common", "Fine", "Masterwork"].indexOf(piece.quality) + 1 || piece.boxes) ?? 1, 1, 3);
+        return itemOf({ name: piece.name, tier: q + 1, kind: "armour", root: piece.root, when: piece.when });
+      }
+      return itemOf({ name, tier: START_TIER, kind: guessKind(name, null, B) });
+    });
+    const was = { utility: list(carry.utility), bag: list(carry.bag) };
+    if (was.utility.length || was.bag.length) c.was = was;
+  }
+  // Every attuned thing's an item: the one that says it's attuned, or the
+  // one with its name, or a new one at tier 2.
+  c.attuned.forEach((a, i) => {
+    const said = items.find((x) => x.attuned === i) ?? items.find((x) => x.attuned == null && bareItem(x.name) === bareItem(a.name));
+    if (said) said.attuned = i;
+    else items.push(itemOf({ name: String(a.name ?? "").replace(/\s*\([^)]*\)\s*$/, ""), tier: START_TIER, kind: guessKind(a.name, a.props ? String(a.props).split(/,\s*/) : null, B), props: a.props, attuned: i }));
+  });
+  for (const it of items) if (it.attuned != null && !c.attuned[it.attuned]) it.attuned = null;
+  return keyItems(items);
+}
 
 // ---------------------------------------------------------------- the sheet
 
@@ -147,9 +288,12 @@ function titleOf(t, B, core = false) {
     ...t,
     text: words,
     permissions,
-    boons: (Array.isArray(t?.boons) ? t.boons : []).filter((x) => x && text(x.lever, 40)).map((x) => boonOf(x, B)),
   };
-  for (const k of ["name", "root", "specialties", "specs", "fromRoot", "fromThree"]) delete out[k];
+  // Boons are gone (17 Nov). One built in is kept as gone, for the player
+  // to spend its 2 points (choicesOf).
+  const gone = (Array.isArray(t?.boons) ? t.boons : []).filter((x) => x && text(x.lever, 40)).map((x) => ({ lever: text(x.lever, 40), name: text(x.name, 40) }));
+  for (const k of ["name", "root", "specialties", "specs", "fromRoot", "fromThree", "boons", "boonsGone"]) delete out[k];
+  if (gone.length) out.boonsGone = gone;
   if (!(t?.roots && typeof t.roots === "object") && ROOTS.includes(t?.root)) out.fromRoot = t.root;
   else if (!core && t?.roots && typeof t.roots === "object" && sumOf(spread) === OLD_TITLE_ROOTS) {
     out.fromThree = spread;
@@ -217,30 +361,25 @@ export function rootsSheet(base, grown = [], B = null) {
     delete a.aura;
   }
   c.archetypes = (c.archetypes ?? []).map((a) => archOf(typeof a === "string" ? { name: a, id: null } : a, B));
-  // What they carry, as lists. A crew sheet writes a piece of armour with its
-  // quality first (Fine plate armour), and the phone keeps it by the piece's
-  // own name, so what's ticked and crossed out follows the piece.
-  const carry = c.carry ?? {};
-  const bare = (x) => String(x).replace(/\b(Common|Fine|Masterwork)\s+/, "");
-  const piece = (x) => (c.armour ?? []).find((a) => a.name === x || a.name === bare(x))?.name ?? x;
-  c.carry = {
-    equipment: (Array.isArray(carry.equipment) ? carry.equipment : carry.equipment?.items ?? []).map(piece),
-    utility: Array.isArray(carry.utility) ? carry.utility : carry.utility?.items ?? [],
-    keepsake: carry.keepsake ?? null,
-    bag: { name: carry.bag?.name ?? "a bag", max: carry.bag?.max ?? 10, items: carry.bag?.items ?? [] },
-  };
-  c.armour = (c.armour ?? []).map((a) => ({ ...a, root: ROOTS.includes(a.root) ? a.root : "Body" }));
+  useTiers(B?.tiers);
+  // The keepsake's free and on top of the six, and the items are a list.
+  delete c.was;
+  c.keepsake = text(c.keepsake ?? c.carry?.keepsake, 120) || null;
+  c.items = itemsFrom(c, B);
   c.titles = (c.titles ?? []).filter((t) => t && typeof t === "object").map((t) => titleOf(t, B, core));
   c.points = { start: int(base.points?.start, START), spent: costOf(c).spent };
   if (Array.isArray(grown) && grown.length) growRoots(c, grown, B);
-  withBoons(c);
   c.roots = countRoots(c.titles).roots;
+  // Aura's 5, and nothing changes it.
+  c.numbers = { ...obj(c.numbers), aura: BASE_AURA };
+  for (const k of ["auraNote", "kit"]) delete c.numbers[k];
   // An awakening with no Root locks a point of their biggest, till they say.
   const big = bestRoot(c);
   for (const a of c.attuned) for (const w of a.awakenings) if (!w.root) Object.assign(w, { root: big, guessed: true });
   // No tracks on a sheet any more.
-  if (c.numbers) for (const k of ["stamina", "confidence", "resolve"]) delete c.numbers[k];
+  for (const k of ["stamina", "confidence", "resolve"]) delete c.numbers[k];
   delete c.specialties;
+  legacyCarry(c);
   return c;
 }
 
@@ -249,14 +388,21 @@ export function rootsSheet(base, grown = [], B = null) {
 // player grew for a change in the rules. A slot buys what a point does.
 //   { k: "perm", t, text, root }                a permission on Title t
 //   { k: "swap", t, j, text, root }             permission j on Title t, swapped
-//   { k: "boon", t, lever, name, on, drop }     two permissions swapped for a Boon
+//   { k: "boon", t, lever, name, on, drop }     two permissions swapped for a Boon, before
+//                                               the 17 Nov fixes: Boons are gone, so the
+//                                               permissions stay and it's kept as gone
 //   { k: "ability", a, name }                   another ability for archetype a
 //   { k: "awk", a, name, root, text, catch, burden } an awakening on attuned thing a
 //   { k: "stage", a, to, catch, burden }        attuned thing a up a stage
 //   { k: "thread", person, text, kind }         a new thread, bond or hostile
 //   { k: "title", text, roots, perm }           a new Title, from an Aspiration
 //   { k: "arch", arch, have }                   a new archetype, from an Aspiration
-//   { k: "attune", name, awk }                  a new attuned thing, from an Aspiration
+//   { k: "attune", name, awk, kind, tier }      a new attuned thing, from an Aspiration:
+//                                               the item of that name, or a new one
+//   { k: "item", name, kind, tier, root, props } an item got in play
+//   { k: "tier", key, to }                      item key raised to tier to (Grow to 3,
+//                                               money to 4, the story to 5 and 6)
+//   { k: "drop", key }                          item key let go, to make room
 // From before stacking, a permission said its specialty (spec) and a new
 // Title its one Root (root) and specialties (specs): the specialties are gone,
 // and that Title reads as all 5 on its Root. A new Title from stacking spread
@@ -273,15 +419,9 @@ export function growRoots(c, grown, B = null) {
       const t = c.titles[int(x.t, -1)];
       if (t && slotsOf(t) < MAX_PERMS) t.permissions.push({ text: words, root, g });
     } else if (x.k === "boon" && text(x.lever, 40)) {
-      // Two permissions swapped for a Boon, in downtime: they come off the
-      // Title and the Boon takes their two slots.
+      // Boons are gone: the permissions it took stay, and it's kept as gone.
       const t = c.titles[int(x.t, -1)];
-      if (!t) continue;
-      const drop = [...new Set((Array.isArray(x.drop) ? x.drop : []).map((j) => int(j, -1)))].filter((j) => t.permissions[j]).sort((a, b) => b - a);
-      // Nothing comes off unless the Boon fits once it has.
-      if (slotsOf(t) - drop.length + BOON_SLOTS > MAX_PERMS) continue;
-      for (const j of drop) t.permissions.splice(j, 1);
-      t.boons.push({ ...boonOf(x, B), g });
+      if (t) (t.boonsGone ??= []).push({ lever: text(x.lever, 40), name: text(x.name, 40), grown: true });
     } else if (x.k === "swap" && words && root) {
       const t = c.titles[int(x.t, -1)];
       const j = int(x.j, -1);
@@ -320,6 +460,21 @@ export function growRoots(c, grown, B = null) {
     } else if (x.k === "attune" && text(x.name, 80)) {
       const awk = x.awk && typeof x.awk === "object" && text(x.awk.name, 80) ? [{ ...awkOf({ name: x.awk.name, root: x.awk.root, text: text(x.awk.text, 300) }), g }] : [];
       c.attuned.push({ name: text(x.name, 80), props: null, stage: "Awakened", catch: null, burden: null, awakenings: awk, g });
+      const i = c.attuned.length - 1;
+      const had = c.items.find((it) => it.attuned == null && bareItem(it.name) === bareItem(x.name));
+      if (had) had.attuned = i;
+      else c.items.push(itemOf({ name: x.name, kind: x.kind ?? guessKind(x.name, null, B), tier: x.tier ?? START_TIER, attuned: i, g }));
+      keyItems(c.items);
+    } else if (x.k === "item" && text(x.name, 80)) {
+      c.items.push(itemOf({ ...x, attuned: null, g }));
+      keyItems(c.items);
+    } else if (x.k === "tier") {
+      const it = c.items.find((y) => y.key === x.key);
+      if (it) it.tier = clamp(x.to, 1, MAX_TIER);
+    } else if (x.k === "drop") {
+      const at = c.items.findIndex((y) => y.key === x.key && y.attuned == null);
+      if (at >= 0) c.items.splice(at, 1);
+      keyItems(c.items);
     }
   }
   return c;
@@ -331,6 +486,10 @@ export function growRoots(c, grown, B = null) {
 //   { k: "spread", t, root }      Title t, all 5 on root, to spread how they like
 //   { k: "five", t, was }         Title t's 3 made 5 the way they were spread, to check
 //   { k: "lock", a, name, root }  an awakening with no Root, guessed as root, to check
+//   { k: "boon", t, lever, name } a Boon on Title t, gone since the 17 Nov fixes: one
+//                                 built in gives its 2 points back (they're in points),
+//                                 and one swapped in downtime gives its permissions back
+//   { k: "items", over }          more than six items, for them to choose which go
 //   { k: "points", left }         points they've got left to spend
 export function choicesOf(c) {
   const out = [];
@@ -345,65 +504,16 @@ export function choicesOf(c) {
   (c.attuned ?? []).forEach((a, i) => {
     for (const w of a.awakenings ?? []) if (w.guessed) out.push({ k: "lock", a: i, name: w.name, root: w.root });
   });
+  (c.titles ?? []).forEach((t, i) => {
+    for (const b of t.boonsGone ?? []) out.push({ k: "boon", t: i, lever: b.lever, name: b.name });
+  });
+  const over = (c.items?.length ?? 0) - MAX_ITEMS;
+  if (over > 0) out.push({ k: "items", over });
   const left = int(c.points?.start, 0) - int(c.points?.spent, 0);
   if (c.points && left > 0) out.push({ k: "points", left });
   return out;
 }
-const sameChoice = (x, y) => x?.k === y.k && (y.k !== "spread" && y.k !== "five" ? true : x.t === y.t) && (y.k !== "arch" || x.name === y.name) && (y.k !== "lock" || (x.a === y.a && x.name === y.name));
-
-// ---------------------------------------------------------------- Boons
-
-// A Boon takes two permission slots on its Title (Boons and Burdens, in
-// Building Your Character), so a Title's six slots are its permissions and
-// two for each Boon. What a Boon does comes from the book's table by its
-// lever, and the player's own name for it and what it's on (a piece of
-// armour, a condition, climbing) are theirs. A Boon's never steps on a roll.
-export const BOON_SLOTS = 2;
-export const slotsOf = (t) => (t?.permissions?.length ?? 0) + BOON_SLOTS * (t?.boons?.length ?? 0);
-export function boonOf(x, B = null) {
-  const lever = text(x?.lever, 40);
-  const rule = (B?.boons ?? []).find((b) => b.lever === lever);
-  const out = { lever, name: text(x?.name, 40), text: rule?.text ?? text(x?.text, 200), on: text(x?.on, 60) };
-  if (x?.g != null) out.g = x.g;
-  return out;
-}
-export const boonsOf = (c) => (c?.titles ?? []).flatMap((t) => t.boons ?? []);
-export const boonCount = (c, lever) => boonsOf(c).filter((b) => b.lever === lever).length;
-// What goes on the sheet itself: Aura's maximum (5, and 2 for each Aura
-// Boon), the stride's 2 more for each Stride Boon, a piece of armour gets a
-// box, and Kit's an item more. The rest of the Boons work in play, or are the
-// player's to remember, like Getting around.
-export function withBoons(c) {
-  const n = c.numbers ?? (c.numbers = {});
-  const said = (lever) => {
-    const list = boonsOf(c).filter((b) => b.lever === lever);
-    return list.length ? list.map((b) => b.name || `the ${b.lever} Boon`).join(", ") : null;
-  };
-  const aura = boonCount(c, "Aura");
-  n.aura = BASE_AURA + 2 * aura;
-  if (aura) n.auraNote = said("Aura");
-  const stride = boonCount(c, "Stride");
-  if (stride) {
-    n.stride = int(n.stride, 3) + 2 * stride;
-    n.strideNote = [n.strideNote, said("Stride")].filter(Boolean).join(", ");
-  }
-  n.kit = boonCount(c, "Kit");
-  // One piece has one more box for each Armour Boon: the one it names, or
-  // the first piece they've got.
-  for (const b of boonsOf(c).filter((x) => x.lever === "Armour")) {
-    const piece = c.armour.find((a) => specKey(a.name) === specKey(b.on)) ?? c.armour.find((a) => !b.on || specKey(a.name).includes(specKey(b.on))) ?? c.armour[0];
-    if (piece) piece.boxes = Math.min(6, (piece.boxes ?? 1) + 1);
-  }
-  return c;
-}
-// What a Boon's called on the sheet: the player's name for it, or the lever.
-export const boonSaid = (c, lever) => boonsOf(c).find((b) => b.lever === lever)?.name || `your ${lever} Boon`;
-// A condition the Conditions Boon says can't touch them.
-export const shrugs = (c, name) => boonsOf(c).some((b) => b.lever === "Conditions" && b.on && specKey(b.on) === specKey(name));
-// Going beyond's free once a scene with the Going beyond Boon, and 1 Aura after.
-export const freeBeyond = (c, s) => boonCount(c, "Going beyond") > 0 && s.beyond !== true;
-// What each Root's roll gets at the end of a scene: 2 for each Recovery Boon.
-export const restBonus = (c) => REST_BOON * boonCount(c, "Recovery");
+const sameChoice = (x, y) => x?.k === y.k && (y.k !== "spread" && y.k !== "five" && y.k !== "boon" ? true : x.t === y.t) && (y.k !== "arch" || x.name === y.name) && (y.k !== "lock" || (x.a === y.a && x.name === y.name)) && (y.k !== "boon" || x.lever === y.lever);
 
 export const bestRoot = (c) => [...ROOTS].sort((a, b) => (c.roots?.[b] ?? 0) - (c.roots?.[a] ?? 0))[0];
 
@@ -438,15 +548,17 @@ export function archetypesOf(c, B) {
 
 // ---------------------------------------------------------------- state
 
-// A new character's state: every Root full, nothing wounded, no Toll, and
-// Aura full.
+// A new character's state: every Root full, nothing wounded, no Toll, Aura
+// full, all their armour's soak and all their Resources there, and every
+// vessel empty.
 export function freshCore(c) {
   const s = {
-    v: 4, aura: int(c.numbers?.aura, BASE_AURA), acting: false,
+    v: 5, aura: int(c.numbers?.aura, BASE_AURA), acting: false,
     pts: zero(), wound: { Body: false, Mind: false, Soul: false }, toll: 0,
     scars: { Body: [], Mind: [], Soul: [] },
     blaze: null, out: false, dead: false,
-    conditions: [], threads: {}, crossed: {}, boxes: {}, picked: [],
+    soak: {}, res: [], charge: {},
+    conditions: [], threads: {}, crossed: {}, picked: [],
     asp: even(c.aspiration?.die ?? 2, 2, 12), aspPts: aspOf({ aspPts: c.aspiration?.pts ?? 0 }), aspText: "", notes: "", last: null, grown: [], choose: [],
   };
   for (const r of ROOTS) s.pts[r] = capOf(c, s, r);
@@ -477,14 +589,37 @@ const TRACK_ROOT = { stamina: "Body", confidence: "Mind", resolve: "Soul" };
 // or bought any more. core is there till they've seen it, and choose is
 // what's theirs to choose (choicesOf). c is the sheet as rootsSheet() makes
 // it, so each Title's 3 is 5 already.
+// A v4 state from the new core moves onto the 17 Nov fixes (v5) here too:
+// its armour's soak starts unused and its boxes go, its Resources are all
+// there and its vessels empty, what was crossed out stays crossed out by the
+// item's own key, the utility items and bag the sheet had go into its notes,
+// since they're Resources now, and what that leaves them to choose (a Boon
+// that's gone, items past six, points to spend) joins choose.
 export function normalCore(raw, c) {
   let r = raw && typeof raw === "object" ? JSON.parse(JSON.stringify(raw)) : {};
   const blank = !Object.keys(r).length;
   if (isOldState(r)) r = fromOld(r, c);
-  const moving = !blank && r.v !== 4;
+  const moving = !blank && r.v !== 4 && r.v !== 5;
+  const fixing = !blank && r.v !== 5;
   if (moving && r.v !== 3) r = normalRoots(r, c);
   const s = Object.assign(freshCore(c), r);
-  s.v = 4;
+  s.v = 5;
+  if (fixing) {
+    s.soak = {};
+    s.res = [];
+    s.charge = {};
+    // Crossed out by where it was (equipment|plate armour) is crossed out by
+    // the item's key now (item|plate armour).
+    const crossed = obj(r.crossed);
+    s.crossed = {};
+    for (const [k, v] of Object.entries(crossed)) {
+      if (!v) continue;
+      const key = k.replace(/^(equipment|utility|bag)\|/, "item|");
+      if ((c.items ?? []).some((it) => it.key === key)) s.crossed[key] = true;
+    }
+    const was = [...(c.was?.utility ?? []), ...(c.was?.bag ?? [])];
+    if (was.length) s.notes = `${text(s.notes, 4000)}${text(s.notes, 4000) ? "\n" : ""}What you carried before Resources: ${was.join(", ")}. They're things you can say you've got now, with a Resource.`;
+  }
   if (moving) {
     // A track's Scars are Scars on its Root now, each locking a point, and a
     // Blaze waiting on a track is a Scar waiting on its Root.
@@ -500,11 +635,10 @@ export function normalCore(raw, c) {
     s.core = true;
     s.choose = choicesOf(c);
   }
-  for (const k of ["tracks", "power", "store", "bought", "stacked", "used", "shrugged"]) delete s[k];
+  for (const k of ["tracks", "power", "store", "bought", "stacked", "used", "shrugged", "boxes", "tough", "beyond", "elem"]) delete s[k];
   s.acting = Boolean(s.acting);
-  // Past the maximum only while acting, or by the 1 In your element gave at
-  // the start of the scene, till they've finished acting.
-  s.aura = clamp(s.aura, 0, s.acting ? 99 : auraMax(c, s) + (s.elem === true ? 1 : 0));
+  // Past the maximum only while acting.
+  s.aura = clamp(s.aura, 0, s.acting ? 99 : auraMax(c, s));
   const scars = obj(s.scars);
   const wound = obj(s.wound);
   s.scars = {};
@@ -533,26 +667,34 @@ export function normalCore(raw, c) {
   if (!Object.keys(s.scarGrow).length) delete s.scarGrow;
   s.conditions = (Array.isArray(s.conditions) ? s.conditions : []).filter((x) => x && x.name).map((x) => ({ name: text(x.name, 40), die: even(x.die, 2, 12), kind: x.kind === "for" ? "for" : "against" }));
   s.picked = (Array.isArray(s.picked) ? s.picked : []).filter((p) => p && p.name && ["equipment", "utility", "bag"].includes(p.where));
-  for (const key of ["threads", "crossed", "boxes"]) if (!s[key] || typeof s[key] !== "object" || Array.isArray(s[key])) s[key] = {};
+  for (const key of ["threads", "crossed"]) if (!s[key] || typeof s[key] !== "object" || Array.isArray(s[key])) s[key] = {};
   for (const [k, v] of Object.entries(s.threads)) if (!["strained", "snapped", "whole"].includes(v)) delete s.threads[k];
+  // Attuned things can't break.
+  for (const it of c.items ?? []) if (it.attuned != null) delete s.crossed[it.key];
+  // Soak used on armour they've got, and charge in vessels they've got,
+  // never past an item's tier. Resources said, never more than they've got.
+  const item = (key) => (c.items ?? []).find((it) => it.key === key);
+  const soak = obj(s.soak);
+  s.soak = {};
+  for (const [k, v] of Object.entries(soak)) if (item(k)?.kind === "armour" && int(v, 0) > 0) s.soak[k] = clamp(v, 0, item(k).tier);
+  const charge = obj(s.charge);
+  s.charge = {};
+  for (const [k, v] of Object.entries(charge)) if (item(k)?.kind === "vessel" && int(v, 0) > 0) s.charge[k] = clamp(v, 0, item(k).tier);
+  s.res = (Array.isArray(s.res) ? s.res : []).map((x) => text(x, 120)).filter(Boolean).slice(0, resOf(c));
   s.grown = (Array.isArray(s.grown) ? s.grown : []).filter((g) => g && typeof g === "object" && typeof g.k === "string");
   s.before = (Array.isArray(s.before) ? s.before : []).filter((g) => g && typeof g === "object" && typeof g.k === "string");
   if (!s.before.length) delete s.before;
   if (!s.moved) delete s.moved;
   if (s.core !== true) delete s.core;
-  // After the move, a choice goes once it's made, or once it doesn't apply
-  // any more (their build's spread that Title, or spent the points).
+  // After a move, a choice goes once it's made, or once it doesn't apply any
+  // more (their build's spread that Title, or spent the points). Moving onto
+  // the fixes adds what it's left them to choose.
   if (!moving) {
     const now = choicesOf(c);
-    s.choose = (Array.isArray(s.choose) ? s.choose : []).map((x) => now.find((y) => sameChoice(x, y))).filter(Boolean);
+    const kept = (Array.isArray(s.choose) ? s.choose : []).map((x) => now.find((y) => sameChoice(x, y))).filter(Boolean);
+    s.choose = fixing ? [...kept, ...now.filter((y) => ["boon", "items", "points"].includes(y.k) && !kept.some((x) => sameChoice(x, y)))] : kept;
   }
   if (s.seen && typeof s.seen !== "object") delete s.seen;
-  // What a scene's used up: the Toughness Boon's free hits, the Going
-  // beyond Boon's free go and In your element's Aura, cleared by a new scene.
-  s.tough = clamp(s.tough, 0, 9);
-  if (!s.tough) delete s.tough;
-  if (s.beyond !== true) delete s.beyond;
-  if (s.elem !== true) delete s.elem;
   // A Shadow's pool: the dice they rolled getting into hiding, there to add
   // to a roll later, one die at a time.
   s.pool = (Array.isArray(s.pool) ? s.pool : []).map((d) => even(d, 2, 12)).slice(0, 12);
@@ -606,26 +748,64 @@ export function spendPts(s, root, n = 1) {
   return true;
 }
 
-// n hits at a Root. Each takes a point, and damage carries past 0: a hit on
+// Armour on a Root that can soak: every piece of armour on it that isn't
+// broken, each soaking its tier a scene.
+export const armourOn = (c, s, root) => (c.items ?? []).filter((it) => it.kind === "armour" && (it.root ?? "Body") === root && !s?.crossed?.[it.key]);
+export const soakLeft = (s, it) => Math.max(0, it.tier - clamp(s?.soak?.[it.key] ?? 0, 0, it.tier));
+// What's left to soak on a Root this scene.
+export const soakOf = (c, s, root) => armourOn(c, s, root).reduce((t, it) => t + soakLeft(s, it), 0);
+// Soak n points off the armour on a Root, a piece at a time in the sheet's
+// order, and say what each piece soaked.
+function soakFrom(c, s, root, n) {
+  const out = [];
+  let left = n;
+  for (const it of armourOn(c, s, root)) {
+    const take = Math.min(left, soakLeft(s, it));
+    if (!take) continue;
+    if (!s.soak || typeof s.soak !== "object") s.soak = {};
+    s.soak[it.key] = (s.soak[it.key] ?? 0) + take;
+    out.push({ key: it.key, n: take });
+    left -= take;
+    if (!left) break;
+  }
+  return out;
+}
+const soakedN = (list) => list.reduce((t, x) => t + x.n, 0);
+
+// n hits at a Root. Each is a point, and the armour on that Root soaks it
+// first, then it's a point off the Root, and damage carries past 0: a hit on
 // it at 0 wounds it, and a hit on it wounded at 0 is a Scar, waiting for its
 // Catch (s.blaze), and they're leaving the scene, so the rest do nothing,
-// and nothing lands on someone who's left it (s.out).
-// Taken on another Root (on), each hit's 2 points, all of them or none, and
-// only if that Root's got them. It says what happened:
-//   { root, on, lost, wound, scar, ok }
-// ok is false when they asked to take it on another Root that hasn't got the
-// points, and then nothing changed.
+// and nothing lands on someone who's left it (s.out). A vulnerability's or a
+// deadly threat's hits are just more hits, a point each.
+// Taken on another Root (on), each hit's 2 points there, all of them or none,
+// and only if that Root's soak and points have them between them, its
+// armour soaking first. It says what happened:
+//   { root, on, lost, soaked: [{ key, n }], wound, scar, ok }
+// lost is the points off a Root, and soaked what each piece of armour
+// soaked. ok is false when they asked to take it on another Root that
+// hasn't got it, and then nothing changed.
 export function takeHits(c, s, root, n = 1, { on = null } = {}) {
   const hits = Math.max(0, int(n, 0));
-  const out = { root, on: null, lost: 0, wound: false, scar: false, ok: true };
+  const out = { root, on: null, lost: 0, soaked: [], wound: false, scar: false, ok: true };
   if (!ROOTS.includes(root) || !hits || s.blaze || s.out) return out;
   if (on && on !== root && ROOTS.includes(on)) {
-    if ((s.pts?.[on] ?? 0) < 2 * hits) return { ...out, ok: false };
-    s.pts[on] -= 2 * hits;
-    return { ...out, on, lost: 2 * hits };
+    const need = 2 * hits;
+    if (soakOf(c, s, on) + (s.pts?.[on] ?? 0) < need) return { ...out, ok: false };
+    const soaked = soakFrom(c, s, on, need);
+    const lost = need - soakedN(soaked);
+    s.pts[on] -= lost;
+    return { ...out, on, lost, soaked };
   }
   for (let i = 0; i < hits; i++) {
-    if (s.pts[root] > 0) {
+    const soaked = soakFrom(c, s, root, 1);
+    if (soaked.length) {
+      for (const x of soaked) {
+        const had = out.soaked.find((y) => y.key === x.key);
+        if (had) had.n += x.n;
+        else out.soaked.push(x);
+      }
+    } else if (s.pts[root] > 0) {
       s.pts[root] -= 1;
       out.lost += 1;
     } else if (!s.wound[root]) {
@@ -691,38 +871,132 @@ export function healBy(c, s, rolled, spread = null, { other = false, ease = 0, b
 // The Roots that roll at the end of a scene: the ones below what they can
 // hold that have dice to roll.
 export const restOf = (c, s) => ROOTS.filter((r) => (c.roots?.[r] ?? 0) > 0 && (s.pts?.[r] ?? 0) < capOf(c, s, r));
-// The end of a scene: each Root gets back what it rolled (rolls is
-// { Body, Mind, Soul }, each Root's dice unsplit added up), and 2 more for
-// each Recovery Boon, up to what it can hold, Toll drops by 1, and anyone
-// who left the scene is back for the next.
-export function sceneEnd(c, s, rolls = {}) {
-  const more = restBonus(c);
+// The end of a scene: Aura they've got left can go into their vessels first
+// (fill is { [vesselKey]: n }), then Aura's full again, every piece of
+// armour's soak is back, each Root gets back what it rolled (rolls is
+// { Body, Mind, Soul }, each Root's dice unsplit added up) up to what it can
+// hold, Toll drops by 1, and anyone who left the scene is back for the next.
+// Points never go into a vessel here.
+export function sceneEnd(c, s, rolls = {}, { fill = {} } = {}) {
+  const filled = [];
+  for (const [key, n] of Object.entries(obj(fill))) {
+    const left = Math.min(Math.max(0, int(n, 0)), Math.max(0, int(s.aura, 0)));
+    const put = left ? addCharge(c, s, key, left) : 0;
+    if (put) {
+      s.aura -= put;
+      filled.push({ key, n: put });
+    }
+  }
+  s.acting = false;
+  s.aura = auraMax(c, s);
+  s.soak = {};
   const healed = zero();
   for (const r of ROOTS) {
     const roll = Math.max(0, int(rolls?.[r], 0));
     if (!roll) continue;
-    const to = Math.min(capOf(c, s, r), (s.pts[r] ?? 0) + roll + more);
+    const to = Math.min(capOf(c, s, r), (s.pts[r] ?? 0) + roll);
     healed[r] = Math.max(0, to - s.pts[r]);
     s.pts[r] = Math.max(s.pts[r], to);
   }
   s.toll = Math.max(0, int(s.toll, 0) - 1);
   delete s.out;
-  return { healed, toll: s.toll };
+  return { healed, toll: s.toll, filled };
 }
-// Downtime puts everything back: wounds and Toll clear, and every Root's
-// full. Scars stay.
+// Downtime puts everything back: wounds and Toll clear, every Root's full,
+// armour's soak is back and so are all their Resources. Scars stay, and so
+// does what's in their vessels.
 export function downtimeRest(c, s) {
   s.wound = { Body: false, Mind: false, Soul: false };
   s.toll = 0;
   for (const r of ROOTS) s.pts[r] = capOf(c, s, r);
+  s.soak = {};
+  s.res = [];
   delete s.out;
   return s;
 }
 
+// ---------------------------------------------------------------- Resources
+
+// How many Resources they've got: everyone's 3, and half each pack's tier,
+// rounded up, and anything else on the sheet that says so (resMore, for an
+// ability that gives more).
+export const packRes = (tier) => Math.ceil(clamp(tier, 0, MAX_TIER) / 2);
+export const resOf = (c) => RES_BASE + (c?.items ?? []).filter((it) => it.kind === "pack").reduce((t, it) => t + packRes(it.tier), 0) + Math.max(0, int(c?.resMore, 0));
+// How many they've got left to say till downtime.
+export const resLeft = (c, s) => Math.max(0, resOf(c) - (Array.isArray(s?.res) ? s.res.length : 0));
+// Say one: tick it, and keep their words. It's theirs from then on. It says
+// whether there was one to tick.
+export function sayRes(c, s, words) {
+  if (resLeft(c, s) < 1) return false;
+  if (!Array.isArray(s.res)) s.res = [];
+  s.res.push(text(words, 120) || "something ordinary");
+  return true;
+}
+
+// ---------------------------------------------------------------- vessels
+
+// A vessel holds its tier in charge, and keeps it between scenes and through
+// downtime. A broken one can't be filled or spent from till it's mended.
+const vesselAt = (c, s, key) => (c.items ?? []).find((it) => it.key === key && it.kind === "vessel" && !s?.crossed?.[key]) ?? null;
+export const vesselsOf = (c) => (c.items ?? []).filter((it) => it.kind === "vessel");
+export const chargeOf = (c, s, key) => {
+  const it = (c.items ?? []).find((x) => x.key === key && x.kind === "vessel");
+  return it ? clamp(s?.charge?.[key] ?? 0, 0, it.tier) : 0;
+};
+function addCharge(c, s, key, n) {
+  const it = vesselAt(c, s, key);
+  if (!it) return 0;
+  const put = Math.min(Math.max(0, int(n, 0)), it.tier - chargeOf(c, s, key));
+  if (put > 0) {
+    if (!s.charge || typeof s.charge !== "object") s.charge = {};
+    s.charge[key] = chargeOf(c, s, key) + put;
+  }
+  return Math.max(0, put);
+}
+// Fill a vessel, and say how much went in, never past its tier.
+//   from "pt": a point from root for each charge, any time in a scene, no
+//     action. It's pushing, so it can leave them at 0 and never wounds them.
+//     Never at a scene's end or in downtime (sceneEnd and downtimeRest never
+//     do it), and never once they've left the scene.
+//   from "aura": only Aura they'd lose. That's whatever's past their maximum
+//     on s.aura (while they're acting, which they'd lose on finishing), taken
+//     off it, and spill, the Aura that came in while they weren't acting and
+//     stopped at their maximum (what gainAura handed back), which never
+//     reached s.aura. Aura left at a scene's end goes in through sceneEnd.
+export function fillVessel(c, s, key, n = 1, { from = "aura", root = null, spill = 0 } = {}) {
+  const it = vesselAt(c, s, key);
+  if (!it) return 0;
+  let want = Math.min(Math.max(0, int(n, 0)), it.tier - chargeOf(c, s, key));
+  if (want < 1) return 0;
+  if (from === "pt") {
+    if (s.out || !ROOTS.includes(root)) return 0;
+    want = Math.min(want, s.pts?.[root] ?? 0);
+    if (want < 1) return 0;
+    s.pts[root] -= want;
+  } else {
+    const past = Math.max(0, int(s.aura, 0) - auraMax(c, s));
+    want = Math.min(want, past + Math.max(0, int(spill, 0)));
+    if (want < 1) return 0;
+    s.aura -= Math.min(want, past);
+  }
+  return addCharge(c, s, key, want);
+}
+// Spend charge on one of their own abilities or awakenings' extra steps, a
+// charge for each Aura it'd cost. It's never Aura: it never counts towards
+// their maximum, never goes to a friend, and never pays for bringing in a
+// Root, a tie, an intercept, a quick heal, going beyond or borrowing.
+export function spendCharge(c, s, key, n = 1) {
+  const want = Math.max(0, int(n, 0));
+  if (!want || !vesselAt(c, s, key) || chargeOf(c, s, key) < want) return false;
+  s.charge[key] = chargeOf(c, s, key) - want;
+  if (!s.charge[key]) delete s.charge[key];
+  return true;
+}
+
 // ---------------------------------------------------------------- Aura
 
-// Aura's maximum: the sheet's, 5 and 2 for each Aura Boon. Nothing's
-// powered any more, so nothing comes off it.
+// Aura's maximum: the sheet's, 5. Nothing's powered any more, so nothing
+// comes off it.
 export const auraMax = (c, s) => Math.max(0, int(c.numbers?.aura, BASE_AURA) - poweredOf(s));
 
 // Aura coming in. While you're acting it can go past your maximum, and
@@ -768,31 +1042,11 @@ export function attunedRoom(a) {
   return { stage, base, all: base * 2, needs, missing: needs.filter((x) => !a[x]), next: STAGES[STAGES.indexOf(stage) + 1] ?? null, n, free: Math.max(0, base - n), more: Math.max(0, base * 2 - Math.max(n, base)) };
 }
 
-// ---------------------------------------------------------------- what you carry
+// ---------------------------------------------------------------- items they've got
 
-// Everything they carry and haven't crossed out, what they've picked up, and
-// their attuned things, which can't break. Two of the same have a key each,
-// the second's ending in |2, so either can be crossed out on its own.
-export function itemsOf(c, s = {}) {
-  const out = [];
-  const seen = new Map();
-  const add = (where, name) => {
-    if (!name) return;
-    const base = `${where}|${name}`;
-    const n = (seen.get(base) ?? 0) + 1;
-    seen.set(base, n);
-    const key = n > 1 ? `${base}|${n}` : base;
-    if (s.crossed?.[key]) return;
-    out.push({ key, where, name });
-  };
-  for (const x of c.carry?.equipment ?? []) add("equipment", x);
-  for (const x of c.carry?.utility ?? []) add("utility", x);
-  if (c.carry?.keepsake) add("keepsake", c.carry.keepsake);
-  for (const x of c.carry?.bag?.items ?? []) add("bag", x);
-  for (const p of s.picked ?? []) add(p.where, p.name);
-  c.attuned.forEach((a, i) => out.push({ key: `attuned|${i}`, where: "attuned", name: a.name, a: i }));
-  return out;
-}
+// Every item they've got that isn't broken, each by its key. Attuned things
+// can't break.
+export const itemsOf = (c, s = {}) => (c.items ?? []).filter((it) => it.attuned != null || !s.crossed?.[it.key]);
 
 // ---------------------------------------------------------------- what's on the sheet
 
@@ -803,12 +1057,12 @@ export function itemsOf(c, s = {}) {
 //   ability|i|<name>     an ability archetype i's got
 //   attuned|i            attuned thing i
 //   awk|i|<name>         an awakening on attuned thing i
-//   <where>|<name>       an item, by its itemsOf() key
+//   item|<name>          an item, by its key in c.items, broken or not
 // Two of the same never share a key: the second's ends in |2. root is the
 // Root it's on (a permission, an awakening's lock, or a piece of armour), or
-// the Root a Title puts most on, and null for the rest. On the new core
-// only permissions and awakenings do anything on a roll: a permission
-// justifies bringing a Root in, and an awakening's steps.
+// the Root a Title puts most on, and null for the rest. A permission
+// justifies bringing a Root in, an awakening's steps, and an item's tier on
+// a roll it fits (addsSteps), one item a roll.
 export function thingsOf(c, s = {}) {
   const out = [];
   const seen = new Map();
@@ -829,11 +1083,7 @@ export function thingsOf(c, s = {}) {
     add(`attuned|${i}`, "attuned", a.name, null, { a: i });
     for (const w of a.awakenings ?? []) add(`awk|${i}|${w.name}`, "awk", w.name, ROOTS.includes(w.root) ? w.root : null, { a: i, passive: false });
   });
-  for (const x of itemsOf(c, s)) {
-    if (x.where === "attuned") continue;
-    const piece = x.where === "equipment" ? (c.armour ?? []).find((a) => a.name === x.name) : null;
-    add(x.key, "item", x.name, piece ? piece.root : null, { where: x.where });
-  }
+  for (const it of c.items ?? []) add(it.key, "item", it.name, it.root ?? null, { item: it.kind, tier: it.tier, a: it.attuned, broken: Boolean(s.crossed?.[it.key]) && it.attuned == null });
   return out;
 }
 
@@ -841,9 +1091,14 @@ export function thingsOf(c, s = {}) {
 
 // Count a roll on the new core: the Root, at full whatever it's got left,
 // each Root brought in (bring), at full too, and 2 for each awakening that
-// fits (awk) and 2 more for each Aura spent on it. r is:
-//   { root, bring: [{ root, perm, pay }], awk: [{ key, aura }], dice,
-//     against, aim, conds: [name], pool: [{ i, die }], plus }
+// fits (awk) and 2 more for each Aura spent on it, and one item's tier. r is:
+//   { root, bring: [{ root, perm, pay }], awk: [{ key, aura }], item, avoid,
+//     charge: [{ key, n }], dice, against, aim, conds: [name], pool: [{ i, die }], plus }
+// item is the key of the one item doing the work, which adds its tier when
+// it can: a weapon or a tool on anything, a guard only when avoid says the
+// roll's avoiding harm, and armour, a pack, a vessel or a broken one never.
+// charge is charge out of their vessels paying for the Aura on awakenings,
+// a charge for each Aura, never for anything else on the roll.
 // A Root's brought in on a permission that justifies it (perm, a key off the
 // sheet or a friend's words, a borrowed one or a truth), and paid with 1
 // point from it (pay "pt") or 3 Aura (pay "aura"), each on its own, never
@@ -886,13 +1141,30 @@ export function countRoll(c, s, r) {
     aura += more;
     awk.push({ key: w.key, name: w.name, root: w.root, aura: more, steps: AWK_STEPS * (1 + more) });
   }
+  // One item, the one doing the work.
+  const it = r?.item ? (c.items ?? []).find((x) => x.key === r.item) : null;
+  const broken = it && it.attuned == null && s.crossed?.[it.key];
+  const item = it && !broken && addsSteps(it, r?.avoid) ? { key: it.key, name: it.name, tier: it.tier, steps: it.tier } : null;
+  // Charge paying for awakenings' Aura, never more than that Aura.
+  const awkAura = awk.reduce((t, w) => t + w.aura, 0);
+  const charge = [];
+  let charged = 0;
+  for (const x of Array.isArray(r?.charge) ? r.charge : []) {
+    const n = Math.min(Math.max(0, int(x?.n, 0)), awkAura - charged);
+    if (!n || charge.some((y) => y.key === x.key)) continue;
+    if (!vesselAt(c, s, x.key)) continue;
+    if (chargeOf(c, s, x.key) < n) short.push(`${n} charge in ${(c.items ?? []).find((y) => y.key === x.key)?.name ?? "a vessel"}`);
+    charge.push({ key: x.key, n });
+    charged += n;
+  }
+  aura -= charged;
   const conds = (s.conditions ?? []).filter((x) => (r?.conds ?? []).includes(x.name)).reduce((t, x) => t + (x.kind === "for" ? 1 : -1), 0);
   // A Shadow's pool dice, each one as steps (a d8 is 4) or as its own die.
   const taken = new Set();
   const pool = (r?.pool ?? []).filter((x) => Number.isInteger(x?.i) && s.pool?.[x.i] && !taken.has(x.i) && taken.add(x.i)).map((x) => ({ i: x.i, size: s.pool[x.i], die: Boolean(x.die) }));
   const poolSteps = pool.filter((x) => !x.die).reduce((t, x) => t + x.size / 2, 0);
   const plus = clamp(r?.plus ?? r?.handed ?? 0, 0, 60);
-  const total = Math.max(1, rootN + brought.reduce((t, b) => t + b.steps, 0) + awk.reduce((t, w) => t + w.steps, 0) + conds + poolSteps + plus);
+  const total = Math.max(1, rootN + brought.reduce((t, b) => t + b.steps, 0) + awk.reduce((t, w) => t + w.steps, 0) + (item?.steps ?? 0) + conds + poolSteps + plus);
   // Their split, if it's their steps, or the table's.
   const theirs = Array.isArray(r?.dice) && r.dice.length && r.dice.every((d) => SIZES.includes(d)) && r.dice.reduce((t, d) => t + d / 2, 0) === total ? [...r.dice] : null;
   const poolDice = pool.filter((x) => x.die).map((x) => x.size);
@@ -900,25 +1172,53 @@ export function countRoll(c, s, r) {
   for (const x of ROOTS) if (points[x] > (s.pts?.[x] ?? 0)) short.push(`${points[x]} ${points[x] === 1 ? "point" : "points"} of ${x}`);
   if (aura > (s.aura ?? 0)) short.push(`${aura} Aura`);
   return {
-    root, rootN, brought, awk, conds, pool, poolDice, plus, total, points, aura, short, ok: !short.length,
+    root, rootN, brought, awk, item, charge, conds, pool, poolDice, plus, total, points, aura, short, ok: !short.length,
     split: Boolean(theirs), dice: [...(theirs ?? stepsToDice(total)), ...poolDice],
     // For the screens that haven't moved: nothing's counted off the sheet,
     // there are no extra actions and splitting has no limit.
     using: [], cases: [], extras: [], friends: 0, other: 0, borrowed: 0, bought: 0, price: 0, free: false, splits: Math.max(0, total - 1),
   };
 }
-// Pay for a roll countRoll() counted: its points off their Roots and its
-// Aura, all of it or none.
+// Pay for a roll countRoll() counted: its points off their Roots, its Aura
+// and its charge, all of it or none.
 export function payFor(c, s, k) {
   if (!k?.ok) return false;
   for (const r of ROOTS) if ((k.points?.[r] ?? 0) > (s.pts?.[r] ?? 0)) return false;
   if ((k.aura ?? 0) > (s.aura ?? 0)) return false;
+  for (const x of k.charge ?? []) if (chargeOf(c, s, x.key) < x.n) return false;
   for (const r of ROOTS) s.pts[r] -= k.points?.[r] ?? 0;
   s.aura -= k.aura ?? 0;
+  for (const x of k.charge ?? []) spendCharge(c, s, x.key, x.n);
   return true;
 }
 
 // ---------------------------------------------------------------- for the screens that haven't moved
+
+// The Boons went on 17 Nov (Fix 1 of notes/fixes-plan.md). These stubs give
+// nothing, so the play screen, the builder and downtime still draw till
+// prompts 5 and 6 take them out of those screens. Prompt 8 removes them.
+export const BOON_SLOTS = 2;
+// A Title's slots are its permissions, six at most.
+export const slotsOf = (t) => t?.permissions?.length ?? 0;
+export const boonOf = (x) => ({ lever: text(x?.lever, 40), name: text(x?.name, 40), text: "", on: text(x?.on, 60) });
+export const boonsOf = () => [];
+export const boonCount = () => 0;
+export const withBoons = (c) => c;
+export const boonSaid = () => "";
+export const shrugs = () => false;
+export const freeBeyond = () => false;
+export const restBonus = () => 0;
+
+// What they carry, the way the screens from before the fixes read it, made
+// from the items: equipment is every item that isn't attuned, there's no
+// utility or bag (they're Resources now), and each piece of armour has its
+// tier's name as its quality and its tier as its boxes, keyed by the item.
+// Prompts 5 and 6 move the screens onto c.items, and prompt 8 removes this.
+function legacyCarry(c) {
+  c.carry = { equipment: c.items.filter((it) => it.attuned == null).map((it) => it.name), utility: [], keepsake: c.keepsake, bag: { name: "a bag", max: 10, items: [] } };
+  c.armour = c.items.filter((it) => it.kind === "armour").map((it) => ({ name: it.name, key: it.key, root: it.root, quality: tierName(it.tier), boxes: it.tier, tier: it.tier, ...(it.when ? { when: it.when } : {}) }));
+  return c;
+}
 
 // Everything below is the game on stacking (14 Nov), on a v3 state with
 // tracks, kept only for the screens prompts 4 to 6 of notes/core-plan.md
@@ -938,7 +1238,7 @@ export const RECOVER = 6;
 export const HOLDS = 2;
 export const EXTRA_AURA = 3;
 export const extraCost = (n = 0) => EXTRA_AURA + Math.max(0, int(n, 0));
-export const restsOn = (c) => (boonCount(c, "Recovery") ? 3 : 4);
+export const restsOn = () => 4;
 
 export function freshRoots(c) {
   const n = c.numbers ?? {};

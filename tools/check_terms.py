@@ -15,10 +15,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 RETIRED = [
     ("game name", r"\bZi\b(?!['’]Dara)"),
-    ("tiers", r"\b(Novice|Skilled|tiers?)\b|\bMaster tier\b|\bat Master\b"),
+    ("tiers", r"\b(Novice|Skilled)\b|\bMaster tier\b|\bat Master\b"),
     ("specialization", r"\bspeciali[sz](ation|ations|ed)\b"),
     ("Help action", r"\bHelp(s|ing|ed)?\b|\bhelp action\b"),
-    ("Guard action", r"\bGuard(s|ing|ed)?\b(?! (of|at the|on the gate))"),
+    ("Guard action", r"(?<!\| )(?<!\*\*)\bGuard(s|ing|ed)?\b(?! (of|at the|on the gate))"),
     ("two actions", r"\b(two|both|second|2) actions?\b|\byour two actions\b"),
     ("item rarity", r"\b(rarity|Rare|Legendary)\b"),
     ("stretch", r"\bstretch(es|ed|ing)?\b"),
