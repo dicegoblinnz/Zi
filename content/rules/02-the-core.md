@@ -59,7 +59,7 @@ Your **items** are the real gear you've got on you, six at most: a weapon, a shi
 | Mind | 3 from her second Title, *know how a lock's built*, *find a buyer for anything* | 5 |
 | Soul | nothing yet | 0 |
 
-So sneaking is her Body, 11 steps, a d12 and a d10, and so is climbing and knife work. Picking a lock is her Body too, and her Named set of picks is a tier 3 tool that fits, so that's 14 steps, two d12s and a d4. Working out how a vault door's built before she touches it is her Mind, 5 steps, a d10. Her Soul's 0, so a rousing speech would be a d2, and that's fine. When she's picking the vault door itself, *know how a lock's built* brings her Mind in for a point of it, and with her picks that's 19 steps, three d12s and a d2.
+So sneaking is her Body, 11 steps, a d12 and a d10, and so is climbing and knife work. Picking a lock is her Body too, and her Proven set of picks is a tier 3 tool that fits, so that's 14 steps, two d12s and a d4. Working out how a vault door's built before she touches it is her Mind, 5 steps, a d10. Her Soul's 0, so a rousing speech would be a d2, and that's fine. When she's picking the vault door itself, *know how a lock's built* brings her Mind in for a point of it, and with her picks that's 19 steps, three d12s and a d2.
 
 ## Steps and Dice {#s-building-die}
 
@@ -130,7 +130,7 @@ Spending a point or 3 Aura is a real choice. A point comes out of what that Root
 :::example[Bringing in at the table]
 Isolde's reading the dead order's script off a crypt wall, her Mind, 9 steps, a d12 and a d6. The script's a ward, and *draw a ward the dead can't cross* is how her Soul knows one when it sees it, so she pays a point of Soul and brings it in: 16 steps, two d12s and a d8.
 
-Wren's lining up a shot on the archer in the bell tower, her Body, 8 steps. She's read the ground the whole way in, so *read the land for an ambush* brings her Mind in. The Warden's howl left her Mind on 1 point, and spending it would leave nothing between her and the next one, so she pays 3 Aura instead. Her Mind's 8 steps however few points it's got left, so that's 16. Her Named longbow's doing the work, a tier 3 weapon, so that's 3 more, and its *Long shot* fits too, 2 more: 21 steps, three d12s and a d6.
+Wren's lining up a shot on the archer in the bell tower, her Body, 8 steps. She's read the ground the whole way in, so *read the land for an ambush* brings her Mind in. The Warden's howl left her Mind on 1 point, and spending it would leave nothing between her and the next one, so she pays 3 Aura instead. Her Mind's 8 steps however few points it's got left, so that's 16. Her Proven longbow's doing the work, a tier 3 weapon, so that's 3 more, and its *Long shot* fits too, 2 more: 21 steps, three d12s and a d6.
 :::
 
 ## The Roll {#s-the-roll}
@@ -170,7 +170,7 @@ Put more than one die on the **same** intent and that's **advantage**: your **be
 Every die you get past six steps can have **its own intent**, and that's what big rolls are for. Two dice at the same Warden are two chances to strip two tags. You can still put them on one intent for advantage, but a d12 and a d4 doing two different things is nearly always worth more than the same two dice on one intent.
 
 :::example[Three dice on the guard captain]
-The guard captain's coming over the barricade, and Wren's got him from the gallery. She shoots with her Body, 8 steps, and her Named longbow, 3 more, and *Long shot* fits, 2 more. That's 13 steps, two d12s and a d2: *one through his sword hand, one through his knee to put him on the floor, and the d2 to make him give up.*
+The guard captain's coming over the barricade, and Wren's got him from the gallery. She shoots with her Body, 8 steps, and her Proven longbow, 3 more, and *Long shot* fits, 2 more. That's 13 steps, two d12s and a d2: *one through his sword hand, one through his knee to put him on the floor, and the d2 to make him give up.*
 
 The captain's Challenge 5, and it's the first time anyone's gone at him this round, so he rolls his d10 once: 6. Wren's dice come up 9, 6 and 2. The sword goes skittering, the second d12's a tie, and the d2 was never going to beat a 6, though it landed on its top face. Wren could pay 1 Aura to win the tie, but she lets it go. So the captain's disarmed, still standing, and he won't yield. One die won and the d2 hit its top face, so that's 2 Aura for Wren.
 :::
@@ -184,7 +184,7 @@ The catch is that small dice lose. A d2 against a d8 hardly ever wins, so the mo
 Every die can go at something different, as long as the Root you're rolling fits how you're doing it and you can reach it from where you are. If a die would be doing something your Root's got nothing to do with, like a rousing speech in the middle of Vesk's run across the rooftops, bring the right Root in for it, or leave it.
 
 :::example[Splitting at the study door]
-Vesk's at the study door, and picking its lock is her Body, 11 steps, and her Named picks, 3 more. *Know how a lock's built* brings her Mind in for a point of Mind, and it's 19. That's three d12s and a d2 as it comes, and she splits it four ways: a d12 for the lock, a d12 to keep it quiet so the guard at the foot of the stairs hears nothing, a d8 to listen for anyone else coming, and a d6 to leave the lock without a scratch on it.
+Vesk's at the study door, and picking its lock is her Body, 11 steps, and her Proven picks, 3 more. *Know how a lock's built* brings her Mind in for a point of Mind, and it's 19. That's three d12s and a d2 as it comes, and she splits it four ways: a d12 for the lock, a d12 to keep it quiet so the guard at the foot of the stairs hears nothing, a d8 to listen for anyone else coming, and a d6 to leave the lock without a scratch on it.
 
 The lock's d8 rolls 5, and her first d12 opens it with a 7. Her second d12 lands on 12, a top face, against the guard's 3. Her d8 has got nothing to beat but the quiet house, and the GM calls it a Challenge 1, a d2, which her 4 beats. Her d6 comes up 2 against the lock's 5, so there'll be a scratch for someone to find. Three dice won, and the 12 was a top face as well, so that's 4 Aura.
 :::
@@ -253,7 +253,7 @@ Anything that works on its own, like a summoned beast or a raised servant acting
 -   **A great setup that doesn't land.** You planned it, it was cool, and the dice said no. The GM can give you 1 Aura for it.
 
 :::example[Aura at one table]
-**Spent:** Wren's shooting from the gallery at the archer and the two men beside him. That's her Body, 8 steps, her Named longbow, 3 more, and its *Long shot* fits, 2 more. She's on 5, and she puts 2 into the bow for 4 steps more, so it's 17 steps, two d12s and a d10, and she's on 3.
+**Spent:** Wren's shooting from the gallery at the archer and the two men beside him. That's her Body, 8 steps, her Proven longbow, 3 more, and its *Long shot* fits, 2 more. She's on 5, and she puts 2 into the bow for 4 steps more, so it's 17 steps, two d12s and a d10, and she's on 3.
 
 **Past her maximum:** All three of her dice win, and one lands on its top face, so she's on 7 while she's acting. The brute's club is coming at Isolde beside her, and Isolde's Body is 0, so Wren pays 1 to intercept it and she's on 6. When she's done for the round, the 1 over her maximum is gone.
 
@@ -283,7 +283,7 @@ Your Roots are what keep you standing. **A Root's got as many points as its numb
 **2 for 1.** When a hit gets through, you can take it on another Root instead, for 2 points of it, as long as it's got them, and any armour on that Root soaks them first. Bram takes the spear standing up and unflinching, and it costs him 2 points of Soul instead of a point of Body.
 
 :::example[Bram's points in one fight]
-Bram's Body is 9, and his war hammer's two awakenings lock 2 of it, so he starts the fight on 7 points of Body, with his Named plate on top, a tier 3 piece of armour that soaks 3. A spear gets through in round one, and the plate soaks it, 2 left. In round two *spot who's in charge* brings his Mind in for a point of Mind, so his Mind's on 2, though it's still 3 steps on his roll. Three blows get through in round three: the plate soaks two and it's empty, and the third takes a point of Body, so he's on 6. When one more spear gets through in round four he takes it 2 for 1 on his Soul, which has no armour, so his Soul's on 2 and his Body stays on 6.
+Bram's Body is 9, and his war hammer's two awakenings lock 2 of it, so he starts the fight on 7 points of Body, with his Proven plate on top, a tier 3 piece of armour that soaks 3. A spear gets through in round one, and the plate soaks it, 2 left. In round two *spot who's in charge* brings his Mind in for a point of Mind, so his Mind's on 2, though it's still 3 steps on his roll. Three blows get through in round three: the plate soaks two and it's empty, and the third takes a point of Body, so he's on 6. When one more spear gets through in round four he takes it 2 for 1 on his Soul, which has no armour, so his Soul's on 2 and his Body stays on 6.
 
 At the end of the scene his plate's back to soaking 3, and his Body rolls a d12 and a d6, 5 and 2, more than enough to put it back on 7, its maximum. His Mind rolls a 4 on its d6 and goes back to 3, and his Soul rolls a 3 on its d8 and goes back to 4.
 :::

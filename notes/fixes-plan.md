@@ -89,7 +89,7 @@ The book's built on the first set. They're one table (`#s-item-tiers` in 03, rea
 | --- | --- | --- | --- |
 | 1 | Plain | Rough | Silent |
 | 2 | Trusty | Sound | Humming |
-| 3 | Named | Fine | Singing |
+| 3 | Proven | Fine | Singing |
 | 4 | Storied | Masterwork | Kindled |
 | 5 | Sung | Peerless | Ensouled |
 | 6 | Mythic | Starforged | Radiant |

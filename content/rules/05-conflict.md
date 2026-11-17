@@ -137,7 +137,7 @@ Answering's a gamble. It lets you throw what you like at a problem instead of tr
 -   **Telegraphs aimed at a stake, a place or a clock** have no defence to roll. If nobody answers them, they happen.
 
 :::example[Answering together]
-The brute telegraphs his club at Isolde's Body, a d8. Wren answers it for her with an arrow into his arm, and Bram puts his action into the same thing, getting his shield under the club. Wren rolls, on her Body, 8 steps, with her Named longbow, 3 more, and its *Long shot* fits a shot like that, 2 more. Bram brings his Body, 9, and his Trusty shield's a guard on a roll that's only stopping a blow, 2 more. That's 24 steps between them, four d12s, and they put all four on the club. It rolls 6 and their dice come up 8, 3, 5 and 2, so it never lands, and Wren gets 1 Aura for the die that won. If they'd lost, it'd have landed on Isolde there and then.
+The brute telegraphs his club at Isolde's Body, a d8. Wren answers it for her with an arrow into his arm, and Bram puts his action into the same thing, getting his shield under the club. Wren rolls, on her Body, 8 steps, with her Proven longbow, 3 more, and its *Long shot* fits a shot like that, 2 more. Bram brings his Body, 9, and his Trusty shield's a guard on a roll that's only stopping a blow, 2 more. That's 24 steps between them, four d12s, and they put all four on the club. It rolls 6 and their dice come up 8, 3, 5 and 2, so it never lands, and Wren gets 1 Aura for the die that won. If they'd lost, it'd have landed on Isolde there and then.
 :::
 
 ## When It Lands {#s-defending}
@@ -204,7 +204,7 @@ When a telegraph lands on you, or when a miss costs you something because it mat
 -   **Soak comes back in full at the end of every scene**, whatever it took. Armour never breaks from soaking.
 
 :::example[Bram's plate and shield]
-Bram's holding the gate in his Named plate, tier 3 armour on his Body, so it soaks 3, with his 7 points of Body behind it. Three Wardens' spears land on him at the end of the round, three d8s, and he lets them ride. His Body's 9 steps, and his Trusty shield's a guard, 2 more, so it's 11, and he splits it to meet them: two d8s and a d6. The spears roll 7, 4 and 6, and Bram gets 7, 2 and 6. His 7 meets the 7 and his 6 meets the 6, so those two are stopped, and the 4 gets through. That's a hit, and the plate soaks it, so it's got 2 left. Two dice stopped a spear each and the d6 landed on its top face, so that's 3 Aura.
+Bram's holding the gate in his Proven plate, tier 3 armour on his Body, so it soaks 3, with his 7 points of Body behind it. Three Wardens' spears land on him at the end of the round, three d8s, and he lets them ride. His Body's 9 steps, and his Trusty shield's a guard, 2 more, so it's 11, and he splits it to meet them: two d8s and a d6. The spears roll 7, 4 and 6, and Bram gets 7, 2 and 6. His 7 meets the 7 and his 6 meets the 6, so those two are stopped, and the 4 gets through. That's a hit, and the plate soaks it, so it's got 2 left. Two dice stopped a spear each and the d6 landed on its top face, so that's 3 Aura.
 
 Next round the Warden captain's deadly, a d10 for 2 hits, and it gets through. Each hit's a point of soak, so the plate's empty, and Bram's still on 7. If it'd been 3 hits, the third would've taken a point of his Body. At the end of the scene the plate's back to soaking 3.
 :::
@@ -328,7 +328,7 @@ Take a threat down and its telegraphs go with it, which is often the best answer
 
 ## Weapons and What They Let You Do {#s-weapons-tactics}
 
-A weapon lets you do what that weapon does: a sword cuts, a spear keeps them back, and a crossbow reaches across a street. It's an item, so when it's what's doing the work it puts its tier on in steps (see [Items](#s-items)). It's one item a roll, so a sword in each hand is still one sword's tier. An attuned weapon's awakenings go on top: Wren's Named longbow is 3 steps on a shot, and *Long shot* is 2 more on a shot it fits, and 2 more for every Aura she puts in it, so with her Body's 8 she's on 13 steps before she's spent a thing. A weapon never goes on a roll that's only getting out of the way. That's what a guard's for.
+A weapon lets you do what that weapon does: a sword cuts, a spear keeps them back, and a crossbow reaches across a street. It's an item, so when it's what's doing the work it puts its tier on in steps (see [Items](#s-items)). It's one item a roll, so a sword in each hand is still one sword's tier. An attuned weapon's awakenings go on top: Wren's Proven longbow is 3 steps on a shot, and *Long shot* is 2 more on a shot it fits, and 2 more for every Aura she puts in it, so with her Body's 8 she's on 13 steps before she's spent a thing. A weapon never goes on a roll that's only getting out of the way. That's what a guard's for.
 
 Weapons also come with **properties**, free with the weapon. They're the things a weapon lets you do that bare hands can't. The full list is in [Weapon properties](#s-weapon-props). At the table they sort into four jobs:
 
@@ -457,7 +457,7 @@ Isolde's got nothing to beat, so she doesn't roll. A Warden's a dead thing walki
 **The Mark jumps.** When a *Marked* creature falls, the Mark moves to another creature the Hunter can see, with the die it had.
 
 :::example[Marked]
-Wren marks the Warden with her Body, 8 steps, her Named longbow, 3 more, and *Long shot*, 2 more, two d12s and a d2, and the best of them wins, so it's *Marked d12*. Bram swings at it and rolls the Mark's d12 with his own dice. Next round it's *Marked d10*, and when it falls, the Mark jumps to the second Warden, still a d10.
+Wren marks the Warden with her Body, 8 steps, her Proven longbow, 3 more, and *Long shot*, 2 more, two d12s and a d2, and the best of them wins, so it's *Marked d12*. Bram swings at it and rolls the Mark's d12 with his own dice. Next round it's *Marked d10*, and when it falls, the Mark jumps to the second Warden, still a d10.
 :::
 
 ## Vulnerabilities {#s-vulnerable}
@@ -494,7 +494,7 @@ The Warden's on its back, *Prone*, and Isolde's Study found it's *Dry as Tinder*
 -   **Your dice don't change.** A Bloodied Body still rolls its whole number.
 -   **A hit on a wounded Root with no points left is a Scar**, and you leave the scene.
 
-So Bram, with his Named plate soaking 3 and 7 points of Body behind it, can take ten hits there and still be on his feet. The eleventh leaves him Bloodied, and the twelfth Scars him, unless somebody's healed him in between.
+So Bram, with his Proven plate soaking 3 and 7 points of Body behind it, can take ten hits there and still be on his feet. The eleventh leaves him Bloodied, and the twelfth Scars him, unless somebody's healed him in between.
 
 :::example[Wearing Vesk down]
 Vesk's down to 2 points of Body after a long night on the rooftops, and her worn leathers have soaked all they can this scene. In round one a spear gets through, so she's on 1. In round two a guard's blow lands while she's *Exposed*, which makes it 2 hits: the first takes her last point, and the second leaves her **Bloodied**. Her Body can only heal to 5 now, half of its 10, till downtime. One more hit on her Body and it's a Scar. She could Blaze on her turn and go out on her own terms, but she's got the prize in her hand, so she runs for it instead.

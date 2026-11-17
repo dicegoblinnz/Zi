@@ -53,7 +53,7 @@ A slot buys what a point buys when you make your character: a permission, an abi
 
 -   **A new permission** on one of your Titles, up to six on it. It has to fit inside the Title, and the story should say where you learned it. It puts 1 on its Root, the same as the ones you started with, so that's a step more on every roll of that Root, a point more to take hits with and spend, and one more thing that can bring a Root in. See [Permissions](#s-writing-permissions).
 -   **A new ability** off one of your archetypes' lists, up to six on it. The story should say where it came from, the same as a permission. See [Abilities](#s-abilities).
--   **Raise an item a tier**, as far as tier 3. Vesk's Trusty worn leathers, tier 2, become Named ones, tier 3, and soak 3 from now on. Tier 4 takes money, and tiers 5 and 6 only come out of the story, with a material, the way an attuned thing's stages do (see [Items](#s-items) and [Item tiers](#s-item-tiers)). An attuned thing's tier goes up the same way, and its awakenings don't change.
+-   **Raise an item a tier**, as far as tier 3. Vesk's Trusty worn leathers, tier 2, become Proven ones, tier 3, and soak 3 from now on. Tier 4 takes money, and tiers 5 and 6 only come out of the story, with a material, the way an attuned thing's stages do (see [Items](#s-items) and [Item tiers](#s-item-tiers)). An attuned thing's tier goes up the same way, and its awakenings don't change.
 -   **Put a point in your Aspiration.** Each slot's a point in it, and at 5 it comes good. There's no roll. See [Aspiration](#s-aspiration).
 -   **Grow a Scar.** A slot toward turning a Scar into a Trait. Three slots on it, in one downtime or across a few, and it's a Trait as well as a Scar. See [Wounds, Scars and the Blaze](#s-blaze).
 -   **Deepen a bond.** Write a new thread with someone, a bond thread or a hostile one, whichever the story's given you. If you've already got a bond with them, it goes under that one. If they're in the crew, it goes on both your sheets, so agree on it together.
@@ -126,6 +126,6 @@ Dorrie's slot is a roll at the Goal, sending Vane's investigators the wrong way:
 
 Isolde's other slot is a point in her Aspiration. She'd put two in it before, so it's 3 of 5 now. Her new permission puts her Mind up to 10 for next time.
 
-Bram's slot raises his Trusty shield a tier, so it's a Named shield now, 3 steps on his Body when the blows land. His ribs don't need one: he finished last session Bloodied, with no points of Body left, and downtime started by putting him back on 7 with the wound gone.
+Bram's slot raises his Trusty shield a tier, so it's a Proven shield now, 3 steps on his Body when the blows land. His ribs don't need one: he finished last session Bloodied, with no points of Body left, and downtime started by putting him back on 7 with the wound gone.
 
 The Estate's Power is a d12 and the crew's is a d4, so the crew needs its action and a personal slot on the same move to go at it. Bram's other slot makes it two, and two slots count everything twice: the crew's d4 becomes a d8. They Obstruct, so the d8 has to beat the Estate's d12. The crew rolls 5 and the d12 rolls 9, so the action goes ahead: 9 against the agenda's d10, which rolls 4, and *Vane comes home* climbs to d12. And nobody touched the festival, so next session the law will be on every street.
