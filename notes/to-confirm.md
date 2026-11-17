@@ -91,6 +91,20 @@ Written 17 Nov on `rules/2026-11-17-fixes-abilities-c`: ten abilities each for t
 8. **The Summoner's souls on the new core are still open.** I've written its abilities to the rules as they stand, and three things don't sit right: summons act in the round like anyone (a horde's dice on top of your own one action), they fade and take hits in sizes while everyone else takes points, and nothing about them uses soak or wounds. *Take it for me* and *Soul for a soul* lean on summons intercepting, so they'll move with whatever you decide.
 9. **Six is how many a character holds, never the list.** The build warned past six abilities on an archetype, and now it warns on one that costs under 1 Aura instead (a small change in `scripts/build-content.mjs`, prompt 2's).
 
+### 6. The builder, downtime and print
+
+Built 17 Nov on `rules/2026-11-17-fixes-build`: the builder, the other ways in, downtime, the paper sheet and print on items, tiers and Resources, with no Boons.
+
+1. **The attuned thing is one of the six on the builder's Items step**, with its own kind and tier behind an "As an item" fold on its card. Its 5 covers tier 2, and tier 3's a point more. Picking one of your items as the thing to attune moves it off your other items, so it's never counted twice.
+2. **A new character's items are tier 2 or 3 only**, each said by name ("Trusty 2", "Proven 3, a point more"). Changing a saved character offers all six, since Grow, money and the story raise them at the table, and anything past 3 on a new one is a warning, never a block.
+3. **An item's kind is a guess from its words**, off the book's item groups first: a shield's a guard, plate's armour on the Body, court clothes (Mind) armour on the Mind. A weapon gets the weapons table's properties, so a knife typed in is Thrown, Concealed and Quick. Vesk's knife in 03b lists none, so say if the crew's weapons should carry their table's properties.
+4. **A build from before the fixes moves across like this:** equipment's items at tier 2, armour and a shield a tier up from their quality (Common 2, Fine 3, Masterwork 4), a shield a guard, anything else by its words, and a piece with the attuned thing's name is the attuned thing. Its utility items and bag are kept on the build (`carried`) till the play screen writes them into the notes, and roots.js now lets a build hand them over (a small change there).
+5. **A Boon built in comes off with its 2 points to spend**, flagged in Change with a gold note and on the play screen as a choice. One swapped in during a downtime keeps the permissions it took, the way roots.js already reads it. Nothing in the builder or downtime offers a Boon either way.
+6. **Downtime's Grow has "Raise an item a tier" of its own**, offering only items under tier 3, and "Get something" is an item (its kind, at tier 2, picking one to let go if it's a seventh) or something else, like a purse of gold or a material, which goes in the notes. Mend lists only broken items, since soaked armour never needs it.
+7. **Abilities on an archetype's card are a name, its Aura and a badge**, with what it does behind a ? beside it, so the Shadow's ten fit in about 500px on a phone. Resources are a line and a ? at the foot of the Items step and a number on the last step, with nothing to write.
+8. **The paper sheet's six item cards sit three to a row**, each with its tier in a box, its kind to ring, B, M or S for armour's Root, and six boxes that are soak ticked off for armour and charge filled in for a vessel. The Root columns lost their armour lines, and there's no soak total per Root. Resources are a count and three lines with a tick each, and a seventh item or a fourth Resource goes in Notes.
+9. **The player reference's second and third pages are set a touch smaller** (8.25pt) so Appendix D's new lines on soak, guards and vessels fit on four A4 pages.
+
 ## 16 Nov: the new core
 
 **Not built yet.** Part 2 of the rework (`notes/core-plan.md`), from your 16 Nov chat (`notes/playtest-sheets/2026-11-16-chat-decisions.md`). These are the calls Claude made writing it down, before any chat built it. Each chat adds its own in a subsection below.

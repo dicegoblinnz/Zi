@@ -1,10 +1,11 @@
-// The other ways into the builder on the new core (each Title spreading 5,
-// each awakening on the Root it locks): one of the crew to start from,
-// or random in one tap. Both make an ordinary build (builder.js), so the
-// player can change anything before saving, and the builder's warnings still
-// apply. A blank sheet is just blankBuild() on one page.
-import { blankBuild, guessFor, keepAttuned, normalBuild, pointsOf, spreadFor, ARMOUR } from "./builder.js";
-import { MAX_PERMS, ROOTS, spreadOf, specKey } from "./roots.js";
+// The other ways into the builder on the 17 Nov fixes (each Title spreading
+// 5, each awakening on the Root it locks, items with their tiers): one of the
+// crew to start from, or random in one tap. Both make an ordinary build
+// (builder.js), so the player can change anything before saving, and the
+// builder's warnings still apply. A blank sheet is just blankBuild() on one
+// page.
+import { blankBuild, guessFor, itemFor, keepAttuned, normalBuild, pointsOf, spreadFor } from "./builder.js";
+import { KINDS, MAX_ITEMS, MAX_PERMS, MAX_START_TIER, ROOTS, START_TIER, spreadOf, specKey } from "./roots.js";
 import { START } from "./points.js";
 
 // A thread in someone else's words says whose ("Dorrie’s"). It's theirs to
@@ -12,19 +13,18 @@ import { START } from "./points.js";
 const theirs = (t) => Boolean(t.whose) || /’s\b/.test(t.note ?? "");
 const whoseOf = (t) => t.whose || String(t.note ?? "").match(/^([^,]+’s)(?=,|$)/)?.[1] || "";
 const kindOf = (t) => (t.kind === "hostile" ? "hostile" : "bond");
-const TIER = { Common: 1, Fine: 2, Masterwork: 3 };
-// A crew sheet writes a piece of armour with its quality first (Fine plate
-// armour), and the armour list has the piece by its own name.
-const bare = (x) => String(x).replace(/\b(Common|Fine|Masterwork)\s+/, "");
+// An item off a sheet as the builder keeps it.
+const itemIn = (it) => ({ text: it.name, kind: KINDS.includes(it.kind) ? it.kind : "tool", tier: Number(it.tier) || START_TIER, root: it.kind === "armour" ? (ROOTS.includes(it.root) ? it.root : "Body") : "", props: it.kind === "weapon" ? [...(it.props ?? [])] : [] });
 
 // One of the crew as a build, the way their sheet has them: their archetypes
 // with the abilities each has, their Titles with their spreads and every
-// permission on its Root, what they carry with their armour on its Root,
-// their attuned thing, their own threads, crew answers, Aspiration and
-// trouble, on the points they started on. The name's left for the player.
-// With keep, it's that crew member themselves becoming your own, so nothing's
-// left behind: every attuned thing at its stage with all its awakenings, every
-// thread (the ones in a crewmate's words too), their name, blurb and bag.
+// permission on its Root, their items with their kinds and tiers, their
+// attuned thing as one of them, their keepsake, their own threads, crew
+// answers, Aspiration and trouble, on the points they started on. The name's
+// left for the player. With keep, it's that crew member themselves becoming
+// your own, so nothing's left behind: every attuned thing at its stage with
+// all its awakenings, every thread (the ones in a crewmate's words too), and
+// their name and blurb.
 export function fromCrew(c, B, { keep = false } = {}) {
   const b = blankBuild();
   const ideaOf = (name) => B.ideas.find((x) => x.titles.includes(name))?.id ?? "";
@@ -36,30 +36,25 @@ export function fromCrew(c, B, { keep = false } = {}) {
   }
   if (c.titles?.length) {
     b.titles = c.titles.map((t) => {
-      const boons = (t.boons ?? []).map((x) => ({ lever: x.lever, name: x.name ?? "", on: x.on ?? "" }));
-      const perms = (t.permissions ?? []).slice(0, MAX_PERMS - 2 * boons.length).map((p) => ({ text: p.text, root: ROOTS.includes(p.root) ? p.root : "" }));
+      const perms = (t.permissions ?? []).slice(0, MAX_PERMS).map((p) => ({ text: p.text, root: ROOTS.includes(p.root) ? p.root : "" }));
       const text = t.text ?? t.name;
-      return { idea: ideaOf(text), text, roots: spreadOf(t), perms: perms.length || boons.length ? perms : [{ text: "", root: "" }], boons };
+      return { idea: ideaOf(text), text, roots: spreadOf(t), perms: perms.length ? perms : [{ text: "", root: "" }] };
     });
   }
-  const armour = c.armour ?? [];
-  const eq = (c.carry?.equipment ?? []).slice(0, 3);
-  eq.forEach((x, i) => {
-    const name = bare(x);
-    const piece = armour.find((a) => a.name === name || a.name === x);
-    b.equipment[i] = piece ? { text: piece.name, arm: ROOTS.includes(piece.root) ? piece.root : "Body", ...(TIER[piece.quality] > 1 ? { q: TIER[piece.quality] } : {}) } : { text: name, arm: "" };
-  });
-  const ut = (c.carry?.utility ?? []).slice(0, keep ? 8 : 3);
-  b.utility = Array.from({ length: Math.max(3, ut.length) }, (_, i) => ({ text: ut[i] ?? "" }));
-  b.keepsake = { text: c.carry?.keepsake ?? "" };
-  b.bag = (c.carry?.bag?.items ?? []).join("\n");
-  if (keep && c.carry?.bag?.name) b.bagName = c.carry.bag.name;
+  // Their items, the attuned things among them as the things themselves.
+  const items = Array.isArray(c.items) ? c.items : [];
+  b.items = items.filter((it) => it.attuned == null).map(itemIn);
+  b.keepsake = { text: c.keepsake ?? "" };
   // One of the crew becoming your own keeps every attuned thing at its stage.
   const things = Array.isArray(c.attuned) ? c.attuned : c.attuned ? [c.attuned] : [];
-  b.attuned = things.map((a) => ({
-    name: a.name, props: a.props ?? "", stage: keep ? a.stage || "Awakened" : "Awakened", catch: a.catch ?? "", burden: keep ? a.burden ?? "" : "",
-    awk: (a.awakenings ?? []).slice(0, keep ? 6 : 2).map((w) => ({ name: w.name, root: ROOTS.includes(w.root) && !w.guessed ? w.root : "", text: w.text })),
-  }));
+  b.attuned = things.map((a, i) => {
+    const it = items.find((x) => x.attuned === i);
+    const { text, ...as } = it ? itemIn(it) : itemFor(a.name, B);
+    return {
+      name: a.name, ...as, stage: keep ? a.stage || "Awakened" : "Awakened", catch: a.catch ?? "", burden: keep ? a.burden ?? "" : "",
+      awk: (a.awakenings ?? []).slice(0, keep ? 6 : 2).map((w) => ({ name: w.name, root: ROOTS.includes(w.root) && !w.guessed ? w.root : "", text: w.text })),
+    };
+  });
   if (!b.attuned.length) b.attuned = blankBuild().attuned;
   const own = c.threads.flatMap((p) => p.threads.filter((t) => keep || !theirs(t)).map((t) => ({ person: p.person, text: t.text, kind: kindOf(t), whose: keep ? whoseOf(t) : "", ...(keep && t.strained ? { strained: true } : {}) })));
   if (keep) b.threads = own;
@@ -109,8 +104,8 @@ const LAST = ["a", "an", "ek", "el", "en", "eth", "ia", "in", "is", "o", "on", "
 // points a character starts on and passes every one of the builder's
 // warnings. Two archetypes (sometimes the same one twice) and two Titles,
 // each with its one, an attuned thing, and the other 10 points on more
-// permissions, abilities, now and then a Boon, and what they carry. rand is
-// there so a check can fix the dice.
+// permissions, abilities and items at tier 2 or 3. rand is there so a check
+// can fix the dice.
 export function randomBuild(B, crew, rand = Math.random) {
   const b = blankBuild();
   const known = new Map(B.archetypes.map((a) => [a.name, a]));
@@ -139,7 +134,7 @@ export function randomBuild(B, crew, rand = Math.random) {
     for (const p of mine) taken.add(p);
     return mine;
   });
-  b.titles = ideas.map((idea, i) => ({ idea: idea.id, text: pick(idea.titles, rand), roots: { Body: 0, Mind: 0, Soul: 0 }, perms: [], boons: [], pool: pools[i] }));
+  b.titles = ideas.map((idea, i) => ({ idea: idea.id, text: pick(idea.titles, rand), roots: { Body: 0, Mind: 0, Soul: 0 }, perms: [], pool: pools[i] }));
   const addPerm = (t) => {
     const p = t.pool.shift();
     if (!p) return false;
@@ -157,11 +152,12 @@ export function randomBuild(B, crew, rand = Math.random) {
     const second = thing.awakenings.find((w) => w !== first);
     const withCatch = second && rand() < 0.4 ? pick(B.catches ?? [], rand)?.name ?? "" : "";
     if (withCatch) awk.push({ name: second.name, root: second.root ?? "", text: second.text });
-    b.attuned = [{ name: thing.name, props: "", stage: "Awakened", catch: withCatch, burden: "", awk }];
+    const kind = KINDS.includes(thing.kind) ? thing.kind : itemFor(thing.name, B).kind;
+    b.attuned = [{ name: thing.name, kind, tier: START_TIER, root: kind === "armour" ? (ROOTS.includes(thing.root) ? thing.root : "Body") : "", props: kind === "weapon" ? [...(thing.props ?? [])] : [], stage: "Awakened", catch: withCatch, burden: "", awk }];
   }
 
-  // The other 10 points: an ability or two, now and then a Boon, two to five
-  // more permissions, and the rest on what they carry, at least two things.
+  // The other 10 points: an ability or two, two to five more permissions,
+  // and the rest on items, at least two of them.
   let left = START - pointsOf(b).spent;
   const abilities = Math.min(left - 4, Math.floor(rand() * 3));
   let bought = 0;
@@ -174,18 +170,10 @@ export function randomBuild(B, crew, rand = Math.random) {
     }
   }
   left -= bought;
-  if (rand() < 0.15 && left >= 6) {
-    const t = pick(b.titles, rand);
-    const boon = pick((B.boons ?? []).filter((x) => !["Armour", "Conditions", "Getting around", "Kit"].includes(x.lever)), rand);
-    if (t && boon) {
-      t.boons.push({ lever: boon.lever, name: "", on: "" });
-      left -= 2;
-    }
-  }
   const perms = Math.min(left - 2, 2 + Math.floor(rand() * 4));
   for (let k = 0, n = 0; n < perms && k < 40; k++) {
     const t = b.titles[k % b.titles.length];
-    if (t.perms.length + 2 * t.boons.length < MAX_PERMS && addPerm(t)) n += 1;
+    if (t.perms.length < MAX_PERMS && addPerm(t)) n += 1;
   }
   left = START - pointsOf(b).spent;
 
@@ -213,36 +201,35 @@ export function randomBuild(B, crew, rand = Math.random) {
     if (other) b.attuned = [{ ...a0, name: other.name, awk: other.awakenings.slice(0, n).map((w) => ({ name: w.name, root: w.root, text: w.text })) }];
   }
 
-  // What they carry with what's left: a weapon, a utility item, maybe plain
-  // armour on the Body (Common), more utility, something worn, then the bag.
+  // Items with what's left, a point each at tier 2: a weapon, a tool, maybe
+  // armour on the Body, then a guard, a focus, a pack or a vessel, up to six
+  // with the attuned thing. Whatever's left after that puts things up to
+  // tier 3, the attuned thing too, a point a tier.
   const group = (g) => B.items.find((x) => x.group === g)?.items ?? [];
-  const worn = rand() < 0.6 ? pick(group("Armour & wearables").filter((x) => ARMOUR.test(x)), rand) : null;
-  const wearable = pick(group("Armour & wearables").filter((x) => !ARMOUR.test(x) && x !== worn), rand);
-  const utils = shuffle([...group("Tools"), ...B.usedUp.map((u) => u.name)], rand);
   const order = [
-    ["e", { text: pick(group("Weapons"), rand), arm: "" }],
-    ["u", utils[0]],
-    ...(worn ? [["e", { text: worn, arm: "Body" }]] : []),
-    ["u", utils[1]],
-    ["u", utils[2]],
-    ["e", { text: wearable, arm: "" }],
-    ...shuffle([...group("Personal"), ...utils.slice(3)], rand).map((x) => ["bag", x]),
-  ];
-  const eq = [];
-  const ut = [];
-  const bag = [];
-  for (const [where, x] of order) {
-    if (left <= 0) break;
-    if (!x || (where === "e" && !x.text)) continue;
-    if (where === "e" && eq.length < 3) eq.push(x);
-    else if (where === "u" && ut.length < 3) ut.push(x);
-    else if (where === "bag" && bag.length < 10 && !bag.includes(x)) bag.push(x);
-    else continue;
+    pick(group("Weapons"), rand),
+    pick(group("Tools"), rand),
+    ...(rand() < 0.6 ? [pick(group("Armour").filter((x) => !/\((Mind|Soul)\)/.test(x)), rand)] : []),
+    ...shuffle([pick(group("Guards"), rand), pick(group("Foci"), rand), pick(group("Packs"), rand), pick(group("Vessels"), rand), pick(group("Tools"), rand)], rand),
+  ].filter(Boolean);
+  const room = MAX_ITEMS - b.attuned.filter((a) => a.name).length;
+  const seen = new Set();
+  b.items = [];
+  for (const name of order) {
+    if (left <= 0 || b.items.length >= room) break;
+    const it = itemFor(name, B);
+    if (seen.has(it.text.toLowerCase())) continue;
+    seen.add(it.text.toLowerCase());
+    b.items.push(it);
     left -= 1;
   }
-  eq.forEach((x, i) => (b.equipment[i] = x));
-  ut.forEach((x, i) => (b.utility[i] = { text: x }));
-  b.bag = bag.join("\n");
+  for (const it of shuffle([...b.items, ...b.attuned.filter((a) => a.name)], rand)) {
+    if (left <= 0) break;
+    if (it.tier < MAX_START_TIER) {
+      it.tier += 1;
+      left -= 1;
+    }
+  }
   b.keepsake = { text: pick(B.keepsakes, rand).name };
 
   // Two bond threads and a hostile one, from the crew's own, and sometimes the

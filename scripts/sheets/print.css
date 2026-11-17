@@ -129,16 +129,36 @@ h1, h2, h3, h4, p, ul, ol { margin: 0; }
 .goal .hint { flex: 0 0 34mm; }
 .goal .dice { --die: 5.8mm; --cell: 6.9mm; }
 
-.kit .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 4mm; }
-.kit .sub { margin-top: 1.1mm; }
-.kit .sub > .lab { display: block; margin-bottom: 0.1mm; }
-.kit .sub.row { align-items: flex-end; }
-.kit .sub.row > .lab { margin-bottom: 1mm; }
-.kit .w { height: 4.5mm; }
-/* Each equipment line has three boxes for armour's blows */
-.kit .eq { display: flex; align-items: flex-end; gap: 1.2mm; }
-.kit .eq .boxes { display: flex; flex: none; gap: 0.7mm; margin-bottom: 0.45mm; }
-.kit .eq .tick { width: 3.1mm; height: 3.1mm; }
+/* Six items, three to a row: its words and tier, its kind to ring, the Root
+   armour soaks on, and a box for each point of soak or charge. Then the
+   Resources, a tick and a line each, and the keepsake. */
+.items .hint { margin-top: 0.7mm; }
+.front .items .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4mm 3.4mm; margin-top: 1mm; }
+.icard { border-top: 0.25mm solid var(--hair); padding-top: 0.4mm; min-width: 0; }
+.icard .row { align-items: flex-end; gap: 1.1mm; }
+.icard .w { height: 4.6mm; }
+.icard .row > .lab { margin-bottom: 1mm; font-size: 5.6pt; }
+.icard .sbox { width: 5.6mm; height: 4.4mm; }
+.icard .ikind { margin-top: 0.3mm; }
+.icard .ikind .kind { justify-content: flex-start; height: auto; margin: 0; }
+.icard .ikind .word { padding: 0.75mm 0.95mm; font: 500 5.9pt/1 var(--body); }
+.icard .ibox { margin-top: 0.3mm; align-items: center; }
+.icard .ibox > .lab { margin-bottom: 0; }
+.icard .ibox .kind { height: auto; margin: 0; }
+.icard .ibox .kind .word { padding: 0.7mm 0.8mm; font: 700 5.8pt/1 var(--body); }
+.icard .boxes { display: flex; flex: none; gap: 0.55mm; margin-left: auto; }
+.icard .tick { width: 2.9mm; height: 2.9mm; }
+.res { display: grid; grid-template-columns: auto 1fr 1fr 1fr; gap: 0 3mm; align-items: end; margin-top: 1.3mm; }
+.rcount { display: flex; align-items: flex-end; gap: 1.1mm; }
+.rcount .lab { margin-bottom: 1mm; }
+.rcount .sbox { width: 5.6mm; height: 4.6mm; }
+.rline { display: flex; align-items: flex-end; gap: 1.1mm; min-width: 0; }
+.rline .tick { width: 3.1mm; height: 3.1mm; margin-bottom: 0.5mm; }
+.rline .w { height: 4.6mm; }
+.items .res + .hint { margin-top: 0.5mm; }
+.items .keep { align-items: flex-end; margin-top: 0.6mm; }
+.items .keep .lab { margin-bottom: 1mm; }
+.items .keep .w { height: 4.6mm; }
 .notes { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 .back .notes .tab + .lines { margin-top: 0.3mm; }
 
@@ -226,6 +246,9 @@ h1, h2, h3, h4, p, ul, ol { margin: 0; }
   font: 400 8.6pt/1.27 var(--body);
 }
 .ref .page:last-child { break-after: auto; }
+.ref .page.dense { font-size: 8.25pt; line-height: 1.24; }
+.ref .page.dense .qr li { margin-bottom: 0.75mm; }
+.ref .page.dense .qr { margin-bottom: 2.3mm; }
 .ref .stamp { margin-top: 2mm; padding-top: 1.6mm; border-top: 0.25mm solid var(--hair); }
 
 /* Every page says where you are: the mark, its number and its part, and the
@@ -325,7 +348,7 @@ h1, h2, h3, h4, p, ul, ol { margin: 0; }
 /* Each Root, side by side: its number and where each point came from (each
    Title's spread, and its permissions), the dice it rolls, what's locked,
    what it holds and the points it has now, its wound to tick, a line for
-   each Scar's Catch, and two lines of armour on that Root. */
+   each Scar. Armour's with the items. */
 .roots3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 4mm; margin-top: 0.8mm; }
 .rootcol { border-top: 0.4mm solid var(--ink); padding-top: 1mm; min-width: 0; }
 .rhead { display: flex; align-items: flex-start; gap: 2.2mm; }
@@ -355,11 +378,6 @@ h1, h2, h3, h4, p, ul, ol { margin: 0; }
 /* The Aspiration's five points, a box each. */
 .apts { display: flex; gap: 1.2mm; flex: none; margin-bottom: 1mm; }
 .apts .tick { width: 4.2mm; height: 4.2mm; }
-.arm { display: flex; align-items: flex-end; gap: 1.2mm; }
-.arm .w { height: 4.6mm; }
-.arm .lab { margin-bottom: 0.9mm; }
-.arm .boxes { display: flex; flex: none; gap: 0.7mm; margin-bottom: 0.45mm; }
-.arm .tick { width: 3.1mm; height: 3.1mm; }
 .roots3 + .hint { margin-top: 0.9mm; }
 .roll .hint { margin-top: 0.9mm; }
 

@@ -5,7 +5,9 @@
 // nothing's lost, and none of it plays till the player rebuilds them on Roots
 // in the builder (builder.js, fromBefore), which takes everything across:
 // each Title's 5 Root points spread the way its permissions lean, each
-// permission on its Root, and every archetype with every ability.
+// permission on its Root, every archetype with the abilities it had, what
+// they wore or wielded as items at tier 2, and their utility items and bag
+// in their notes.
 import { diceLabel, stepsToDice } from "./dice.js";
 import { threadKey } from "./threads.js";
 import { tip } from "./tip.js";
@@ -43,7 +45,7 @@ export function beforeView(ch, { esc, link, back, tools }) {
   const sec = (title, body) => (body ? `<section class="cc-sec"><h2 class="cc-h3">${title}</h2><ul class="cc-list">${body}</ul></section>` : "");
   return `<div class="cc-topbar"><a class="cc-back" href="/characters/" data-act="nav">${back}Characters</a><div class="cc-tools">${tools}</div></div>
   <header class="cc-head cc-char"><div class="cc-who"><h1>${esc(ch.name)}</h1>${text(b.blurb) ? `<p class="cc-title"><em>${esc(text(b.blurb))}</em></p>` : ""}<p class="cc-small">Your own, from before the Roots change</p></div></header>
-  <div class="cc-note is-gold" role="status"><p><b>${esc(ch.name)} was built before the Roots change, so here’s the sheet as it was.</b> Rebuild ${esc(ch.name)} on Roots and everything here comes across. ${tip("before-roots", [`Every roll’s a Root now, the one that fits how you’re doing it, and its number’s its dice, the points it takes hits with and the points you spend. A Title puts 5 on your Roots, spread however you like, and a permission puts 1 on its Root.`, `When you rebuild ${esc(ch.name)}, each Title’s 5 Root points are spread the way its permissions lean, each permission’s Root is a guess from its words or the set action it was on, and every archetype keeps every ability, so check them and save.`, link("s-roots", "Roots in the rules")], "Rebuilding on Roots")}</p>
+  <div class="cc-note is-gold" role="status"><p><b>${esc(ch.name)} was built before the Roots change, so here’s the sheet as it was.</b> Rebuild ${esc(ch.name)} on Roots and everything here comes across. ${tip("before-roots", [`Every roll’s a Root now, the one that fits how you’re doing it, and its number’s its dice, the points it takes hits with and the points you spend. A Title puts 5 on your Roots, spread however you like, and a permission puts 1 on its Root.`, `When you rebuild ${esc(ch.name)}, each Title’s 5 Root points are spread the way its permissions lean, each permission’s Root is a guess from its words or the set action it was on, every archetype keeps the abilities it had, what ${esc(ch.name)} wore or wielded are items, and the rest of what ${esc(ch.name)} carried goes in the notes, so check them and save.`, link("s-roots", "Roots in the rules")], "Rebuilding on Roots")}</p>
   <div class="cc-row"><a class="button primary" href="/characters/?build=${encodeURIComponent(ch.id)}" data-act="bopen" data-key="${esc(ch.id)}">Rebuild ${esc(ch.name)} on Roots</a></div></div>
   ${numbers.length ? `<p class="cc-lead">Where ${esc(ch.name)} had got to: ${esc(numbers.join(", "))}.${text(s.aspText) || text(b.aspiration) ? ` Aspiration: <em>${esc(text(s.aspText) || text(b.aspiration))}</em>${num(s.asp) ? `, d${num(s.asp)}` : ""}.` : ""}</p>` : ""}
   ${sec("Set actions", acts)}${sec("Titles and permissions", perms)}${sec("Traits", traits)}

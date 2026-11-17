@@ -959,9 +959,15 @@ button.bd-tok:active { transform: scale(0.97); }
 .bd-arch-what { margin-top: 0.6rem; }
 .bd-arch-what > .bd-label { margin-top: 0.9rem; }
 .bd-mech { margin: 0 0 0.4rem; line-height: 1.4; }
+/* Ten abilities on an archetype's card: each a row with its name, its Aura
+   and its badge, a tap to pick it, and what it does behind the ? beside it. */
 .bd-abils { display: grid; gap: 6px; }
-.bd-abil { padding-right: 34px; }
-.bd-abil b small { font-size: 0.8rem; font-weight: 600; color: var(--muted); }
+.bd-abil-row { display: flex; align-items: center; gap: 2px; }
+.bd-abil-row > .bd-abil { flex: 1 1 auto; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 2px 8px; padding: 8px 34px 8px 12px; }
+.bd-abil-row > .bd-abil b { padding-right: 0; }
+.bd-abil-row > .tip { flex: none; margin: 0 -4px 0 0; }
+.bd-abil > small { font-size: 0.8rem; font-weight: 600; color: var(--muted); }
+.bd-abil > .bd-badge { margin-top: 0; }
 .bd-abil.is-twin { border-style: dashed; }
 .bd-badge { margin-top: 3px; padding: 1px 8px; font-size: 0.76rem; font-weight: 700; color: var(--zd-on-you); background: var(--zd-you); border-radius: 2px; }
 .bd-abil.is-twin .bd-badge { color: var(--muted); background: none; border: 1px dashed var(--line); }
@@ -987,12 +993,30 @@ button.bd-tok:active { transform: scale(0.97); }
 .bd-slot.is-row > .bd-on { grid-column: 1 / -1; margin-bottom: 0.6rem; }
 /* A piece of armour's quality, under where it goes: each choice shows the
    boxes it gives you. */
-.bd-slot.is-row > .bd-quality { grid-column: 1 / -1; margin: -0.2rem 0 0.8rem; }
-.bd-quality .bd-label { margin-top: 0.2rem; }
-.bd-quality .bd-label small { font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--muted); }
-.bd-qual { display: inline-flex; align-items: center; gap: 8px; }
-.bd-qual[aria-pressed="true"] .zd-plate .a { fill: var(--on-gold); stroke: var(--on-gold); }
 .bd-carry > h2 { margin-top: 1.4rem; }
+/* Your six items: the attuned things at the top, said, then each item a line
+   with its tier's name and what it does, a tap opening its kind and tier.
+   The book's items wait in a fold, and Resources are a line and a ?. */
+.bd-its { display: grid; gap: 6px; margin: 0.4rem 0 6px; padding: 0; list-style: none; }
+.bd-it-att, .bd-it > summary { display: flex; flex-direction: column; justify-content: center; gap: 1px; width: 100%; min-height: 48px; padding: 7px 34px 7px 12px; text-align: left; font: inherit; color: var(--ink); background: var(--zd-token); border: 1.5px solid var(--bd-edge); border-radius: 3px; }
+.bd-it-att { cursor: pointer; border-style: dashed; }
+.bd-it-name { font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
+.bd-it-att small, .bd-it > summary small { font-size: 0.82rem; color: var(--muted); }
+.bd-it { margin: 0 0 6px; }
+.bd-it > summary { position: relative; cursor: pointer; list-style: none; }
+.bd-it > summary::-webkit-details-marker { display: none; }
+.bd-it > summary::after { content: "+"; position: absolute; top: 50%; right: 12px; transform: translateY(-50%); font-size: 1.3rem; color: var(--gold-ink); }
+.bd-it[open] > summary::after { content: "\2212"; }
+.bd-it > summary:focus-visible, .bd-it-att:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.bd-it[open] > summary { border-color: var(--zd-you-line); }
+.bd-it-in { padding: 0.5rem 0.2rem 0.4rem; }
+.bd-it-in > .cc-field:first-child { margin-top: 0; }
+.bd-it-in .bd-label, .bd-asitem .bd-label { margin-top: 0.6rem; }
+.bd-tiers small, .bd-kinds small { font-weight: 500; color: var(--muted); }
+.bd-tiers [aria-pressed="true"] small { color: inherit; }
+.bd-props .cc-chips { margin-bottom: 0.6rem; }
+.bd-kitideas .bd-items { margin-bottom: 0.4rem; }
+.bd-res { margin-top: 1rem; }
 .bd-items { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
 .bd-items.is-wide { grid-template-columns: 1fr; }
 @media (min-width: 560px) { .bd-items { grid-template-columns: repeat(3, minmax(0, 1fr)); } .bd-items.is-wide { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
@@ -1004,11 +1028,6 @@ button.bd-tok:active { transform: scale(0.97); }
 .bd-perm > input:placeholder-shown ~ .bd-perm-how { display: none; }
 .bd-perm-how { display: grid; gap: 6px; margin-top: 6px; }
 .bd-perm-how .bd-roots { margin: 0; }
-.bd-boon { margin: 0.6rem 0 0.9rem; padding: 0.6rem 0.75rem; background: var(--surface); border-left: 2px solid var(--gold); }
-.bd-boon > p small { color: var(--muted); }
-.bd-boons { margin-top: 0.6rem; }
-.bd-arm .bd-label small, .bd-arm .bd-label { margin-top: 0.2rem; }
-.bd-slot.is-row > .bd-arm { grid-column: 1 / -1; margin: 0 0 0.5rem; }
 .bd-awk { margin: 0.6rem 0 0.8rem; padding-left: 12px; border-left: 2px solid var(--line-soft); }
 .bd-awk .cc-chips { margin: 6px 0; }
 .bd-from-list small { display: block; font-weight: 400; color: var(--muted); }

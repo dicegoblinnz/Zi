@@ -1,22 +1,25 @@
-// The character builder on the new core (Mo's 16 Nov rework, prompt 5 of
-// notes/core-plan.md, on top of stacking's builder, prompt 7 of
-// notes/stacking-plan.md): the Quick Build from the rules, one step to a
-// screen on a phone held in one hand, with the book's own words for each step
-// behind a question bubble (tip.js). A character's bought with points
-// (points.js): 35, or more when the player says it's a one-shot or a
-// catch-up, with what's spent and what's left in the bar at the bottom the
-// whole way, and a tap on it saying what every point went on. A Title, an
-// archetype or an attuned thing is 5 and comes with its one permission,
-// ability or awakening, and every other permission, ability, awakening or
-// item is 1. A Title puts 5 on your Roots, spread with a tap on a Root (All
-// on puts the 5 on one, and + takes a point off the biggest of the others
-// once all 5 are on), and each permission 1 on the Root it's written with. A
-// Root's number is its dice, its points to take hits with and its points to
-// spend. Each awakening says the Root it fits, and locks a point of it. An archetype shows its mechanic, its Trait and its abilities, and the
-// player picks the one it comes with. There are no specialties. At least one
-// Title, one archetype and one attuned thing is recommended, and that's a
-// nudge. It warns but never blocks, bar one thing: a Title holds six
-// permission slots, and a Boon takes two of them.
+// The character builder on the 17 Nov fixes (prompt 6 of notes/fixes-plan.md,
+// on top of the new core's builder, prompt 5 of notes/core-plan.md): the
+// Quick Build from the rules, one step to a screen on a phone held in one
+// hand, with the book's own words for each step behind a question bubble
+// (tip.js). A character's bought with points (points.js): 35, or more when
+// the player says it's a one-shot or a catch-up, with what's spent and what's
+// left in the bar at the bottom the whole way, and a tap on it saying what
+// every point went on. A Title, an archetype or an attuned thing is 5 and
+// comes with its one permission, ability or awakening, and every other
+// permission, ability or awakening is 1. An item's 1 point and comes at tier
+// 2, a point more puts it up to tier 3, and you carry six at most, the
+// attuned thing among them (its 5 covers it at tier 2), with the keepsake
+// free on top. Resources aren't written down, so a bubble says what they
+// are. A Title puts 5 on your Roots, spread with a tap on a Root (All on
+// puts the 5 on one, and + takes a point off the biggest of the others once
+// all 5 are on), and each permission 1 on the Root it's written with. Each
+// awakening says the Root it fits, and locks a point of it. An archetype
+// shows its mechanic, its Trait and its ten or so abilities, each a name and
+// its Aura with what it does behind its ?, and the player picks the one it
+// comes with. There are no Boons. At least one Title, one archetype and one
+// attuned thing is recommended, and that's a nudge. It warns but never
+// blocks.
 // Drafts are saved on the phone as you go, in one localStorage key, zi-drafts,
 // by "new" or by the id of the character being changed, so nothing's lost if
 // the page closes. A finished character keeps only what the player chose (its
@@ -29,17 +32,19 @@
 // one built before Roots (fromBefore). One built before stacking keeps
 // everything, even past 35: a Title that was on one Root has all 5 on it for
 // the player to spread how they like, its specialties go, and its archetypes
-// keep every ability they had. One built on stacking has each Title's 3 made
+// keep the abilities they had. One built on stacking has each Title's 3 made
 // 5 the way they were spread (R.toFive), flagged for the player to check, and
-// each awakening on its biggest Root till they say.
+// each awakening on its biggest Root till they say. One built before the
+// fixes (v 5 and older) has its equipment as items at tier 2 (armour a tier
+// up from its quality), its utility items and bag gone into its notes, and
+// each Boon's 2 points back to spend, flagged.
 
 import { diceLabel, stepsToDice } from "./dice.js";
 import * as R from "./roots.js";
 import { costOf, START } from "./points.js";
 import { tip } from "./tip.js";
-import { many } from "./armour.js";
 import { bondKey, bondName, bondsOf, threadNote } from "./threads.js";
-import { SIGILS, aura as kitAura, boxes as kitBoxes, crest, die as kitDie, grow as growDie, sigil } from "../kit/kit.js";
+import { SIGILS, aura as kitAura, crest, die as kitDie, grow as growDie, sigil } from "../kit/kit.js";
 
 const KEY = "zi-drafts";
 export const MAX_TITLES = 24;
@@ -53,12 +58,14 @@ export const MAX_START = 99;
 const ROOTS = R.ROOTS;
 const ORD = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth", "thirteenth", "fourteenth", "fifteenth", "sixteenth", "seventeenth", "eighteenth", "nineteenth", "twentieth", "twenty-first", "twenty-second", "twenty-third", "twenty-fourth"];
 const ord = (i) => ORD[i] ?? `${i + 1}${(i + 1) % 100 >= 11 && (i + 1) % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][(i + 1) % 10] ?? "th"}`;
-// Plain armour, a shield and a helmet guard your Body, so they go on it as
+// Plain armour and a helmet guard your Body, so they're armour on it as
 // they're written in. Mind and Soul armour (court clothes, a holy symbol) is
-// the player's to say.
+// the player's to say. A shield's a guard, never armour.
 export const ARMOUR = /\b(plate|chain|mail|leathers|shield|armou?r|breastplate|hauberk|brigandine|helm|helmet)\b/i;
-// A piece of armour's quality is its tier in the book's table (1 Common, 2
-// Fine, 3 Masterwork), kept on its equipment line as q.
+const GUARD = /\b(shield|buckler|parrying)\b/i;
+const WEAPON = /\b(sword|knife|knives|dagger|axe|bow|longbow|shortbow|crossbow|spear|hammer|mace|club|whip|staff|rapier|stiletto|sling|blade|pistol|net|maul|glaive|halberd|polearm|lance)\b/i;
+// A piece of armour's quality from before the fixes (1 Common, 2 Fine, 3
+// Masterwork), kept on its equipment line as q. It's a tier up from that now.
 export const tierOf = (x) => ([1, 2, 3].includes(Number(x?.q)) ? Number(x.q) : 1);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (ch) => `&#${ch.charCodeAt(0)};`);
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -67,50 +74,54 @@ const pts = (n) => `${n} point${n === 1 ? "" : "s"}`;
 
 // ---------------------------------------------------------------- the build
 //
-//   { v: 5, start, archs: [name], have: [[ability]], titles: [{ idea, text,
-//     roots: { Body, Mind, Soul }, perms: [{ text, root }], boons: [{ lever,
-//     name, on }] }], equipment: [{ text, arm, q }], utility: [{ text }],
-//     keepsake: { text }, bag, attuned: [{ name, props, stage, catch, burden,
-//     awk: [{ name, root, text, kept }] }], threads, connect, aspiration,
-//     name, pronoun, blurb, trouble }
+//   { v: 6, start, archs: [name], have: [[ability]], titles: [{ idea, text,
+//     roots: { Body, Mind, Soul }, perms: [{ text, root }] }], items: [{ text,
+//     kind, tier, root, props }], keepsake: { text }, attuned: [{ name, kind,
+//     tier, root, props, stage, catch, burden, awk: [{ name, root, text,
+//     kept }] }], threads, connect, aspiration, name, pronoun, blurb, trouble,
+//     carried }
 //
 // start is the points they start on. archs stays a list of names, since the
 // Worker reads it for the crests, and have[i] is the abilities archetype i's
-// got, the one it came with first (null for every ability it has, from
+// got, the one it came with first (null for every ability it had, from
 // before stacking, till the book's to hand to say which). A Title's roots is
-// its 5 Root points, spread. An awakening's root is the Root it fits and
-// locks a point of. arm is the Root a piece of armour guards ("" when
-// it isn't armour). kept is on an awakening that was on the sheet already
-// past what its thing's stage holds (a crew sheet, or downtime's Finish
-// anyway), so it stays there.
+// its 5 Root points, spread. An item's kind is a weapon, a tool, a guard,
+// armour, a pack or a vessel, its tier 1 to 6 (2 or 3 for a new character),
+// root the Root armour soaks on and props a weapon's properties. An attuned
+// thing is one of the six items too, with the same kind, tier, root and
+// props. An awakening's root is the Root it fits and locks a point of. kept
+// is on an awakening that was on the sheet already past what its thing's
+// stage holds (a crew sheet, or downtime's Finish anyway), so it stays there.
+// carried is what a build from before the fixes had as utility items and in
+// its bag, for the notes (roots.js's normalCore writes them in).
 // While a change is open, a Title from before stacking says the Root it was
-// all on (from), a Title from stacking says how its 3 were spread (three),
-// an awakening from before the new core that's on a guessed Root says so
-// (guessed), and the build says it moved onto stacking (stack) or onto the
-// new core (core): none of them reaches a saved character.
+// all on (from), a Title from stacking says how its 3 were spread (three), a
+// Title from before the fixes says the Boons it had (boonsGone), an
+// awakening from before the new core that's on a guessed Root says so
+// (guessed), and the build says it moved onto stacking (stack), onto the new
+// core (core) or onto the fixes (fixes): none of them reaches a saved
+// character.
 
 const line = () => ({ text: "" });
 const noRoots = () => ({ Body: 0, Mind: 0, Soul: 0 });
 const blankPerm = () => ({ text: "", root: "" });
-const blankTitle = (n = 3) => ({ idea: "", text: "", roots: noRoots(), perms: Array.from({ length: n }, blankPerm), boons: [] });
-const blankKit = () => ({ text: "", arm: "" });
+const blankTitle = (n = 3) => ({ idea: "", text: "", roots: noRoots(), perms: Array.from({ length: n }, blankPerm) });
+const blankItem = () => ({ text: "", kind: "tool", tier: R.START_TIER, root: "", props: [] });
 const blankAwk = () => ({ name: "", root: "", text: "" });
-const blankThing = () => ({ name: "", props: "", stage: "Awakened", catch: "", burden: "", awk: [blankAwk(), blankAwk()] });
+const blankThing = () => ({ name: "", kind: "tool", tier: R.START_TIER, root: "", props: [], stage: "Awakened", catch: "", burden: "", awk: [blankAwk(), blankAwk()] });
 // A thread is a bond thread or a hostile thread (threads.js). Whose is set
 // when it's in a crewmate's words, and strained only when a crew sheet says
 // so: what happens in play is kept in the character's state.
 const blankThread = (kind = "bond") => ({ person: "", text: "", kind, whose: "" });
 export function blankBuild() {
   return {
-    v: 5,
+    v: 6,
     start: START,
     archs: ["", ""],
     have: [[], []],
     titles: [blankTitle(), blankTitle()],
-    equipment: [0, 1, 2].map(blankKit),
-    utility: [0, 1, 2].map(line),
+    items: [],
     keepsake: line(),
-    bag: "",
     // One attuned thing to start, and more for 5 points each.
     attuned: [blankThing()],
     // Two bond threads with the crew, and a hostile thread with anyone.
@@ -173,8 +184,79 @@ const was = (x) => (typeof x?.was === "string" && x.was ? { was: x.was.slice(0, 
 const from = (x) => (typeof x?.from === "string" && x.from ? { from: x.from.slice(0, 120) } : {});
 const fixLine = (x) => ({ text: str(x?.text), ...was(x) });
 const fixPerm = (x) => ({ text: str(x?.text, 120), root: rootOf(x?.root), ...from(x) });
-const fixBoon = (x) => ({ lever: str(x?.lever, 40), name: str(x?.name, 40), on: str(x?.on, 60) });
 const fixAwk = (x) => ({ name: str(x?.name, 80), root: rootOf(x?.root), text: str(x?.text, 240), ...(x?.kept ? { kept: true } : {}), ...(x?.guessed && rootOf(x?.root) ? { guessed: true } : {}) });
+
+// ---------------------------------------------------------------- items
+//
+// What each kind's called on the screen, and an item tidied: its words, its
+// kind, its tier (1 to 6), the Root armour soaks on (Body unless it says),
+// and a weapon's properties.
+const KINDS = R.KINDS;
+const KIND_NAME = { weapon: "Weapon", tool: "Tool", guard: "Guard", armour: "Armour", pack: "Pack", vessel: "Vessel" };
+const kindAt = (v) => (KINDS.includes(v) ? v : "tool");
+const tierAt = (v) => Math.min(R.MAX_TIER, Math.max(1, int(v, R.START_TIER)));
+const propsOf = (v) => [...new Set((Array.isArray(v) ? v : String(v ?? "").split(/,\s*/)).map((p) => str(String(p ?? "").trim(), 30)).filter(Boolean))].slice(0, 8);
+function fixItem(x) {
+  const kind = kindAt(x?.kind);
+  return { text: str(x?.text ?? x?.name, 80), kind, tier: tierAt(x?.tier), root: kind === "armour" ? rootOf(x?.root) || "Body" : "", props: kind === "weapon" ? propsOf(x?.props) : [], ...was(x) };
+}
+// An item's name without its article, for matching.
+const bareName = (name) => String(name ?? "").trim().toLowerCase().replace(/^(a|an|the|her|his|their|your|my) /, "").replace(/\s*\([^)]*\)\s*$/, "");
+// A weapon's properties off the book's weapons table, the one whose name
+// fits best: a longbow's Long and Two-Handed, a knife's Thrown, Concealed and
+// Quick.
+function weaponProps(name, B) {
+  const n = bareName(name);
+  let best = null;
+  for (const w of B?.weapons ?? []) {
+    if (/^(weapon|bare hands|improvised weapon)$/i.test(w.name)) continue;
+    for (const word of String(w.name).toLowerCase().split(/,| or /).map((x) => x.trim()).filter(Boolean)) {
+      if (new RegExp(`\\b${word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`).test(n) && (!best || word.length > best.word.length)) best = { word, props: w.props ?? [] };
+    }
+  }
+  return best ? [...best.props] : [];
+}
+// The book's groups of items, by the kind each is.
+const GROUP_KIND = { Weapons: "weapon", Guards: "guard", Armour: "armour", Tools: "tool", Foci: "tool", Packs: "pack", Vessels: "vessel" };
+// An item from its words: its kind from the book's group it's in, or from
+// what it sounds like, armour on the Root it says (court clothes (Mind)) or
+// the Body, a weapon with its properties, at tier 2. It's a guess, so the
+// player can change any of it.
+export function itemFor(name, B) {
+  const words = String(name ?? "").trim();
+  const n = words.toLowerCase();
+  const group = (B?.items ?? []).find((g) => GROUP_KIND[g.group] && g.items.some((x) => x.toLowerCase() === n));
+  const kind = group ? GROUP_KIND[group.group] : GUARD.test(n) ? "guard" : ARMOUR.test(n) ? "armour" : WEAPON.test(n) ? "weapon" : "tool";
+  const root = kind === "armour" ? (/\(mind\)\s*$/i.test(words) ? "Mind" : /\(soul\)\s*$/i.test(words) ? "Soul" : "Body") : "";
+  return { text: words.replace(/\s*\((Body|Mind|Soul)\)\s*$/i, ""), kind, tier: R.START_TIER, root, props: kind === "weapon" ? weaponProps(words, B) : [] };
+}
+// What an item costs: a point at tier 2, and a point for each tier above.
+// An attuned thing's 5 covers it at tier 2.
+const itemCost = (it, attuned = false) => (attuned ? 0 : 1) + Math.max(0, it.tier - R.START_TIER);
+// What a build from before the fixes carried, moved across the way a saved
+// character is (Items in Building Your Character): each piece of equipment
+// an item at tier 2, armour and a shield a tier up from their quality (Common
+// 2, Fine 3, Masterwork 4), a shield a guard, and the utility items and bag
+// gone, kept in carried for the notes, since they're Resources now. One with
+// the same name as an attuned thing is that thing.
+function itemsBefore(r, B, things) {
+  const items = [];
+  for (const e of list(r.equipment, 8)) {
+    const text = str(e?.text, 80).trim();
+    if (!text) continue;
+    const guess = itemFor(text, B);
+    const arm = rootOf(e?.arm);
+    const tier = arm ? tierOf(e) + 1 : R.START_TIER;
+    const it = guess.kind === "guard" ? { ...guess, tier } : arm ? { ...guess, kind: "armour", root: arm, tier, props: [] } : guess.kind === "armour" ? { ...guess, kind: "tool", root: "" } : guess;
+    const thing = things.find((a) => bareName(a.name) === bareName(text));
+    if (thing) Object.assign(thing, { kind: it.kind, tier: Math.max(thing.tier, it.tier), root: it.root, props: it.props.length ? it.props : thing.props });
+    else items.push({ ...it, text, ...was(e) });
+  }
+  const lines = (v) => (Array.isArray(v) ? v.map((x) => str(typeof x === "string" ? x : x?.text, 120).trim()) : String(v ?? "").split("\n").map((x) => x.trim().slice(0, 120))).filter(Boolean);
+  const carried = { utility: lines(r.utility), bag: lines(r.bag) };
+  return { items, carried: carried.utility.length || carried.bag.length ? carried : null };
+}
+
 // B is the builder's data from the book, for an archetype's abilities. A new
 // character's draft (fresh) from before stacking picks its abilities again,
 // where a saved one keeps them all.
@@ -190,6 +272,9 @@ export function normalBuild(raw, B = null, { fresh = false } = {}) {
   // Root. A new character's draft from then is still a draft, so it's moved
   // across the same way, and just says nothing about it.
   const stacked = r.v != null && Number(r.v) < 5;
+  // A build from before the fixes (v 5 and older): equipment, utility items
+  // and a bag, and Boons.
+  const unfixed = !Array.isArray(r.items) && (r.v == null || Number(r.v) < 6);
   b.start = Math.min(MAX_START, Math.max(START, int(r.start, START)));
   const archs = list(r.archs, MAX_ARCHS).map((a) => str(typeof a === "string" ? a : a?.name, 24));
   if (archs.length) {
@@ -206,12 +291,14 @@ export function normalBuild(raw, B = null, { fresh = false } = {}) {
   const titles = list(r.titles, MAX_TITLES);
   if (titles.length) {
     b.titles = titles.map((x) => {
-      const boons = list(x?.boons, 3).filter((y) => y && str(y.lever, 40)).map(fixBoon);
-      // Six slots a Title, and a Boon takes two.
-      const perms = list(x?.perms ?? x?.permissions, MAX_PERMS - R.BOON_SLOTS * boons.length).map(fixPerm);
+      const perms = list(x?.perms ?? x?.permissions, MAX_PERMS).map(fixPerm);
       const one = rootOf(x?.root);
       const spread = Boolean(x?.roots && typeof x.roots === "object");
-      const t = { idea: str(x?.idea, 40), text: str(x?.text ?? x?.name, 120), roots: spread ? fixRoots(x.roots) : one ? { ...noRoots(), [one]: R.TITLE_ROOTS } : noRoots(), perms: boons.length || perms.length ? perms : [blankPerm()], boons };
+      const t = { idea: str(x?.idea, 40), text: str(x?.text ?? x?.name, 120), roots: spread ? fixRoots(x.roots) : one ? { ...noRoots(), [one]: R.TITLE_ROOTS } : noRoots(), perms: perms.length ? perms : [blankPerm()] };
+      // Boons are gone. A saved one's 2 points are theirs to spend, and the
+      // change says so till it's saved.
+      const gone = [...list(x?.boons, 3), ...list(x?.boonsGone, 3)].filter((y) => y && str(y.lever, 40)).map((y) => ({ lever: str(y.lever, 40), name: str(y.name, 40) }));
+      if (gone.length && !fresh) t.boonsGone = gone;
       // From before stacking it was all on one Root, so all 5 are on it,
       // for the player to spread how they like.
       const was1 = rootOf(x?.from) || (!spread && one ? one : "");
@@ -226,23 +313,17 @@ export function normalBuild(raw, B = null, { fresh = false } = {}) {
       return t;
     });
   }
-  b.equipment = b.equipment.map((e, i) => {
-    const x = r.equipment?.[i];
-    const out = { text: str(x?.text, 80), arm: rootOf(x?.arm), ...was(x) };
-    if (out.arm && tierOf(x) > 1) out.q = tierOf(x);
-    return out;
-  });
-  b.utility = Array.from({ length: Math.max(3, Math.min(8, Array.isArray(r.utility) ? r.utility.length : 0)) }, (_, i) => fixLine(r.utility?.[i]));
   b.keepsake = fixLine(r.keepsake);
-  b.bag = str(r.bag, 600);
-  if (Array.isArray(r.bagWas)) b.bagWas = r.bagWas.slice(0, 40).map((x) => str(x, 120));
-  // One of the crew made into a build keeps their bag's name.
-  if (str(r.bagName, 80).trim()) b.bagName = str(r.bagName, 80).trim();
   if (Array.isArray(r.attuned)) {
-    b.attuned = r.attuned.slice(0, MAX_ATTUNED).map((x) => ({
-      name: str(x?.name, 80), props: str(x?.props, 80), stage: R.STAGES.includes(x?.stage) ? x.stage : "Awakened", catch: str(x?.catch, 120), burden: str(x?.burden, 120),
-      awk: atLeast(list(x?.awk ?? x?.awakenings, 6).map(fixAwk), 1, blankAwk),
-    }));
+    b.attuned = r.attuned.slice(0, MAX_ATTUNED).map((x) => {
+      const guess = x?.kind ? null : itemFor(str(x?.name, 80), B);
+      const kind = kindAt(x?.kind ?? guess?.kind);
+      return {
+        name: str(x?.name, 80), kind, tier: tierAt(x?.tier), root: kind === "armour" ? rootOf(x?.root ?? guess?.root) || "Body" : "", props: kind === "weapon" ? propsOf(x?.props?.length ? x.props : guess?.props) : [],
+        stage: R.STAGES.includes(x?.stage) ? x.stage : "Awakened", catch: str(x?.catch, 120), burden: str(x?.burden, 120),
+        awk: atLeast(list(x?.awk ?? x?.awakenings, 6).map(fixAwk), 1, blankAwk),
+      };
+    });
     if (!b.attuned.length) b.attuned = [blankThing()];
     // An awakening from before the new core hasn't got a Root, so it's on
     // their biggest till they say, the way roots.js reads it.
@@ -251,6 +332,12 @@ export function normalBuild(raw, B = null, { fresh = false } = {}) {
       for (const a of b.attuned) for (const w of a.awk) if (awkIn(w) && !w.root) Object.assign(w, { root: big, guessed: true });
     }
   }
+  if (unfixed) {
+    const moved = itemsBefore(r, B, b.attuned);
+    b.items = moved.items;
+    if (moved.carried) b.carried = moved.carried;
+  } else b.items = list(r.items, 12).map(fixItem);
+  if (r.carried && typeof r.carried === "object") b.carried = { utility: list(r.carried.utility, 12).map((x) => str(x, 120)).filter(Boolean), bag: list(r.carried.bag, 40).map((x) => str(x, 120)).filter(Boolean) };
   if (Array.isArray(r.threads)) b.threads = r.threads.slice(0, MAX_THREADS).map((t) => ({ person: str(t?.person, 120), text: str(t?.text, 200), kind: kindOf(t), whose: str(t?.whose, 40), ...(t?.strained ? { strained: true } : {}), ...was(t) }));
   b.connect = (Array.isArray(r.connect) ? r.connect : []).slice(0, 12).map((a) => str(a, 200));
   for (const k of ["aspiration", "name", "blurb"]) b[k] = str(r[k], k === "name" ? 40 : 160);
@@ -258,6 +345,7 @@ export function normalBuild(raw, B = null, { fresh = false } = {}) {
   b.trouble = (Array.isArray(r.trouble) ? r.trouble : []).filter((x) => typeof x === "string").slice(0, 12).map((x) => str(x, 120));
   if (r.stack === true || (before && !fresh)) b.stack = true;
   if (r.core === true || (stacked && !fresh && !before && !b.stack)) b.core = true;
+  if (r.fixes === true || (unfixed && !fresh && r.v != null)) b.fixes = true;
   return b;
 }
 // Their biggest Root, the first on a tie, the way roots.js picks it.
@@ -268,25 +356,27 @@ const bigOf = (b) => {
 // What's saved: the build without what only matters while it's open.
 function forSave(b) {
   const out = JSON.parse(JSON.stringify(b));
-  delete out.stack;
-  delete out.core;
-  out.v = 5;
+  for (const k of ["stack", "core", "fixes"]) delete out[k];
+  out.v = 6;
   for (const t of out.titles) {
     delete t.from;
     delete t.three;
+    delete t.boonsGone;
   }
   for (const a of out.attuned) for (const w of a.awk) delete w.guessed;
   return out;
 }
 
 // What's in, and what to call it.
-const titleIn = (t) => Boolean(t.text.trim() || sumOf(t.roots) || t.perms.some((p) => p.text.trim()) || t.boons.length);
+const titleIn = (t) => Boolean(t.text.trim() || sumOf(t.roots) || t.perms.some((p) => p.text.trim()));
 const titleName = (t) => t.text.trim() || "Untitled";
 const thingIn = (a) => Boolean(a.name.trim() || a.awk.some((w) => w.name.trim() || w.text.trim()));
 const thingName = (a) => a.name.trim() || "Something attuned";
 const awkIn = (w) => Boolean(w.name.trim() || w.text.trim());
-const bagOf = (b) => b.bag.split("\n").map((x) => x.trim()).filter(Boolean);
-const slotsOf = (t) => t.perms.filter((p) => p.text.trim()).length + R.BOON_SLOTS * t.boons.length;
+const itemIn = (it) => Boolean(it.text.trim());
+const slotsOf = (t) => t.perms.filter((p) => p.text.trim()).length;
+// Your items, the attuned things among them, and how many that is of six.
+const itemCount = (b) => b.attuned.filter(thingIn).length + b.items.filter(itemIn).length;
 // What an attuned thing holds at its stage (Three stages): the first ones,
 // then the rest once it's got its Catch, its Burden or both. One already on
 // the sheet past that is kept.
@@ -305,25 +395,21 @@ export function keepAttuned(b) {
   return b;
 }
 
-// The numbers on the sheet: Aura's 5, and 2 for each Aura Boon (attuned
-// things don't touch it any more), the stride's 3, and the utility items you
-// can carry.
+// The numbers on the sheet: Aura's 5 and the stride's 3, and nothing
+// changes them, and your Resources, 3 and half a pack's tier, rounded up.
 export function numbersOf(b) {
-  const n = (lever) => b.titles.reduce((t, x) => t + x.boons.filter((y) => y.lever === lever).length, 0);
-  return { aura: R.BASE_AURA + 2 * n("Aura"), stride: 3 + 2 * n("Stride"), utility: 3 + n("Kit") };
+  const packs = [...b.items.filter(itemIn), ...b.attuned.filter(thingIn)].filter((it) => it.kind === "pack");
+  return { aura: R.BASE_AURA, stride: 3, res: R.RES_BASE + packs.reduce((t, it) => t + R.packRes(it.tier), 0) };
 }
 
 // What a build costs, the way costOf() counts a sheet: only what goes on it,
-// so an empty line, an awakening its thing can't hold yet and a utility item
-// past the limit cost nothing.
-export function pointsOf(b, n = numbersOf(b)) {
+// so an empty line and an awakening its thing can't hold yet cost nothing.
+export function pointsOf(b) {
   const x = {
-    titles: b.titles.filter(titleIn).map((t) => ({ text: titleName(t), perms: t.perms.filter((p) => p.text.trim()).map((p) => p.text.trim()), boons: t.boons })),
+    titles: b.titles.filter(titleIn).map((t) => ({ text: titleName(t), perms: t.perms.filter((p) => p.text.trim()).map((p) => p.text.trim()) })),
     archs: b.archs.map((name, i) => ({ name: name.trim(), have: b.have[i] ?? [] })).filter((a) => a.name),
     attuned: b.attuned.filter(thingIn).map((a) => ({ name: thingName(a), catch: a.catch.trim(), awk: a.awk.filter((w, j) => awkIn(w) && counts(a, j)).map((w) => ({ name: w.name.trim() || "An awakening" })) })),
-    equipment: b.equipment.filter((e) => e.text.trim()).map((e) => e.text.trim()),
-    utility: b.utility.slice(0, n.utility).filter((u) => u.text.trim()).map((u) => u.text.trim()),
-    bag: bagOf(b).slice(0, 10).join("\n"),
+    items: [...b.attuned.filter(thingIn).map((a) => ({ name: thingName(a), tier: a.tier, attuned: true })), ...b.items.filter(itemIn).map((it) => ({ name: it.text.trim(), tier: it.tier }))],
   };
   const { spent, lines } = costOf(x);
   return { start: b.start, spent, left: b.start - spent, lines };
@@ -367,27 +453,26 @@ function makeSheet(ch, b, B, { draft = false } = {}) {
   // change is saved, it's a spread like any other, and the sheet says it's on
   // the new core (core), so a Title the player's left at 3 stays at 3.
   // A draft's the build as it stands on the screen, so it's on the new core.
+  // A Boon from before the fixes goes on as a Boon, which roots.js keeps as
+  // gone (boonsGone), for its 2 points to be spent.
   const three = !draft && b.titles.some((t) => titleIn(t) && t.three);
   const titles = b.titles.filter(titleIn).map((t) => ({
     text: titleName(t), name: titleName(t), ...(t.from && t.roots[t.from] === R.TITLE_ROOTS ? { root: t.from } : t.three && three ? { roots: { ...t.three } } : { roots: { ...t.roots } }),
     permissions: t.perms.filter((p) => p.text.trim()).map((p) => ({ text: p.text.trim(), root: p.root })),
-    boons: t.boons.map((x) => ({ lever: x.lever, name: x.name.trim(), on: x.on.trim() })),
+    boons: draft ? [] : (t.boonsGone ?? []).map((x) => ({ lever: x.lever, name: x.name })),
   }));
   const archetypes = b.archs.map((a, i) => ({ name: a.trim(), i })).filter((a) => a.name).map(({ name, i }) => ({ name, id: ARCH.get(name)?.id ?? null, ...(Array.isArray(b.have[i]) ? { have: [...b.have[i]] } : {}) }));
-  const kit = b.equipment.filter((e) => e.text.trim());
-  const qualities = B.qualities ?? [];
-  const armour = kit.filter((e) => e.arm).map((e) => {
-    const q = qualities[tierOf(e) - 1] ?? { name: ["Common", "Fine", "Masterwork"][tierOf(e) - 1], boxes: tierOf(e) };
-    const piece = { name: e.text.trim(), root: e.arm, quality: q.name, boxes: q.boxes, when: null };
-    if (e.arm === "Mind") piece.when = many(piece) ? "when they fit the scene" : "when it fits the scene";
-    return piece;
-  });
-  const attuned = b.attuned.filter(thingIn).map((a) => ({
-    name: thingName(a), props: a.props.trim() || null, stage: a.stage || "Awakened", catch: a.catch.trim() || null, burden: a.burden.trim() || null,
+  const things = b.attuned.filter(thingIn);
+  const attuned = things.map((a) => ({
+    name: thingName(a), props: a.kind === "weapon" && a.props.length ? a.props.join(", ") : null, stage: a.stage || "Awakened", catch: a.catch.trim() || null, burden: a.burden.trim() || null,
     // An awakening on a Root the player hasn't said goes on with none, and
     // roots.js puts it on their biggest, guessed.
     awakenings: a.awk.map((w, j) => ({ w, j })).filter(({ w, j }) => awkIn(w) && counts(a, j)).map(({ w }) => ({ name: w.name.trim() || "An awakening", root: w.guessed ? "" : w.root, text: w.text.trim() })),
   }));
+  // Every item the way the crew's are, the attuned things last, each one
+  // saying which it is.
+  const itemOf = (it, name, attuned) => ({ name, tier: it.tier, kind: it.kind, root: it.kind === "armour" ? it.root || "Body" : null, props: it.kind === "weapon" ? [...it.props] : [], attuned });
+  const items = [...b.items.filter(itemIn).map((it) => itemOf(it, it.text.trim(), null)), ...things.map((a, i) => itemOf(a, thingName(a), i))];
   // Each person's one bond, with every thread with them under it, however
   // the name was typed. Each thread says bond or hostile, and whose it is when
   // it's in someone else's words, the way the crew's do.
@@ -409,9 +494,9 @@ function makeSheet(ch, b, B, { draft = false } = {}) {
     playsLike: esc(plays.join(", and ") || both(names) || "your own"),
     points: { start: b.start },
     archetypes, titles, roots: rootsOf(b).roots,
-    carry: { equipment: kit.map((e) => e.text.trim()), utility: b.utility.slice(0, n.utility).map((x) => x.text.trim()).filter(Boolean), keepsake: b.keepsake.text.trim() || null, bag: { name: b.bagName || "a bag", max: 10, items: bagOf(b).slice(0, 10) } },
-    armour, attuned,
-    numbers: { aura: n.aura, stride: 3, strideNote: null },
+    items, keepsake: b.keepsake.text.trim() || null, attuned,
+    ...(b.carried ? { was: { utility: [...b.carried.utility], bag: [...b.carried.bag] } } : {}),
+    numbers: { aura: n.aura, stride: n.stride, strideNote: null },
     threads,
     crewQs: B.connect.map((q, i) => ({ q, a: (b.connect[i] ?? "").trim() })).filter((x) => x.a),
     aspiration: { text: b.aspiration.trim(), pts: 0, die: 2 },
@@ -433,9 +518,8 @@ export function threadCount(b) {
 // step says which step it's on, and null's the points.
 export function checksOf(b, B, { changing = false } = {}) {
   const out = [];
-  const n = numbersOf(b);
   const ARCH = new Map(B.archetypes.map((a) => [a.name, a]));
-  const p = pointsOf(b, n);
+  const p = pointsOf(b);
   if (p.left > 0) out.push({ step: null, text: `You’ve got ${p.left === 1 ? "a point" : `${p.left} points`} left to spend.` });
   if (!changing && p.left < 0) out.push({ step: null, text: `That’s ${p.spent} points, ${-p.left} past the ${p.start} you start on. Take ${-p.left === 1 ? "a point" : `${-p.left} points`} off, or ask the GM about starting on more.` });
   // Archetypes. An empty slot costs nothing and goes on no sheet, so with
@@ -475,7 +559,7 @@ export function checksOf(b, B, { changing = false } = {}) {
     const sum = sumOf(t.roots);
     if (sum < R.TITLE_ROOTS) out.push({ step: 1, t: i, text: sum ? `${which} has ${sum} of its 5 Root points on your Roots. Put the last ${R.TITLE_ROOTS - sum === 1 ? "one" : R.TITLE_ROOTS - sum} where it lives.` : `${which}’s 5 Root points aren’t on your Roots yet.` });
     const perms = t.perms.filter((x) => x.text.trim());
-    if (!perms.length && !t.boons.length) out.push({ step: 1, t: i, text: `${which} hasn’t got its permission yet. It comes with one.` });
+    if (!perms.length) out.push({ step: 1, t: i, text: `${which} hasn’t got its permission yet. It comes with one.` });
     for (const x of perms) {
       const w = x.text.trim();
       if (!x.root) out.push({ step: 1, t: i, text: `“${w}” needs its Root.` });
@@ -483,10 +567,9 @@ export function checksOf(b, B, { changing = false } = {}) {
       const k = w.toLowerCase();
       seen.set(k, [w, (seen.get(k)?.[1] ?? 0) + 1]);
     }
-    for (const x of t.boons) if (!(B.boons ?? []).some((y) => y.lever === x.lever)) out.push({ step: 1, t: i, text: `The ${x.lever} Boon isn’t one of the Boons any more. Take it off, and the two slots are permissions again.` });
   });
   for (const [w, k] of seen.values()) if (k > 1) out.push({ step: 1, text: `“${w}” is on your sheet ${k === 2 ? "twice" : `${k} times`}, and the same permission only counts once. Use different words for one of them.` });
-  // What you carry, with the attuned things first.
+  // Items, with the attuned things first.
   const att = b.attuned.filter(thingIn);
   if (!att.length) out.push({ step: 3, kit: "a", text: "You haven’t attuned anything. At least one thing’s recommended, but it’s your call." });
   b.attuned.forEach((a) => {
@@ -504,13 +587,13 @@ export function checksOf(b, B, { changing = false } = {}) {
     if (!changing && a.burden.trim()) out.push({ step: 3, kit: "a", text: `${name} has a Burden, and a thing can’t take one before it’s Tempered.` });
     if (!changing && a.stage !== "Awakened") out.push({ step: 3, kit: "a", text: `${name}’s ${a.stage}, and what you attune starts at Awakened.` });
   });
-  // What you start with is Common, and one piece can be Fine.
+  // Six items at most, the attuned things among them, and a new
+  // character's at tier 3 at most.
+  const count = itemCount(b);
+  if (count > R.MAX_ITEMS) out.push({ step: 3, kit: "i", text: `That’s ${count} items, your attuned ${att.length === 1 ? "thing" : "things"} among them, and you carry six at most. Take ${count - R.MAX_ITEMS === 1 ? "one" : count - R.MAX_ITEMS} off.` });
   if (!changing) {
-    const armour = b.equipment.filter((e) => e.text.trim() && e.arm);
-    const qname = (tier) => B.qualities?.[tier - 1]?.name ?? ["Common", "Fine", "Masterwork"][tier - 1];
-    const better = armour.filter((e) => tierOf(e) > 1);
-    if (armour.some((e) => tierOf(e) > 2)) out.push({ step: 3, kit: "e", text: `${qname(3)} armour comes from play. What you start with is ${qname(1)}, and one piece can be ${qname(2)}.` });
-    else if (better.length > 1) out.push({ step: 3, kit: "e", text: `You’ve got ${better.length} ${qname(2)} pieces. What you start with is ${qname(1)}, and one piece can be ${qname(2)}.` });
+    for (const a of att) if (a.tier > R.MAX_START_TIER) out.push({ step: 3, kit: "a", text: `${cap(thingName(a))} is tier ${a.tier}, and what you start with is tier ${R.MAX_START_TIER} at most.` });
+    for (const it of b.items.filter(itemIn)) if (it.tier > R.MAX_START_TIER) out.push({ step: 3, kit: "i", text: `${cap(it.text.trim())} is tier ${it.tier}, and what you start with is tier ${R.MAX_START_TIER} at most.` });
   }
   // An awakening needs a point of its Root to lock, or it does nothing.
   const { roots } = rootsOf(b);
@@ -520,8 +603,6 @@ export function checksOf(b, B, { changing = false } = {}) {
     lock[w.root] += 1;
     if (lock[w.root] > roots[w.root]) out.push({ step: 3, kit: "a", text: `“${w.name.trim() || "An awakening"}” locks a point of your ${w.root}, and ${roots[w.root] ? `it hasn’t got another free` : "it’s got none"}, so it does nothing till it has.` });
   });
-  if (b.utility.slice(n.utility).some((u) => u.text.trim())) out.push({ step: 3, kit: "u", text: `You can carry ${n.utility} utility items, so the last one won’t go on the sheet.` });
-  if (bagOf(b).length > 10) out.push({ step: 3, kit: "u", text: `Your bag holds 10, so the last ${bagOf(b).length - 10} won’t go in.` });
   if (!changing && !b.keepsake.text.trim()) out.push({ step: 3, kit: "k", text: "You haven’t got a keepsake yet. It’s free." });
   // Two bond threads with the crew to start. A hostile thread lets you write a
   // third bond thread, and three is the most.
@@ -564,6 +645,20 @@ export function spreadFor(roots) {
 // anything else. Each entry lands where it sat on the sheet: a permission
 // after the Title's others, a new Title last, and so on, so the sheet it
 // makes is the one the player already had.
+// Each item by its key on the sheet: item| and its name, and a second of the
+// same name item| its name |2, in the order makeSheet puts them on, the
+// attuned things last.
+function keyed(b) {
+  const out = new Map();
+  const seen = new Map();
+  for (const [it, name] of [...b.items.filter(itemIn).map((x) => [x, x.text.trim()]), ...b.attuned.filter(thingIn).map((a) => [a, thingName(a)])]) {
+    const base = `item|${name}`;
+    const n = (seen.get(base) ?? 0) + 1;
+    seen.set(base, n);
+    out.set(n > 1 ? `${base}|${n}` : base, it);
+  }
+  return out;
+}
 export function foldGrown(raw, grown, B) {
   const b = normalBuild(raw, B);
   if (!Array.isArray(grown) || !grown.length) return b;
@@ -597,12 +692,9 @@ export function foldGrown(raw, grown, B) {
       const p = t?.perms[Number(g.j)];
       if (p && text) Object.assign(p, { text, root });
     } else if (g.k === "boon") {
-      const t = titleAt(g.t);
-      if (!t || !words(g.lever, 40)) continue;
-      const drop = [...new Set((Array.isArray(g.drop) ? g.drop : []).map(Number))].filter((j) => t.perms[j]).sort((x, y) => y - x);
-      if (slotsOf(t) - drop.length + R.BOON_SLOTS > MAX_PERMS) continue;
-      for (const j of drop) t.perms.splice(j, 1);
-      t.boons.push({ lever: words(g.lever, 40), name: words(g.name, 40), on: words(g.on, 60) });
+      // Boons are gone, so the permissions one swapped out stay, the way
+      // roots.js reads it.
+      continue;
     } else if (g.k === "ability") {
       const i = archAt(Number(g.a));
       const name = words(g.name, 60);
@@ -640,7 +732,7 @@ export function foldGrown(raw, grown, B) {
       const roots = spread ? fixRoots(g.roots) : root ? { ...noRoots(), [root]: R.TITLE_ROOTS } : noRoots();
       const p = g.perm && typeof g.perm === "object" && words(g.perm.text, 120) ? { text: words(g.perm.text, 120), root: rootOf(g.perm.root) } : blankPerm();
       const three = spread && sumOf(roots) === R.OLD_TITLE_ROOTS;
-      b.titles.push({ idea: "", text, roots: three ? R.toFive(roots, p.text ? [p] : []) : roots, perms: [p], boons: [], ...(!spread && root ? { from: root } : {}), ...(three ? { three: roots } : {}) });
+      b.titles.push({ idea: "", text, roots: three ? R.toFive(roots, p.text ? [p] : []) : roots, perms: [p], ...(!spread && root ? { from: root } : {}), ...(three ? { three: roots } : {}) });
     } else if (g.k === "arch") {
       const arch = words(g.arch, 24);
       if (!arch || b.archs.length >= MAX_ARCHS) continue;
@@ -654,7 +746,22 @@ export function foldGrown(raw, grown, B) {
       if (!name || b.attuned.length >= MAX_ATTUNED) continue;
       const w = g.awk && typeof g.awk === "object" && words(g.awk.name, 80) ? [{ name: words(g.awk.name, 80), root: rootOf(g.awk.root), text: words(g.awk.text, 240) }] : [];
       for (const x of w) onSheet.add(x);
-      b.attuned.push({ name, props: "", stage: "Awakened", catch: "", burden: "", awk: w });
+      // The item of that name is the thing now, or it's a new one at tier 2.
+      const at = b.items.findIndex((it) => itemIn(it) && bareName(it.text) === bareName(name));
+      const it = at >= 0 ? b.items.splice(at, 1)[0] : { ...itemFor(name, B), ...(g.kind ? { kind: kindAt(g.kind) } : {}), ...(g.tier ? { tier: tierAt(g.tier) } : {}) };
+      b.attuned.push({ name, kind: it.kind, tier: it.tier, root: it.root, props: it.props, stage: "Awakened", catch: "", burden: "", awk: w });
+    } else if (g.k === "item") {
+      const name = words(g.name, 80);
+      if (name) b.items.push(fixItem({ ...g, text: name }));
+    } else if (g.k === "tier") {
+      // An item's key is item| and its name, and a second of the same name
+      // item| its name |2, the way roots.js keys them, attuned things last.
+      const it = keyed(b).get(String(g.key ?? ""));
+      if (it) it.tier = tierAt(g.to);
+    } else if (g.k === "drop") {
+      const it = keyed(b).get(String(g.key ?? ""));
+      const at = b.items.indexOf(it);
+      if (at >= 0) b.items.splice(at, 1);
     }
   }
   for (const a of b.attuned) {
@@ -665,7 +772,7 @@ export function foldGrown(raw, grown, B) {
     });
     atLeast(a.awk, 1, blankAwk);
   }
-  for (const t of b.titles) if (!t.perms.length && !t.boons.length) t.perms.push(blankPerm());
+  for (const t of b.titles) if (!t.perms.length) t.perms.push(blankPerm());
   // An awakening grown before the new core hasn't got a Root, so it's on
   // their biggest till they say, the way roots.js reads it.
   const big = bigOf(b);
@@ -703,28 +810,31 @@ export function fromBefore(old, B = null) {
         return { text, root: core ? CORE_ROOT[core] ?? "Body" : guessFor(text).root, ...(on.length ? { from: `It was on your ${both(on)}` } : {}) };
       });
       const roots = perms.length ? spreadFor(perms.map((p) => p.root)) : s(t) ? { ...noRoots(), [guessFor(s(t)).root]: R.TITLE_ROOTS } : noRoots();
-      return { idea: str(t?.idea, 40), text: s(t, 120), roots, perms: perms.length ? perms : [blankPerm()], boons: [] };
+      return { idea: str(t?.idea, 40), text: s(t, 120), roots, perms: perms.length ? perms : [blankPerm()] };
     });
   }
-  const eq = list(r.equipment, 3);
-  b.equipment = [0, 1, 2].map((i) => {
-    const e = eq[i];
+  // What they wore or wielded are items at tier 2, armour on their Body,
+  // and clothes that fit some scenes (a size up on Confidence, then) Mind
+  // armour. Utility items and the bag are things to say with a Resource now,
+  // so they're kept for the notes.
+  const items = [];
+  for (const e of list(r.equipment, 6)) {
     const text = s(e, 80);
-    const arm = text && (ons(e).includes("Defend") || e?.armour || ARMOUR.test(text)) ? "Body" : "";
-    return { text, arm, ...(arm && tierOf(e) > 1 ? { q: tierOf(e) } : {}) };
-  });
-  // Clothes that fit some scenes gave Confidence a size up. On Roots they're
-  // Mind armour, while they fit the scene, if there's room for them.
+    if (!text) continue;
+    const guess = itemFor(text, B);
+    const armour = guess.kind === "armour" || (guess.kind !== "guard" && (ons(e).includes("Defend") || e?.armour));
+    items.push({ ...guess, text, ...(armour ? { kind: "armour", root: "Body", props: [] } : {}), tier: armour || guess.kind === "guard" ? tierOf(e) + 1 : R.START_TIER });
+  }
   const clothes = str(r.clothes, 80).trim();
-  const free = b.equipment.findIndex((e) => !e.text);
-  if (clothes && free >= 0) b.equipment[free] = { text: clothes, arm: "Mind" };
-  b.utility = Array.from({ length: Math.max(3, Math.min(8, list(r.utility, 8).length)) }, (_, i) => ({ text: s(r.utility?.[i], 80) }));
+  if (clothes) items.push({ text: clothes, kind: "armour", tier: R.START_TIER, root: "Mind", props: [] });
+  b.items = items;
+  const carried = { utility: list(r.utility, 8).map((x) => s(x, 120)).filter(Boolean), bag: String(r.bag ?? "").split("\n").map((x) => x.trim().slice(0, 120)).filter(Boolean) };
+  if (carried.utility.length || carried.bag.length) b.carried = carried;
   b.keepsake = { text: s(r.keepsake, 80) };
-  b.bag = str(r.bag, 600);
   const things = list(r.attuned, MAX_ATTUNED).filter((a) => s(a?.name) || list(a?.perms, 6).some((p) => s(p)));
   if (things.length) {
     b.attuned = things.map((a) => ({
-      name: s(a?.name, 80), props: "", stage: R.STAGES.includes(a?.stage) ? a.stage : "Awakened", catch: str(a?.catch, 120), burden: str(a?.burden, 120),
+      ...(({ text, ...it }) => it)(itemFor(s(a?.name, 80), B)), name: s(a?.name, 80), stage: R.STAGES.includes(a?.stage) ? a.stage : "Awakened", catch: str(a?.catch, 120), burden: str(a?.burden, 120),
       awk: atLeast(list(a?.perms, 6).filter((p) => s(p)).map((p) => ({ name: s(p, 80), root: "", text: "2 steps on every roll you make with it", ...(p?.kept ? { kept: true } : {}) })), 1, blankAwk),
     }));
     // Each one's on their biggest Root till they say.
@@ -790,20 +900,17 @@ const STEPS = [
   { name: "Archetypes", short: "Archetypes" },
   { name: "Titles and permissions", short: "Titles" },
   { name: "Roots", short: "Roots" },
-  { name: "What you carry", short: "What you carry" },
+  { name: "Items", short: "Items" },
   { name: "Threads", short: "Threads" },
   { name: "Aspiration", short: "Aspiration" },
   { name: "Check it and play", short: "Check it" },
 ];
 const LAST = STEPS.length - 1;
-// What you carry, a part to a screen: the attuned thing first, for its 5,
-// then the rest with what's left.
-const KIT = [["a", "Attuned"], ["e", "Equipment"], ["u", "Utility"], ["k", "Keepsake"]];
+// Items, a part to a screen: the attuned thing first, for its 5, then the
+// rest of your six with what's left, then the keepsake.
+const KIT = [["a", "Attuned"], ["i", "Items"], ["k", "Keepsake"]];
 const PRO = { her: ["she", "her", "she’s"], him: ["he", "his", "he’s"], them: ["they", "their", "they’re"] };
 const PRICE = { Awakened: "a Catch", Tempered: "a Burden", Perfected: "a Burden and a Catch" };
-// A Boon that's on something says what: a piece of armour, a condition, or
-// which of climbing, swimming and rough ground.
-const BOON_ON = { Armour: ["Which piece", "your worn leathers"], Conditions: ["Which condition", "Frightened"], "Getting around": ["Climbing, swimming or rough ground", "climbing"] };
 // Where a Title's 5 Root points go, a tap at a time: All on puts all 5 on
 // one Root, + puts one more on a Root, and once all 5 are on, it takes that
 // one off the biggest of the others (the last of them on a tie, so Body keeps
@@ -828,14 +935,15 @@ export function nudgeSpread(roots, r, how, total = R.TITLE_ROOTS) {
 }
 const spreadSays = (roots) => ROOTS.filter((r) => roots[r]).map((r) => `${r} ${roots[r]}`).join(", ");
 // The groups of what a character's points went on.
-const SPENT = [["Titles", ["title", "perm", "boon"]], ["Archetypes", ["arch", "ability"]], ["Attuned", ["attuned", "awk"]], ["What you carry", ["item"]]];
+const SPENT = [["Titles", ["title", "perm"]], ["Archetypes", ["arch", "ability"]], ["Attuned", ["attuned", "awk"]], ["Items", ["item", "tier"]]];
 // A link inside a card would be a link inside a button, so cards keep the words only.
 const unlink = (html) => String(html ?? "").replace(/<a [^>]*>|<\/a>/g, "");
 
 export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule = () => "", tools = () => "" }) {
   const ARCH = new Map(B.archetypes.map((a) => [a.name, a]));
   const IDEA = new Map(B.ideas.map((x) => [x.id, x]));
-  const BOON = new Map((B.boons ?? []).map((x) => [x.lever, x]));
+  // The tiers' names off the book's table, the way roots.js says them.
+  R.useTiers(B.tiers);
   let slotKey = "new";
   let d = null; // { step, deep: {}, page, way, from, build, basis }
   let meta = {}; // for a saved character: { basis, crew, before }, crew being the crew member's name when they're still one
@@ -969,12 +1077,28 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
   // saved, one built before Roots moves onto it, and one built before
   // stacking keeps everything and hears what changed and what's theirs to
   // choose.
+  // One built before the fixes (17 Nov): its equipment's items now, its
+  // utility items and bag are in its notes, and each Boon's 2 points are
+  // there to spend.
+  function fixesNote() {
+    const x = b();
+    if (!changing() || !x.fixes || meta.before) return "";
+    const [they, their] = PRO[x.pronoun] ?? PRO.them;
+    const name = esc(x.name || "They");
+    const boons = x.titles.flatMap((t) => t.boonsGone ?? []);
+    const over = itemCount(x) - R.MAX_ITEMS;
+    const asks = [boons.length ? `${boons.length === 1 ? "a Boon’s" : `${boons.length} Boons’`} ${pts(2 * boons.length)} to spend` : "", over > 0 ? `${over === 1 ? "an item" : `${over} items`} to let go, since you carry six` : ""].filter(Boolean);
+    return `<div class="cc-note is-gold bd-fixes" role="status"><p>${name}’s things are items now${asks.length ? `, with ${both(asks)}` : ""}. ${tip("bd-fixes", [`Each thing ${they} wore or wielded is an item at tier 2, armour a tier up from its quality, and a shield’s a guard. Check what kind each one is.`, `Utility items and the bag have gone. What was in them is in ${their} notes, and any of it’s something to say with a Resource now.`, ...(boons.length ? [`Boons have gone from the rules, so ${both(boons.map((y) => `${esc(y.name || `the ${y.lever} Boon`)}`))} ${boons.length === 1 ? "is" : "are"} off ${their} sheet, and the points ${boons.length === 1 ? "it" : "they"} cost are ${their} to spend on anything else.`] : []), link("s-items", "Items in the rules")], "Items now")}</p></div>`;
+  }
   function crewNote() {
+    return `${crewNote1()}${fixesNote()}`;
+  }
+  function crewNote1() {
     if (!changing()) return "";
     const x = b();
     const [, their, theyre] = PRO[x.pronoun] ?? PRO.them;
     const name = esc(x.name || "They");
-    if (meta.before) return `<div class="cc-note is-gold" role="status"><p>${name} ${theyre === "they’re" ? "were" : "was"} built before the Roots change, so here’s everything that comes across. ${tip("bd-before", [`Each Title’s 5 Root points are spread the way its permissions lean, and each permission’s Root is a guess from its words or the set action it was on (it says which), so check them.`, `${cap(their)} archetypes keep every ability, ${their} attuned things’ permissions are awakenings now, each on ${their} biggest Root till you say, and traits have gone from the rules. Save it and ${theyre} back in play, with ${their} threads, Aspiration and notes as they were.`], "Rebuilding on Roots")}</p></div>`;
+    if (meta.before) return `<div class="cc-note is-gold" role="status"><p>${name} ${theyre === "they’re" ? "were" : "was"} built before the Roots change, so here’s everything that comes across. ${tip("bd-before", [`Each Title’s 5 Root points are spread the way its permissions lean, and each permission’s Root is a guess from its words or the set action it was on (it says which), so check them.`, `${cap(their)} archetypes keep the abilities they had, ${their} attuned things’ permissions are awakenings now, each on ${their} biggest Root till you say, and traits have gone from the rules. What ${PRO[x.pronoun]?.[0] ?? "they"} wore or wielded are items at tier 2, and ${their} utility items and bag are in ${their} notes, things to say with a Resource now. Save it and ${theyre} back in play, with ${their} threads, Aspiration and notes as they were.`], "Rebuilding on Roots")}</p></div>`;
     if (x.stack) {
       const left = pointsOf(x).left;
       const spread = x.titles.filter((t) => t.from).length;
@@ -1139,23 +1263,25 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     const trait = traitOf(a.trait);
     // What another of the same archetype has already.
     const twin = new Set(x.archs.flatMap((n, k) => (k !== i && n === a.name ? x.have[k] ?? [] : [])));
-    const abil = (ab) => {
+    // Each ability's its name and its Aura, a tap to pick it, and what it
+    // does behind its ?, so ten of them fit on a phone's screen.
+    const abil = (ab, j) => {
       const k = have.indexOf(ab.name);
       const say = k === 0 ? "Comes with it" : k > 0 ? "1 point" : twin.has(ab.name) ? `On your other ${esc(a.name)}` : "";
-      return card(`bd-abil${twin.has(ab.name) && k < 0 ? " is-twin" : ""}`, `data-b="abil" data-t="${i}" data-v="${esc(ab.name)}"`, k >= 0, `<b>${esc(ab.name)} <small>${Math.max(1, Number(ab.cost) || 1)} Aura</small></b><span class="bd-for">${unlink(ab.html ?? esc(ab.text))}</span>${say ? `<span class="bd-badge">${say}</span>` : ""}`);
+      const aura = Math.max(1, Number(ab.cost) || 1);
+      return `<div class="bd-abil-row">${card(`bd-abil${twin.has(ab.name) && k < 0 ? " is-twin" : ""}`, `data-b="abil" data-t="${i}" data-v="${esc(ab.name)}"`, k >= 0, `<b>${esc(ab.name)}</b><small>${aura} Aura</small>${say ? `<span class="bd-badge">${say}</span>` : ""}`)}${tip(`bd-ab-${i}-${j}`, [...paras(ab.html ?? esc(ab.text)), `${aura} Aura each time you use it.`], ab.name)}</div>`;
     };
-    const cost = have.length ? `${have.length} of ${a.abilities.length}, ${pts(4 + have.length)} with the archetype` : "pick the one it comes with";
+    const cost = have.length ? `${have.length} picked, ${pts(4 + have.length)} with the archetype` : "pick the one it comes with";
     return `<div class="bd-arch-what">
       <p class="bd-label">Its mechanic</p><p class="bd-mech">${a.summary}</p>
       ${trait.name ? `<p class="bd-label">Its Trait <small>always true of you</small></p><p class="bd-mech"><b>${esc(trait.name)}.</b> ${trait.html}</p>` : ""}
-      ${asked(`Its abilities <small>${cost}</small>`, `bd-ab-${i}`, [`An archetype’s ${pts(5)}, and it comes with one ability, your pick, Push included. The first you pick is the one it comes with, and each one after that is a point, up to six.`, `An ability costs Aura each time you use it, 1 unless it says.`], "Abilities", ` id="bd-ab-${i}-l"`)}
+      ${asked(`Its abilities <small>${cost}</small>`, `bd-ab-${i}`, [`An archetype’s ${pts(5)}, and it comes with one ability, your pick, Push included. The first you pick is the one it comes with, and each one after that is a point, up to six.`, `An ability costs Aura each time you use it, 1 unless it says. Tap an ability’s ? to read what it does.`], "Abilities", ` id="bd-ab-${i}-l"`)}
       <div class="bd-abils" role="group" aria-labelledby="bd-ab-${i}-l">${a.abilities.map(abil).join("")}</div>
       <p class="cc-small">${link(a.id, `The ${esc(a.name)} in full`)}</p></div>`;
   }
 
   // Step 2: name each Title, put its 5 Root points on your Roots, and write
-  // its permissions, each with its Root, three to start and six slots at
-  // most, two of which can be a Boon.
+  // its permissions, each with its Root, three to start and six at most.
   function stepTitles() {
     const x = b();
     const which = d.page ? x.titles.map((_, i) => i) : [tabOf()];
@@ -1195,28 +1321,12 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     return `<div class="bd-perm">${field(`t${i}.p${j}`, `Permission ${j + 1} <small>${says}${p.from ? `. ${esc(p.from)}` : ""}</small>`, p.text, { ph: "a doing word, and how, what or where", max: 120 })}
       <div class="bd-perm-how">${rootChips(`data-b="proot" data-t="${i}" data-j="${j}"`, p.root, `The Root for permission ${j + 1}`)}</div></div>`;
   }
-  function boonsView(t, i) {
-    const room = MAX_PERMS - slotsOf(t) >= R.BOON_SLOTS || t.perms.filter((p) => !p.text.trim()).length >= R.BOON_SLOTS;
-    const mine = t.boons.map((x, k) => {
-      const rul = BOON.get(x.lever);
-      const on = BOON_ON[x.lever];
-      return `<div class="bd-boon"><p><b>${esc(x.name.trim() || `The ${x.lever} Boon`)}</b> <small>${esc(x.lever)}${rul ? `: ${esc(rul.text)}` : ""}</small></p>
-        ${field(`t${i}.b${k}.name`, "Its name from the story, if you like", x.name, { ph: x.lever === "Toughness" ? "Iron Lungs" : "", max: 40 })}
-        ${on ? field(`t${i}.b${k}.on`, on[0], x.on, { ph: on[1], max: 60 }) : ""}
-        <div class="cc-row">${dropBtn(`boon${i}-`, k, "Take it off")}</div></div>`;
-    }).join("");
-    const offer = room ? `<div class="bd-items is-wide bd-boons">${(B.boons ?? []).map((x) => card("bd-item", `data-b="boon" data-t="${i}" data-v="${esc(x.lever)}"`, false, `<b>${esc(x.lever)}</b><span class="bd-for">${esc(cap(x.text))}</span>`)).join("")}</div>` : `<p class="cc-lead">${esc(titleName(t))} hasn’t got two slots free. Take two permissions off first.</p>`;
-    const open = d.deep[`boon${i}`] === true || t.boons.length > 0;
-    return `<details class="bd-more" data-open="bd-boon-${i}"${open ? " open" : ""}><summary>A Boon instead of two permissions${t.boons.length ? ` <small>${t.boons.length === 1 ? "one" : t.boons.length}</small>` : ""}</summary>
-      <p class="cc-lead">${pts(2)}, in two of this Title’s slots. ${tip(`bd-boons-${i}`, [`A Boon’s a permanent upgrade, like shrugging off the first hit each scene or a longer stride. It takes two of this Title’s slots, for ${pts(2)}, the same as the two permissions it takes the place of, and you can swap it back for permissions in downtime. A Boon does what it says, and it’s never a step on a roll.`, link("s-boons", "Boons and Burdens")], "Boons")}</p>
-      ${mine}${offer}</details>`;
-  }
   function titleView(t, i) {
     const idea = IDEA.get(t.idea);
     const used = new Set(t.perms.map((p) => p.text.trim().toLowerCase()));
     const offer = (perms) => `<div class="cc-chips bd-perms">${perms.map((p) => chip(`<em>${esc(p)}</em>`, `data-b="perm" data-t="${i}" data-v="${esc(p)}"`, used.has(p.toLowerCase()))).join("")}</div>`;
     const slots = slotsOf(t);
-    const cost = titleIn(t) ? pointsOf({ ...b(), titles: [t], archs: [], have: [], attuned: [], equipment: [], utility: [], bag: "" }).spent : 0;
+    const cost = titleIn(t) ? pointsOf({ ...b(), titles: [t], archs: [], have: [], attuned: [], items: [] }).spent : 0;
     return `<fieldset class="bd-title"><legend${d.page ? "" : ' class="sr-only"'}>Your ${ord(i)} Title</legend>
       ${ideasOf(t, i)}
       ${field(`t${i}.text`, `Your Title <small>${cost ? `${pts(cost)} with what’s on it` : pts(5)}</small>`, t.text, { ph: "Make it specific: the best blade in the Low Market", max: 120 })}
@@ -1227,7 +1337,6 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       ${slots < MAX_PERMS && t.perms.every((p) => p.text.trim()) ? `<div class="cc-row"><button type="button" class="button sm" data-act="b" data-b="addperm" data-t="${i}">Add a permission</button><span class="bd-cost">${pts(1)}</span></div>` : slots >= MAX_PERMS ? '<p class="cc-lead">That’s all six slots. Six is the most a Title holds.</p>' : ""}
       ${idea ? `<p class="cc-small">Tap one of the ${esc(idea.name)} idea’s permissions to put it in, and tap it again to take it out. Its Root’s a guess, so check it.</p>${offer(idea.permissions)}` : ""}
       ${d.deep[1] ? B.permIdeas.map((g) => `<p class="bd-label">${esc(g.for)}</p>${offer(g.perms)}`).join("") : ""}
-      ${boonsView(t, i)}
       ${canDrop("title") ? `<div class="cc-row">${dropBtn("title", i, "Take this Title off")}</div>` : ""}</fieldset>`;
   }
 
@@ -1261,51 +1370,62 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       ${awk ? `<h2><span>Your awakenings</span> ${tip("bd-wake", ["Each one locks a point of its Root while it’s attuned, so the Root holds a point less, but its dice don’t shrink. It’s 2 steps on any roll it fits, and 2 more for each Aura you put in it."], "Awakenings on a roll")}</h2><ul class="bd-things">${awk}</ul>` : ""}`;
   }
 
-  // Step 4: what you carry, picked from cards a part at a time, the attuned
-  // things first.
+  // Step 4: items, picked from cards a part at a time, the attuned things
+  // first, then the rest of your six, then the keepsake.
   function kitSwitch() {
     const x = b();
-    const n = numbersOf(x);
-    const count = (items, of) => `${items.filter((v) => v.text.trim()).length} of ${of}`;
-    const says = { a: x.attuned.some((a) => a.name.trim()) ? `${x.attuned.filter((a) => a.name.trim()).length} attuned` : "Not yet", e: count(x.equipment, 3), u: count(x.utility.slice(0, n.utility), n.utility), k: x.keepsake.text.trim() ? "Taken" : "Not yet" };
-    return `<div class="bd-switch is-kit" role="group" aria-label="What you carry">${KIT.map(([k, name]) => `<button type="button" class="bd-seg" data-act="b" data-b="kit" data-v="${k}"${k === kitOf() ? ' aria-current="true"' : ""}><span class="bd-seg-text"><small>${says[k]}</small><b>${name}</b></span></button>`).join("")}</div>`;
+    const says = { a: x.attuned.some((a) => a.name.trim()) ? `${x.attuned.filter((a) => a.name.trim()).length} attuned` : "Not yet", i: `${itemCount(x)} of ${R.MAX_ITEMS}`, k: x.keepsake.text.trim() ? "Taken" : "Not yet" };
+    return `<div class="bd-switch is-kit" role="group" aria-label="Items">${KIT.map(([k, name]) => `<button type="button" class="bd-seg" data-act="b" data-b="kit" data-v="${k}"${k === kitOf() ? ' aria-current="true"' : ""}><span class="bd-seg-text"><small>${says[k]}</small><b>${name}</b></span></button>`).join("")}</div>`;
+  }
+  // The tiers an item can be: 2 or 3 for a new character, and any of the six
+  // on a saved one, since Grow, money and the story raise them. Each says its
+  // name off the book's table.
+  const tiersFor = (now) => (changing() ? [1, 2, 3, 4, 5, 6] : [...new Set([R.START_TIER, R.MAX_START_TIER, now])].sort((p, q) => p - q));
+  const tierChips = (attrs, now, label, attuned = false) => `<div class="cc-chips bd-tiers" role="group" aria-label="${esc(label)}">${tiersFor(now).map((t) => chip(`${esc(R.tierName(t))} <small>${t}${!changing() && t > R.START_TIER ? ", a point more" : !changing() && attuned ? ", in its 5" : ""}</small>`, `${attrs} data-v="${t}"`, now === t, "sm")).join("")}</div>`;
+  const kindChips = (attrs, now, label) => `<div class="cc-chips bd-kinds" role="group" aria-label="${esc(label)}">${KINDS.map((k) => chip(KIND_NAME[k], `${attrs} data-v="${k}"`, now === k, "sm")).join("")}</div>`;
+  // What each kind does, off the book's own table, for a ?.
+  const kindsTip = (id) => tip(id, [...(B.kinds ?? []).map((k) => `<b>${esc(k.name)}.</b> ${unlink(k.html)}`), link("s-item-kinds", "Kinds of item")], "Kinds of item");
+  const propsTip = (id) => tip(id, [...(B.props ?? []).map((p) => `<b>${esc(p.name)}.</b> ${unlink(p.html)}`), link("s-weapon-props", "Weapon properties")], "Weapon properties");
+  // An item as it's said, its tier's name first: a Proven set of picks.
+  const itemSays = (name, tier) => cap(R.itemSaid({ name, tier }));
+  // What kind it is and what it's doing, in a few words.
+  const kindSays = (it) => `${KIND_NAME[it.kind].toLowerCase()}${it.kind === "armour" ? `, soaks ${it.tier} on your ${it.root || "Body"}` : it.kind === "guard" ? `, ${it.tier} steps getting out of the way` : it.kind === "pack" ? `, ${R.packRes(it.tier)} more ${R.packRes(it.tier) === 1 ? "Resource" : "Resources"}` : it.kind === "vessel" ? `, holds ${it.tier} charge` : `, ${it.tier} steps when it fits`}`;
+  // An item's kind, tier, Root and properties, the same for any item and
+  // for an attuned thing (w is a for the attuned thing, and i for an item).
+  function itemHow(it, w, k) {
+    const at = `data-i="${k}" data-w="${w}"`;
+    return `<p class="bd-label" id="bd-${w}k-${k}">What kind of item ${kindsTip(`bd-${w}kt-${k}`)}</p>${kindChips(`data-b="ikind" ${at}`, it.kind, "What kind of item")}
+      <p class="bd-label">Its tier <small>the steps it adds</small></p>${tierChips(`data-b="itier" ${at}`, it.tier, "Its tier", w === "a")}
+      ${it.kind === "armour" ? `<p class="bd-label">The Root it soaks on</p>${rootChips(`data-b="iroot" ${at}`, it.root || "Body", "The Root it soaks on")}` : ""}
+      ${it.kind === "weapon" ? `<details class="bd-more bd-props" data-open="bd-pr-${w}${k}"${d.deep[`pr${w}${k}`] === true ? " open" : ""}><summary>Its properties <small>${esc(it.props.join(", ") || "none yet")}</small></summary><p class="cc-small">What it can do that another weapon can’t. ${propsTip(`bd-${w}pt-${k}`)}</p><div class="cc-chips">${(B.props ?? []).map((p) => chip(esc(p.name), `data-b="iprop" ${at} data-v="${esc(p.name)}"`, it.props.includes(p.name), "sm")).join("")}</div></details>` : ""}`;
   }
   function stepCarry() {
     const x = b();
     const n = numbersOf(x);
-    atLeast(x.utility, Math.min(8, n.utility), line);
     const group = (name) => B.items.find((g) => g.group === name)?.items ?? [];
-    const has = new Set([...x.equipment, ...x.utility, x.keepsake].map((v) => v.text.trim().toLowerCase()).filter(Boolean));
-    // Item cards: a name, and what it does or says about you where the book has it.
-    const offer = (kind, label, items) => `<p class="bd-label">${label}</p><div class="bd-items${items.some((v) => v.say) ? " is-wide" : ""}">${items.map((v) => card("bd-item", `data-b="fillany" data-k="${kind}" data-v="${esc(v.name)}"`, has.has(v.name.toLowerCase()), `<b>${esc(cap(v.name))}</b>${v.say ? `<span class="bd-for">${v.say}</span>` : ""}`)).join("")}</div>`;
-    const plain = (items) => items.map((name) => ({ name }));
-    // A piece of equipment can be armour on the Root it guards, and armour
-    // picks its quality, with the boxes each one gives it.
-    const quality = (i, item) => `<div class="bd-quality" role="group" aria-labelledby="bd-q-${i}"><p class="bd-label" id="bd-q-${i}">How good is it? <small>a box for every hit it can take for you</small></p><div class="cc-chips">${(B.qualities ?? []).map((q) => chip(`<span>${esc(q.name)}</span>${kitBoxes(0, q.boxes, { label: `${q.boxes} ${q.boxes === 1 ? "box" : "boxes"}` })}`, `data-b="quality" data-i="${i}" data-v="${q.tier}"`, tierOf(item) === q.tier, "bd-qual")).join("")}</div></div>`;
-    const armOf = (i, item) => `<div class="bd-arm" role="group" aria-labelledby="bd-arm-${i}"><p class="bd-label" id="bd-arm-${i}">Is it armour? <small>${item.arm ? `on your ${item.arm}, a box for a hit there` : "on the Root it guards"}</small></p><div class="cc-chips">${chip("No", `data-b="arm" data-i="${i}" data-v=""`, !item.arm, "sm")}${ROOTS.map((r) => chip(r, `data-b="arm" data-i="${i}" data-v="${r}"`, item.arm === r, "sm")).join("")}</div></div>`;
-    const slot = (kind, i, label) => {
-      const ref = `${kind}${i}`;
-      const item = kind === "e" ? x.equipment[i] : x.utility[i];
-      return `<div class="bd-slot is-row">${field(ref, `<span class="sr-only">${label} </span>${i + 1}`, item.text, { max: 80, ph: "Type it, or pick a card below" })}
-        ${kind === "e" && item.text.trim() ? armOf(i, item) : ""}${kind === "e" && item.text.trim() && item.arm ? quality(i, item) : ""}</div>`;
-    };
-    const things = [...new Set([...x.equipment, ...x.utility, x.keepsake].map((v) => v.text.trim()).filter(Boolean))];
+    const count = itemCount(x);
+    const full = count >= R.MAX_ITEMS;
+    const bare = (label) => label.replace(/ ?<small>[\s\S]*<\/small>/, "");
     // Something you carry, or a signature thing: one often makes the best
-    // thing to attune.
+    // thing to attune. One of your items attuned moves off your other items,
+    // since it's one of your six already.
     const pick = (i, a, items) => `<div class="bd-items">${items.map((v) => card("bd-item", `data-b="fill" data-p="a${i}.name" data-v="${esc(v)}"`, a.name.trim() === v, `<b>${esc(cap(v))}</b>`)).join("")}</div>`;
-    const yours = (i, a) => `<div class="bd-namepick">${things.length ? `<p class="bd-label">Or one of the things you carry</p>${pick(i, a, things)}` : ""}<p class="bd-label">Or a signature thing</p>${pick(i, a, group("Signature").filter((v) => !things.includes(v)))}</div>`;
+    const mine = (i) => x.items.map((it, k) => [it, k]).filter(([it]) => itemIn(it));
+    const yours = (i, a) => `<div class="bd-namepick">${mine(i).length ? `<p class="bd-label">Or one of your items</p><div class="bd-items">${mine(i).map(([it, k]) => card("bd-item", `data-b="attitem" data-i="${i}" data-v="${k}"`, false, `<b>${esc(itemSays(it.text.trim(), it.tier))}</b>`)).join("")}</div>` : ""}<p class="bd-label">Or a signature thing</p>${pick(i, a, group("Signature"))}</div>`;
+    // What the attuned thing is as an item: one of your six, behind a fold
+    // with what it is now on it.
+    const asItem = (a, i) => `<details class="bd-more bd-asitem" data-open="bd-ai-${i}"${d.deep[`ai${i}`] === true ? " open" : ""}><summary>As an item <small>${esc(itemSays(KIND_NAME[a.kind].toLowerCase(), a.tier))}, one of your six</small></summary>${itemHow(a, "a", i)}</details>`;
     const catches = (i, a) => `<div class="bd-items is-wide bd-catches">${B.catches.map((c) => card("bd-item", `data-b="fill" data-p="a${i}.catch" data-v="${esc(c.name)}"`, a.catch.trim() === c.name, `<b>${esc(c.name)}</b><span class="bd-for">${esc(c.text)}</span>`)).join("")}</div>`;
     const drop = (i) => (canDrop("att") ? `<div class="cc-row">${dropBtn("att", i, "Take it off")}</div>` : "");
     // An awakening: its name, the Root it fits (which it locks a point of),
     // and what it does.
-    const bare = (label) => label.replace(/ ?<small>[\s\S]*<\/small>/, "");
     const awkRow = (a, i, w, j, label) => `<div class="bd-awk">${field(`a${i}.w${j}.name`, label, w.name, { max: 80, ph: j ? "Hit anything I can see" : "Anywhere I can throw a hook" })}
       <p class="bd-label" id="bd-awr-${i}-${j}">The Root it fits <small>${w.root ? `it locks a point of your ${w.root}${w.guessed ? ", till you say" : ""}` : "it locks a point of it"}</small></p><div class="cc-chips bd-roots" role="group" aria-labelledby="bd-awr-${i}-${j}">${ROOTS.map((r) => chip(r, `data-b="awkroot" data-i="${i}" data-j="${j}" data-v="${r}" aria-label="${esc(`${bare(label)}: ${r}`)}"`, w.root === r && !w.guessed, "sm")).join("")}</div>
       ${field(`a${i}.w${j}.text`, `<span class="sr-only">${bare(label)}: </span>What it does`, w.text, { max: 240, ph: "2 steps on every roll I make with it" })}</div>`;
-    const awkTip = (i) => tip(`bd-awk-${i}`, ["An awakening’s something the thing itself does, written the way you’d write a permission, with the Root it fits.", "It locks a point of that Root for as long as it’s attuned, so you hold a point less there, but you still roll all of it. It’s 2 steps on any roll it fits, and each Aura you put in it as you roll is 2 more.", link("s-attunement", "Attunement")], "Awakenings");
+    const awkTip = (i) => tip(`bd-awk-${i}`, ["An awakening’s something the thing itself does, written the way you’d write a permission, with the Root it fits.", "It locks a point of that Root for as long as it’s attuned, so you hold a point less there, but you still roll all of it. It’s 2 steps on any roll it fits, on top of the thing’s tier, and each Aura you put in it as you roll is 2 more.", link("s-attunement", "Attunement")], "Awakenings");
     // The Quick Build's: Awakened, one awakening, and a second with a Catch.
     const quick = (a, i) => `<fieldset class="bd-box bd-att"><legend>${x.attuned.length > 1 ? `Attuned thing ${i + 1}` : "Your attuned thing"} <small>${pts(5)}</small></legend>
-      ${field(`a${i}.name`, "What it is", a.name, { max: 80, ph: "a grappling line" })}${yours(i, a)}
+      ${field(`a${i}.name`, "What it is", a.name, { max: 80, ph: "a grappling line" })}${yours(i, a)}${asItem(a, i)}
       <div class="bd-ask"><p class="bd-label">Its awakening <small>it comes with one</small></p>${awkTip(i)}</div>
       ${awkRow(a, i, a.awk[0], 0, "Its awakening")}
       ${field(`a${i}.catch`, "Its Catch, if you’d like a second awakening, free", a.catch, { max: 60, ph: "Wanted" })}${catches(i, a)}
@@ -1315,7 +1435,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       const r = roomOf(a);
       const off = (j) => (j >= r.all ? "until it goes up a stage" : `until it’s got ${both(r.missing.map((m) => (m === "catch" ? "its Catch" : "its Burden")))}`);
       return `<fieldset class="bd-box bd-att is-grown"><legend>Attuned thing ${i + 1}</legend>
-        ${field(`a${i}.name`, "What it is", a.name, { max: 80, ph: "a grappling line" })}${yours(i, a)}
+        ${field(`a${i}.name`, "What it is", a.name, { max: 80, ph: "a grappling line" })}${yours(i, a)}${asItem(a, i)}
         <p class="bd-label" id="bd-stage-${i}">Its stage</p><div class="cc-chips" role="group" aria-labelledby="bd-stage-${i}">${R.STAGES.map((st) => chip(st, `data-b="stage" data-i="${i}" data-v="${st}"`, r.stage === st)).join("")}</div>
         <p class="cc-small">${r.stage} holds ${r.base}, and ${r.base} more with ${PRICE[r.stage]}. ${tip(`bd-stages-${i}`, ["An attuned thing grows in three stages, and each new stage needs a material, found in the story or bought. Awakened holds 1, and 1 more with a Catch. Tempered holds 2, and 2 more with a Burden. Perfected holds 3, and 3 more with a Burden and a Catch.", link("attunement-stages", "The three stages")], "The three stages")}</p>
         ${field(`a${i}.catch`, "Its Catch", a.catch, { max: 80, ph: "Wanted" })}${catches(i, a)}
@@ -1325,23 +1445,40 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
         ${a.awk.length < 6 ? `<div class="cc-row"><button type="button" class="button sm" data-act="b" data-b="addawk" data-i="${i}">Add an awakening</button></div>` : '<p class="cc-lead">Six awakenings is the most anything holds.</p>'}
         ${drop(i)}</fieldset>`;
     };
+    // An item: a line with its name, its tier's name and what it does, and a
+    // tap opens what it is, its kind, its tier and the rest. A new one's open.
+    const itemCard = (it, i) => {
+      const open = !itemIn(it) || d.deep[`it${i}`] === true;
+      return `<details class="bd-it" data-open="bd-it-${i}"${open ? " open" : ""}><summary><span class="bd-it-name">${itemIn(it) ? esc(itemSays(it.text.trim(), it.tier)) : "A new item"}</span> <small>${esc(kindSays(it))} · ${pts(itemCost(it))}</small></summary><div class="bd-it-in">
+        ${field(`i${i}`, "What it is", it.text, { max: 80, ph: "Type it, or pick one below" })}
+        ${itemHow(it, "i", i)}
+        <div class="cc-row">${dropBtn("item", i, "Take it off")}</div></div></details>`;
+    };
+    // Each attuned thing at the top of your six, said, with a tap back to it.
+    const attLine = (a, i) => `<li><button type="button" class="bd-it-att" data-act="b" data-b="kit" data-v="a"><span class="bd-it-name">${esc(itemSays(thingName(a), a.tier))}</span> <small>${esc(kindSays(a))} · attuned, ${a.tier > R.START_TIER ? `${pts(itemCost(a, true))} on its 5` : "in its 5"}</small></button></li>`;
+    const has = new Set(x.items.filter(itemIn).map((it) => bareName(it.text)));
+    const offer = (label, items) => `<p class="bd-label">${label}</p><div class="bd-items">${items.map((v) => {
+      const it = itemFor(v, B);
+      return card("bd-item", `data-b="additem" data-v="${esc(v)}"`, has.has(bareName(it.text)), `<b>${esc(cap(it.text))}</b>`);
+    }).join("")}</div>`;
+    const ideasOpen = d.deep.kitideas ?? (!x.items.some(itemIn) && !d.page);
     // A part's heading: its section's named by the words in it, and the rest's behind its ?.
     const head2 = (id, title, words, label, small = "") => `<h2><span id="${id}">${title}</span>${small ? ` <small>${small}</small>` : ""} ${tip(`${id}-t`, words, label)}</h2>`;
+    const res = n.res;
     const parts = {
-      a: `<section class="bd-carry" aria-labelledby="bd-at">${head2("bd-at", changing() ? "Attuned things" : "Attune something", ["An attuned thing’s bound to you, and it grows with you. It’s 5 points, and it comes with one awakening, which locks a point of the Root it fits. It doesn’t touch your Aura.", "It doesn’t count towards what you carry, and it can’t be broken.", "Give it a Catch, trouble the GM can run with, and it gets a second awakening, free. That’s all an Awakened thing holds, so the rest come as it grows.", link("s-attunement", "Attunement")], "Attunement")}
+      a: `<section class="bd-carry" aria-labelledby="bd-at">${head2("bd-at", changing() ? "Attuned things" : "Attune something", ["An attuned thing’s bound to you, and it grows with you. It’s 5 points, and it comes with one awakening, which locks a point of the Root it fits. It doesn’t touch your Aura.", "It’s one of your six items, and its 5 covers it at tier 2. A point more puts it up to tier 3. It can’t be broken.", "Give it a Catch, trouble the GM can run with, and it gets a second awakening, free. That’s all an Awakened thing holds, so the rest come as it grows.", link("s-attunement", "Attunement")], "Attunement")}
         ${x.attuned.map((a, i) => (changing() ? grown(a, i) : quick(a, i))).join("")}
         ${x.attuned.length < MAX_ATTUNED ? `<div class="cc-row"><button type="button" class="button" data-act="b" data-b="addatt">${x.attuned.length ? "Attune another thing" : "Attune something"}</button><span class="bd-cost">${pts(5)}</span></div>` : ""}</section>`,
-      e: `<section class="bd-carry" aria-labelledby="bd-eq">${head2("bd-eq", "3 equipment", [`What you wear or wield, a point each. Armour goes on the Root it guards: plate, leathers and a shield on your Body, clothes that fit the scene on your Mind, a holy symbol or a ward on your Soul. ${changing() ? "Each piece is Common, Fine or Masterwork, with a box for every hit it can take for you instead of a point." : "Each piece is Common, with a box for a hit it can take for you instead of a point, and one can be Fine, with two."}`, "A plain item does what it is. It’s never a step or a Root.", link("s-armour", "Armour")], "Equipment", "1 point each")}
-        ${x.equipment.map((e, i) => slot("e", i, "Equipment")).join("")}
-        ${offer("e", "Weapons", plain(group("Weapons")))}${offer("e", "Armour and wearables", plain(group("Armour & wearables")))}</section>`,
-      u: `<section class="bd-carry" aria-labelledby="bd-ut">${head2("bd-ut", `${n.utility} utility items`, ["Tools and things you use up, a point each. Each one does what it is, and something you use up is crossed off once it’s used.", "Your bag holds 10 more, a point each. Nothing in it can be used till you’ve pulled it out, and that takes your action."], "Utility items", "1 point each")}
-        ${x.utility.slice(0, n.utility).map((u, i) => slot("u", i, "Utility")).join("")}
-        ${offer("u", "Tools", plain(group("Tools")))}${offer("u", "Foci", plain(group("Foci")))}${offer("u", "Things you use up", B.usedUp.map((u) => ({ name: u.name, say: unlink(u.html) })))}
-        ${d.deep[4] ? `<h2 id="bd-bag">Your bag <small>1 point each</small></h2>${field("bag", "Up to 10 more things, one a line", x.bag, { area: true, max: 600 })}` : ""}
-        <div class="cc-row"><button type="button" class="button sm" data-act="b" data-b="deep" data-s="4"${pressed(d.deep[4])}>${d.deep[4] ? "Put the bag away" : "Pack your bag too"}</button></div></section>`,
-      k: `<section class="bd-carry" aria-labelledby="bd-ks">${head2("bd-ks", "A keepsake", ["Something that matters to your character. It’s free."], "Your keepsake", "free")}
+      i: `<section class="bd-carry" aria-labelledby="bd-is">${head2("bd-is", "Your items", [`Real gear you’ve got on you: a weapon, a shield, armour, or a tool good enough to matter. You carry six at most, your attuned thing among them.`, `An item’s 1 point and comes at tier 2${changing() ? "" : ", and a point more puts it up to tier 3, the most you start with"}. When it fits what you’re doing, its tier’s that many steps on top of your Root, one item a roll.`, "A weapon or a tool adds its tier to a roll it fits. A guard adds its tier only when you’re getting out of the way. Armour soaks its tier on its Root, a pack gives you more Resources, and a vessel holds its tier in charge.", link("s-items", "Items")], "Items", `${count} of ${R.MAX_ITEMS}`)}
+        <ul class="bd-its">${x.attuned.filter(thingIn).map(attLine).join("")}</ul>
+        ${x.items.map(itemCard).join("")}
+        ${full ? `<p class="cc-lead">That’s ${count === R.MAX_ITEMS ? "six, the most you carry" : `${count}, and you carry six at most`}.</p>` : `<div class="cc-row"><button type="button" class="button" data-act="b" data-b="additem">Add an item</button><span class="bd-cost">${pts(1)}</span></div>`}
+        ${full ? "" : `<details class="bd-more bd-kitideas" data-open="bd-kitideas"${ideasOpen ? " open" : ""}><summary>Items from the book</summary>${[["Weapons", "Weapons"], ["Guards", "Guards"], ["Armour", "Armour"], ["Tools", "Tools"], ["Foci", "Foci"], ["Packs", "Packs"], ["Vessels", "Vessels"]].map(([g, label]) => offer(label, group(g))).join("")}</details>`}
+        <p class="cc-lead bd-res">You’ve got ${res === R.RES_BASE ? "3 Resources" : `${res} Resources, 3 and ${res - R.RES_BASE} from your ${res - R.RES_BASE === 1 ? "pack" : "packs"}`} as well, with nothing to write. ${tip("bd-res-t", [`A Resource is something ordinary you happen to have, said in the moment you need it: “as it happens, I’ve got rope on me”. Say it, tick one, and it’s real.`, "You don’t list them ahead of time. Anything ordinary you could have on you, never magic, and never good enough to be steps, since that’s an item. Something you use up, like a smoke bomb, is gone once it’s used.", `Everyone’s got 3, a pack gives more, and they all come back in downtime.`, link("s-resources", "Resources")], "Resources")}</p></section>`,
+      k: `<section class="bd-carry" aria-labelledby="bd-ks">${head2("bd-ks", "A keepsake", ["Something that matters to your character. It’s free, on top of your six items, and it’s story, never steps."], "Your keepsake", "free")}
         <div class="bd-slot is-row">${field("k", '<span class="sr-only">Keepsake </span>1', x.keepsake.text, { max: 80, ph: "Type it, or pick a card below" })}</div>
-        ${offer("k", "Keepsakes", B.keepsakes.map((k) => ({ name: k.name, say: esc(k.text) })))}${offer("k", "Signature things", plain(group("Signature")))}</section>`,
+        <p class="bd-label">Keepsakes</p><div class="bd-items is-wide">${B.keepsakes.map((v) => card("bd-item", `data-b="keep" data-v="${esc(v.name)}"`, x.keepsake.text.trim().toLowerCase() === v.name.toLowerCase(), `<b>${esc(cap(v.name))}</b><span class="bd-for">${esc(v.text)}</span>`)).join("")}</div>
+        <p class="bd-label">Signature things</p><div class="bd-items">${group("Signature").map((v) => card("bd-item", `data-b="keep" data-v="${esc(v)}"`, x.keepsake.text.trim().toLowerCase() === v.toLowerCase(), `<b>${esc(cap(v))}</b>`)).join("")}</div></section>`,
     };
     if (d.page) return KIT.map(([k]) => parts[k]).join("");
     return `${kitSwitch()}${parts[kitOf()]}`;
@@ -1413,14 +1550,11 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
   function stepCheck() {
     const x = b();
     const n = numbersOf(x);
-    const p = pointsOf(x, n);
+    const p = pointsOf(x);
     const checks = checksOf(x, B, { changing: changing() });
     const trouble = [...new Set(x.titles.flatMap((t) => IDEA.get(t.idea)?.trouble ?? []))];
-    const boons = x.titles.flatMap((t) => t.boons);
-    const said = (lever) => boons.filter((y) => y.lever === lever).map((y) => y.name.trim() || `the ${lever} Boon`);
     const num = (k, v, note, piece = "", cls = "") => `<li${cls ? ` class="${cls}"` : ""}><span class="bd-num-text"><span class="k">${k}</span> <b>${v}</b>${note ? ` <small>(${esc(note)})</small>` : ""}</span>${piece}</li>`;
     const go = (c) => (c.step == null ? "" : `<button type="button" class="button sm" data-act="b" data-b="go" data-s="${c.step}"${c.t != null ? ` data-t="${c.t}"` : ""}${c.a != null ? ` data-a="${c.a}"` : ""}${c.kit ? ` data-k="${c.kit}"` : ""}>${d.page ? STEPS[c.step].name : `Step ${c.step + 1}`}</button>`);
-    const auraNote = said("Aura");
     return `<fieldset class="bd-box"><legend>Who they are</legend>
         ${field("name", "Name", x.name, { max: 40 })}
         <p class="bd-label" id="bd-pro">Call them</p><div class="cc-chips" role="group" aria-labelledby="bd-pro">${[["her", "she, her"], ["him", "he, him"], ["them", "they, them"]].map(([v, l]) => chip(l, `data-b="pronoun" data-v="${v}"`, x.pronoun === v)).join("")}</div>
@@ -1429,11 +1563,11 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       <p class="cc-lead bd-pts-line">${p.spent} of ${p.start} spent${p.left > 0 ? `, ${p.left} left` : p.left < 0 ? `, ${-p.left} over` : ", all of them"}.</p>
       ${spentList(p)}${startStepper("check")}
       <h2>Your numbers</h2><ul class="bd-nums">
-        ${num("Aura", n.aura, auraNote.length ? both(auraNote) : null, kitAura(n.aura, n.aura), "is-wide")}
-        ${num("Stride", n.stride, said("Stride").length ? both(said("Stride")) : null)}
+        ${num("Aura", n.aura, null, kitAura(n.aura, n.aura), "is-wide")}
+        ${num("Stride", n.stride, null)}
+        ${num("Resources", n.res, n.res > R.RES_BASE ? `3, and ${n.res - R.RES_BASE} from your ${n.res - R.RES_BASE === 1 ? "pack" : "packs"}` : "said when you need them")}
       </ul>
       <h2><span>Your Roots</span> <small>every one full to start</small></h2>${rootTiles()}
-      ${boons.length ? `<h2>Your Boons</h2><ul class="cc-list">${boons.map((y) => `<li class="cc-item"><p><b>${esc(y.name.trim() || y.lever)}</b>${y.name.trim() ? ` <small>${esc(y.lever)}</small>` : ""} ${esc(BOON.get(y.lever)?.text ?? "")}${y.on.trim() ? ` (${esc(y.on.trim())})` : ""}</p></li>`).join("")}</ul>` : ""}
       ${trouble.length || x.trouble.length || changing() ? `<h2><span>Trouble that follows you</span> ${tip("bd-trouble", ["If you like. Let it cause real trouble and you take 1 Aura."], "Trouble")}</h2>${trouble.length || x.trouble.length ? `<div class="cc-chips">${[...new Set([...trouble, ...x.trouble])].map((t) => chip(`<em>${esc(t)}</em>`, `data-b="trouble" data-v="${esc(t)}"`, x.trouble.includes(t))).join("")}</div>` : ""}
         <div class="cc-form">${field("newtrouble", "Or write your own", "", { max: 120, ph: "owes the wrong people" })}<button type="button" class="button" data-act="b" data-b="addtrouble">Add it</button></div>` : ""}
       ${checks.length ? `<div class="cc-note is-warn"><p>A few things to look at. You can save anyway, and change them later.</p><ul class="bd-checks">${checks.map((c) => `<li>${esc(c.text)} ${go(c)}</li>`).join("")}</ul></div>` : '<p class="cc-note" role="status">Everything adds up.</p>'}`;
@@ -1509,19 +1643,19 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     let m;
     if ((m = path.match(/^t(\d+)\.text$/))) set(x.titles[m[1]], "text");
     else if ((m = path.match(/^t(\d+)\.p(\d+)$/))) set(x.titles[m[1]]?.perms[m[2]], "text");
-    else if ((m = path.match(/^t(\d+)\.b(\d+)\.(name|on)$/))) set(x.titles[m[1]]?.boons[m[2]], m[3]);
-    else if ((m = path.match(/^e(\d)$/))) {
-      const item = x.equipment[m[1]];
-      if (!item) return;
-      const wasArmour = ARMOUR.test(item.text);
-      item.text = v;
-      // Plate, leathers and a shield going in put the piece on the Body, and
-      // taking them out takes it off, unless the player's said otherwise.
-      if (wasArmour !== ARMOUR.test(v) && (!item.arm || item.arm === "Body")) {
-        item.arm = ARMOUR.test(v) ? "Body" : "";
-        if (!item.arm) delete item.q;
+    else if ((m = path.match(/^i(\d+)$/))) {
+      const it = x.items[m[1]];
+      if (!it) return;
+      const before = itemIn(it) ? itemFor(it.text, B) : null;
+      it.text = v;
+      // While it's still what its words first made it, its kind follows
+      // what's typed: plate's armour on the Body, a longbow's a weapon with
+      // its properties. Once the player's picked, it's theirs.
+      if (!before || (before.kind === it.kind && (it.kind !== "weapon" || before.props.join() === it.props.join()))) {
+        const now = itemFor(v, B);
+        Object.assign(it, { kind: now.kind, root: now.kind === "armour" ? it.root || now.root : "", props: now.props });
       }
-    } else if ((m = path.match(/^u(\d)$/))) set(x.utility[m[1]], "text");
+    }
     else if (path === "k") x.keepsake.text = v;
     else if ((m = path.match(/^a(\d+)\.(name|catch|burden)$/))) set(x.attuned[m[1]], m[2]);
     else if ((m = path.match(/^a(\d+)\.w(\d+)\.(name|text)$/))) {
@@ -1533,7 +1667,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     } else if ((m = path.match(/^th(\d+)\.person$/))) for (const j of bondsDrawn.get(Number(m[1])) ?? [Number(m[1])]) set(x.threads[j], "person");
     else if ((m = path.match(/^th(\d+)\.text$/))) set(x.threads[m[1]], "text");
     else if ((m = path.match(/^cq(\d+)$/))) x.connect[m[1]] = v;
-    else if (["asp", "name", "blurb", "bag"].includes(path)) x[path === "asp" ? "aspiration" : path] = v;
+    else if (["asp", "name", "blurb"].includes(path)) x[path === "asp" ? "aspiration" : path] = v;
     else return; // newtrouble is read when its button's tapped
     saveSoon();
     refreshSoon();
@@ -1752,29 +1886,6 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       if (slotsOf(t) >= MAX_PERMS) return toast("That’s all six slots. Six is the most a Title holds.", false);
       t.perms.push(blankPerm());
       then = focusIn(`#b-t${i}-p${t.perms.length - 1}`);
-    } else if (k === "boon") {
-      const t = x.titles[i];
-      if (!t || !BOON.has(v)) return;
-      // A Boon takes two slots: two empty permission lines go, or two more
-      // slots if the Title's got them.
-      const empty = t.perms.map((p, q) => (p.text.trim() ? -1 : q)).filter((q) => q >= 0);
-      if (MAX_PERMS - slotsOf(t) < R.BOON_SLOTS) return toast("That Title hasn’t got two slots free. Take two permissions off first.", false);
-      for (const q of empty.slice(-R.BOON_SLOTS).sort((p, q) => q - p)) t.perms.splice(q, 1);
-      t.boons.push({ lever: v, name: "", on: "" });
-      then = focusIn(`#b-t${i}-b${t.boons.length - 1}-name`);
-    } else if (k.startsWith("dropboon")) {
-      const m = k.match(/^dropboon(\d+)-$/);
-      const t = m && x.titles[Number(m[1])];
-      const at = Number(el.dataset.i);
-      if (!t || !t.boons[at]) return;
-      if (armed !== `${k.slice(4)}${at}` && (t.boons[at].name.trim() || t.boons[at].on.trim())) {
-        dropping = `${k.slice(4)}${at}`;
-        return render();
-      }
-      t.boons.splice(at, 1);
-      // Its two slots are permissions again, on a new character.
-      if (!changing()) for (let q = 0; q < R.BOON_SLOTS && slotsOf(t) + t.perms.filter((p) => !p.text.trim()).length < 3; q++) t.perms.push(blankPerm());
-      if (!t.perms.length && !t.boons.length) t.perms.push(blankPerm());
     } else if (k === "addtitle") {
       if (x.titles.length >= MAX_TITLES) return;
       // A Title from an Aspiration comes with one permission. The Quick Build's come with three.
@@ -1782,6 +1893,20 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       const n = x.titles.length - 1;
       d.deep.tab = n;
       then = focusIn(`#b-t${n}-text`);
+    } else if (k === "dropitem") {
+      const it = x.items[i];
+      if (!it) return;
+      if (itemIn(it) && armed !== `item${i}`) {
+        dropping = `item${i}`;
+        return render();
+      }
+      x.items.splice(i, 1);
+      // The folds that are open follow the items that are left.
+      for (const key of ["it", "pri"]) {
+        for (let q = i; q < x.items.length; q++) d.deep[`${key}${q}`] = d.deep[`${key}${q + 1}`];
+        delete d.deep[`${key}${x.items.length}`];
+      }
+      then = focusIn('[data-b="additem"]', ".bd-its + *");
     } else if (["droptitle", "droparch", "dropatt", "dropthread"].includes(k)) {
       const kind = k.slice(4);
       const arr = kind === "title" ? x.titles : kind === "arch" ? x.archs : kind === "att" ? x.attuned : x.threads;
@@ -1797,7 +1922,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       if (kind === "arch") x.have.splice(i, 1);
       if (kind === "title" || kind === "arch") {
         // The switch and the open pickers follow the ones that are left.
-        const keys = kind === "title" ? ["ideas", "idea", "boon"] : ["pick"];
+        const keys = kind === "title" ? ["ideas", "idea"] : ["pick"];
         for (const key of keys) {
           for (let q = i; q < arr.length; q++) d.deep[`${key}${q}`] = d.deep[`${key}${q + 1}`];
           delete d.deep[`${key}${arr.length}`];
@@ -1824,16 +1949,44 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       delete a.awk[j].guessed;
     } else if (k === "stage") {
       if (x.attuned[i] && R.STAGES.includes(v)) x.attuned[i].stage = v;
-    } else if (k === "arm") {
-      const e2 = x.equipment[i];
-      if (!e2) return;
-      e2.arm = rootOf(v);
-      if (!e2.arm) delete e2.q;
-    } else if (k === "quality") {
-      const e2 = x.equipment[i];
-      if (!e2 || ![1, 2, 3].includes(Number(v))) return;
-      if (Number(v) > 1) e2.q = Number(v);
-      else delete e2.q;
+    } else if (k === "additem") {
+      // A card adds that item at tier 2, its kind from the book, and a second
+      // tap takes it back off. The button adds an empty one to write in.
+      if (v) {
+        // The book's items stay open while they're being picked from.
+        d.deep.kitideas = true;
+        const it = itemFor(v, B);
+        const at = x.items.findIndex((y) => itemIn(y) && bareName(y.text) === bareName(it.text));
+        if (at >= 0) {
+          x.items.splice(at, 1);
+          return (save(), render());
+        }
+      }
+      if (itemCount(x) >= R.MAX_ITEMS) return toast("That’s six items, the most you carry. Take one off first.", false);
+      x.items.push(v ? itemFor(v, B) : blankItem());
+      const n = x.items.length - 1;
+      if (!v) then = focusIn(`#b-i${n}`);
+    } else if (["ikind", "itier", "iroot", "iprop"].includes(k)) {
+      const it = el.dataset.w === "a" ? x.attuned[i] : x.items[i];
+      if (!it) return;
+      if (k === "ikind") {
+        it.kind = kindAt(v);
+        it.root = it.kind === "armour" ? it.root || "Body" : "";
+        it.props = it.kind === "weapon" ? (it.props.length ? it.props : weaponProps(it.text ?? it.name, B)) : [];
+      } else if (k === "itier") it.tier = tierAt(v);
+      else if (k === "iroot") it.root = rootOf(v) || "Body";
+      else it.props = it.props.includes(v) ? it.props.filter((p) => p !== v) : propsOf([...it.props, v]);
+      then = focusIn(`[data-b="${k}"][data-w="${el.dataset.w}"][data-i="${i}"][data-v="${CSS.escape(v)}"]`);
+    } else if (k === "attitem") {
+      // One of your items attuned is that item, so it moves off the rest.
+      const a = x.attuned[i];
+      const it = x.items[Number(v)];
+      if (!a || !it || !itemIn(it)) return;
+      Object.assign(a, { name: it.text.trim(), kind: it.kind, tier: it.tier, root: it.root, props: [...it.props] });
+      x.items.splice(Number(v), 1);
+    } else if (k === "keep") {
+      // A second tap on the card it's from takes it back off.
+      x.keepsake.text = x.keepsake.text.trim().toLowerCase() === v.toLowerCase() ? "" : v;
     } else if (k === "addthread") {
       if (x.threads.length >= MAX_THREADS) return;
       x.threads.push(blankThread());
@@ -1847,23 +2000,13 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     } else if (k === "fill") {
       const m = el.dataset.p.match(/^a(\d+)\.(name|catch)$/);
       // A second tap on the card it's from takes it back off.
-      if (m && x.attuned[m[1]]) x.attuned[m[1]][m[2]] = x.attuned[m[1]][m[2]].trim() === v ? "" : v;
-    } else if (k === "fillany") {
-      const kind = el.dataset.k;
-      const items = kind === "e" ? x.equipment : kind === "u" ? x.utility.slice(0, numbersOf(x).utility) : [x.keepsake];
-      const at = items.findIndex((it) => it.text.trim().toLowerCase() === v.toLowerCase());
-      if (at >= 0) {
-        items[at].text = "";
-        if (kind === "e") {
-          items[at].arm = "";
-          delete items[at].q;
-        }
-      } else {
-        const free = kind === "k" ? 0 : items.findIndex((it) => !it.text.trim());
-        if (free < 0) return toast("That’s full. Tap one to take it off, or change one by hand.", false);
-        items[free].text = v;
-        // Plain armour and a shield guard your Body.
-        if (kind === "e") items[free].arm = ARMOUR.test(v) ? "Body" : "";
+      const a = m && x.attuned[m[1]];
+      if (a) a[m[2]] = a[m[2]].trim() === v ? "" : v;
+      // A thing picked off a card is the kind of item its words say, a
+      // blade a weapon, till the player says otherwise.
+      if (a && m[2] === "name" && a.name) {
+        const it = itemFor(a.name, B);
+        Object.assign(a, { kind: it.kind, root: it.root, props: it.props });
       }
     } else if (k === "kind") {
       if (!x.threads[i]) return;
@@ -1914,10 +2057,10 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     if (!d) return;
     const key = el.dataset.open ?? "";
     let m;
-    const name = (m = key.match(/^bd-q-(\d+)$/)) ? `q${m[1]}` : (m = key.match(/^bd-ideas-(\d+)$/)) ? `idea${m[1]}` : (m = key.match(/^bd-boon-(\d+)$/)) ? `boon${m[1]}` : key === "bd-qs" ? "qs" : key === "bd-pts" ? "pts" : "";
+    const name = (m = key.match(/^bd-q-(\d+)$/)) ? `q${m[1]}` : (m = key.match(/^bd-ideas-(\d+)$/)) ? `idea${m[1]}` : (m = key.match(/^bd-(it|ai)-(\d+)$/)) ? `${m[1]}${m[2]}` : (m = key.match(/^bd-pr-([ai]\d+)$/)) ? `pr${m[1]}` : key === "bd-kitideas" ? "kitideas" : key === "bd-qs" ? "qs" : key === "bd-pts" ? "pts" : "";
     if (!name) return;
     // A redraw puts a fold back the way it was, which isn't a change.
-    const now = name.startsWith("idea") ? d.deep[name] ?? !d.page : d.deep[name] === true;
+    const now = name.startsWith("idea") ? d.deep[name] ?? !d.page : name === "kitideas" ? Boolean(d.deep.kitideas ?? (!b().items.some(itemIn) && !d.page)) : /^it\d/.test(name) ? d.deep[name] === true || !itemIn(b().items[Number(name.slice(2))] ?? { text: "x" }) : d.deep[name] === true;
     if (now === el.open) return;
     d.deep[name] = el.open;
     saveSoon();

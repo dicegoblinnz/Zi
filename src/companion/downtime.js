@@ -1,60 +1,64 @@
 // Downtime on the phone: two slots, and what they buy lands on the sheet when
 // the player finishes, with one undo for the lot. On the new core (Mo's 16
-// Nov rework, prompt 5 of notes/core-plan.md), every downtime starts with
-// everything back, free: every Root full, every wound gone and Toll cleared,
-// so there's no slot to recover in any more. The choices are Downtime's: face
-// a pressure, mend something, grow (a permission, an ability, the
-// Aspiration, a bond, something to carry), a new awakening on an attuned
-// thing, or a slot toward the crew. A slot buys what a point does: a
-// permission written with its Root, an ability off an archetype's list, or an
-// awakening with the Root it locks a point of, a slot each. An Aspiration
-// has no roll (Mo's answer, 16 Nov): a slot's a point in it, and at 5 it
-// comes good, bringing a new Title (its 5 Root points spread and its one
-// permission), a new archetype (with the ability it comes with) or a new
+// Nov rework, prompt 5 of notes/core-plan.md) and the 17 Nov fixes (prompt 6
+// of notes/fixes-plan.md), every downtime starts with everything back, free:
+// every Root full, every wound gone and Toll cleared, every piece of
+// armour's soak and all your Resources, so there's no slot to recover in.
+// A vessel keeps its charge. The choices are Downtime's: face a pressure,
+// mend something that's broken, grow (a permission, an ability, an item a
+// tier up as far as 3, the Aspiration, a Scar, a bond, or something to
+// carry, an item at tier 2 among them), a new awakening on an attuned thing,
+// or a slot toward the crew. A slot buys what a point does: a permission
+// written with its Root, an ability off an archetype's list, an awakening
+// with the Root it locks a point of, an item at tier 2 or a tier on one, a
+// slot each. You carry six items at most, so a seventh means one goes. An
+// Aspiration has no roll (Mo's answer, 16 Nov): a slot's a point in it, and
+// at 5 it comes good, bringing a new Title (its 5 Root points spread and its
+// one permission), a new archetype (with the ability it comes with) or a new
 // attuned thing (with its awakening). A slot can go on a Scar too, and its
-// third grows it into a Trait. Swapping a permission, two
-// permissions for a Boon, mending a strained bond thread and marking that you
-// did right by someone you've a hostile thread with don't take a slot. The
-// card's a draft until it's finished, kept on the page by character (not
-// saved), so closing it and coming back keeps what's picked. Every
-// explanation on it is a question bubble (tip.js).
-// Till the play screen's on the new core (prompt 4), the state it hands this
-// card is stacking's, with tracks and no points, so everything back is every
-// track on d12, and its Scars are by track, read as the Root each was on.
+// third grows it into a Trait. Swapping a permission, mending a strained
+// bond thread and marking that you did right by someone you've a hostile
+// thread with don't take a slot. There are no Boons, so nothing swaps
+// permissions for one, or one back. The card's a draft until it's finished,
+// kept on the page by character (not saved), so closing it and coming back
+// keeps what's picked. Every explanation on it is a question bubble
+// (tip.js).
+// A state from stacking, with tracks and no points, still opens: everything
+// back is every track on d12, and its Scars are by track, read as the Root
+// each was on.
 
 import { nudgeSpread } from "./builder.js";
 import * as R from "./roots.js";
 import { tip } from "./tip.js";
 import { bondKey, threadKey, threadState } from "./threads.js";
-import { isBroken, keyOf, many, mend, nameOf, pieceAt, tickedOf, worn, yours } from "./armour.js";
+import { mend } from "./armour.js";
 
 const CHOICES = [
   ["Face a pressure", [["pressure", "Deal with a pressure"]]],
   ["Mend", [["mend", "Mend something"]]],
-  ["Grow", [["perm", "A new permission"], ["ability", "A new ability"], ["asp", "A point in your Aspiration"], ["scar", "Grow a Scar"], ["thread", "Deepen a bond"], ["get", "Get something"]]],
+  ["Grow", [["perm", "A new permission"], ["ability", "A new ability"], ["tier", "Raise an item a tier"], ["asp", "A point in your Aspiration"], ["scar", "Grow a Scar"], ["thread", "Deepen a bond"], ["get", "Get something"]]],
   ["Attunement", [["awk", "A new awakening"]]],
   ["The crew", [["party", "Toward the crew"]]],
 ];
 const LABEL = Object.fromEntries(CHOICES.flatMap(([, list]) => list));
 const cap = (x) => x.charAt(0).toUpperCase() + x.slice(1);
 const ORD = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth"];
-const ROOM = { equipment: 3, utility: 3 };
 const TN = (t) => R.TRACK[t].name;
 // The state's on the new core once it's got points (s.pts).
 const onCore = (s) => Boolean(s?.pts && typeof s.pts === "object");
 const andList = (list) => (list.length > 1 ? `${list.slice(0, -1).join(", ")} and ${list[list.length - 1]}` : list[0] ?? "");
 const noRoots = () => ({ Body: 0, Mind: 0, Soul: 0 });
 const sumOf = (roots) => R.ROOTS.reduce((t, r) => t + (roots?.[r] ?? 0), 0);
+const KIND_NAME = { weapon: "Weapon", tool: "Tool", guard: "Guard", armour: "Armour", pack: "Pack", vessel: "Vessel" };
+// An item as it's said, its tier's name first.
+const sayItem = (it) => R.itemSaid(it);
+// How many permissions a Title's got, of its six.
+const permsOf = (t) => t?.permissions?.length ?? 0;
 
-// What a slot can mend: anything crossed out, and a piece of armour with
-// boxes ticked, every box at once.
+// What a slot can mend: an item that's broken, crossed out till it's mended.
+// Armour that's only soaked never needs it.
 function crossed(c, s) {
-  const out = Object.keys(s.crossed).filter((k) => s.crossed[k]).map((key) => {
-    const [where, ...rest] = key.split("|");
-    return { key, name: nameOf(c, where, rest.join("|")), note: "" };
-  });
-  for (const a of worn(c, s)) if (!isBroken(s, a)) out.push({ key: keyOf(a), name: nameOf(c, "equipment", a.name), note: `${tickedOf(s, a)} of ${a.boxes} ${a.boxes === 1 ? "box" : "boxes"} ticked` });
-  return out;
+  return (c.items ?? []).filter((it) => it.attuned == null && s.crossed?.[it.key]).map((it) => ({ key: it.key, name: sayItem(it) }));
 }
 // Every thread with where it stands now.
 const threadsOf = (c, s) => c.threads.flatMap((p) => p.threads.map((t) => ({ key: threadKey(p.person, t), person: p.person, text: t.text, kind: t.kind, sheet: t.strained, st: threadState(s, p.person, t) })));
@@ -63,7 +67,9 @@ const strainedOf = (c, s) => threadsOf(c, s).filter((t) => t.kind !== "hostile" 
 // A hostile thread that's still there: doing right by them strains it, and
 // doing right by them again snaps it.
 const grudgesOf = (c, s) => threadsOf(c, s).filter((t) => t.kind === "hostile" && t.st !== "snapped");
-const roomFor = (c, s, where) => (where === "bag" ? (c.carry.bag?.max ?? 10) - (c.carry.bag?.items?.length ?? 0) : ROOM[where] - (c.carry[where] ?? []).length) - s.picked.filter((p) => p.where === where).length;
+// An item that can go up a tier in downtime: one under tier 3, counting the
+// slots before this one. Tier 4 takes money, and 5 and 6 the story.
+const raisable = (c) => (c.items ?? []).filter((it) => it.tier < R.MAX_START_TIER);
 // Everything back, the way every downtime starts: on the new core every Root
 // full, wounds and Toll gone (a copy, put back by R.downtimeRest), and on
 // stacking's state every track on d12.
@@ -77,10 +83,14 @@ function restedOf(c, s) {
 function backOf(c, s) {
   const r = restedOf(c, s);
   if (!onCore(s)) return R.TRACKS.filter((t) => s.tracks?.[t] < 12).map((t) => `${TN(t)} d${s.tracks[t]} to d12`);
+  const soaked = Object.values(s.soak ?? {}).reduce((t, n) => t + (Number(n) || 0), 0);
+  const res = Array.isArray(s.res) ? s.res.length : 0;
   return [
     ...R.ROOTS.filter((x) => (r.pts[x] ?? 0) > (s.pts[x] ?? 0)).map((x) => `${x} ${s.pts[x]} to ${r.pts[x]}`),
     ...R.ROOTS.filter((x) => s.wound?.[x]).map((x) => `${R.WOUNDS[x]} gone`),
     ...(s.toll ? [`${s.toll} Toll gone`] : []),
+    ...(soaked ? [`your armour’s soak`] : []),
+    ...(res ? [`${res === 1 ? "a Resource" : `${res} Resources`}`] : []),
   ];
 }
 // Every Scar, by the Root it's on and its place there, with its slots toward
@@ -115,26 +125,27 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
   const paras = (html) => String(html ?? "").replace(/<\/(?:p|li|h\d)>/g, "\n").replace(/<(?:p|li|ul|ol|h\d|div)(?:\s[^>]*)?>|<\/(?:ul|ol|div)>/g, "\n").split(/\n+/).map((x) => x.trim()).filter(Boolean);
 
   function start(ch) {
-    const d = drafts.get(ch.id) ?? { kind: "downtime", id: ch.id, slots: [blank(), blank()], swaps: [], boons: [], mends: [], rights: [], sure: false };
-    d.boons ??= [];
+    const d = drafts.get(ch.id) ?? { kind: "downtime", id: ch.id, slots: [blank(), blank()], swaps: [], mends: [], rights: [], sure: false };
+    delete d.boons;
     d.sure = false;
     drafts.set(ch.id, d);
     return d;
   }
   const done = (ch) => drafts.delete(ch.id);
-  const at = (d, where) => (String(where)[0] === "w" ? d.swaps[Number(String(where).slice(1))] : String(where)[0] === "b" ? d.boons?.[Number(String(where).slice(1))] : d.slots[Number(where)]);
+  const at = (d, where) => (String(where)[0] === "w" ? d.swaps[Number(String(where).slice(1))] : d.slots[Number(where)]);
 
   function can(k, c, s) {
     if (k === "mend") return crossed(c, s).length > 0;
-    if (k === "perm") return c.titles.some((t) => R.slotsOf(t) < R.MAX_PERMS);
+    if (k === "perm") return c.titles.some((t) => permsOf(t) < R.MAX_PERMS);
     if (k === "ability") return c.archetypes.some((_, i) => spareOf(c, i).length > 0);
     if (k === "awk") return c.attuned.length > 0;
+    if (k === "tier") return raisable(c).length > 0;
     if (k === "scar") return scarsOf(s).some((x) => !x.trait);
     return true;
   }
 
   function fresh(k, c, s) {
-    const firstTitle = Math.max(0, c.titles.findIndex((t) => R.slotsOf(t) < R.MAX_PERMS));
+    const firstTitle = Math.max(0, c.titles.findIndex((t) => permsOf(t) < R.MAX_PERMS));
     const firstArch = Math.max(0, c.archetypes.findIndex((_, i) => spareOf(c, i).length > 0));
     return {
       pressure: { k, text: "" }, mend: { k, key: crossed(c, s)[0]?.key ?? "" },
@@ -142,7 +153,8 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
       ability: { k, a: firstArch, name: "" },
       asp: { k, take: "", text: "", roots: noRoots(), perm: "", proot: "Body", arch: "", ability: "", name: "", wname: "", wroot: R.bestRoot(c), wtext: "" },
       scar: { k, key: scarsOf(s).find((x) => !x.trait)?.key ?? "", trait: "" },
-      thread: { k, person: "", text: "", tkind: "bond" }, get: { k, text: "", where: "bag" },
+      thread: { k, person: "", text: "", tkind: "bond" }, get: { k, what: "item", text: "", kind: "tool", root: "Body", drop: "" },
+      tier: { k, key: raisable(c)[0]?.key ?? "" },
       awk: { k, a: 0, name: "", root: R.bestRoot(c), text: "", catch: "", burden: "", up: false }, party: { k, text: "" },
     }[k] ?? blank();
   }
@@ -152,7 +164,7 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
   // awakenings on each attuned thing and a stage gone up, a Catch or Burden
   // written, the points in the Aspiration, and the slots on each Scar.
   function earlier(d, i, s) {
-    const out = { perms: {}, abil: {}, awk: {}, up: {}, catch: {}, burden: {}, asp: R.aspOf(s), scar: {} };
+    const out = { perms: {}, abil: {}, awk: {}, up: {}, catch: {}, burden: {}, asp: R.aspOf(s), scar: {}, tier: {}, items: 0, drops: [] };
     for (const sl of d.slots.slice(0, i)) {
       if (sl.k === "perm" && sl.text.trim()) out.perms[sl.t] = (out.perms[sl.t] ?? 0) + 1;
       if (sl.k === "ability" && sl.name) out.abil[sl.a] = [...(out.abil[sl.a] ?? []), sl.name];
@@ -164,6 +176,11 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
       }
       if (sl.k === "asp") out.asp = out.asp + 1 >= R.ASP_PTS ? 0 : out.asp + 1;
       if (sl.k === "scar" && sl.key) out.scar[sl.key] = (out.scar[sl.key] ?? 0) + 1;
+      if (sl.k === "tier" && sl.key) out.tier[sl.key] = (out.tier[sl.key] ?? 0) + 1;
+      if (sl.k === "get" && sl.what === "item" && sl.text.trim()) {
+        out.items += 1;
+        if (sl.drop) out.drops.push(sl.drop);
+      }
     }
     return out;
   }
@@ -263,11 +280,11 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
       case "pressure":
         return `${field(i, "text", "What you’re dealing with", sl.text)}${say("One slot usually settles it.", `dt-press-${i}`, ["Pay the debt, answer the letter, lie low, meet the man. One slot usually settles a pressure, and the GM says if it needs two. If something pushes back, roll for it."], "Facing a pressure")}`;
       case "mend":
-        return `${chips(i, "key", crossed(c, s).map((x) => [x.key, `${esc(x.name)}${x.note ? ` <small>${esc(x.note)}</small>` : ""}`]), sl.key, "What you’re mending")}${say("Mending usually takes a purse of gold as well.", `dt-mend-${i}`, ["Mending something usually takes a purse of gold as well. Mended armour has every box clear.", link("s-armour-quality", "Armour’s boxes")], "Mending")}`;
+        return `${chips(i, "key", crossed(c, s).map((x) => [x.key, esc(x.name)]), sl.key, "What you’re mending")}${say("Mending usually takes a purse of gold as well.", `dt-mend-${i}`, ["Something broken is crossed out from when the GM named it broken till it’s mended, and then it’s back at its tier. Mending usually takes a purse of gold as well.", "Armour that’s only soaked never needs mending, since its soak comes back every scene, and attuned things can’t break.", link("recovering-armour", "Broken items")], "Mending")}`;
       case "perm": {
         const t = c.titles[sl.t];
         const e = earlier(d, i, s);
-        const has = (j) => R.slotsOf(c.titles[j]) + (e.perms[j] ?? 0);
+        const has = (j) => permsOf(c.titles[j]) + (e.perms[j] ?? 0);
         return `${chips(i, "t", c.titles.map((x, j) => [j, `<em>${esc(x.text ?? x.name)}</em> <small>${has(j)} of ${R.MAX_PERMS}</small>`, has(j) >= R.MAX_PERMS]), sl.t, "Which Title")}
           ${t ? say(`It has to fit inside <em>${esc(t.text ?? t.name)}</em>.`, `dt-perm-${i}`, ["It has to fit inside its Title, and the story should say where you learned it. It puts 1 on the Root it’s written with: a step more when you roll it, and a point more to take hits with and spend. It’s one more thing that can bring a Root in, too.", quickTest()].filter(Boolean), "A new permission") : ""}
           ${field(i, "text", "The permission", sl.text)}
@@ -295,12 +312,26 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
           ${people.length ? `<p class="cc-lead">Who it’s with: one of your bonds, or someone new.</p>${chips(i, "person", people.map((p) => [p, esc(p)]), mine ?? "", "Who it’s with")}` : ""}
           ${field(i, "person", people.length ? "Or someone new" : "Who it’s with", mine ? "" : sl.person)}${field(i, "text", "The thread", sl.text)}${say("It goes under your bond with them.", `dt-thread-${i}`, ["A bond thread or a hostile one, whichever the story’s given you. It goes under your bond with them. If they’re in the crew, it goes on both your sheets, so agree on it together."], "Deepening a bond")}`;
       }
+      case "tier": {
+        const e = earlier(d, i, s);
+        const now = (it) => it.tier + (e.tier[it.key] ?? 0);
+        const it = (c.items ?? []).find((x) => x.key === sl.key);
+        return `${chips(i, "key", (c.items ?? []).map((x) => [x.key, `${esc(sayItem({ ...x, tier: now(x) }))} <small>tier ${now(x)}</small>`, now(x) >= R.MAX_START_TIER]), sl.key, "Which item")}
+          ${it ? say(`It goes up to tier ${now(it) + 1}, ${esc(R.tierName(now(it) + 1))}.`, `dt-tier-${i}`, ["A slot raises an item a tier, as far as tier 3, and it’s that many steps when it fits, soaks that much if it’s armour, gives more Resources if it’s a pack, and holds more charge if it’s a vessel.", "Tier 4 takes money, and tiers 5 and 6 only come out of the story, with a material. An attuned thing goes up the same way, and its awakenings don’t change.", link("s-item-tiers", "Item tiers")], "Raising an item") : ""}`;
+      }
       case "get": {
-        const room = roomFor(c, s, sl.where);
-        return `${field(i, "text", "What you’re getting", sl.text)}
-          <label class="cc-field">It goes in <select id="dt-where-${i}" data-dt="${i}" data-f="where">${[["bag", "the bag"], ["utility", "utility"], ["equipment", "equipment"]].map(([v, t]) => `<option value="${v}"${sl.where === v ? " selected" : ""}>${t}</option>`).join("")}</select></label>
-          ${room < 1 ? `<p class="cc-warn">There’s no room there.</p>` : ""}
-          ${say("Bought, made, won or owed.", `dt-get-${i}`, ["Something to carry, a purse of gold, or the material an attuned thing needs for its next stage, whether it’s bought, made, won or owed."], "Getting something")}`;
+        // Something the story gives you: an item at tier 2, one of your six,
+        // or anything else (a purse of gold, a material), written in your
+        // notes. A seventh item means one goes.
+        const e = earlier(d, i, s);
+        const left = (c.items ?? []).filter((x) => !e.drops.includes(x.key));
+        const full = left.length + e.items >= R.MAX_ITEMS;
+        return `${chips(i, "what", [["item", "An item"], ["other", "Something else"]], sl.what, "What you’re getting")}
+          ${field(i, "text", sl.what === "item" ? "The item" : "What you’re getting", sl.text)}
+          ${sl.what === "item" ? `<p class="cc-lead">What kind</p>${chips(i, "kind", R.KINDS.map((k) => [k, KIND_NAME[k]]), sl.kind, "What kind of item")}
+            ${sl.kind === "armour" ? `<p class="cc-lead">The Root it soaks on</p>${roots(i, "root", sl.root, "The Root it soaks on")}` : ""}
+            ${full ? `<p class="cc-warn">You carry six items at most, so one goes.</p>${chips(i, "drop", left.filter((x) => x.attuned == null).map((x) => [x.key, esc(sayItem(x))]), sl.drop, "The item that goes")}` : ""}` : ""}
+          ${say(sl.what === "item" ? "It comes at tier 2." : "It goes in your notes.", `dt-get-${i}`, ["Something the story can give you, whether it’s bought, made, won or owed: a new item at tier 2, a purse of gold, or the material an attuned thing needs for its next stage.", "An item’s one of your six. Anything else goes in your notes, and something ordinary is a Resource you can say you’ve got anyway."], "Getting something")}`;
       }
       case "awk":
         return awkView(sl, i, c, s, d);
@@ -334,24 +365,6 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
       <div class="cc-row"><button type="button" class="button sm" data-act="dt" data-do="swap-off" data-s="${n}">Leave it as it was</button></div></div>`;
   }
 
-  // Two permissions on one Title for a Boon, which takes their two slots.
-  // Fewer go when the Title's got slots free.
-  const BOON_ON = { Armour: "Which piece of armour", Conditions: "Which condition can’t touch you", "Getting around": "Climbing, swimming or rough ground" };
-  // How many permissions have to go, counting the ones this downtime's slots
-  // put on the same Title first.
-  const goes = (t, j, d, s) => Math.max(0, R.BOON_SLOTS - (R.MAX_PERMS - R.slotsOf(t) - (earlier(d, d.slots.length, s).perms[j] ?? 0)));
-  function boonView(w, n, c, d, s) {
-    const where = `b${n}`;
-    const t = c.titles[w.t];
-    const need = t ? goes(t, w.t, d, s) : 0;
-    const rul = (B.boons ?? []).find((x) => x.lever === w.lever);
-    return `<div class="dt-swap">${chips(where, "t", c.titles.map((x, j) => [j, `<em>${esc(x.text ?? x.name)}</em>`]), w.t, "Which Title")}
-      ${t && need ? `<p class="cc-lead">${need === 1 ? "Pick the permission that goes." : "Pick the two permissions that go."}</p><div class="cc-chips" role="group" aria-label="The permissions going">${t.permissions.map((p, j) => `<button type="button" class="cc-chipbtn" data-act="dt" data-do="boon-drop" data-s="${where}" data-v="${j}"${pressed(w.drop.includes(j))}><em>${esc(p.text)}</em></button>`).join("")}</div>` : t ? `<p class="cc-lead">${esc(t.text ?? t.name)} has two slots free, so nothing has to go.</p>` : ""}
-      ${chips(where, "lever", (B.boons ?? []).map((x) => [x.lever, esc(x.lever)]), w.lever, "Which Boon")}
-      ${rul ? `<p class="cc-lead">${esc(cap(rul.text))}.</p>${field(where, "name", "Its name from the story, if you like", w.name)}${BOON_ON[w.lever] ? field(where, "on", BOON_ON[w.lever], w.on) : ""}` : ""}
-      <div class="cc-row"><button type="button" class="button sm" data-act="dt" data-do="boon-off" data-s="${n}">Leave it as it was</button></div></div>`;
-  }
-
   function view(c, s, ch, d) {
     const n = 2;
     while (d.slots.length < n) d.slots.push(blank());
@@ -360,20 +373,17 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
     const strained = strainedOf(c, s);
     const grudges = grudgesOf(c, s);
     const warn = d.sure ? warnings(d, c, s) : [];
-    const free = ["swaps", "Boons", ...(strained.length ? ["mending"] : []), ...(grudges.length ? ["hostile threads"] : [])];
+    const free = ["swaps", ...(strained.length ? ["mending"] : []), ...(grudges.length ? ["hostile threads"] : [])];
     const back = backOf(c, s);
     return `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">Downtime</h2><p class="cc-small">${picked} of ${n} slots picked</p></div>
       <button type="button" class="cc-x" data-act="close" aria-label="Close">${icon.close}</button></div>
     <div class="dlg-body">
-      <p class="cc-lead">Every downtime starts with everything back, free${back.length ? `: ${andList(back)}` : onCore(s) ? ", and you’re full already" : ", and they’re all on d12"}. Then pick what each of your two slots is for. ${tip("dt-how", [...paras(rule("your-slots")), "A slot buys what a point does when you make a character: a permission, an ability, an awakening or something to carry. What it buys lands on your sheet when you finish.", link("what-you-can-do-with-a-slot", "What a slot can do")], "Your slots")}</p>
+      <p class="cc-lead">Every downtime starts with everything back, free${back.length ? `: ${andList(back)}` : onCore(s) ? ", and you’re full already" : ", and they’re all on d12"}. Then pick what each of your two slots is for. ${tip("dt-how", [...paras(rule("your-slots")), "A slot buys what a point does when you make a character: a permission, an ability, an awakening, an item at tier 2 or a tier on one. What it buys lands on your sheet when you finish.", link("what-you-can-do-with-a-slot", "What a slot can do")], "Your slots")}</p>
       ${d.slots.map((_, i) => slotView(d, i, c, s)).join("")}
-      <details class="cc-group" data-open="dt-free"${isOpen("dt-free") || d.swaps.length || d.boons.length || d.mends.length || d.rights.length ? " open" : ""}><summary>Without a slot <small>${andList(free)}</small></summary>
+      <details class="cc-group" data-open="dt-free"${isOpen("dt-free") || d.swaps.length || d.mends.length || d.rights.length ? " open" : ""}><summary>Without a slot <small>${andList(free)}</small></summary>
         <h3><span>Swap a permission</span> ${tip("dt-swap", ["Swap any permission for another that fits its Title, as long as it makes sense for your character. Your Roots change with it."], "Swapping a permission")}</h3>
         ${d.swaps.map((w, k) => swapView(w, k, c)).join("")}
         <div class="cc-row"><button type="button" class="button sm" data-act="dt" data-do="swap-add">${d.swaps.length ? "Swap another" : "Swap a permission"}</button></div>
-        <h3><span>Two permissions for a Boon</span> ${tip("dt-boon", ["Two permissions on one Title can go for a Boon, which takes their two slots. A Boon can go back for two permissions the same way, from Change.", link("s-boons", "Boons and Burdens")], "Boons")}</h3>
-        ${d.boons.map((w, k) => boonView(w, k, c, d, s)).join("")}
-        <div class="cc-row"><button type="button" class="button sm" data-act="dt" data-do="boon-add">${d.boons.length ? "Another Boon" : "Two permissions for a Boon"}</button></div>
         ${strained.length ? `<h3><span>Mend a strained bond thread</span> ${tip("dt-strain", ["Make it right with them, whatever suits them, and play it out at the table.", link("s-downtime-threads", "Mending threads")], "Mending a thread")}</h3>
           ${strained.map((t) => `<button type="button" class="cc-line" data-act="dt" data-do="mend" data-v="${esc(t.key)}"${pressed(d.mends.includes(t.key))}><span class="tick" aria-hidden="true"></span><span><em>${esc(t.text)}</em> <small>${esc(t.person)}</small></span></button>`).join("")}` : ""}
         ${grudges.length ? `<h3><span>Did right by them</span> ${tip("dt-right", ["Doing right by someone you’ve a hostile thread with, like paying what you owe, strains it, and doing right by them again snaps it. Tick the ones you did right by this week."], "Doing right by them")}</h3>
@@ -386,23 +396,25 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
 
   // ---------------------------------------------------------------- doing
 
+  // Whether a slot getting an item makes a seventh, and the items a slot can
+  // raise, counting the slots before it.
+  const getsFull = (c, d, i, s) => {
+    const e = earlier(d, i, s);
+    return (c.items ?? []).filter((x) => !e.drops.includes(x.key)).length + e.items >= R.MAX_ITEMS;
+  };
+  const raisableAt = (c, d, i, s) => {
+    const e = earlier(d, i, s);
+    return (c.items ?? []).filter((x) => x.tier + (e.tier[x.key] ?? 0) < R.MAX_START_TIER);
+  };
+
   const empty = (x) => !String(x ?? "").trim();
   function warnings(d, c, s) {
     const out = [];
-    const titled = new Set();
-    for (const w of d.boons ?? []) {
-      const t = c.titles[w.t];
-      if (!t || !w.lever) continue;
-      const tname = t.text ?? t.name;
-      if (titled.has(w.t)) out.push(`${tname} takes one Boon a downtime here, so the second waits for the next.`);
-      else if (w.drop.filter((j) => t.permissions[j]).length < goes(t, w.t, d, s)) out.push(`${tname} needs ${goes(t, w.t, d, s) === 1 ? "a permission" : "two permissions"} picked to make room for ${w.name.trim() || `the ${w.lever} Boon`}.`);
-      titled.add(w.t);
-    }
     d.slots.forEach((sl, i) => {
       const which = `Your ${ORD[i]} slot`;
       if (!sl.k) out.push(`${which} isn’t picked yet, so it goes to waste.`);
       else if (sl.k === "perm" && (empty(sl.text) || !R.ROOTS.includes(sl.root))) out.push(`${which} needs the new permission’s words and its Root.`);
-      else if (sl.k === "perm" && c.titles[sl.t] && R.slotsOf(c.titles[sl.t]) + (earlier(d, i, s).perms[sl.t] ?? 0) >= R.MAX_PERMS) out.push(`${which} would be a seventh permission on ${c.titles[sl.t].text ?? c.titles[sl.t].name}, and six is the most a Title holds.`);
+      else if (sl.k === "perm" && c.titles[sl.t] && permsOf(c.titles[sl.t]) + (earlier(d, i, s).perms[sl.t] ?? 0) >= R.MAX_PERMS) out.push(`${which} would be a seventh permission on ${c.titles[sl.t].text ?? c.titles[sl.t].name}, and six is the most a Title holds.`);
       else if (sl.k === "ability" && (!sl.name || !spareOf(c, sl.a, takenBefore(c, d, i, sl.a)).some((x) => x.name === sl.name))) out.push(`${which} needs the ability.`);
       else if (sl.k === "scar" && !scarAt(s, d, i, sl.key)) out.push(`${which} needs the Scar it’s going on.`);
       else if (sl.k === "scar" && scarAt(s, d, i, sl.key).n + 1 >= R.SCAR_SLOTS && empty(sl.trait)) out.push(`${which} grows your Scar into a Trait, so it needs the Trait.`);
@@ -413,7 +425,8 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
         else if (sl.take === "attune" && (empty(sl.name) || empty(sl.wname) || !R.ROOTS.includes(sl.wroot))) out.push(`${which} needs the thing you’re attuning, the awakening it comes with and the Root that fits.`);
       } else if (sl.k === "thread" && (empty(sl.person) || empty(sl.text))) out.push(`${which} needs who the thread’s with, and the thread.`);
       else if (sl.k === "get" && empty(sl.text)) out.push(`${which} needs what you’re getting.`);
-      else if (sl.k === "get" && roomFor(c, s, sl.where) < 1) out.push(`${which} has nowhere to put it.`);
+      else if (sl.k === "get" && sl.what === "item" && getsFull(c, d, i, s) && !sl.drop) out.push(`${which} is a seventh item, so pick the one that goes.`);
+      else if (sl.k === "tier" && !raisableAt(c, d, i, s).some((x) => x.key === sl.key)) out.push(`${which} needs the item it’s raising, one under tier ${R.MAX_START_TIER}.`);
       else if (sl.k === "awk") {
         const a = thingAt(c, d, i, sl.a, s);
         if (!a || (empty(sl.name) && !sl.up)) out.push(`${which} needs the awakening’s name.`);
@@ -448,12 +461,11 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
     d.slots.forEach((sl, i) => {
       const text = String(sl.text ?? "").trim();
       if (sl.k === "pressure") said.push(text ? `${text}: done` : "A pressure dealt with");
-      else if (sl.k === "mend" && (s.crossed[sl.key] || s.boxes?.[sl.key])) {
-        const [where, ...rest] = sl.key.split("|");
-        const a = pieceAt(c, sl.key);
+      else if (sl.k === "mend" && s.crossed[sl.key]) {
+        const it = (c.items ?? []).find((x) => x.key === sl.key);
         mend(s, sl.key);
-        said.push(a ? `${cap(yours(a, { quality: true }))} ${many(a) ? "are" : "is"} mended, every box clear` : `${nameOf(c, where, rest.join("|"))} is mended`);
-      } else if (sl.k === "perm" && text && R.ROOTS.includes(sl.root) && c.titles[sl.t] && R.slotsOf(c.titles[sl.t]) + (earlier(d, i, s).perms[sl.t] ?? 0) < R.MAX_PERMS) {
+        said.push(`${it ? cap(sayItem(it)) : "It"} is mended, and back at tier ${it?.tier ?? 2}`);
+      } else if (sl.k === "perm" && text && R.ROOTS.includes(sl.root) && c.titles[sl.t] && permsOf(c.titles[sl.t]) + (earlier(d, i, s).perms[sl.t] ?? 0) < R.MAX_PERMS) {
         grow({ k: "perm", t: sl.t, text, root: sl.root });
         said.push(`“${text}” goes on your ${ORD[sl.t] ?? ""} Title, and your ${sl.root} is 1 more`);
       } else if (sl.k === "ability" && sl.name && spareOf(c, sl.a, takenBefore(c, d, i, sl.a)).some((x) => x.name === sl.name)) {
@@ -493,9 +505,23 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
         const kind = sl.tkind === "hostile" ? "hostile" : "bond";
         grow({ k: "thread", person: sl.person.trim(), text, kind });
         said.push(`A new ${kind} thread with ${sl.person.trim()}${crewNames().has(sl.person.trim()) ? ", so tell them" : ""}`);
-      } else if (sl.k === "get" && text && roomFor(c, s, sl.where) > 0) {
-        s.picked.push({ where: sl.where, name: text });
-        said.push(`${text} goes in ${sl.where === "bag" ? "the bag" : `your ${sl.where}`}`);
+      } else if (sl.k === "tier" && raisableAt(c, d, i, s).some((x) => x.key === sl.key)) {
+        const it = c.items.find((x) => x.key === sl.key);
+        const to = it.tier + (earlier(d, i, s).tier[it.key] ?? 0) + 1;
+        grow({ k: "tier", key: it.key, to });
+        said.push(`${cap(R.itemSaid({ ...it, tier: to }))}, tier ${to} now`);
+      } else if (sl.k === "get" && text && sl.what === "item") {
+        // A seventh item means one goes first.
+        const full = getsFull(c, d, i, s);
+        const out = full ? c.items.find((x) => x.key === sl.drop && x.attuned == null) : null;
+        if (full && !out) return;
+        if (out) grow({ k: "drop", key: out.key });
+        const kind = R.KINDS.includes(sl.kind) ? sl.kind : "tool";
+        grow({ k: "item", name: text, kind, tier: R.START_TIER, ...(kind === "armour" ? { root: R.ROOTS.includes(sl.root) ? sl.root : "Body" } : {}) });
+        said.push(`${cap(R.itemSaid({ name: text, tier: R.START_TIER }))} is one of your items${out ? `, and ${R.itemSaid(out)} goes` : ""}`);
+      } else if (sl.k === "get" && text) {
+        s.notes = `${String(s.notes ?? "").trim()}${String(s.notes ?? "").trim() ? "\n" : ""}Got in downtime: ${text}.`.slice(0, 4000);
+        said.push(`${cap(text)} goes in your notes`);
       } else if (sl.k === "awk") {
         const a = thingAt(c, d, i, sl.a, s);
         const next = a && R.attunedRoom(a).next;
@@ -513,17 +539,6 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
       if (!from || !text || !R.ROOTS.includes(w.root) || (text === from && t.permissions[w.j].root === w.root)) continue;
       grow({ k: "swap", t: w.t, j: w.j, text, root: w.root });
       said.push(`“${from}” becomes “${text}”`);
-    }
-    const titled = new Set();
-    for (const w of d.boons ?? []) {
-      const t = c.titles[w.t];
-      if (!t || !w.lever || titled.has(w.t)) continue;
-      const drop = [...new Set(w.drop)].filter((j) => t.permissions[j]).slice(0, R.BOON_SLOTS);
-      if (drop.length < goes(t, w.t, d, s)) continue;
-      titled.add(w.t);
-      const name = w.name.trim() || `the ${w.lever} Boon`;
-      grow({ k: "boon", t: w.t, lever: w.lever, name: w.name.trim(), on: w.on.trim(), drop });
-      said.push(drop.length ? `${andList(drop.map((j) => `“${t.permissions[j].text}”`))} ${drop.length === 1 ? "goes" : "go"} for ${name}` : `${t.text ?? t.name} takes ${name}`);
     }
     const now = new Map(threadsOf(c, s).map((t) => [t.key, t]));
     for (const key of d.mends) {
@@ -576,7 +591,6 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
     else if (go === "clear") d.slots[Number(el.dataset.s)] = blank();
     else if (go === "set" && sl) {
       sl[f] = ["t", "j", "a"].includes(f) ? Number(v) : v;
-      if (String(el.dataset.s)[0] === "b" && f === "t") sl.drop = [];
       // A swap starts from the permission it's swapping: its words and Root.
       if (String(el.dataset.s)[0] === "w") {
         if (f === "t") sl.j = -1;
@@ -593,14 +607,6 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
     else if (go === "tnudge" && sl) sl.roots = nudgeSpread(sl.roots, v, Number(el.dataset.n) > 0 ? "up" : "down");
     else if (go === "flip" && sl) sl[f] = !sl[f];
     else if (go === "swap-add") d.swaps.push({ t: 0, j: -1, text: "", root: "Body" });
-    else if (go === "boon-add") d.boons.push({ t: 0, drop: [], lever: "", name: "", on: "" });
-    else if (go === "boon-off") d.boons.splice(Number(el.dataset.s), 1);
-    else if (go === "boon-drop" && sl) {
-      const j = Number(v);
-      const k = sl.drop.indexOf(j);
-      if (k >= 0) sl.drop.splice(k, 1);
-      else sl.drop = [...sl.drop, j].slice(-R.BOON_SLOTS);
-    }
     else if (go === "swap-off") d.swaps.splice(Number(el.dataset.s), 1);
     else if (go === "mend" || go === "right") {
       const list = go === "mend" ? d.mends : d.rights;
