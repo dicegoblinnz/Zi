@@ -411,8 +411,7 @@ function editBuild(ch) {
   b.name = ch.name;
   if (ch.state?.aspText) b.aspiration = String(ch.state.aspText).slice(0, 160);
   for (const t of b.threads) if (t.person.trim() && t.text.trim()) t.was = `${t.person.trim()}|${t.text.trim()}`;
-  for (const [where, list] of [["equipment", b.equipment], ["utility", b.utility], ["keepsake", [b.keepsake]]]) for (const x of list) if (x.text.trim()) x.was = `${where}|${x.text.trim()}`;
-  b.bagWas = bagLines(b.bag);
+  for (const x of b.items ?? []) if (x.text.trim()) x.was = `item|${x.text.trim()}`;
   return b;
 }
 // What a character built before Roots grew in downtime then, written into
@@ -2526,12 +2525,8 @@ function saveBuilt(build, key, discard, basis) {
       }
     };
     for (const t of build.threads) move(s.threads, t.was, `${t.person.trim()}|${t.text.trim()}`);
-    for (const [where, list] of [["equipment", build.equipment], ["utility", build.utility], ["keepsake", [build.keepsake]]]) for (const x of list) move(s.crossed, x.was, `${where}|${x.text.trim()}`);
-    // A piece of armour's ticked boxes follow it too.
-    if (s.boxes) for (const x of build.equipment) move(s.boxes, x.was, `equipment|${x.text.trim()}`);
-    // The bag's one box of lines, so a line's only followed when none were added or taken out.
-    const bagNow = bagLines(clean.bag);
-    if (Array.isArray(build.bagWas) && build.bagWas.length === bagNow.length) build.bagWas.forEach((x, i) => move(s.crossed, `bag|${x}`, `bag|${bagNow[i]}`));
+    // An item that's broken, and the soak a piece of armour's used, follow it too.
+    for (const x of build.items ?? []) for (const map of [s.crossed, s.soak]) move(map, x.was, `item|${x.text.trim()}`);
     ch.build = clean;
     ch.name = name;
     if (rebuilt) {

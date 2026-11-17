@@ -29,7 +29,7 @@ const SOURCE = "content/rules/33-appendix-d-quick-reference.md";
 // A page's blocks: a flow of sections in two columns, or a panel across the
 // page. In a flow, only keeps just the bullets that start like this, drop
 // leaves these out, and table: false leaves out the section's table (it's
-// drawn as a panel instead).
+// drawn as a panel instead). A dense page has its text a touch smaller.
 const PAGES = [
   {
     title: "The round and rolling",
@@ -44,6 +44,9 @@ const PAGES = [
   {
     title: "Your points, defence and threats",
     short: "Points and threats",
+    // Soak and items (17 Nov) put this page and the next past A4 at the
+    // usual size, so their text's a touch smaller.
+    dense: true,
     blocks: [
       { panel: "points", id: "s-qr-tracks" },
       { flow: [{ id: "s-qr-tracks" }, { id: "telegraphs-and-defence" }, { id: "consequences-the-gm-names-one" }, { id: "conditions" }, { id: "s-qr-threats", drop: ["**Round budget:**", "**Threat budget:**"] }] },
@@ -52,6 +55,7 @@ const PAGES = [
   {
     title: "Aura, archetypes and threads",
     short: "Aura and archetypes",
+    dense: true,
     blocks: [
       { panel: "economy", ids: ["aura"] },
       { panel: "archetypes", id: "s-qr-archetypes" },
@@ -246,7 +250,7 @@ export function playerReference(stamp) {
       throw new Error(`the player reference has no panel called ${b.panel}`);
     }).join("\n");
     const nav = PAGES.map((p, i) => `<li${i === n ? ' class="here" aria-current="page"' : ""}><b>${i + 1}</b>${p.short}</li>`).join("");
-    return `<section class="page">
+    return `<section class="page${page.dense ? " dense" : ""}">
   <header class="ref-head">${crest([], { size: "sm", label: "Zi’Dara" })}<div><div class="wordmark">Zi’Dara</div><div class="doc">Player reference</div></div><ol class="parts">${nav}</ol></header>
   <h1><span class="num">${n + 1}</span>${page.title}</h1>
   ${blocks}

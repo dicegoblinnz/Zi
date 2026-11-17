@@ -9,16 +9,16 @@
 // printed character back field by field. On the new core (16 Nov 2026) the
 // front has each Root's number and dice, what's locked and what it holds,
 // its points now, its wound and its Scars, with Toll and Aura, and each
-// awakening rings the Root it locks.
+// awakening rings the Root it locks. Since the fixes (17 Nov) it has six
+// items, each with its kind and tier, the Root armour soaks on and a box for
+// each point of soak used or charge held, the Resources said, and the
+// keepsake. There are no Boons.
 import { threadState } from "./threads.js";
-import { nameOf, piecesOf, tickedOf, withQuality } from "./armour.js";
 import * as R from "./roots.js";
 import { ROWS } from "./sheet-fields.js";
 import { diceLabel, stepsToDice } from "./dice.js";
 
 const SHEET = "/sheets/zidara-character-sheet.pdf";
-// A Boon as it's written on the paper.
-const boonLine = (b) => `Boon, ${b.name ? `${b.name} (${b.lever})` : b.lever}${b.on ? `, ${b.on}` : ""}: ${plain(b.text)}`;
 const PRONOUNS = { her: "she, her", him: "he, him", them: "they, them" };
 const TIMES = ["", "", "twice", "three times", "four times"];
 const NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
@@ -49,10 +49,10 @@ const traitLine = (t) => {
 // blank is the sheet's bytes, when they're to hand already (the checks pass
 // them), and otherwise it's fetched, from the service worker when offline.
 export async function fillSheet(ch, c, s0, { goal = null, B = null, blank = null } = {}) {
-  // Where they are now, on the new core: a state from before it (the play
-  // screen's, till it's on the new core too) is read the way it'll move
-  // across, every Root full and a track's Scars on its Root.
-  const s = s0?.v === 4 && s0.pts ? s0 : R.normalCore(s0, c);
+  // Where they are now, on the fixes: a state from before them is read the
+  // way it'll move across (one from stacking every Root full and a track's
+  // Scars on its Root, and one from the new core with its soak back).
+  const s = R.normalCore(s0, c);
   const [{ PDFDocument, StandardFonts }, bytes] = await Promise.all([
     import("pdf-lib"),
     blank ?? fetch(SHEET).then((res) => {
@@ -251,17 +251,6 @@ export async function fillSheet(ch, c, s0, { goal = null, B = null, blank = null
       for (let j = 1; j <= Math.min(ROWS.grow, x.n); j++) tick(`${at}_scar_${i + 1}_grow_${j}`);
     });
     if (scars.length > ROWS.scars) notes.push(`More Scars on ${r}: ${scars.slice(ROWS.scars).map((x) => (x.n && x.n < R.SCAR_SLOTS ? `${x.text} (${x.n} of ${R.SCAR_SLOTS} toward its Trait)` : x.text)).join(", ")}.`);
-    // Each piece of armour on this Root, its boxes ticked on its first line,
-    // and a piece that's said when it counts gets the next line too if it's free.
-    const pieces = piecesOf(c).filter((a) => (a.root ?? "Body") === r);
-    const shown = pieces.slice(0, ROWS.armour);
-    const rows = Array.from({ length: ROWS.armour }, (_, i) => `${at}_armour_${i + 1}`);
-    share(rows, shown.map((a) => `${withQuality(a.name, a.quality)}${a.when ? `, ${a.when}` : ""}${s.crossed[`equipment|${a.name}`] ? " (broken)" : ""}`)).forEach((k, i) => {
-      for (let j = 1; j <= Math.min(ROWS.boxes, tickedOf(s, shown[i])); j++) tick(`${rows[k]}_box_${j}`);
-    });
-    // A Boon can give a piece more boxes than its line has.
-    for (const a of shown.filter((x) => x.boxes > ROWS.boxes)) notes.push(`Armour on ${r}: ${withQuality(a.name, a.quality)} has ${a.boxes} boxes, ${tickedOf(s, a)} ticked.`);
-    for (const a of pieces.slice(ROWS.armour)) notes.push(`Armour on ${r}: ${withQuality(a.name, a.quality)}, ${tickedOf(s, a)} of ${a.boxes} ${a.boxes === 1 ? "box" : "boxes"} ticked.`);
   }
   if (s.blaze) notes.push(`A Scar on your ${s.blaze} waits to be written in.`);
   s.conditions.slice(0, ROWS.conditions).forEach((x, i) => {
@@ -283,15 +272,32 @@ export async function fillSheet(ch, c, s0, { goal = null, B = null, blank = null
     put("points_start", c.points.start);
   }
 
-  // What they carry, with anything picked up in play. Broken and used things
-  // say so, and a list too long for its lines shares the last one. Armour
-  // says its quality first.
-  const kit = (where, list) => [...list, ...s.picked.filter((p) => p.where === where).map((p) => p.name)].map((x) => (s.crossed[`${where}|${x}`] ? `${nameOf(c, where, x)} (${where === "equipment" ? "broken" : "used"})` : nameOf(c, where, x)));
-  const lines = (prefix, list, rows) => list.slice(0, rows).forEach((x, i) => put(`${prefix}_${i + 1}`, i === rows - 1 ? list.slice(i).join(", ") : x));
-  lines("equipment", kit("equipment", c.carry.equipment), ROWS.equipment);
-  lines("utility", kit("utility", c.carry.utility), ROWS.utility);
-  if (c.carry.keepsake) put("keepsake", s.crossed[`keepsake|${c.carry.keepsake}`] ? `${c.carry.keepsake} (used)` : c.carry.keepsake);
-  lines("bag", kit("bag", c.carry.bag?.items ?? []), ROWS.bag);
+  // Their items, each with its kind and tier ringed and written, the Root
+  // armour soaks on, and a box ticked for each point of soak it's used or
+  // charge a vessel holds. A weapon says its properties, and an attuned thing
+  // or a broken one says so. Past six they go in Notes.
+  const itemLine = (it) => `${it.name}${it.props?.length ? ` (${it.props.join(", ")})` : ""}${it.attuned != null ? ", attuned" : ""}${s.crossed[it.key] && it.attuned == null ? " (broken)" : ""}${it.when ? `, ${it.when}` : ""}`;
+  const gear = c.items ?? [];
+  gear.slice(0, ROWS.items).forEach((it, i) => {
+    const at = `item_${i + 1}`;
+    put(at, itemLine(it));
+    ring(`${at}_kind`, it.kind);
+    put(`${at}_tier`, it.tier);
+    if (it.kind === "armour") ring(`${at}_root`, key(it.root ?? "Body"));
+    const marked = it.kind === "armour" ? R.soakLeft(s, it) < it.tier ? it.tier - R.soakLeft(s, it) : 0 : it.kind === "vessel" ? R.chargeOf(c, s, it.key) : 0;
+    for (let j = 1; j <= Math.min(ROWS.itemBoxes, marked); j++) tick(`${at}_box_${j}`);
+  });
+  for (const it of gear.slice(ROWS.items)) notes.push(said(`Item, ${itemLine(it)} (${it.kind}, tier ${it.tier}${it.kind === "armour" ? `, on your ${it.root ?? "Body"}` : ""})`));
+  // Resources: how many they've got, and each one said since downtime,
+  // ticked, the ones past the lines in Notes.
+  put("resources", R.resOf(c));
+  const res = Array.isArray(s.res) ? s.res : [];
+  res.slice(0, ROWS.resources).forEach((x, i) => {
+    put(`resource_${i + 1}`, x);
+    tick(`resource_${i + 1}_used`);
+  });
+  if (res.length > ROWS.resources) notes.push(said(`Resources said: ${res.slice(ROWS.resources).join(", ")}`));
+  if (c.keepsake) put("keepsake", c.keepsake);
 
   // Each attuned thing, with its awakenings and the Root each one locks,
   // ringed beside it.
@@ -321,30 +327,14 @@ export async function fillSheet(ch, c, s0, { goal = null, B = null, blank = null
     const at = `title_${i + 1}`;
     flow([at, `${at}_more`], t.text ?? t.name);
     for (const r of R.ROOTS) num(`${at}_${key(r)}`, t.roots?.[r]);
-    // A Boon takes two of the six rows, its words carrying on from the first
-    // to the second, and it rings no Root.
-    const rows = [...t.permissions.map((p) => ({ text: p.text, root: p.root })), ...(t.boons ?? []).map((b) => ({ text: boonLine(b), boon: true }))];
-    let j = 0;
-    const over = [];
-    for (const x of rows) {
-      const room = x.boon ? 2 : 1;
-      if (j + room > ROWS.perms) {
-        over.push(x);
-        continue;
-      }
-      const row = (k) => `${at}_permission_${j + k + 1}`;
-      if (x.boon) {
-        flow([row(0), row(1)], x.text, 5.5);
-        if (!form.getFieldMaybe(row(1))?.getText()) put(row(1), "(the Boon above takes this line too)");
-      } else {
-        put(row(0), x.text);
-        if (R.ROOTS.includes(x.root)) ring(`${row(0)}_root`, key(x.root));
-      }
-      j += room;
-    }
-    if (over.length) notes.push(said(`On Title ${NUMERALS[i]}: ${over.map((x) => (x.root ? `${x.text} (${x.root})` : x.text)).join(", ")}`));
+    t.permissions.slice(0, ROWS.perms).forEach((p, j) => {
+      put(`${at}_permission_${j + 1}`, p.text);
+      if (R.ROOTS.includes(p.root)) ring(`${at}_permission_${j + 1}_root`, key(p.root));
+    });
+    const over = t.permissions.slice(ROWS.perms);
+    if (over.length) notes.push(said(`On Title ${NUMERALS[i]}: ${over.map(permWords).join(", ")}`));
   });
-  c.titles.slice(ROWS.titles).forEach((t, k) => notes.push(said(`Title ${NUMERALS[ROWS.titles + k] ?? ROWS.titles + k + 1}, ${t.text ?? t.name} (${spreadNote(t)}): ${[...t.permissions.map(permWords), ...(t.boons ?? []).map(boonLine)].join(", ") || "no permissions yet"}`)));
+  c.titles.slice(ROWS.titles).forEach((t, k) => notes.push(said(`Title ${NUMERALS[ROWS.titles + k] ?? ROWS.titles + k + 1}, ${t.text ?? t.name} (${spreadNote(t)}): ${t.permissions.map(permWords).join(", ") || "no permissions yet"}`)));
   // Every ability says what it costs in Aura.
   const ability = (a, x) => `${x.name} (${Math.max(1, Number(x.cost) || 1)} Aura): ${plain(x.text ?? x.html)}`;
   const archs = R.archetypesOf(c, B);

@@ -62,13 +62,15 @@
 //    src/companion/sheet-fields.js lists, and every crew member printed reads
 //    back field by field (each Root and where its points came from, adding up
 //    to it, each Title's words, spread and permissions with their Roots, the
-//    archetypes, the attuned thing, Aura's 7 and 35 points), the same from the
-//    GM's look with no book to hand. Vesk part way through a scene (her hook
-//    powered, a Scar, Burning, a strained thread, her smoke bomb used and her
-//    Shadow's pool), Bram with a Boon taking two lines, and Rook, made up with
-//    more of everything than the paper holds. Nothing print writes is missing
-//    from the sheet, every field bar the ones only a pencil fills gets
-//    something from one of them, and what doesn't fit goes in Notes.
+//    archetypes, the attuned thing, every item with its kind and tier, 3
+//    Resources, the keepsake, Aura's 5 and 35 points), the same from the GM's
+//    look with no book to hand. Vesk part way through a scene (a Scar,
+//    Burning, a strained thread, a point of her leathers' soak used, a smoke
+//    bomb said and her Shadow's pool), Ash's coal horn holding 2, Bram's old
+//    Boon printing nothing, and Rook, made up with more of everything than the
+//    paper holds. Nothing print writes is missing from the sheet, every field
+//    bar the ones only a pencil fills gets something from one of them, and
+//    what doesn't fit goes in Notes.
 // 2. Every crew member's Roots on the phone match their sheet in the
 //    chapter, on the new core: each Root's tile with its steps, the dice it
 //    rolls and the points it's got, each Root's tracker its points out of what
@@ -97,22 +99,25 @@
 //    every Root full and her Scar on her Body, Old Vesk from before Roots
 //    comes all the way across, one built on stacking has each Title's 3 made
 //    5, and Tamsin from before Roots shows as she was.
-// 5. Building your own on stacking: Vesk again on 35 points, a step to a
-//    screen, with what's spent and what's left in the bar the whole way. Two
-//    Shadows with an ability each, her Titles' 3 Root points spread in a tap
-//    or two, a Root on each permission, her Roots added up with where each
-//    comes from, what she carries a point each, her grappling line with its
-//    one awakening and nothing to write for its Aura, and threads from the
-//    crew questions. Saved, her sheet is the chapter's. Then a reload,
-//    offline, a change (a Boon, a fourth permission and a Masterwork shield)
+// 5. Building your own: Vesk again on 35 points, a step to a screen, with
+//    what's spent and what's left in the bar the whole way. Two Shadows with
+//    an ability each, her Titles' 5 Root points spread in a tap or two, a
+//    Root on each permission, her Roots added up with where each comes from,
+//    her grappling line with its one awakening and nothing to write for its
+//    Aura, one of her six items, then her items a point each at tier 2, two
+//    of them Proven for a point more, armour on its Root, a knife typed in a
+//    weapon, Resources in a bubble, and threads from the crew questions.
+//    Saved, her sheet is the chapter's. Then a reload, offline, a change (no
+//    Boons, a fourth permission, her leathers Storied and a Proven shield)
 //    past 35, a blank character with the nudges and a start of 36, a draft
 //    waiting on the list, and every step at 320 wide in both themes with axe.
 // 5b. The builder in one hand: full screen with the crest at the top, the
 //    seven steps in one line, the points and Back and Next in the bar at the
 //    bottom on every step, the step's tip and the menus away on Escape or a
 //    tap outside, a Root's die growing in the dock as a Title's spread and a
-//    permission go on, an ability, a Title idea and a Boon in the points,
-//    and axe on every step, dark and light.
+//    permission go on, ten abilities on an archetype's card with what each
+//    does behind its ?, a Title idea, a shield off a card a guard, its point
+//    in the points, and axe on every step, dark and light.
 // 5c. The other ways in. Every crew member made into a build spends 35 and
 //    has the sheet the chapter gives them, and a thousand random characters
 //    spend exactly 35 and pass every check. A build from before stacking
@@ -120,14 +125,17 @@
 //    its specialties gone and its archetypes' abilities dealt between them.
 //    Bram from the crew and a random one saved, a way in asking before it
 //    bins a draft, Vesk from the crew becoming your own with her play kept,
-//    Vesk saved before stacking spreading her Titles and saved on 35 with her
-//    Roots the chapter's, and Tamsin from before Roots rebuilt.
+//    Vesk saved before stacking spreading her Titles and saved with her Roots
+//    the chapter's and her utility items in her notes, Bram built before the
+//    fixes with his equipment as items, his Boon's points back and his bag
+//    in his notes, and Tamsin from before Roots rebuilt.
 // 6. Print on the phone, from the Sheet tab's button (saved characters put on
 //    the phone as they'd be part way through a scene, since the play screen's
 //    being redrawn): Vesk with a Scar, Burning, Aura spent and her hook
 //    powered, a strained thread and her smoke bomb used, read back field by
-//    field off the stacking sheet, then Bram's plate with a box ticked and
-//    Dorrie's court clothes on her Confidence, over two lines.
+//    field off the stacking sheet with her items, then Bram's plate (its box
+//    from before soak gone), helmet and shield, and Dorrie's court clothes on
+//    her Mind.
 // 7. Dice, feel and learning. The learning round on the new core: Wren's
 //    Body and *Long shot* for her arrow, and Bram's Body brought in with
 //    *Ring the bell* to get his hammer under the club, 21 steps. Three ways:
@@ -164,7 +172,10 @@
 //    them.
 // 8. Downtime on the new core. Isolde's weeks with no browser: everything
 //    back, a point in her Aspiration, a Scar grown into a Trait over three
-//    slots and a Title from her Aspiration's fifth point. Then Vesk's on the
+//    slots and a Title from her Aspiration's fifth point. Bram's on the
+//    fixes: his soak and Resources back, his broken shield mended, his helmet
+//    a tier up and no Boons, and Vesk's crowbar and a buckler that's her
+//    seventh, so her knife goes, and a material in her notes. Then Vesk's on the
 //    phone: everything back and a new permission with its Root, undone and
 //    done again, then a point in her Aspiration, a new awakening with its
 //    Root and its Catch, and a reload. 8b (the play
@@ -175,9 +186,9 @@
 // 9. Every crew member's growth adds up on stacking (a permission with its
 //    Root, a thread, a Title with its 3 spread and its one permission, an
 //    archetype with its one ability, an attuned thing with its awakening and
-//    an awakening), a Title stops at six permissions, a Boon takes two
-//    permissions' slots and one that won't fit takes nothing off, and what
-//    downtime grew folds into a build as the same sheet. On the phone, Vesk's
+//    an awakening), a Title stops at six permissions, a Boon swapped in
+//    before the fixes is gone with its permissions kept, and what downtime
+//    grew folds into a build as the same sheet. On the phone, Vesk's
 //    Aspiration's fifth point gives her a third Title spread Soul 3 and Mind 2,
 //    and Gil buys an ability a slot, never the same one twice.
 // 10. The rules on a phone. The Learn deck (content/learn.md) has 30 to 40
@@ -1668,6 +1679,14 @@ if (part("1f")) {
     same(got.attune_1_awakening_1_root, lower(thing.awakenings[0].root), `${who}'s first awakening, its Root ringed`);
     same([got.aspiration, got.aspiration_1], [crew.aspiration.text, false], `${who}'s Aspiration, with nothing in it yet`);
     same(got.bond_1, crew.threads[0].person, `${who}'s first bond`);
+    // Each item with its kind and tier, armour on its Root, the attuned thing
+    // saying so, nothing past them, their 3 Resources and their keepsake.
+    c.items.forEach((it, i) => {
+      const at = `item_${i + 1}`;
+      same([got[at], got[`${at}_kind`], got[`${at}_tier`], got[`${at}_root`]], [`${it.name}${it.props.length ? ` (${it.props.join(", ")})` : ""}${it.attuned != null ? ", attuned" : ""}${it.when ? `, ${it.when}` : ""}`, it.kind, String(it.tier), it.kind === "armour" ? lower(it.root) : ""], `${who}'s item ${i + 1}, its kind and tier`);
+    });
+    same(got[`item_${c.items.length + 1}`] ?? "", "", `nothing after ${who}'s items`);
+    same([got.resources, got.resource_1, got.keepsake], ["3", "", crew.keepsake], `${who}'s 3 Resources, none said yet, and their keepsake`);
   }
   // From the GM's look, with no book to hand: the sheet the phone already has.
   {
@@ -1709,14 +1728,15 @@ if (part("1f")) {
     s.toll = 2;
     s.conditions = [{ name: "Burning", die: 6, kind: "against" }];
     s.threads["Dorrie|We have pulled a dozen jobs. I trust her with my life."] = "strained";
-    s.crossed["utility|a smoke bomb"] = true;
+    s.res = ["a smoke bomb"];
+    s.soak = { "item|worn leathers": 1 };
     s.pool = [8, 4];
     const { got } = await print("Vesk", c, s, { goal: { text: "Get the Vane collection out of the city", die: 4 } });
     const want = [["aura_now", "4"], ["aura_max", "5"], ["toll", "2"], ["root_body", "11"], ["root_body_dice", "d12 + d10"], ["root_body_locked", "2"], ["root_body_holds", "9"], ["root_body_now", "0"], ["root_body_wound", true], ["root_body_scar_1", "can't go near open flame without freezing"], ["root_body_scar_1_grow_2", true], ["root_body_scar_1_grow_3", false], ["root_body_scar_2", ""],
       ["aspiration_2", true], ["aspiration_3", false],
       ["root_mind_now", "3"], ["root_mind_wound", false], ["root_soul", "0"], ["root_soul_dice", "nothing"],
-      ["condition_1", "Burning"], ["condition_1_die", "d6"], ["utility_2", "a smoke bomb (used)"], ["party_goal", "Get the Vane collection out of the city"], ["party_goal_die", "d4"],
-      ["attune_1_awakening_1_root", "body"], ["bond_1_thread_1_strained", true], ["bond_1_thread_1_snapped", false], ["root_body_armour_1", "Common worn leathers"]];
+      ["condition_1", "Burning"], ["condition_1_die", "d6"], ["resource_1", "a smoke bomb"], ["resource_1_used", true], ["resource_2_used", false], ["party_goal", "Get the Vane collection out of the city"], ["party_goal_die", "d4"],
+      ["attune_1_awakening_1_root", "body"], ["bond_1_thread_1_strained", true], ["bond_1_thread_1_snapped", false], ["item_1", "worn leathers"], ["item_1_root", "body"], ["item_1_box_1", true], ["item_1_box_2", false]];
     for (const [name, value] of want) same(got[name], value, `${name} on Vesk part way through a scene`);
     const notes = joined(got, "notes_1", "notes_2", "notes_3", "notes_4");
     has(notes, "Trouble that follows her: wanted in three districts, owes the Guild.", "her trouble in Notes");
@@ -1737,41 +1757,53 @@ if (part("1f")) {
     has(joined(got, "notes_1", "notes_2", "notes_3", "notes_4"), "Title VII, The seventh best climber (Body 5 on your Roots)", "her seventh Title's spread in Notes");
   }
 
-  // A line cut short goes in Notes in full: Vesk's leathers, said to count only
-  // on a rooftop, with two more pieces on her Body so it gets one line.
+  // A line cut short goes in Notes in full: Vesk's leathers, said to count
+  // only on a rooftop.
   {
     const crew = structuredClone(book.crew.find((c) => c.id === "vesk"));
-    crew.armour[0].when = "but only on a rooftop at night, with the wind behind her";
-    crew.armour.push({ name: "a padded hood", root: "Body", quality: "Common", boxes: 1, when: null }, { name: "bracers", root: "Body", quality: "Common", boxes: 1, when: null });
+    crew.items[0].when = "but only on a rooftop at night, with the wind behind her and a moon to see by";
     const c = rootsSheet(crew, [], BUILD);
     const { got } = await print("Vesk", c, RS.normalCore({}, c));
-    if (!got.root_body_armour_1.endsWith("…")) note(`Vesk's long armour line isn't cut short: "${got.root_body_armour_1}"`);
-    has(joined(got, "notes_1", "notes_2", "notes_3", "notes_4"), "In full: Common worn leathers, but only on a rooftop at night, with the wind behind her.", "the leathers in full in Notes");
+    if (!got.item_1.endsWith("…")) note(`Vesk's long item line isn't cut short: "${got.item_1}"`);
+    has(joined(got, "notes_1", "notes_2", "notes_3", "notes_4"), "In full: worn leathers, but only on a rooftop at night, with the wind behind her and a moon to see by.", "the leathers in full in Notes");
   }
 
-  // Bram's plate made Masterwork, with an Armour Boon on it, has more boxes
-  // than its line: three ticked, and Notes say the rest.
+  // Ash's coal horn holding 2 charge, two of its boxes filled, and Bram's
+  // plate made Mythic out of the story, 5 of its 6 soak used.
   {
+    const ash = rootsSheet(book.crew.find((c) => c.id === "ash"), [], BUILD);
+    const s = RS.normalCore({}, ash);
+    s.charge = { "item|a coal horn": 2 };
+    const { got } = await print("Ash", ash, s);
+    same([got.item_2, got.item_2_kind, got.item_2_tier, got.item_2_box_2, got.item_2_box_3], ["a coal horn", "vessel", "3", true, false], "Ash's coal horn with 2 charge in it");
     const crew = structuredClone(book.crew.find((c) => c.id === "bram"));
-    crew.armour[0].quality = "Masterwork";
-    crew.armour[0].boxes = 3;
-    crew.titles[0].boons = [{ lever: "Armour", name: "Old plates", on: "plate armour" }];
+    crew.items[0].tier = 6;
     const c = rootsSheet(crew, [], BUILD);
-    const s = RS.normalCore({}, c);
-    s.boxes = { "equipment|plate armour": 4 };
-    const { got } = await print("Bram", c, s);
-    same([got.root_body_armour_1, got.root_body_armour_1_box_3], ["Masterwork plate armour", true], "Bram's Masterwork plate, its line's three boxes ticked");
-    has(joined(got, "notes_1", "notes_2", "notes_3", "notes_4"), "Armour on Body: Masterwork plate armour has 4 boxes, 4 ticked.", "his plate's fourth box in Notes");
+    const s2 = RS.normalCore({}, c);
+    s2.soak = { "item|plate armour": 5 };
+    const b = (await print("Bram", c, s2)).got;
+    same([b.item_1_tier, b.item_1_box_5, b.item_1_box_6], ["6", true, false], "Bram's Mythic plate, 5 of its 6 soak ticked off");
   }
 
-  // Bram with a Boon on his second Title, which takes two lines and rings no Root.
+  // Bram with a Boon from before the fixes: it's gone, so it prints nothing,
+  // and his permissions are as they were.
   {
     const crew = structuredClone(book.crew.find((c) => c.id === "bram"));
     crew.titles[1].boons = [{ lever: "Toughness", name: "Thick skull" }];
     const c = rootsSheet(crew, [], BUILD);
     const { got } = await print("Bram", c, RS.normalCore({}, c));
-    has(`Boon, Thick skull (Toughness): ${BUILD.boons.find((b) => b.lever === "Toughness").text}`, joined(got, "title_2_permission_4", "title_2_permission_5").replace(/…$/, ""), "Bram's Boon after his permissions, over its two lines");
-    same([got.title_2_permission_4_root, got.title_2_permission_5_root, got.title_2_permission_6], ["", "", ""], "no Root ringed for his Boon, and his last line free");
+    same(Object.values(got).some((v) => typeof v === "string" && /Boon|Thick skull/.test(v)), false, "Bram's old Boon nowhere on his sheet");
+    same(got[`title_2_permission_${crew.titles[1].permissions.length}`], crew.titles[1].permissions.at(-1).text, "his permissions as they were");
+  }
+
+  // Vesk carrying seven, past the six lines, the last in Notes.
+  {
+    const crew = structuredClone(book.crew.find((c) => c.id === "vesk"));
+    crew.items.push({ name: "a crowbar", kind: "tool", tier: 2, root: null, props: [], attuned: null }, { name: "a buckler", kind: "guard", tier: 3, root: null, props: [], attuned: null });
+    const c = rootsSheet(crew, [], BUILD);
+    const { got } = await print("Vesk", c, RS.normalCore({}, c));
+    same([got.item_6, got.item_6_kind], ["a crowbar", "tool"], "her sixth item on its line");
+    has(joined(got, "notes_1", "notes_2", "notes_3", "notes_4"), "Item, a buckler (guard, tier 3).", "her seventh in Notes");
   }
 
   // The longest mechanic in the book, the Bard's, whole over its two lines.
@@ -1785,16 +1817,15 @@ if (part("1f")) {
 
   // Rook, made up with more of everything than the paper holds: seven
   // Titles spread across every Root, four archetypes past the three cards
-  // (one taken twice), three attuned things, armour on every Root, five
-  // bonds of four threads, five conditions, every Root wounded and five
-  // Scars on each.
+  // (one taken twice), three attuned things, nine items with Mythic armour
+  // on every Root, five Resources said, five bonds of four threads, five
+  // conditions, every Root wounded and five Scars on each.
   {
     const ord = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh"];
     const titles = ord.map((o, i) => ({
       text: `The ${o} ferry keeper on the drowned river road`,
       roots: { Body: 2, Mind: 2, Soul: 1 },
       permissions: Array.from({ length: i === 6 ? 4 : 6 }, (_, j) => ({ text: `cross ${o} water ${j + 1}`, root: ROOTS[j % 3] })),
-      boons: i === 6 ? [{ lever: "Aura", name: "Deep reserves" }] : [],
     }));
     const made = (name) => ({
       name, id: null,
@@ -1815,8 +1846,8 @@ if (part("1f")) {
         { name: "A pole", props: null, stage: "Tempered", catch: "Slippery", burden: "Long", awakenings: wakes("Pole", 6) },
         { name: "A bell", props: null, stage: "Awakened", catch: null, burden: null, awakenings: wakes("Bell", 1) },
       ],
-      carry: { equipment: ["a coat", "a hook", "a boot", "a spare boot"], utility: ["rope", "tar", "salt", "wax"], keepsake: "a river stone", bag: { name: "a bag", max: 10, items: Array.from({ length: 12 }, (_, k) => `a thing ${k + 1}`) } },
-      armour: ROOTS.flatMap((r) => [1, 2, 3].map((k) => ({ name: `${lower(r)} guard ${k}`, root: r, quality: "Masterwork", boxes: 3, when: k === 1 ? "while the lantern's lit" : null }))),
+      items: ROOTS.flatMap((r) => [1, 2].map((k) => ({ name: `${lower(r)} guard ${k}`, kind: "armour", root: r, tier: 6, props: [], attuned: null, ...(k === 1 && r === "Body" ? { when: "while the lantern's lit and the river's high and the ferry's running late" } : {}) }))),
+      keepsake: "a river stone",
       threads: people.map((p, i) => ({ person: p, threads: Array.from({ length: 4 }, (_, k) => ({ text: `${p} and I, ${k + 1}`, kind: (i + k) % 2 ? "hostile" : "bond", whose: null, strained: false })) })),
       trouble: ["owes the ferry guild"],
     };
@@ -1830,7 +1861,8 @@ if (part("1f")) {
     s.aspPts = 4;
     s.pts = { Body: 0, Mind: 2, Soul: 1 };
     s.conditions = ["Burning", "Slowed", "Shaken", "Prone", "Blinded"].map((name, k) => ({ name, die: 2 + 2 * k, kind: "against" }));
-    s.boxes = Object.fromEntries(c.armour.map((a) => [`equipment|${a.name}`, 3]));
+    s.soak = Object.fromEntries(c.items.filter((it) => it.kind === "armour").map((it) => [it.key, 6]));
+    s.res = ["rope", "tar", "salt", "wax", "a lantern wick"];
     s.threads = Object.fromEntries(c.threads.flatMap((p) => p.threads.map((t) => [`${p.person}|${t.text}`, "snapped"])));
     s.notes = "Owes the ferryman a song.";
     s.asp = 8;
@@ -1843,10 +1875,9 @@ if (part("1f")) {
     same(joined(got, "archetype_1_mechanic", "archetype_1_mechanic_more"), "Lanternkeeper: a lantern held up to whatever the crew can't see", "the Lanternkeeper's mechanic over two lines");
     same([got.archetype_2_ability_1, got.archetype_2_ability_6], ["Ferryman 1 (1 Aura): a short thing it does, 1", "Ferryman 6 (2 Aura): a short thing it does, 6"], "six abilities on the Ferryman's card, a line each");
     same([got.attune_2_thing, got.attune_2_stage, got.attune_2_burden, got.attune_2_awakening_6_root], ["A pole", "tempered", "Long", "soul"], "Rook's second attuned thing, each awakening's Root ringed");
-    same([got.equipment_3, got.bag_10], ["a boot, a spare boot", "a thing 10, a thing 11, a thing 12"], "what doesn't fit its lines sharing the last one");
-    has(got.root_body_armour_1, "Masterwork body guard 1, while the", "Rook's first armour on Body, cut short since the lines are full");
-    if (!/…$/.test(got.root_body_armour_1)) note(`Rook's first armour on Body doesn't end with an ellipsis: "${got.root_body_armour_1}"`);
-    same([got.root_body_armour_1_box_3, got.root_body_armour_2], [true, "Masterwork body guard 2"], "Rook's armour on Body, a line each when the lines are full");
+    same([got.item_6, got.item_6_kind, got.item_6_tier, got.item_6_root, got.item_6_box_6], ["soul guard 2", "armour", "6", "soul", true], "Rook's sixth item, Mythic armour on their Soul with all 6 soak used");
+    has(got.item_1, "body guard 1, while the", "Rook's first item, cut short");
+    same([got.resource_3, got.resource_3_used, got.keepsake], ["salt", true, "a river stone"], "Rook's Resources said, a line each, and their keepsake");
     same([got.root_body_scar_2, got.root_soul_scar_1, got.root_soul_scar_1_grow_3, got.root_mind_wound, got.root_soul_wound, got.toll], ["two", "eleven, its Trait: soul grew", true, true, true, "3"], "Rook's Scars with what they've grown into, wounds and Toll");
     same([got.aspiration_4, got.aspiration_5], [true, false], "Rook's Aspiration on 4 of its 5");
     same([got.bond_4_thread_3_strained, got.bond_4_thread_3_snapped], [true, true], "a snapped thread ticked both ways");
@@ -1861,7 +1892,7 @@ if (part("1f")) {
   // good the moment it goes in.
   const PENCIL = ["player", "points_banked", "attune_1_material", "attune_2_material", "aspiration_5"];
   same(list.map((f) => f.name).filter((n) => !filled.has(n) && !PENCIL.includes(n)), [], "fields print never fills for anyone");
-  console.log("print checked field by field: the crew, Vesk mid-scene and saved on stacking, Bram's Boon and Rook past the paper's room");
+  console.log("print checked field by field: the crew with their items, Vesk mid-scene and saved on stacking, Ash's charge, Bram's Mythic plate and old Boon, and Rook past the paper's room");
 }
 
 // A small static server that answers the way Cloudflare's assets do.
@@ -2483,17 +2514,19 @@ const unfold = async (page, key) => {
 
 // What a sheet's made of, for comparing one built on the phone with the
 // chapter's: Roots, Titles with their spreads and permissions, archetypes
-// with their abilities, points, Aura, armour, attuned things, what's carried
-// (the bag by what's in it) and their own threads.
-const sheetParts = (c) => ({
+// with their abilities, points, Aura, items with their kinds and tiers (an
+// attuned one by its being attuned, since a build calls it by the thing's
+// name, in any order, since a build puts its attuned things last), the
+// keepsake, attuned things and their own threads.
+const sheetParts = (c, { props = true } = {}) => ({
   roots: c.roots,
-  titles: c.titles.map((t) => [t.text, t.roots, t.permissions.map((p) => [p.text, p.root]), (t.boons ?? []).map((x) => x.lever)]),
+  titles: c.titles.map((t) => [t.text, t.roots, t.permissions.map((p) => [p.text, p.root])]),
   archetypes: c.archetypes.map((a) => [a.name, a.have]),
   points: c.points,
   aura: c.numbers.aura,
-  armour: c.armour.map((a) => [a.name, a.root, a.quality, a.boxes]),
+  items: (c.items ?? []).map((it) => [it.attuned != null ? `attuned ${it.attuned}` : it.name, it.kind, it.tier, it.root ?? null, props ? (it.props ?? []).join(", ") : ""]).sort((x, y) => String(x).localeCompare(String(y))),
+  keepsake: c.keepsake,
   attuned: c.attuned.map((a) => [a.name, a.stage, a.catch, a.awakenings.map((w) => [w.name, w.root])]),
-  carry: [c.carry.equipment, c.carry.utility, c.carry.keepsake, c.carry.bag.items],
   threads: c.threads.map((p) => [p.person, p.threads.filter((t) => !t.whose).map((t) => [t.text, t.kind])]).filter(([, t]) => t.length),
 });
 // The characters saved on this phone, and one of them as the phone makes
@@ -2620,10 +2653,11 @@ if (part("5")) {
   has(await page.textContent(".bd-from-list"), "5 from your first Title, “move unseen”, “run the rooftops”, “pick a mechanical lock”, 2 from your second Title and “fight dirty with a knife”", "where her Body comes from");
   same(await page.$$eval(".tile[data-s], .bd-specs3, [data-b='pspec']", (els) => els.length), 0, "no specialties anywhere");
   has(await page.textContent(".bd-body"), "Soul at 0 has no points, so the first hit there wounds you", "her Soul at 0 said for what it means");
-  await next("What you carry");
-  // What she carries, a part at a time, her attuned thing first: her
-  // grappling line, 5 points, with the awakening it comes with on the Root it
-  // locks a point of, and nothing to write for its own Aura.
+  await next("Items");
+  // Her items, a part at a time, her attuned thing first: her grappling
+  // line, 5 points, with the awakening it comes with on the Root it locks a
+  // point of, and nothing to write for its own Aura. It's one of her six,
+  // a Trusty tool, in its 5.
   same(await page.getAttribute('.bd-seg[data-v="a"]', "aria-current"), "true", "her attuned thing first");
   same(await page.$$eval('[data-bin$=".aura"]', (els) => els.length), 0, "no Aura of its own to write");
   await page.fill("#b-a0-name", "A grappling line");
@@ -2631,25 +2665,40 @@ if (part("5")) {
   await b('[data-b="awkroot"][data-i="0"][data-j="0"][data-v="Body"]');
   await page.fill("#b-a0-w0-text", "2 steps on every roll she makes with it, and 2 more for each Aura");
   has(await page.textContent(".bd-awk"), "it locks a point of your Body", "her hook locking a point of her Body");
+  has(await page.textContent(".bd-asitem summary"), "Trusty tool, one of your six", "her line one of her six, a Trusty tool");
   same(await points(), "6 left, 29 of 35 spent", "her grappling line's 5");
   await shot(page, "5-builder-attuned");
-  await next("What you carry");
-  // Her leathers off a card are armour on her Body, Common with a box, and
-  // everything she carries is a point.
-  await b('[data-b="fillany"][data-k="e"][data-v="worn leathers"]');
-  if ((await pressedOn('[data-b="arm"][data-i="0"][data-v="Body"]')) !== "true") await b('[data-b="arm"][data-i="0"][data-v="Body"]');
-  same(await page.$$eval(".bd-quality .bd-qual", (els) => els.map((el) => [el.textContent.trim(), el.getAttribute("aria-pressed"), el.querySelectorAll(".zd-plate").length])), [["Common", "true", 1], ["Fine", "false", 2], ["Masterwork", "false", 3]], "her leathers' quality, Common to start");
-  await b('[data-b="arm"][data-i="0"][data-v="Mind"]');
-  has(await page.textContent(".bd-arm"), "on your Mind, a box for a hit there", "armour moved to her Mind");
-  await b('[data-b="arm"][data-i="0"][data-v="Body"]');
-  await page.fill("#b-e1", "a knife");
-  await page.fill("#b-e2", "soft-soled boots");
-  await next("What you carry");
-  same(await page.getAttribute('.bd-seg[data-v="u"]', "aria-current"), "true", "Next going on to her utility items");
-  await page.fill("#b-u0", "a purse of gold");
-  await page.fill("#b-u1", "a smoke bomb");
-  await page.fill("#b-u2", "a perfect set of picks");
-  await next("What you carry");
+  await next("Items");
+  same(await page.getAttribute('.bd-seg[data-v="i"]', "aria-current"), "true", "Next going on to her items");
+  has(await page.textContent(".bd-its"), "A Trusty grappling line", "her attuned thing at the top of her six");
+  // Her leathers off a card are armour on her Body at tier 2, a point.
+  await b('[data-b="additem"][data-v="worn leathers"]');
+  same((await page.textContent('details[data-open="bd-it-0"] > summary')).replace(/\s+/g, " ").trim(), "Trusty worn leathers armour, soaks 2 on your Body · 1 point", "her leathers off a card, armour soaking 2 on her Body");
+  await unfold(page, "bd-it-0");
+  await b('[data-b="iroot"][data-w="i"][data-i="0"][data-v="Mind"]');
+  has(await page.textContent('details[data-open="bd-it-0"] > summary'), "soaks 2 on your Mind", "her leathers moved to her Mind");
+  await b('[data-b="iroot"][data-w="i"][data-i="0"][data-v="Body"]');
+  // A knife typed in is a weapon, and her boots and picks go up to tier 3,
+  // Proven, for a point more each.
+  await b('[data-b="additem"]:not([data-v])');
+  await page.fill("#b-i1", "a knife");
+  await b('[data-b="additem"][data-v="soft-soled boots"]');
+  await unfold(page, "bd-it-2");
+  await b('[data-b="itier"][data-w="i"][data-i="2"][data-v="3"]');
+  has(await page.textContent('details[data-open="bd-it-1"] > summary'), "weapon", "a knife typed in a weapon");
+  has(await page.textContent('details[data-open="bd-it-2"] > summary'), "Proven soft-soled boots", "her boots Proven, tier 3");
+  same(await page.$$eval('[data-b="itier"][data-w="i"][data-i="2"]', (els) => els.map((el) => el.textContent.trim())), ["Trusty 2", "Proven 3, a point more"], "tier 2 or 3 to start, by their names");
+  await b('[data-b="additem"]:not([data-v])');
+  await page.fill("#b-i3", "a set of picks");
+  await b('[data-b="itier"][data-w="i"][data-i="3"][data-v="3"]');
+  has(await page.textContent(".bd-carry h2"), "5 of 6", "five of her six");
+  has(await page.textContent(".bd-res"), "You’ve got 3 Resources as well, with nothing to write.", "her Resources said for what they are");
+  await page.click(".bd-res .tip");
+  has(await page.textContent(".bd-res .tip-card:popover-open"), "as it happens, I’ve got rope on me", "Resources in a bubble");
+  await page.keyboard.press("Escape");
+  same(await points(), "0 left, 35 of 35 spent", "all 35 spent: four items, two of them Proven");
+  await shot(page, "5-builder-items");
+  await next("Items");
   await page.fill("#b-k", "the first coin she ever stole");
   // The bar follows what's typed after a moment.
   await page.waitForFunction(() => /^0 left/.test(document.querySelector(".bd-pts-say")?.textContent.replace("Points: ", "").trim() ?? ""));
@@ -2683,9 +2732,13 @@ if (part("5")) {
   await playing(page);
   const built = (await savedAll(page)).at(-1);
   const drafts = await page.evaluate(() => JSON.parse(localStorage.getItem("zi-drafts") || "{}"));
-  same([built.crew, built.name, built.build?.v, built.build?.start, "new" in drafts, sheetFor(built).core], ["own", "Vesk", 5, 35, false, true], "the built Vesk saved on 35 points on the new core, and the draft cleared");
+  same([built.crew, built.name, built.build?.v, built.build?.start, "new" in drafts, sheetFor(built).core], ["own", "Vesk", 6, 35, false, true], "the built Vesk saved on 35 points on the new core, and the draft cleared");
+  same(/boon|equipment|utility|"bag"/i.test(JSON.stringify(built.build)), false, "nothing saved about Boons, equipment, utility items or a bag");
   same(JSON.stringify(built.build).includes("spec"), false, "nothing saved about specialties");
-  same(sheetParts(sheetFor(built)), sheetParts(want), "the built Vesk against her sheet in the chapter");
+  // A knife typed in gets the weapons table's properties, where the
+  // chapter's Vesk lists none, so those are left out of the comparing.
+  same(sheetFor(built).items.find((it) => it.name === "a knife")?.props, ["Thrown", "Concealed", "Quick"], "a knife typed in with a knife's properties off the weapons table");
+  same(sheetParts(sheetFor(built), { props: false }), sheetParts(want, { props: false }), "the built Vesk against her sheet in the chapter");
 
   // A reload and no signal keep her, and Change opens her offline.
   await page.reload();
@@ -2700,20 +2753,18 @@ if (part("5")) {
   same(await points(), "35 points on the sheet, 35 to start", "a saved character's points on the sheet");
   await context.setOffline(false);
 
-  // Change her: a Boon instead of two permissions on her first Title, a
-  // fourth permission there filling its six slots, and her boots for a
-  // Masterwork shield. A saved character keeps everything, even past 35.
-  await unfold(page, "bd-boon-0");
-  await b('[data-b="boon"][data-t="0"][data-v="Toughness"]');
-  await page.fill("#b-t0-b0-name", "Iron Lungs");
+  // Change her: a fourth permission on her first Title, her leathers up to
+  // Storied (tier 4, bought with money in play), and her boots swapped for a
+  // Proven shield, a guard. A saved character keeps everything, even past 35.
+  same(await page.$$eval('[data-b="boon"], [data-open^="bd-boon"]', (els) => els.length), 0, "no Boons to take");
   await b('[data-b="addperm"][data-t="0"]');
   await perm(0, 3, "slip a grip", "Body");
-  has(await page.textContent(".bd-title:has(#b-t0-text)"), "That’s all six slots", "a Boon and four permissions filling her first Title");
-  same(await page.$$eval('[data-b="addperm"][data-t="0"]', (els) => els.length), 0, "no seventh slot to add");
-  await page.fill("#b-e2", "");
-  await b('[data-b="fillany"][data-k="e"][data-v="shield"]');
-  if ((await pressedOn('[data-b="arm"][data-i="2"][data-v="Body"]')) !== "true") await b('[data-b="arm"][data-i="2"][data-v="Body"]');
-  await b('[data-b="quality"][data-i="2"][data-v="3"]');
+  await unfold(page, "bd-it-0");
+  same(await page.$$eval('[data-b="itier"][data-w="i"][data-i="0"]', (els) => els.length), 6, "any of the six tiers on a saved character");
+  await b('[data-b="itier"][data-w="i"][data-i="0"][data-v="4"]');
+  await unfold(page, "bd-it-2");
+  await page.fill("#b-i2", "a shield");
+  await page.waitForFunction(() => /38 points/.test(document.querySelector(".bd-pts-say")?.textContent ?? ""));
   same(await points(), "38 points on the sheet, 35 to start", "38 points on her sheet now");
   same((await page.textContent(".bd-part:last-of-type")).includes("past the 35"), false, "nothing flagged for being past 35");
   await page.click('.bd-foot button[data-b="save"]');
@@ -2721,8 +2772,8 @@ if (part("5")) {
   const changed = (await savedAll(page)).filter((c) => c.build);
   same(changed.length, 1, "changing her doesn't make a second Vesk");
   const now = sheetFor(changed[0]);
-  same([now.titles[0].permissions.length, now.titles[0].boons.map((x) => [x.lever, x.name]), now.armour.map((a) => [a.name, a.quality, a.boxes]), now.points.spent], [4, [["Toughness", "Iron Lungs"]], [["worn leathers", "Common", 1], ["shield", "Masterwork", 3]], 38], "her Boon, her fourth permission and her Masterwork shield");
-  same(now.roots, { Body: 12, Mind: 5, Soul: 0 }, "her Body 1 more for her new permission, and nothing for the Boon");
+  same([now.titles[0].permissions.length, now.items.map((it) => [it.name, it.kind, it.tier]), now.points.spent], [4, [["worn leathers", "armour", 4], ["a knife", "weapon", 2], ["a shield", "guard", 3], ["a set of picks", "tool", 3], ["A grappling line", "tool", 2]], 38], "her fourth permission, her Storied leathers and her Proven shield");
+  same(now.roots, { Body: 12, Mind: 5, Soul: 0 }, "her Body 1 more for her new permission");
 
   // A blank character saves too: the builder warns, and never blocks, and
   // the recommendation's only a nudge. Leaving keeps the draft, and the list
@@ -2840,21 +2891,38 @@ if (part("5b")) {
     const steppers = await page.$$eval('.bd-spread .cc-stepbtn', (els) => els.filter((el) => el.checkVisibility() && (el.getBoundingClientRect().height < 44 || el.getBoundingClientRect().width < 44)).length);
     same(steppers, 0, `the spread's + and − 44px or more, ${theme}`);
     // axe again with things picked: a spread and a permission, an archetype
-    // with its ability, a Title idea, a Boon, the points open, and a crew
-    // question made into a thread.
+    // with its ability and what one does behind its ?, a Title idea, an item
+    // open with its kind and tier, the points open, and a crew question made
+    // into a thread.
     await axe(`a Title with a spread and a permission, ${theme}`);
     await jump(0);
     await b('[data-b="arch"][data-t="0"][data-v="Warrior"]');
-    await b(`[data-b="abil"][data-t="0"][data-v="${BUILD.archetypes.find((a) => a.name === "Warrior").abilities[0].name}"]`);
+    const warrior = BUILD.archetypes.find((a) => a.name === "Warrior");
+    await b(`[data-b="abil"][data-t="0"][data-v="${warrior.abilities[0].name}"]`);
+    // Ten abilities on the card, each its name and its Aura, with what it
+    // does behind its ?, so the card's short.
+    same(await page.$$eval('.bd-abil-row', (els) => els.map((el) => [el.querySelector('[data-b="abil"]').dataset.v, Boolean(el.querySelector(".tip"))])), warrior.abilities.map((x) => [x.name, true]), `the Warrior's abilities, each with a ?, ${theme}`);
+    same(await page.$$eval('[data-b="abil"] .bd-for', (els) => els.length), 0, `no ability's words on the card till its ? is tapped, ${theme}`);
+    const abilH = await page.$eval(".bd-abils", (el) => Math.round(el.getBoundingClientRect().height));
+    if (abilH > 700) note(`the Warrior's ten abilities take ${abilH}px at 390 wide, ${theme}`);
+    await page.click(".bd-abil-row:nth-child(2) .tip");
+    has(await page.textContent(".bd-abil-row:nth-child(2) .tip-card:popover-open"), "Aura each time you use it", `an ability's words behind its ?, ${theme}`);
+    await page.keyboard.press("Escape");
     await axe(`an archetype and its ability picked, ${theme}`);
     await jump(1);
     await unfold(page, "bd-ideas-0");
     await b('[data-b="idea"][data-t="0"][data-v="k-warrior"]');
-    await unfold(page, "bd-boon-0");
-    await b('[data-b="boon"][data-t="0"][data-v="Stride"]');
-    await axe(`a Title idea and a Boon, ${theme}`);
+    await axe(`a Title idea, ${theme}`);
+    await jump(3);
+    await b('.bd-seg[data-v="i"]');
+    await unfold(page, "bd-kitideas");
+    await b('[data-b="additem"][data-v="Shield"]');
+    await unfold(page, "bd-it-0");
+    same(await page.getAttribute('[data-b="ikind"][data-w="i"][data-i="0"][data-v="guard"]', "aria-pressed"), "true", `a shield off a card a guard, ${theme}`);
+    await axe(`an item open with its kind and tier, ${theme}`);
+    await shot(page, `5b-builder-items-${theme}`);
     await page.click(".bd-pts > summary");
-    has(await page.textContent(".bd-pts-in"), "the Stride Boon", `the Boon's 2 points in what they went on, ${theme}`);
+    has(await page.textContent(".bd-pts-in"), "Shield", `the shield's point in what they went on, ${theme}`);
     await axe(`the points open, ${theme}`);
     await page.click(".bd-head h1");
     await jump(4);
@@ -2919,24 +2987,43 @@ if (part("5c")) {
     connect: [], aspiration: "Own the score of a lifetime", name: "Vesk", pronoun: "her", blurb: "", trouble: [], order: ["Locks", "Stealth"] };
   {
     const nb = normalBuild(OLD, BUILD);
-    same([nb.v, nb.have, nb.titles.map((t) => [t.roots, t.from]), nb.stack, nb.attuned[0].awk.map((w) => [w.root, w.guessed])], [5, [["Push"], ["Vanish"]], [[{ Body: 5, Mind: 0, Soul: 0 }, "Body"], [{ Body: 0, Mind: 5, Soul: 0 }, "Mind"]], true, [["Body", true]]], "a build from before stacking: each Title's 5 on its old Root, Shadow's abilities dealt between her two, and her hook on her biggest Root till she says");
+    same([nb.v, nb.have, nb.titles.map((t) => [t.roots, t.from]), nb.stack, nb.attuned[0].awk.map((w) => [w.root, w.guessed])], [6, [["Push"], ["Vanish"]], [[{ Body: 5, Mind: 0, Soul: 0 }, "Body"], [{ Body: 0, Mind: 5, Soul: 0 }, "Mind"]], true, [["Body", true]]], "a build from before stacking: each Title's 5 on its old Root, Shadow's abilities dealt between her two, and her hook on her biggest Root till she says");
     same(JSON.stringify(nb).match(/spec|order|"aura"/g), null, "its specialties and its thing's own Aura gone");
     const old = rootsSheet(sheetOf({ id: "5c-old", name: "Vesk", build: OLD }, BUILD), [], BUILD);
-    same([old.roots, old.points, old.numbers.aura, RS.choicesOf(old)], [{ Body: 9, Mind: 7, Soul: 0 }, { start: 35, spent: 34 }, 5, [{ k: "spread", t: 0, root: "Body" }, { k: "spread", t: 1, root: "Mind" }, { k: "lock", a: 0, name: "Anywhere I can throw a hook", root: "Body" }, { k: "points", left: 1 }]], "her Roots recounted, her points, Aura 5, and what's hers to choose");
-    same(checksOf(nb, BUILD, { changing: true }).map((x) => x.text), ["You’ve got a point left to spend."], "a saved character only told about the point she's got left");
+    same([old.roots, old.points, old.numbers.aura, RS.choicesOf(old)], [{ Body: 9, Mind: 7, Soul: 0 }, { start: 35, spent: 31 }, 5, [{ k: "spread", t: 0, root: "Body" }, { k: "spread", t: 1, root: "Mind" }, { k: "lock", a: 0, name: "Anywhere I can throw a hook", root: "Body" }, { k: "points", left: 4 }]], "her Roots recounted, her points with her utility items gone, Aura 5, and what's hers to choose");
+    same(checksOf(nb, BUILD, { changing: true }).map((x) => x.text), ["You’ve got 4 points left to spend."], "a saved character only told about the points she's got left");
     // Grown past 35, it keeps everything, and nothing's flagged.
     const grown = foldGrown(OLD, [{ k: "perm", t: 0, text: "slip a grip", root: "Body", spec: "Stealth" }, { k: "title", text: "The woman who has never been seen", root: "Body", specs: ["Hiding"], perm: { text: "vanish in a crowd", root: "Body", spec: "Hiding" } }, { k: "arch", arch: "Hunter" }], BUILD);
-    same([pointsOf(grown).spent, grown.have, grown.titles[2].roots, checksOf(grown, BUILD, { changing: true }).length], [46, [["Push"], ["Vanish"], ["Push", "Mark the pack"]], { Body: 5, Mind: 0, Soul: 0 }, 0], "what she grew before stacking folded in, 46 points and nothing flagged");
+    same([pointsOf(grown).spent, grown.have, grown.titles[2].roots, checksOf(grown, BUILD, { changing: true }).length], [43, [["Push"], ["Vanish"], ["Push", "Mark the pack"]], { Body: 5, Mind: 0, Soul: 0 }, 0], "what she grew before stacking folded in, 46 points and nothing flagged");
     // Built on stacking: each Title's 3 made 5 the way they were spread, said
     // till it's saved, and her hook on her biggest Root.
     const STACKED = { ...structuredClone(OLD), v: 4, titles: OLD.titles.map((t, i) => ({ ...t, root: undefined, specs: undefined, roots: i ? { Body: 1, Mind: 2, Soul: 0 } : { Body: 3, Mind: 0, Soul: 0 } })) };
     const st = normalBuild(STACKED, BUILD);
-    same([st.v, st.core, st.titles.map((t) => [t.roots, t.three]), st.attuned[0].awk[0].root], [5, true, [[{ Body: 5, Mind: 0, Soul: 0 }, { Body: 3, Mind: 0, Soul: 0 }], [{ Body: 2, Mind: 3, Soul: 0 }, { Body: 1, Mind: 2, Soul: 0 }]], "Body"], "a build from stacking: each Title's 3 made 5 the way it was spread, saying what it was");
+    same([st.v, st.core, st.titles.map((t) => [t.roots, t.three]), st.attuned[0].awk[0].root], [6, true, [[{ Body: 5, Mind: 0, Soul: 0 }, { Body: 3, Mind: 0, Soul: 0 }], [{ Body: 2, Mind: 3, Soul: 0 }, { Body: 1, Mind: 2, Soul: 0 }]], "Body"], "a build from stacking: each Title's 3 made 5 the way it was spread, saying what it was");
     const stSheet = rootsSheet(sheetOf({ id: "5c-stacked", name: "Vesk", build: STACKED }, BUILD), [], BUILD);
     same([stSheet.roots, stSheet.core, RS.choicesOf(stSheet).map((x) => x.k)], [{ Body: 11, Mind: 5, Soul: 0 }, undefined, ["five", "five", "lock", "points"]], "its sheet the chapter's Vesk, with each Title's 5 and her hook for her to check");
     // From before Roots: each Title's spread the way its permissions lean.
     const tam = normalBuild({ v: 2, titles: [{ arch: "Warrior", text: "The best blade on the docks", perms: [{ text: "fight with a sword", on: ["Fight"] }, { text: "read a fighter’s style", on: ["Study"] }] }], actions: ["Fight", "Study"], equipment: [], utility: [], attuned: [], threads: [] }, BUILD);
-    same([tam.titles[0].roots, tam.titles[0].perms.map((p) => p.root), tam.have], [{ Body: 3, Mind: 2, Soul: 0 }, ["Body", "Mind"], [BUILD.archetypes.find((a) => a.name === "Warrior").abilities.map((x) => x.name)]], "a Title from before Roots spread the way its permissions lean, its archetype with every ability");
+    same([tam.titles[0].roots, tam.titles[0].perms.map((p) => p.root), tam.have], [{ Body: 3, Mind: 2, Soul: 0 }, ["Body", "Mind"], [RS.hadOf("Warrior", BUILD.archetypes.find((a) => a.name === "Warrior").abilities.map((x) => x.name))]], "a Title from before Roots spread the way its permissions lean, its archetype with the abilities it had");
+    // Built on the new core before the fixes (v 5): Bram with Fine plate and
+    // a shield on his Body, a hammer, utility items, a bag and a Toughness
+    // Boon. His equipment's items at tier 2 (his plate 3, a shield a guard),
+    // his utility items and bag go into his notes, and the Boon's 2 points
+    // are his to spend, flagged.
+    const bram = fromCrew(book.crew.find((c) => c.id === "bram"), BUILD, { keep: true });
+    const V5 = { ...structuredClone(bram), v: 5, items: undefined, equipment: [{ text: "plate armour", arm: "Body", q: 2 }, { text: "a shield", arm: "Body" }, { text: "a war hammer", arm: "" }], utility: [{ text: "a purse of gold" }, { text: "rope" }, { text: "" }], bag: "chalk\nbandages", keepsake: { text: "his old sergeant’s stripes" } };
+    V5.titles[1].boons = [{ lever: "Toughness", name: "Thick skull", on: "" }];
+    delete V5.items;
+    V5.attuned = V5.attuned.map(({ kind, tier, root, props, ...a }) => ({ ...a, props: "Breaker" }));
+    const nb5 = normalBuild(V5, BUILD);
+    same([nb5.v, nb5.fixes, nb5.items.map((it) => [it.text, it.kind, it.tier, it.root]), nb5.carried, nb5.titles[1].boonsGone], [6, true, [["plate armour", "armour", 3, "Body"], ["a shield", "guard", 2, ""]], { utility: ["a purse of gold", "rope"], bag: ["chalk", "bandages"] }, [{ lever: "Toughness", name: "Thick skull" }]], "a build from before the fixes: items at tier 2, Fine plate tier 3, a shield a guard, his hammer the attuned thing, utility and bag kept for his notes, and his Boon gone");
+    same([nb5.attuned[0].kind, nb5.attuned[0].props], ["weapon", ["Breaker"]], "his attuned hammer a weapon with Breaker");
+    const s5 = rootsSheet(sheetOf({ id: "5c-v5", name: "Bram", build: V5 }, BUILD), [], BUILD);
+    same([s5.points.spent, RS.choicesOf(s5).map((x) => x.k)], [34, ["boon", "points"]], "his sheet a point under 35 with his helmet and Boon gone, his Boon and his points to spend flagged");
+    const st5 = RS.normalCore({ v: 4, pts: { Body: 3, Mind: 3, Soul: 4 }, boxes: { "equipment|plate armour": 1 }, notes: "Owes Murk" }, s5);
+    has(st5.notes, "Owes Murk\nWhat you carried before Resources: a purse of gold, rope, chalk, bandages.", "his utility items and bag in his notes");
+    same([st5.soak, "boxes" in st5, st5.choose.map((x) => x.k)], [{}, false, ["boon", "points"]], "his plate's soak full and its boxes gone, with the Boon and his points his to choose");
+    same(JSON.stringify(Object.keys(normalBuild(nb5, BUILD))).includes("equipment"), false, "nothing left of equipment once it's moved across");
   }
 
   const { context, page } = await phone();
@@ -2975,14 +3062,14 @@ if (part("5c")) {
   await setState(page, vesk.id, { aura: 4, pts: { Body: 7, Mind: 5, Soul: 0 } });
   await page.goto(`${BASE}/characters/?build=${encodeURIComponent(vesk.id)}`);
   has(await page.textContent(".bd-head"), "Change anything on her sheet", "changing Vesk from the crew");
-  await unfold(page, "bd-boon-1");
-  await b('[data-b="boon"][data-t="1"][data-v="Ties"]');
+  await unfold(page, "bd-it-1");
+  await b('[data-b="itier"][data-w="i"][data-i="1"][data-v="3"]');
   await page.click('.bd-foot button[data-b="save"]');
   await playing(page);
   const mine = (await savedAll(page)).find((c) => c.from === "vesk");
   same([mine.crew, Boolean(mine.build), mine.state.aura, mine.state.pts?.Body], ["own", true, 4, 7], "Vesk your own, with her Aura spent and her Body's points kept");
   same(await page.$$eval(".cc-gold, .cc-gem", (els) => els.length), 0, "no gold marks on Vesk once she's your own");
-  same([sheetFor(mine).roots, sheetFor(mine).titles[1].boons.map((x) => x.lever), sheetFor(mine).points.spent], [rootsSheet(book.crew.find((c) => c.id === "vesk"), [], BUILD).roots, ["Ties"], 37], "her Roots as they were, and the Boon's 2 points");
+  same([sheetFor(mine).roots, sheetFor(mine).items[1].tier, sheetFor(mine).points.spent], [rootsSheet(book.crew.find((c) => c.id === "vesk"), [], BUILD).roots, 3, 36], "her Roots as they were, and her knife a tier up for a point");
 
   // Vesk built on the phone before stacking: her play screen knows what's
   // hers to choose, and Change says what changed and asks only that.
@@ -2996,10 +3083,11 @@ if (part("5c")) {
   const moved = (await savedAll(page)).find((c) => c.id === "own-v3").state;
   // The play screen moves her state on (stacking's, or the new core's once
   // it's there), with what's hers to choose.
-  same([[3, 4].includes(moved.v), moved.choose], [true, [{ k: "spread", t: 0, root: "Body" }, { k: "spread", t: 1, root: "Mind" }, { k: "lock", a: 0, name: "Anywhere I can throw a hook", root: "Body" }, { k: "points", left: 1 }]], "moved on with what's hers to choose: two Titles to spread, her hook's Root and a point");
+  same([[3, 4, 5].includes(moved.v), moved.choose], [true, [{ k: "spread", t: 0, root: "Body" }, { k: "spread", t: 1, root: "Mind" }, { k: "lock", a: 0, name: "Anywhere I can throw a hook", root: "Body" }, { k: "points", left: 4 }]], "moved on with what's hers to choose: two Titles to spread, her hook's Root and 4 points");
   await page.goto(`${BASE}/characters/?build=own-v3`);
   const told = (await page.textContent(".cc-note.is-gold")).replace(/\s+/g, " ");
-  has(told, "Vesk keeps everything since the stacking change. Each Title that was on one Root has all 5 on it, so spread them how you like, and you’ve got 1 point to spend.", "what changed, and what's hers to choose");
+  has(told, "Vesk keeps everything since the stacking change. Each Title that was on one Root has all 5 on it, so spread them how you like, and you’ve got 4 points to spend.", "what changed, and what's hers to choose");
+  has((await page.textContent(".bd-fixes")).replace(/\s+/g, " "), "Vesk’s things are items now.", "her things items now, said");
   has(await page.textContent(".bd-title:has(#b-t1-text) .bd-was"), "It was all on your Mind, so it still is.", "her second Title on its old Root");
   same(await page.$$eval("[data-b='abil'][aria-pressed='true']", (els) => els.map((el) => `${el.dataset.t}:${el.dataset.v}`)), ["0:Push", "1:Vanish"], "her Shadows keeping Push and Vanish");
   await b('[data-b="snudge"][data-t="1"][data-v="Body"][data-n="1"]');
@@ -3007,11 +3095,13 @@ if (part("5c")) {
   await b('[data-b="snudge"][data-t="1"][data-v="Body"][data-n="1"]');
   await b('[data-b="snudge"][data-t="1"][data-v="Mind"][data-n="-1"]');
   await b('[data-b="snudge"][data-t="1"][data-v="Mind"][data-n="1"]');
-  await page.fill("#b-e2", "soft-soled boots");
+  await b('[data-b="additem"]:not([data-v])');
+  await page.fill("#b-i2", "soft-soled boots");
   await page.click('.bd-foot button[data-b="save"]');
   await playing(page);
   const v3 = (await savedAll(page)).find((c) => c.id === "own-v3");
-  same([v3.build.v, "stack" in v3.build, v3.build.titles.some((t) => "from" in t || "three" in t), v3.build.attuned[0].awk[0], v3.state.choose, v3.state.notes, v3.state.asp], [5, false, false, { name: "Anywhere I can throw a hook", root: "Body", text: "+1 on one die of every roll she makes with it, for each Aura in it" }, [], "Owes the fence", 4], "saved on the new core, her hook on her Body, with nothing left to choose and her play kept");
+  same([v3.build.v, "stack" in v3.build, "fixes" in v3.build, v3.build.titles.some((t) => "from" in t || "three" in t), v3.build.attuned[0].awk[0], v3.state.choose, v3.state.asp], [6, false, false, false, { name: "Anywhere I can throw a hook", root: "Body", text: "+1 on one die of every roll she makes with it, for each Aura in it" }, [{ k: "points", left: 3 }], 4], "saved on the fixes, her hook on her Body, with her points left to spend and her play kept");
+  has(v3.state.notes, "Owes the fence\nWhat you carried before Resources: a purse of gold, a smoke bomb, a perfect set of picks.", "her notes kept, with her utility items in them");
   same(sheetFor(v3).roots, rootsSheet(book.crew.find((c) => c.id === "vesk"), [], BUILD).roots, "her Roots recounted the chapter's way");
 
   // Tamsin, built on the phone before Roots, rebuilt on stacking.
@@ -3034,7 +3124,7 @@ if (part("5c")) {
   await page.click('.bd-foot button[data-b="save"]');
   await playing(page);
   const tam = (await savedAll(page)).find((c) => c.id === "own-old");
-  same([tam.build.v, [3, 4].includes(tam.state.v), "before" in tam.state, tam.state.notes, sheetFor(tam).roots], [5, true, false, "Owes Dorrie", { Body: 6, Mind: 0, Soul: 0 }], "Tamsin saved on the new core, her Body 6 and her notes kept");
+  same([tam.build.v, [3, 4, 5].includes(tam.state.v), "before" in tam.state, tam.state.notes, sheetFor(tam).roots, sheetFor(tam).items.map((it) => [it.name, it.kind, it.tier])], [6, true, false, "Owes Dorrie", { Body: 6, Mind: 0, Soul: 0 }, [["a sword", "weapon", 2]]], "Tamsin saved on the fixes, her Body 6, her sword an item and her notes kept");
   same(sheetFor(tam).threads.find((p) => p.person === "Dorrie")?.threads[0]?.text, "She owes me.", "her hostile thread with Dorrie kept");
   console.log("ways in: Bram and a random one saved, a draft binned on a second tap, Vesk your own with her play kept, one from before stacking asked only what's hers, and Tamsin rebuilt");
   await context.close();
@@ -3081,11 +3171,11 @@ if (part("6")) {
   // onto the new core: every Root full, and her Stamina's Scar on her Body.
   want(f, [["name", "Vesk"], ["pronouns", "she, her"], ["aura_now", "4"], ["aura_max", "5"], ["toll", ""], ["stride", "3"],
     ["root_body_now", "9"], ["root_body_holds", "9"], ["root_body_locked", "2"], ["root_body_wound", false], ["root_body_scar_1", "a burn across the back"], ["root_mind_now", "5"], ["root_soul_now", "0"],
-    ["root_body_armour_1", "Common worn leathers"], ["root_body_armour_1_box_1", false],
+    ["item_1", "worn leathers"], ["item_1_kind", "armour"], ["item_1_tier", "2"], ["item_1_root", "body"], ["item_1_box_1", false],
     ["root_body", "11"], ["root_body_dice", "d12 + d10"], ["root_body_title_1", "5"], ["root_body_title_2", "2"], ["root_body_permissions", "4"], ["root_mind", "5"], ["root_mind_title_1", ""], ["root_mind_title_2", "3"], ["root_mind_permissions", "2"], ["root_soul", "0"], ["root_soul_permissions", ""],
     ["points_spent", "35"], ["points_start", "35"], ["points_banked", ""],
     ["aspiration", "Own the score of a lifetime"], ["aspiration_1", false],
-    ["equipment_1", "Common worn leathers"], ["equipment_2", "a knife"], ["utility_2", "a smoke bomb (used)"], ["keepsake", "the first coin she ever stole"],
+    ["item_2", "a knife"], ["item_2_kind", "weapon"], ["item_4", "a set of picks"], ["item_4_tier", "3"], ["item_5", "her grappling line, attuned"], ["resources", "3"], ["resource_1", ""], ["keepsake", "the first coin she ever stole"],
     ["title_1", "The best cat burglar in the city"], ["title_1_body", "5"], ["title_1_mind", ""], ["title_1_permission_1", "move unseen"], ["title_1_permission_1_root", "body"],
     ["title_2", "Raised by the Guild"], ["title_2_body", "2"], ["title_2_mind", "3"], ["title_2_permission_2", "fight dirty with a knife"], ["title_2_permission_2_root", "body"], ["title_2_permission_3_root", "mind"],
     ["archetype_1", "Shadow, twice"], ["archetype_2", ""],
@@ -3095,14 +3185,13 @@ if (part("6")) {
   has([1, 2, 3, 4, 5, 6].map((k) => f.get(`attune_1_awakening_${k}`)).filter(Boolean).join(" "), "Anywhere I can throw a hook: 2 steps on every roll she makes with it, and 2 more for each Aura", "her hook's awakening, whole over its lines");
   has(`${f.get("archetype_1_ability_1")} ${f.get("archetype_1_ability_2")}`, "Push (1 Aura): +3", "her Shadow's Push, +3 for taking it twice, for 1 Aura");
   has(f.get("notes_1"), "Trouble that follows her: wanted in three districts, owes the Guild.", "her trouble in Notes");
-  // Bram's plate with a box ticked, and Dorrie's court clothes on her Mind.
+  // Bram's plate saved with a box ticked before the fixes, its soak all back
+  // now, his helmet, and his shield a guard. Dorrie's court clothes on her Mind.
   f = await print("bram");
-  want(f, [["root_body_armour_1", "Fine plate armour"], ["root_body_armour_1_box_1", true], ["root_body_armour_1_box_2", false], ["archetype_1", "Guardian"], ["archetype_2", "Leader"], ["attune_1_thing", "His war hammer (Breaker)"], ["attune_1_catch", "Marked"]], "Bram");
-  has(f.get("root_body_armour_2"), "shield", "Bram's shield on his Body");
+  want(f, [["item_1", "plate armour"], ["item_1_tier", "3"], ["item_1_root", "body"], ["item_1_box_1", false], ["item_2", "a helmet"], ["item_3", "a shield"], ["item_3_kind", "guard"], ["item_3_root", ""], ["archetype_1", "Guardian"], ["archetype_2", "Leader"], ["attune_1_thing", "His war hammer (Breaker)"], ["attune_1_catch", "Marked"]], "Bram");
   f = await print("dorrie");
-  same(`${f.get("root_mind_armour_1")} ${f.get("root_mind_armour_2")}`.trim(), "Common court clothes, when they fit the scene", "Dorrie's court clothes on her Mind, over its two lines");
-  same(f.get("root_body_armour_1"), "", "nothing on Dorrie's Body");
-  console.log("print on the phone: Vesk mid-scene, Bram's plate and Dorrie's court clothes, read back field by field");
+  want(f, [["item_1", "court clothes, when they fit the scene"], ["item_1_kind", "armour"], ["item_1_root", "mind"]], "Dorrie");
+  console.log("print on the phone: Vesk mid-scene, Bram's plate, helmet and shield and Dorrie's court clothes, read back field by field");
   await context.close();
 }
 
@@ -3756,6 +3845,60 @@ if (part("8")) {
     const grownSheet = rootsSheet(book.crew.find((x) => x.id === "isolde"), s.grown, BUILD);
     same([grownSheet.roots, s.pts], [{ Body: 0, Mind: 14, Soul: 9 }, { Body: 0, Mind: 13, Soul: 8 }], "her Roots with the new Title, and every Root full on it, less her Scar");
   }
+  // Bram's week on the fixes: his plate's soak and his Resources back as it
+  // starts, his broken shield mended, his helmet raised a tier, and no Boons
+  // to swap either way. Then Vesk getting a crowbar, and a buckler that's
+  // her seventh item, so her knife goes.
+  {
+    const { makeDowntime } = await import("../src/companion/downtime.js");
+    const D = makeDowntime({ B: BUILD, esc: (x) => String(x ?? ""), steps: (n) => `${n} steps`, link: () => "", icon: { close: "" }, throwDie: (n) => n, crewNames: () => new Set(), isOpen: () => false, rule: () => "" });
+    const bram = book.crew.find((x) => x.id === "bram");
+    const c = rootsSheet(bram, [], BUILD);
+    const s = RS.normalCore({}, c);
+    Object.assign(s, { soak: { "item|plate armour": 2 }, res: ["rope", "a flask"], crossed: { "item|a shield": true } });
+    const ch = { id: "bram-week" };
+    const d = D.start(ch);
+    const tap = (data, dd = d, cc = c, ss = s) => D.act({ dataset: data }, dd, cc, ss);
+    const type = (where, f, value, dd = d) => D.input({ dataset: { dt: String(where), f }, value }, dd);
+    const card = (dd = d, cc = c, ss = s, id = ch) => D.view(cc, ss, id, dd).replace(/<[^>]*>/g, "").replace(/\s+/g, " ");
+    has(card(), "everything back, free: your armour’s soak and 2 Resources", "his soak and his Resources back, said on the card");
+    same(/Boon/.test(D.view(c, s, ch, d)), false, "no Boons on the downtime card");
+    tap({ do: "pick", s: "0", v: "mend" });
+    has(card(), "Trusty shield", "his broken shield the one thing to mend");
+    tap({ do: "pick", s: "1", v: "tier" });
+    has(card(), "Proven plate armour tier 3", "his plate already at tier 3, so it can't go up");
+    tap({ do: "set", s: "1", f: "key", v: "item|a helmet" });
+    has(card(), "It goes up to tier 3, Proven.", "his helmet going up to tier 3");
+    same(D.warnings(d, c, s), [], "nothing to flag on Bram's week");
+    const said = D.apply(s, c, d);
+    same([s.soak, s.res, s.crossed, s.grown.at(-1)], [{}, [], {}, { k: "tier", key: "item|a helmet", to: 3 }], "his soak and Resources back, his shield mended and his helmet up a tier");
+    has(said.join(". "), "A Trusty shield is mended, and back at tier 2", "his shield mended, said");
+    same(rootsSheet(bram, s.grown, BUILD).items.find((it) => it.key === "item|a helmet")?.tier, 3, "his helmet Proven on his sheet");
+    // Vesk: a crowbar's her sixth item, and a buckler would be a seventh.
+    const vesk = book.crew.find((x) => x.id === "vesk");
+    const cv = rootsSheet(vesk, [], BUILD);
+    const sv = RS.normalCore({}, cv);
+    const dv = D.start({ id: "vesk-get" });
+    tap({ do: "pick", s: "0", v: "get" }, dv, cv, sv);
+    type(0, "text", "a crowbar", dv);
+    tap({ do: "pick", s: "1", v: "get" }, dv, cv, sv);
+    type(1, "text", "a buckler", dv);
+    tap({ do: "set", s: "1", f: "kind", v: "guard" }, dv, cv, sv);
+    has(card(dv, cv, sv, { id: "vesk-get" }), "You carry six items at most, so one goes.", "a seventh item, so one goes");
+    same(D.warnings(dv, cv, sv), ["Your second slot is a seventh item, so pick the one that goes."], "the seventh waiting on what goes");
+    tap({ do: "set", s: "1", f: "drop", v: "item|a knife" }, dv, cv, sv);
+    same(D.warnings(dv, cv, sv), [], "her knife going for the buckler");
+    D.apply(sv, cv, dv);
+    same(rootsSheet(vesk, sv.grown, BUILD).items.map((it) => [it.name, it.kind, it.tier]), [["worn leathers", "armour", 2], ["soft-soled boots", "tool", 3], ["a set of picks", "tool", 3], ["her grappling line", "tool", 2], ["a crowbar", "tool", 2], ["a buckler", "guard", 2]], "her crowbar and her buckler at tier 2, and her knife gone");
+    // Something else the story gives you goes in your notes.
+    const dn = D.start({ id: "vesk-purse" });
+    tap({ do: "pick", s: "0", v: "get" }, dn, cv, sv);
+    tap({ do: "set", s: "0", f: "what", v: "other" }, dn, cv, sv);
+    type(0, "text", "the iron for her line’s next stage", dn);
+    tap({ do: "pick", s: "1", v: "party" }, dn, cv, sv);
+    D.apply(sv, cv, dn);
+    has(sv.notes, "Got in downtime: the iron for her line’s next stage.", "a material in her notes");
+  }
 
   const { context, page } = await phone();
   const t = tableOf(page);
@@ -3775,9 +3918,10 @@ if (part("8")) {
   const week = async () => {
     await page.click('button[data-act="downtime"]');
     has(await t.body(), "Every downtime starts with everything back, free: Body 4 to 10 and Mind 3 to 5", "everything back, free");
-    // Vesk's Shadows have both their abilities, so there's none to buy, and
-    // there's no slot to recover in.
-    same(await page.$$eval('#cc-dialog button[data-do="pick"][data-v="ability"], #cc-dialog button[data-do="pick"][data-v="heal"]', (els) => els.length), 0, "no ability to buy when every one's had, and no Recover slot");
+    // There's no slot to recover in, and her Shadows have more abilities to
+    // buy, ten on the list.
+    same(await page.$$eval('#cc-dialog button[data-do="pick"][data-v="heal"]', (els) => els.length), 0, "no Recover slot");
+    same(await page.$$eval('#cc-dialog button[data-do="pick"][data-s="0"][data-v="ability"]', (els) => els.length), 1, "an ability to buy off the Shadow's ten");
     await dt('[data-do="pick"][data-s="0"][data-v="pressure"]');
     await dt('[data-do="pick"][data-s="1"][data-v="perm"]');
     await dt('[data-do="set"][data-s="1"][data-f="t"][data-v="0"]');
@@ -3881,15 +4025,16 @@ if (part("8b")) {
 // its one awakening. A slot buys an ability, never one another of the same
 // archetype has.
 if (part("9")) {
-  // Two permissions for a Boon in downtime: the Boon takes their slots, and
-  // one that wouldn't fit takes nothing off.
+  // Two permissions swapped for a Boon in a downtime before the fixes: Boons
+  // are gone, so the permissions stay, Aura's 5, and it's flagged. Folded
+  // into Change it's just the permissions.
   {
     const vesk = structuredClone(book.crew.find((c) => c.id === "vesk"));
     vesk.titles[0].permissions.push({ text: "slip a grip", root: "Body" }, { text: "hang off a ledge", root: "Body" });
-    const swapped = rootsSheet(vesk, [{ k: "boon", t: 0, lever: "Aura", name: "Second Wind", drop: [0], g: 0 }], BUILD);
-    same([swapped.titles[0].permissions.length, swapped.titles[0].boons.map((b) => b.name), swapped.numbers.aura], [4, ["Second Wind"], 7], "a permission off her five for a Boon, with Aura 2 more");
-    const full = rootsSheet(vesk, [{ k: "perm", t: 0, text: "palm a key", root: "Body", g: 0 }, { k: "boon", t: 0, lever: "Aura", drop: [0], g: 1 }], BUILD);
-    same([full.titles[0].permissions.length, full.titles[0].boons.length, full.numbers.aura], [6, 0, 5], "a Boon that won't fit beside six permissions takes none of them off");
+    const grown = [{ k: "boon", t: 0, lever: "Aura", name: "Second Wind", drop: [0], g: 0 }];
+    const swapped = rootsSheet(vesk, grown, BUILD);
+    same([swapped.titles[0].permissions.length, "boons" in swapped.titles[0], swapped.titles[0].boonsGone?.map((b) => b.name), swapped.numbers.aura, RS.choicesOf(swapped).map((x) => x.k)], [5, false, ["Second Wind"], 5, ["boon"]], "a Boon swapped in before the fixes gone, her permissions kept and Aura 5, flagged");
+    same(foldGrown(fromCrew(vesk, BUILD, { keep: true }), grown, BUILD).titles[0].perms.length, 5, "and folded into Change, her five permissions");
   }
   for (const base of book.crew) {
     const c0 = rootsSheet(base, [], BUILD);
@@ -3947,13 +4092,14 @@ if (part("9")) {
   has(await t.body(), "Its 5 Root points: Mind 2, Soul 3", "her new Title's spread");
   await page.fill('#cc-dialog input[data-dt="0"][data-f="perm"]', "know who’s lying in my crew");
   await dt('[data-do="set"][data-s="0"][data-f="proot"][data-v="Mind"]');
-  // Her second slot can't buy an ability, so it's Get something.
+  // Her second slot's Get something: a crowbar, her sixth item.
   await dt('[data-do="pick"][data-s="1"][data-v="get"]');
-  await page.fill('#cc-dialog input[data-dt="1"][data-f="text"]', "a spare lockpick");
+  await page.fill('#cc-dialog input[data-dt="1"][data-f="text"]', "a crowbar");
   await t.finish();
   const v = (await savedAll(page)).find((c) => c.id === vesk.id);
   const sheet = sheetFor(v);
   same([sheet.roots, sheet.titles.at(-1).text, sheet.titles.at(-1).roots, sheet.titles.at(-1).permissions.map((p) => [p.text, p.root]), v.state.aspPts], [{ Body: 11, Mind: 8, Soul: 3 }, "Captain of the crew", { Body: 0, Mind: 2, Soul: 3 }, [["know who’s lying in my crew", "Mind"]], 0], "her third Title, its spread and its permission, and her Aspiration starting again with nothing");
+  same(sheet.items.map((it) => [it.name, it.kind, it.tier]).at(-1), ["a crowbar", "tool", 2], "her crowbar, a Trusty tool");
 
   // Gil, a Guardian and a Leader with Push on each: a slot buys Stand firm,
   // and the second slot can't take the one the first's taking.
@@ -3972,7 +4118,8 @@ if (part("9")) {
   await dt('[data-do="set"][data-s="0"][data-f="a"][data-v="0"]');
   await dt('[data-do="set"][data-s="0"][data-f="name"][data-v="Stand firm"]');
   await dt('[data-do="pick"][data-s="1"][data-v="ability"]');
-  same(await page.$eval('#cc-dialog button[data-act="dt"][data-do="set"][data-s="1"][data-f="a"][data-v="0"]', (el) => el.disabled), true, "the second slot can't take the Guardian's last ability again");
+  await dt('[data-do="set"][data-s="1"][data-f="a"][data-v="0"]');
+  same(await page.$$eval('#cc-dialog button[data-act="dt"][data-do="set"][data-s="1"][data-f="name"]', (els) => els.map((el) => el.dataset.v).includes("Stand firm")), false, "the second slot can't take Stand firm again");
   await dt('[data-do="set"][data-s="1"][data-f="a"][data-v="1"]');
   await dt('[data-do="set"][data-s="1"][data-f="name"][data-v="Everyone gets it"]');
   await t.finish();

@@ -15,13 +15,16 @@ export const ROWS = {
   titles: 6, perms: 6,
   archetypes: 3, abilities: 7,
   attuned: 2, awakenings: 6,
-  armour: 2, boxes: 3,
   conditions: 4, scars: 2, grow: 3, aspiration: 5,
   bonds: 4, threads: 3,
-  equipment: 3, utility: 3, bag: 10,
+  // Six items, each with a box for every tier it could have, ticked for
+  // armour's soak used or filled for a vessel's charge, and three Resources.
+  items: 6, itemBoxes: 6, resources: 3,
   notes: 4,
 };
 export const ROOTS = ["body", "mind", "soul"];
+// An item's kind, by its name on the paper.
+export const KINDS = ["weapon", "tool", "guard", "armour", "pack", "vessel"];
 // Each Root's wound, by its name on the paper.
 export const WOUNDS = { body: "Bloodied", mind: "Frayed", soul: "Hollow" };
 export const DICE = ["d2", "d4", "d6", "d8", "d10", "d12"];
@@ -39,10 +42,10 @@ export function sheetFields() {
   // The front: who, Aura, Toll and stride, then each Root (on the new core,
   // 16 Nov 2026): its number and its dice, where its points came from, what
   // it holds once its awakenings and Scars have locked theirs, the points it
-  // has now, its wound, its Scars (each with its slots toward a Trait) and its
-  // armour. Then conditions, the
-  // Aspiration, the Party Goal, points, what you carry and your attuned
-  // things, each awakening with the Root it locks.
+  // has now, its wound and its Scars (each with its slots toward a Trait).
+  // Then conditions, the Aspiration, the Party Goal, points, your six items
+  // (17 Nov), your Resources, the keepsake and your attuned things, each
+  // awakening with the Root it locks.
   for (const f of ["name", "pronouns", "player", "aura_now", "aura_max", "toll", "stride"]) text(f);
   for (const r of ROOTS) {
     for (const f of ["", "_dice"]) text(`root_${r}${f}`);
@@ -55,10 +58,6 @@ export function sheetFields() {
       text(`root_${r}_scar_${i}`);
       for (const j of range(ROWS.grow)) check(`root_${r}_scar_${i}_grow_${j}`);
     }
-    for (const i of range(ROWS.armour)) {
-      text(`root_${r}_armour_${i}`);
-      for (const j of range(ROWS.boxes)) check(`root_${r}_armour_${i}_box_${j}`);
-    }
   }
   for (const i of range(ROWS.conditions)) {
     text(`condition_${i}`);
@@ -70,10 +69,22 @@ export function sheetFields() {
   text("party_goal");
   radio("party_goal_die", DICE);
   for (const f of ["points_spent", "points_start", "points_banked"]) text(f);
-  for (const i of range(ROWS.equipment)) text(`equipment_${i}`);
-  for (const i of range(ROWS.utility)) text(`utility_${i}`);
+  // Each item: its words, its kind and its tier, the Root armour soaks on,
+  // and its boxes. Then your Resources (how many, and a line and a tick for
+  // each one said) and the keepsake.
+  for (const i of range(ROWS.items)) {
+    text(`item_${i}`);
+    radio(`item_${i}_kind`, KINDS);
+    text(`item_${i}_tier`);
+    radio(`item_${i}_root`, ROOTS);
+    for (const j of range(ROWS.itemBoxes)) check(`item_${i}_box_${j}`);
+  }
+  text("resources");
+  for (const i of range(ROWS.resources)) {
+    text(`resource_${i}`);
+    check(`resource_${i}_used`);
+  }
   text("keepsake");
-  for (const i of range(ROWS.bag)) text(`bag_${i}`);
   for (const a of range(ROWS.attuned)) {
     for (const f of ["thing", "material"]) text(`attune_${a}_${f}`);
     radio(`attune_${a}_stage`, STAGES);

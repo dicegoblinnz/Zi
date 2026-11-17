@@ -73,7 +73,6 @@ export const soakSaid = (s, a) => (isBroken(s, a) ? "broken till it’s mended" 
 export const tickedOf = usedOf;
 export const setTicked = setUsed;
 export const tick = (s, a) => setUsed(s, a, usedOf(s, a) + 1);
-export const boxesOn = soakOn;
 export const boxesSaid = soakSaid;
 export function withQuality(name, quality) {
   if (!quality) return name;
@@ -81,4 +80,3 @@ export function withQuality(name, quality) {
   const rest = String(name).slice(art.length);
   return `${/^an? $/i.test(art) ? `${art[0]} ` : art}${quality} ${rest}`;
 }
-export const tierSaid = (n) => tierName(n);

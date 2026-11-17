@@ -278,6 +278,24 @@ What the other prompts need from it:
 - **6:** `allOf()` in `builder.js` gives a build from before stacking the first six of the book's list, which is the old abilities and then new ones now. It wants the abilities each archetype had then (two to four, first in every list), not the first six. The builder's archetype cards show ten to pick from.
 - **7:** 07's Summoning and Appendix C's *Catch its soul* still say a utility slot, and the Summoner's souls are still Mo's (call 8).
 
+### 6. The builder, downtime and print
+
+Built 17 Nov on `rules/2026-11-17-fixes-build`. Its calls are under 6 in `notes/to-confirm.md`'s 17 Nov section.
+
+- **The builder (`builder.js`):** a build's `v: 6`, with `items: [{ text, kind, tier, root, props }]`, `keepsake`, and each attuned thing with its own `kind`, `tier`, `root` and `props`, and no `equipment`, `utility`, `bag` or Boons. Step 4 is Items: the attuned thing first, then your six (each a line with its tier's name and what it does, a tap opening its kind, tier, armour's Root and a weapon's properties, `itemFor()` guessing them off the book), the book's items in a fold, Resources in a bubble, then the keepsake. The points count at the new prices (`pointsOf()` hands items to `costOf()`), the last step shows Resources and no Boons, and checks warn past six and past tier 3 on a new character. Each archetype card shows its ten abilities as a name, its Aura and a ?. `HAD_ABILITIES` stays in `allOf()`.
+- **Older builds:** `normalBuild()` moves `v: 5` and older across (`itemsBefore()`), keeps the utility items and bag in `carried` for the notes, and flags each Boon as `boonsGone` in Change (`fixesNote()`) and on the sheet (choicesOf). `fromBefore()` makes items too. `foldGrown()` reads `{ k: "item" }`, `{ k: "tier" }`, `{ k: "drop" }` and an attune with its kind, and skips a Boon.
+- **The other ways in (`ways.js`):** `fromCrew()` on the crew's items, and `randomBuild()` buying items at tier 2 and tiers up to 3 with what's left, exactly 35 every time.
+- **Downtime (`downtime.js`):** soak and Resources back as it starts (said on the card), Mend for broken items only, Raise an item a tier (to 3), Get something as an item at tier 2 (a seventh letting one go) or into the notes, and no Boons.
+- **The paper sheet and print:** six item cards with kind, tier, armour's Root and six soak or charge boxes, Resources with three lines, the keepsake, no armour lines on the Roots and no Boons (`sheet-fields.js`, `character-sheet.mjs`, `print.css`, `print.js`). The player reference's pages 2 and 3 are `dense`. Both PDFs rebuilt.
+- **Appendix A's The character sheet** says what's on it, with Vesk's front and back on her items.
+- **Small changes elsewhere:** `app.js` (prompt 5's) follows a reworded item's crossed and soak by `item|` keys in place of equipment, utility and the bag. `roots.js` (prompt 2's) lets a build's `was` reach the notes and curls the apostrophes in that note. The unused stubs `BOON_SLOTS`, `boonOf`, `withBoons`, `boxesOn` and `tierSaid` are gone.
+- **Checks:** `tests/check-companion.mjs` parts 1f, 5, 5b, 5c, 6, 8 and 9 rewritten for items, and passing with 1e.
+
+For the others:
+
+- **5:** `app.js` still uses `slotsOf`, `boonCount`, `boonSaid`, `shrugs`, `freeBeyond`, `restBonus`, `tickedOf`, `setTicked`, `boxesSaid`, `piecesOf` and `c.carry` (and `marks.js` `c.carry`), so those stubs stay in roots.js and armour.js, and `legacyCarry()` with them. `kit.astro` uses `withQuality`. Part 3d's Toughness Boon test times out on the base as well as here.
+- **8:** take out the stubs above once 5's landed, and `legacyCarry()`. A build saved now is `v: 6`.
+
 ### 7. The rest of the book
 
 Written 17 Nov on `rules/2026-11-17-fixes-book`. Its calls are under 7 in `notes/to-confirm.md`'s 17 Nov section.

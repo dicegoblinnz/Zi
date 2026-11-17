@@ -381,10 +381,14 @@ export function rootsSheet(base, grown = [], B = null) {
   }
   c.archetypes = (c.archetypes ?? []).map((a) => archOf(typeof a === "string" ? { name: a, id: null } : a, B));
   useTiers(B?.tiers);
-  // The keepsake's free and on top of the six, and the items are a list.
+  // The keepsake's free and on top of the six, and the items are a list. A
+  // build moved across from before the fixes says what its utility items and
+  // bag held (was), for normalCore to write into the notes.
+  const was = c.was && typeof c.was === "object" ? { utility: (Array.isArray(c.was.utility) ? c.was.utility : []).map((x) => text(x, 120)).filter(Boolean), bag: (Array.isArray(c.was.bag) ? c.was.bag : []).map((x) => text(x, 120)).filter(Boolean) } : null;
   delete c.was;
   c.keepsake = text(c.keepsake ?? c.carry?.keepsake, 120) || null;
   c.items = itemsFrom(c, B);
+  if (!c.was && (was?.utility.length || was?.bag.length)) c.was = was;
   c.titles = (c.titles ?? []).filter((t) => t && typeof t === "object").map((t) => titleOf(t, B, core));
   c.points = { start: int(base.points?.start, START), spent: costOf(c).spent };
   if (Array.isArray(grown) && grown.length) growRoots(c, grown, B);
@@ -637,7 +641,7 @@ export function normalCore(raw, c) {
       if ((c.items ?? []).some((it) => it.key === key)) s.crossed[key] = true;
     }
     const was = [...(c.was?.utility ?? []), ...(c.was?.bag ?? [])];
-    if (was.length) s.notes = `${text(s.notes, 4000)}${text(s.notes, 4000) ? "\n" : ""}What you carried before Resources: ${was.join(", ")}. They're things you can say you've got now, with a Resource.`;
+    if (was.length) s.notes = `${text(s.notes, 4000)}${text(s.notes, 4000) ? "\n" : ""}What you carried before Resources: ${was.join(", ")}. They’re things you can say you’ve got now, with a Resource.`;
   }
   if (moving) {
     // A track's Scars are Scars on its Root now, each locking a point, and a
@@ -1216,13 +1220,10 @@ export function payFor(c, s, k) {
 // The Boons went on 17 Nov (Fix 1 of notes/fixes-plan.md). These stubs give
 // nothing, so the play screen, the builder and downtime still draw till
 // prompts 5 and 6 take them out of those screens. Prompt 8 removes them.
-export const BOON_SLOTS = 2;
 // A Title's slots are its permissions, six at most.
 export const slotsOf = (t) => t?.permissions?.length ?? 0;
-export const boonOf = (x) => ({ lever: text(x?.lever, 40), name: text(x?.name, 40), text: "", on: text(x?.on, 60) });
 export const boonsOf = () => [];
 export const boonCount = () => 0;
-export const withBoons = (c) => c;
 export const boonSaid = () => "";
 export const shrugs = () => false;
 export const freeBeyond = () => false;
