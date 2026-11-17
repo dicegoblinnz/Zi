@@ -2700,7 +2700,7 @@ if (part("4h")) {
   // Cut in this pass: a Bard with Old songs and a Warrior with Face me get the choice.
   const bard = rootsSheet({ ...ash, archetypes: [{ name: "Bard", have: ["Push", "Old songs"] }, { name: "Warrior", have: ["Push", "Face me"] }] }, [], B);
   same(RS.choicesOf(bard).filter((x) => x.k === "ability").map((x) => x.name), ["Old songs", "Face me"], "Old songs and Face me come off for the player to choose");
-  same(Object.entries(RS.HAD_ABILITIES).flatMap(([a, l]) => l.filter((n) => !abil(a, RS.abilityNow(a, n))).map((n) => `${a}: ${n}`)), ["Bloodsworn: Bleed out"], "every 16 Nov ability still in the book bar Bleed out");
+  same(Object.entries(RS.HAD_ABILITIES).flatMap(([a, l]) => l.filter((n) => !abil(a, RS.abilityNow(a, n))).map((n) => `${a}: ${n}`)), ["Bloodsworn: Bleed for it", "Bloodsworn: Bleed out", "Healer: Pull them back"], "every 16 Nov ability still in the book bar the ones Mo cut");
   console.log("held and signature: up and dropped, a new scene, once a scene, no charge at 5, Parry held, older saves, Hot streak, Opened, Sit with them");
 }
 

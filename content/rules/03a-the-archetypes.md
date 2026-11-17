@@ -166,7 +166,7 @@ You can't spend a locked point or one you haven't got, and spending your Body to
 
 **Now I know you (1 Aura):** when a hit takes a point off your Body, the GM tells you how whatever hit you comes at you: one of its hidden tags of that kind, or that it hasn't got one.
 
-**Blood oath (1 Aura):** cut your palm as you swear something, and spend a point of your Body. Everyone who sees it knows you mean it, and nobody can take it for a bluff or a lie, though they can still say no. Anyone who swears back on your blood and breaks their word before the next downtime's over is *Hexed* at a d8 the moment they do, with no roll.
+**Blood oath (1 Aura):** cut your palm as you swear something, and spend a point of your Body. It's spent outside your action, so it puts no steps on a roll. Everyone who sees it knows you mean it, and nobody can take it for a bluff or a lie, though they can still say no. Anyone who swears back on your blood and breaks their word before the next downtime's over is *Hexed* at a d8 the moment they do, with no roll.
 
 **Scent of blood (1 Aura, held):** till the scene ends or you drop it, you can smell blood. You know where anything that's bleeding is, a long way off, you can follow a blood trail at a run, and you know if blood's been spilled where you're standing.
 
@@ -472,7 +472,7 @@ Only a Leader leads. An order or a rallying song is an action: a Root at full an
 :::rule
 **Trait:** *Where It's Needed*. Each round, you can move steps around between your own roll and the rolls of friends who can hear or see you, up to 1 step for each of you, counting yourself. Take them off one roll and put them on another before either's rolled. It's free and takes no action, and nobody's roll goes below 1 step.
 
-**Push (1 Aura):** +2 to one of a friend's dice, on a roll your steps went into, once it's rolled and you can see it's needed. A roll your steps went into is any roll this round that got steps from your lead, your *Where It's Needed* or your *Everyone gets it*.
+**Push (1 Aura):** +2 to one of a friend's dice on a roll your steps went into this round, once it's rolled and you can see it's needed.
 
 **Take charge (1 Aura):** people in the scene who aren't threats, like a crowd or a ship's crew, do what you tell them this round, as long as it's something they'd do for whoever's in charge. There's no roll. They won't fight for you, but what they do changes the ground: the crowd blocks the street, or the crew cuts the anchor. Pay again for another round.
 
@@ -488,7 +488,7 @@ Only a Leader leads. An order or a rallying song is an action: a Root at full an
 
 **Follow it up (1 Aura):** lead after a friend's rolled instead of before. Your steps all go to that one friend, and they roll them straight away as more dice on the same roll, each with its own intent. It's still your one action, and it can't go on an Oracle's foresight.
 
-**Everyone gets it (1 Aura):** as you lead, one friend who can hear or see you gets 1 step more on their roll this round, on top of whatever you handed them, even if that was nothing. Their roll's one your steps went into, and it never goes on your own dice. Pay again for another step, for the same friend or another.
+**Everyone gets it (1 Aura):** as you lead, one friend who can hear or see you gets 1 step more this round, even if you handed them nothing. Pay again for another step, for them or another friend.
 
 **Orders for the week (1 Aura):** a lead you make in the last scene before downtime can wait for the faction turn, and its steps go on the crew's roll there. You pay for it in the scene.
 
