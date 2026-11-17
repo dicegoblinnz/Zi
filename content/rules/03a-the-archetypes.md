@@ -37,7 +37,7 @@ Start with how they work, then find yours in [Picking Your Archetypes](#s-pickin
 **Signature** abilities are an archetype's one big thing, at 4 or 5 Aura. They're once a scene, with no roll, and paying again gets you nothing more. A vessel's charge can't pay for one at 5.
 :::
 
-Say Bram took Warrior too. With its *Parry* held, his war hammer's a guard every time blows land at his Body till the scene ends, and his Aura maximum's 4 while it's up. A Guardian's *Not while I stand* is 4 Aura, once a scene, and every blow at her Body that round is stopped with no roll at all.
+Say you're a Warrior and put *Parry* up. Your weapon's a guard every time blows land at your Body till the scene ends, and your Aura maximum's 4 while it's up. Bram's a Guardian, so if he took *Not while I stand*, 4 Aura once a scene would stop every blow at his Body that round, his own and the ones he took for friends, with no roll at all.
 
 An ability's never steps on a roll. It does what it says, and that's all. It can work with what you've got, though: an item's tier, your Resources, a vessel's charge or your armour's soak. With the Warrior's *Parry*, your weapon's tier goes on your roll when blows land, which a weapon never does on its own, and with the Shadow's *I had it planned*, you say a Resource without ticking one. The Maker's *Tune it up* puts an item a tier higher for the scene, and *Made it earlier* hands you one at tier 2, and it's the item's tier that goes on the roll, never the ability. Wren's roll to mark a creature is her Body as usual, and paying for Mark the pack sends that roll at two more.
 
