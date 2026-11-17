@@ -6,7 +6,7 @@ order: 7
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-11-16
+updated: 2026-11-17
 ---
 :::quote
 Everyone's got a soul, and a soul can be spent.
@@ -18,8 +18,8 @@ Zi'Dara starts with *Zi*, the Sumerian word for soul. In Zi'Dara, magic is a per
 
 -   **You need a magic permission or a magic item** to do magic at all. *Throw fire*, *change my face* and *speak with the recently dead* are permissions like any other, but magic's written narrow: *throw fire*, not *fire magic*. That's because a magic permission is what lets you do that magic at all, and it does what it says for free. See [Writing permissions](#s-writing-permissions).
 -   **A school of magic is a Title.** Ash's first Title is *The last fire-speaker of the Ember Court*, and that's the Fire school, with all 5 of its Root points on her Soul. Her [archetypes](#s-how-archetypes) are a separate pick, and the Elementalist's what lets her fire fill a room. It's one school per Title, so pick the one you're known for, because *Archmage* is too wide. Every permission has to fit inside its Title, so Ash's fire-speaker can have *throw fire* and *feel every flame in a room*, and her other Title, *The Court's runaway heir*, can't.
--   **A magic item works the same way.** Ash's ember stone is attuned, and it lets her call fire without a word or a gesture. Its awakening, *Fire without a word*, locks a point of her Soul, and it's 2 steps when she throws fire, and 2 more for each Aura she puts in it. A magic item lets you do the magic it's for, school or no school. See [Attunement](#s-attunement).
--   **Every permission does what it says, for free.** Ash's fire is her Soul, 11 steps, and *Fire without a word*, 2 more, so 13 steps, two d12s and a d2, and no Aura. Her Title, *throw fire* and the Elementalist aren't counted on the roll, since they're what let her do it at all. If *throw fire* covers it, whether it's a bolt at a man or a rope burning through, it doesn't cost a thing.
+-   **A magic item works the same way.** Ash's ember stone is attuned, and it lets her call fire without a word or a gesture. It's a tool at tier 2, so it's 2 steps when she throws fire with it, like any item that fits. Its awakening, *Fire without a word*, locks a point of her Soul, and it's 2 more steps when she throws fire, and 2 more for each Aura she puts in it. A magic item lets you do the magic it's for, school or no school. See [Attunement](#s-attunement).
+-   **Every permission does what it says, for free.** Ash's fire is her Soul, 11 steps, her ember stone, 2 more, and *Fire without a word*, 2 more, so 15 steps, two d12s and a d6, and no Aura. Her Title, *throw fire* and the Elementalist aren't counted on the roll, since they're what let her do it at all. If *throw fire* covers it, whether it's a bolt at a man or a rope burning through, it doesn't cost a thing.
 -   **Going beyond what a permission normally does costs 1 Aura**, the same as it does with a sword. Phasing's free until you phase through a wall. If you have to make a case for why it's normal, it's going beyond, so pay the Aura and keep playing. There's more in [Going beyond](#s-going-beyond).
 -   **Areas are an Elementalist's.** A fireball that fills a room is an area, and an [Elementalist](#a-elementalist) makes one for free. Everyone else puts their magic on one target, or splits it. See [Area magic](#s-magic-area), below.
 -   **Anything that works on its own is [summoning](#s-summoning)**, and only a Summoner does that. Raising the dead to fight or carry something as part of your own action is your permission doing what it says, and it's free. One of the dead that gets up and works for you on its own is a summon.
@@ -31,11 +31,11 @@ How far magic reaches is the story's call. A fireball can land across the town s
 Going beyond lets your permission do the bigger thing. If something's in the way, it's still in the way, and you've still got to beat it.
 
 :::example[Magic at the table]
-**For free:** A guard levels a crossbow at Ash across the warehouse. She throws fire at him with her Soul, 11 steps, and *Fire without a word*, 2 more, 13 steps, two d12s and a d2. A bolt of fire at a man is what *throw fire* does, so it doesn't cost her anything.
+**For free:** A guard levels a crossbow at Ash across the warehouse. She throws fire at him with her Soul, 11 steps, her ember stone, 2 more, and *Fire without a word*, 2 more, 15 steps, two d12s and a d6. A bolt of fire at a man is what *throw fire* does, so it doesn't cost her anything.
 
 **Going beyond:** In the Vane crypt, Isolde wants a word with the mason who built the vault, a hundred years dead. That's her Soul, 7 steps, a d12 and a d2. A hundred years isn't recent, so that's going beyond, and she pays 1 Aura. The old man doesn't want to come, and the GM makes him Challenge 3, a d6. Isolde's d12 rolls 5 against his 4, and he starts talking.
 
-**Bigger, with a friend:** The city gate is Challenge 5, a d10, and two tags keep it shut: *Iron* and *Barred*. *Throw fire* doesn't normally make iron give, so Ash pays 1 Aura to go beyond. Bram's going at the gate with his war hammer, and Ash puts her action in with his, so it's a combo, on his roll. His Body's 9 and *Ring the bell* fits his hammer, 2 more, and Ash brings her Soul, 11, and *Fire without a word*, 2 more. That's 24 between them, four d12s: one for *Iron*, and the other three on *Barred*, where the best of them counts, and Bram rolls them all. The gate hasn't been attacked yet this round, so it rolls its d10 once, a 5. The first d12 comes up 7, so *Iron*'s gone. The best of the other three is a 5, a tie, and the gate keeps a tie unless he pays, so Bram pays 1 Aura, the bar splits, and the gate swings open.
+**Bigger, with a friend:** The city gate is Challenge 5, a d10, and two tags keep it shut: *Iron* and *Barred*. *Throw fire* doesn't normally make iron give, so Ash pays 1 Aura to go beyond. Bram's going at the gate with his war hammer, and Ash puts her action in with his, so it's a combo, on his roll. His Body's 9, his hammer's tier 2, and *Ring the bell* fits it, 2 more, and Ash brings her Soul, 11, her ember stone, 2, and *Fire without a word*, 2 more. That's 28 between them, four d12s and a d8: a d12 for *Iron*, and the rest on *Barred*, where the best of them counts, and Bram rolls them all. The gate hasn't been attacked yet this round, so it rolls its d10 once, a 5. The first d12 comes up 7, so *Iron*'s gone. The best of the others is a 5, a tie, and the gate keeps a tie unless he pays, so Bram pays 1 Aura, the bar splits, and the gate swings open.
 :::
 
 ### Area magic {#s-magic-area}
@@ -108,7 +108,7 @@ Only a [Summoner](#a-summoner) catches souls and summons. A Summoner catches sou
 
 You start at Awakened, like anything you attune, so that's one soul, or two if you give it its Catch. A starting soul's a d4. Like anything you attune, it's 5 points when you make your character. A soul sits in an awakening's place, but it isn't steps, so it doesn't lock a point the way an awakening does.
 
-**Catching a soul.** When a creature falls, spend your action and roll against its Challenge, with the Root that fits how you catch it. Beat it and its soul goes into one of your utility slots, with its Challenge die. Miss and that soul's gone. In downtime, put it into your summoning attunement. You can swap a soul in your attunement for one you're carrying whenever you've got the slot.
+**Catching a soul.** When a creature falls, put a die on it, from the Root that fits how you catch it, and roll against its Challenge. Beat it and you're carrying its soul, with its Challenge die, and it ticks one of your [Resources](#s-resources) till downtime. It isn't one of your items. Miss and that soul's gone. In downtime, put it into your summoning attunement, or swap a soul that's in there for one you're carrying.
 
 **Calling them out** spends Aura, as part of your action. Every Aura's **a d4 of summons**: build them into one summon or several, as you like, but none bigger than that soul's own die. Three Aura on the harbour Warden, a d8, is a d8 Warden and a d4 one, or three d4s. It needs a reason in the story. Nobody calls up a horde to drink at the tavern.
 
@@ -127,7 +127,7 @@ Sable's a Summoner, and she's got three souls: a rat swarm (d4), a hound (d6) an
 
 Next round, the clubs come at Sable, a d6 each. The bigger hound intercepts both for her, free, so they come at it instead. When they land, the clubs come up 4 and 3. The hound faded to a d4 at the end of last round, so it rolls a d4: 4. That stops the 4, and the 3 gets through, so it's a d2. At the end of the round it fades again, and it's gone, back in her attunement.
 
-Later the dock boss falls, and Sable spends her action catching his soul: *catch a soul as it leaves* lets her, and it's her Soul, 7 steps, a d12 and a d2, against his Challenge 3, a d6. Her d12 rolls 7 against his 4, and his soul goes into one of her utility slots, a d6. In downtime she can put him in her attunement if there's room, or swap him for the rats.
+Later the dock boss falls, and Sable puts her whole Soul on catching his: *catch a soul as it leaves* lets her, and it's 7 steps, a d12 and a d2, against his Challenge 3, a d6. Her d12 rolls 7 against his 4, so she's carrying his soul, a d6, and she ticks one of her 3 Resources for it. In downtime she can put him in her attunement if there's room, or swap him for the rats.
 :::
 
 ## Rituals {#rituals}
@@ -243,5 +243,5 @@ Every ritual worth rolling for has three things: something *interfering*, someth
 :::example[The Unbinding, at the Vane manor]
 Isolde kneels in the binding room with the three paintings, and the crew gathers round the circle. She speaks her own true name aloud, and the GM starts the interference: Vane's household is at the door, a d10 each round.
 
-Isolde works *Old Ink* with her Mind, 9 steps, a d12 and a d6, since this binding's in her order's own script, and *read the order's old script* is what lets her read it at all. Bram answers the interference at the door. Vesk works *Names*, since she stole these paintings and knows whose they were, and Dorrie puts her action into the same roll: she knows the old families, and she reads their names off the frames. Three rounds later, *Mercy*'s the last tag standing, and it's Isolde's to strip. She has to mean it.
+Isolde works *Old Ink* with her Mind, 9 steps, and her reading lens, tier 3, 12 steps, two d12s, since this binding's in her order's own script, and *read the order's old script* is what lets her read it at all. Bram answers the interference at the door. Vesk works *Names*, since she stole these paintings and knows whose they were, and Dorrie puts her action into the same roll: she knows the old families, and she reads their names off the frames. Three rounds later, *Mercy*'s the last tag standing, and it's Isolde's to strip. She has to mean it.
 :::

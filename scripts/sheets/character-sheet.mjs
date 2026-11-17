@@ -1,7 +1,9 @@
 // The character sheet: one A4 sheet, printed back to back. The front's for
-// play, on the new core (16 Nov 2026): each Root as its number, its dice and
-// its points, with its wound, its Scars and its armour, Aura and Toll, and
-// the attuned things with the Root each awakening locks. The back's who you
+// play, on the new core (16 Nov 2026) and the fixes (17 Nov): each Root as
+// its number, its dice and its points, with its wound and its Scars, Aura
+// and Toll, six items with their kind and tier and a box for each point of
+// soak or charge, three Resources, the keepsake, and the attuned things with
+// the Root each awakening locks. The back's who you
 // are. Every write-in space carries a field name
 // (data-f, data-cb or data-radio), and scripts/build-sheets.mjs puts a
 // fillable field over each one, so it can be typed into or printed blank.
@@ -14,7 +16,7 @@
 // shapes, the crest and Aura's hexes.
 import { die, crest, mini, aura, SIZES } from "../../src/kit/kit.js";
 import { stepsToDice, diceLabel } from "../../src/companion/dice.js";
-import { ROWS, ROOTS, WOUNDS, STAGES, THREADS } from "../../src/companion/sheet-fields.js";
+import { ROWS, ROOTS, WOUNDS, STAGES, THREADS, KINDS } from "../../src/companion/sheet-fields.js";
 
 const range = (n) => Array.from({ length: n }, (_, i) => i + 1);
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -67,8 +69,8 @@ const pool = () => `
 // A Root, side by side with the other two: its number, which is its dice,
 // and where each point came from (each Title's spread, and 1 for every
 // permission on it), then what's locked (a point for each awakening and each
-// Scar), what it holds, and the points it has now, its wound to tick, a line
-// for each Scar's Catch, and two lines of armour on it.
+// Scar), what it holds, and the points it has now, its wound to tick, and a
+// line for each Scar. Its armour's with the items.
 function rootCol(r) {
   return `
     <section class="blk rootcol">
@@ -86,21 +88,20 @@ function rootCol(r) {
         <span class="wound">${tick(`root_${r}_wound`, "cross")}<b>${WOUNDS[r]}</b></span>
       </div>
       <div class="scars">${range(ROWS.scars).map((n) => `<div class="scar"><span class="cut"></span>${w(`root_${r}_scar_${n}`, { size: 8 })}<span class="boxes">${range(ROWS.grow).map((j) => tick(`root_${r}_scar_${n}_grow_${j}`, "check")).join("")}</span></div>`).join("")}</div>
-      ${range(ROWS.armour).map((n) => `<div class="arm"><span class="lab">Armour</span>${w(`root_${r}_armour_${n}`)}<span class="boxes">${range(ROWS.boxes).map((j) => tick(`root_${r}_armour_${n}_box_${j}`, "check")).join("")}</span></div>`).join("")}
     </section>`;
 }
 const roots = () => `
   <section>
     ${tab("Roots", "a Title puts 5 on your Roots · a permission 1 on its Root · a Root’s number is its dice, its points to take hits with and its points to spend")}
     <div class="roots3">${ROOTS.map(rootCol).join("")}</div>
-    <p class="hint"><b>A hit</b>’s a point off, or 2 off another Root · armour can take it · <b>at 0</b> it wounds, and you heal to half · <b>wounded at 0</b> it’s a Scar, something you can’t do, and you leave · <b>Blaze:</b> take the Scar, do the extraordinary, leave</p>
+    <p class="hint"><b>A hit</b>’s a point off, or 2 off another Root · armour on that Root soaks it first, a point of soak a point · <b>at 0</b> it wounds, and you heal to half · <b>wounded at 0</b> it’s a Scar, something you can’t do, and you leave · <b>Blaze:</b> take the Scar, do the extraordinary, leave</p>
   </section>`;
 
 // Building a roll, and the steps ladder under it.
 const roll = () => `
   <section class="blk roll">
     ${tab("A roll", "two sides a step, up to a d12 · past 6 steps, more dice")}
-    <p class="hint"><b>One Root</b> that fits how you’re doing it, all of it, whatever it’s got left · <b>bring another Root in:</b> a permission that explains it, and 1 point of that Root or <b>3 Aura</b> · an <b>awakening</b> that fits is 2 steps, and 2 more for each Aura · split your dice any way you like, an intent on each · nothing else is counted · every roll’s at least 1 step</p>
+    <p class="hint"><b>One Root</b> that fits how you’re doing it, all of it, whatever it’s got left · <b>an item</b> that fits adds its tier, one a roll · <b>bring another Root in:</b> a permission that explains it, and 1 point of that Root or <b>3 Aura</b>, never another item · an <b>awakening</b> that fits is 2 steps, and 2 more for each Aura · split your dice any way you like, an intent on each · nothing else is counted · every roll’s at least 1 step</p>
     <div class="ladder" aria-label="Steps into dice">${LADDER.map(([s, dice]) => `<div><b>${s}</b><span class="shapes${dice.length > 2 ? " many" : ""}">${dice.map((d) => mini(d)).join("")}</span><span>${diceLabel(dice).replace(/\s/g, "")}</span></div>`).join("")}</div>
   </section>`;
 
@@ -113,8 +114,8 @@ const conditionsAndScars = () => `
     </section>
     <section class="blk rests">
       ${tab("Getting it back", "two rests")}
-      <p class="hint"><b>When a scene ends:</b> roll each Root below what it holds, unsplit, d12s first (8 is a d12 and a d4), and get back what you roll · its top faces are Aura, what it heals never is · Toll down 1</p>
-      <p class="hint"><b>Downtime:</b> everything back, every Root full and every wound and your Toll gone · Scars stay, and 3 slots on one grow it into a Trait: tick a box for each</p>
+      <p class="hint"><b>When a scene ends:</b> roll each Root below what it holds, unsplit, d12s first (8 is a d12 and a d4), and get back what you roll · its top faces are Aura, what it heals never is · Toll down 1 · armour’s soak all back</p>
+      <p class="hint"><b>Downtime:</b> everything back, every Root full, every wound and your Toll gone, and your Resources · a vessel keeps its charge · Scars stay, and 3 slots on one grow it into a Trait: tick a box for each</p>
       <p class="hint"><b>A heal</b> (a Healer’s) is rolled unsplit, less 5 for each Toll, spread on any of your Roots · <b>quick heal:</b> 1 Aura and an action, 1 point back</p>
     </section>
   </div>`;
@@ -134,16 +135,28 @@ const goals = () => `
     </div>
   </section>`;
 
-const kit = () => `
-  <section class="blk kit">
-      ${tab("Kit", "a plain item does what it is, and it’s never a step · armour goes on its Root too")}
-      <div class="cols">
-        <div class="sub"><span class="lab">Equipment · what you wear or wield</span>${range(ROWS.equipment).map((n) => w(`equipment_${n}`)).join("")}</div>
-        <div class="sub"><span class="lab">Utility · cross it off once it’s used</span>${range(ROWS.utility).map((n) => w(`utility_${n}`)).join("")}</div>
+// Your six items, each with its words, its tier, its kind to ring, the Root
+// armour soaks on, and a box for each point of its tier: soak ticked off as
+// armour takes hits, and charge filled in as a vessel holds it. Then your
+// Resources, three lines to write what you said and tick it, and your
+// keepsake.
+const itemCard = (n) => `
+      <div class="icard">
+        <div class="row">${w(`item_${n}`, { size: 8.5 })}<span class="lab">tier</span>${box(`item_${n}_tier`, "sbox", 9)}</div>
+        <div class="row ikind"><span class="kind">${words(`item_${n}_kind`, KINDS, (v) => v)}</span></div>
+        <div class="row ibox"><span class="lab">armour on</span><span class="kind">${words(`item_${n}_root`, ROOTS, (v) => v.charAt(0).toUpperCase())}</span><span class="lab">soak · charge</span><span class="boxes">${range(ROWS.itemBoxes).map((j) => tick(`item_${n}_box_${j}`, "check")).join("")}</span></div>
+      </div>`;
+const items = () => `
+  <section class="blk items">
+      ${tab("Items", "six at most, your attuned thing among them · one a roll, its tier in steps when it fits")}
+      <p class="hint"><b>Weapon, tool:</b> its tier on a roll it fits · <b>guard:</b> its tier only getting out of the way · <b>armour:</b> soaks its tier on its Root, back every scene · <b>pack:</b> half its tier in Resources · <b>vessel:</b> holds its tier in charge, for your own abilities and awakenings</p>
+      <div class="grid3">${range(ROWS.items).map(itemCard).join("")}</div>
+      <div class="res">
+        <div class="rcount"><span class="lab">Resources</span>${box("resources", "sbox", 9)}</div>
+        ${range(ROWS.resources).map((n) => `<div class="rline">${tick(`resource_${n}_used`, "check")}${w(`resource_${n}`, { size: 8 })}</div>`).join("")}
       </div>
-      <div class="sub row"><span class="lab">Keepsake · something that matters to you</span>${w("keepsake")}</div>
-      <div class="sub"><span class="lab">Bag · holds 10 · getting something out takes your action</span>
-        <div class="cols"><div>${range(ROWS.bag / 2).map((n) => w(`bag_${n}`)).join("")}</div><div>${range(ROWS.bag / 2).map((n) => w(`bag_${n + ROWS.bag / 2}`)).join("")}</div></div></div>
+      <p class="hint"><b>Resources:</b> 3, and a pack’s · something ordinary you happen to have, said when you need it · tick one and write what it was · all back in downtime</p>
+      <div class="row keep"><span class="lab">Keepsake · free, and story</span>${w("keepsake")}</div>
   </section>`;
 
 // An attuned thing: what it is, its material and stage, its Catch and
@@ -157,8 +170,8 @@ const attuneCard = (a) => `
       </div>`;
 const attunement = () => `
   <section class="blk attune">
-    ${tab("Attunement", "bound to you · it can’t break")}
-    <p class="hint">Each awakening locks a point of the Root you ring, for as long as it’s attuned, so that Root holds a point less, but you still roll all of it · it’s 2 steps on a roll it fits, and 2 more for each Aura · attuned things don’t touch your Aura · a Summoner’s souls go on the lines, with their dice</p>
+    ${tab("Attunement", "bound to you · one of your items · it can’t break")}
+    <p class="hint">Each awakening locks a point of the Root you ring, for as long as it’s attuned, so that Root holds a point less, but you still roll all of it · it’s 2 steps on a roll it fits, on top of the thing’s tier, and 2 more for each Aura · attuned things don’t touch your Aura · a Summoner’s souls go on the lines, with their dice</p>
     <div class="grid2">${range(ROWS.attuned).map(attuneCard).join("")}</div>
   </section>`;
 
@@ -171,7 +184,7 @@ function front(stamp) {
   ${roll()}
   ${conditionsAndScars()}
   ${goals()}
-  ${kit()}
+  ${items()}
   ${attunement()}
   <footer class="stamp"><span>zidara.world/sheets</span><span>${stamp}</span></footer>
 </section>`;
@@ -180,7 +193,7 @@ function front(stamp) {
 // ---------------------------------------------------------------- the back
 
 // A Title: its words, its spread (5 in all), and its permissions, each with
-// its Root to ring. A Boon takes two lines and rings nothing.
+// its Root to ring.
 const titleCard = (t) => `
       <div class="card tcard">
         <div class="top">${numeral(NUMERALS[t - 1])}<span class="lines">${w(`title_${t}`, { size: 8.5 })}${w(`title_${t}_more`, { size: 8.5 })}</span></div>
@@ -216,7 +229,7 @@ function back(stamp) {
 
   <section>
     ${tab("Titles")}
-    <p class="hint">Write where each Title’s 5 Root points go, all on one or spread · ring each permission’s Root, B, M or S, for 1 on it · a permission’s what you can do, and what lets you bring a Root in · six at most · a Boon takes two lines and puts nothing on a Root</p>
+    <p class="hint">Write where each Title’s 5 Root points go, all on one or spread · ring each permission’s Root, B, M or S, for 1 on it · a permission’s what you can do, and what lets you bring a Root in · six at most</p>
     <div class="grid3">${range(ROWS.titles).map(titleCard).join("")}</div>
   </section>
 

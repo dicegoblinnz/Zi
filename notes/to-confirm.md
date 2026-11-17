@@ -16,6 +16,17 @@ Part 3 of the rework (`notes/fixes-plan.md`), from your 17 Nov chat (`notes/play
 8. **Packs give Resources**, half their tier rounded up.
 9. **A vessel holds its tier in charge**, filled only with Aura you'd lose or a point at a time mid-scene, and spent only on your own abilities and awakenings.
 
+### 4. The loop under tension
+
+Prompt 4 (`tools/fight_sim.py`, `notes/loop-under-tension.md`). Its proposals are in the note, and these are the calls it made to run them.
+
+1. **What the four carry in the sim**, on the plan's prices since prompt 2's crew wasn't written yet: Bram's Named plate (tier 3) and a Trusty shield as a guard, Vesk's Trusty leathers and a Trusty knife, Wren's Named longbow and her hooded cloak as a guard (the plan's "a cloak that blurs you"), and Ash's ember stone as a tool that fits her fire. An attuned thing comes at tier 2, its awakenings on top.
+2. **A guard goes on once a landing.** When Bram Defends, his shield's 2 steps go on the Body roll against what's landing and not on the Defend's dice as well, since it's one item a roll and the two are one landing.
+3. **2 for 1 onto armour comes before the wound.** With soak back every scene, Vesk taking a Soul hit on her leathers costs her nothing, so the sim plays it that way, and the walk-through shows it.
+4. **A fight's minutes come from what's in it now**, about 33 seconds a go, 9 a die and 6 a thing checked or paid, set so 16 Nov's fights come out as long as the old flat guess. They're a guess too, so time a round at the table and move them.
+5. **Two fixes to the sim itself**: the hard GM's third die of every three now goes round the Roots (it was always Body, so Mind and Soul never got any), and a deadly telegraph costs what the book says (it cost its steps once).
+6. **Bram still intercepts for everyone by default**, as prompt 3 had it, with `--reach` for how many friends he can get in front of. The note gives both.
+
 ### 2. The character
 
 Written into Building Your Character (03), Title Ideas and the Crew (03b) and Coin and Kit (18) on 17 Nov, on `rules/2026-11-17-fixes-character`.
@@ -104,6 +115,34 @@ Built 17 Nov on `rules/2026-11-17-fixes-play`: the play screen, When it lands, t
 7. **The GM giving a Resource back isn't a button.** Undo takes back a mistake, and downtime puts them all back. Say if the restock wants one.
 8. **When it lands writes `box` the same as `soaked`**, so a phone from before soak still says something came off armour.
 9. **A gone Boon is one row in Yours to choose with Got it**, and the points it gave back are the points row's to spend, so there's one Spend button, not two.
+
+### 6. The builder, downtime and print
+
+Built 17 Nov on `rules/2026-11-17-fixes-build`: the builder, the other ways in, downtime, the paper sheet and print on items, tiers and Resources, with no Boons.
+
+1. **The attuned thing is one of the six on the builder's Items step**, with its own kind and tier behind an "As an item" fold on its card. Its 5 covers tier 2, and tier 3's a point more. Picking one of your items as the thing to attune moves it off your other items, so it's never counted twice.
+2. **A new character's items are tier 2 or 3 only**, each said by name ("Trusty 2", "Proven 3, a point more"). Changing a saved character offers all six, since Grow, money and the story raise them at the table, and anything past 3 on a new one is a warning, never a block.
+3. **An item's kind is a guess from its words**, off the book's item groups first: a shield's a guard, plate's armour on the Body, court clothes (Mind) armour on the Mind. A weapon gets the weapons table's properties, so a knife typed in is Thrown, Concealed and Quick. Vesk's knife in 03b lists none, so say if the crew's weapons should carry their table's properties.
+4. **A build from before the fixes moves across like this:** equipment's items at tier 2, armour and a shield a tier up from their quality (Common 2, Fine 3, Masterwork 4), a shield a guard, anything else by its words, and a piece with the attuned thing's name is the attuned thing. Its utility items and bag are kept on the build (`carried`) till the play screen writes them into the notes, and roots.js now lets a build hand them over (a small change there).
+5. **A Boon built in comes off with its 2 points to spend**, flagged in Change with a gold note and on the play screen as a choice. One swapped in during a downtime keeps the permissions it took, the way roots.js already reads it. Nothing in the builder or downtime offers a Boon either way.
+6. **Downtime's Grow has "Raise an item a tier" of its own**, offering only items under tier 3, and "Get something" is an item (its kind, at tier 2, picking one to let go if it's a seventh) or something else, like a purse of gold or a material, which goes in the notes. Mend lists only broken items, since soaked armour never needs it.
+7. **Abilities on an archetype's card are a name, its Aura and a badge**, with what it does behind a ? beside it, so the Shadow's ten fit in about 500px on a phone. Resources are a line and a ? at the foot of the Items step and a number on the last step, with nothing to write.
+8. **The paper sheet's six item cards sit three to a row**, each with its tier in a box, its kind to ring, B, M or S for armour's Root, and six boxes that are soak ticked off for armour and charge filled in for a vessel. The Root columns lost their armour lines, and there's no soak total per Root. Resources are a count and three lines with a tick each, and a seventh item or a fourth Resource goes in Notes.
+9. **The player reference's second and third pages are set a touch smaller** (8.25pt) so Appendix D's new lines on soak, guards and vessels fit on four A4 pages.
+
+### 7. The rest of the book
+
+Written 17 Nov on `rules/2026-11-17-fixes-book`: the GM's numbers, A Full Fight, the rest of the book, Appendices B and C, the index and the Learn deck.
+
+1. **The GM piles on from round 2, and the budgets stay.** With the crew's real items the fight's still 45 minutes, but Wren's cloak is a tool, not a guard, so a GM piling on from round 1 Bloodies her in round 2. Spreading round 1 and piling on from round 2 puts the first Bloodied back in round 3 with the same minutes, so I moved the advice rather than the 72. If you'd rather Wren's cloak was a guard (03 lists "a cloak that blurs you" as one), that's the other fix.
+2. **Multipliers stay as written as the crew grows, but not as the crew's size changes.** Prompt 4 only ran growth, so two characters still halve them and six make them half again, since that's fewer or more actions a round.
+3. **A Root of 0 gets one die a round**, and Running the Game reminds the players of Defend with a Root that fits and 2 for 1 onto their armour, as prompt 4 proposed.
+4. **A Full Fight**: Isolde's reading lens doesn't fit a Study across the corridor, Bram offers the pin as a hit his plate soaks, Vesk's leathers soak the sweep where they used to split, and Dorrie says an apron off the laundry line as a Resource. None of the four carries a vessel, so the vessel's lesson is the 5 Aura Dorrie lost at her maximum.
+5. **Vesk's Session 19** was two permissions for a Boon. Now she swaps *fight dirty with a knife* for *climb a sheer wall*, gives the knife away, and a strand of the Quiet Order's bell rope takes her grappling line to Tempered for *Up the walls* (Body), climbing at full stride. She's still worth 47.
+6. **A caught soul in Magic and Appendix C** is the 03a way: a die on it, and it ticks one of your Resources till downtime.
+7. **The Learn deck stays at 40**: Awakenings folded into Attuned things to make room for Resources, What you carry became Items (keeping its id for bookmarks), and the first card's strongbox became a roof jump, so no item's on a roll before the deck teaches items.
+8. **Appendix C lists the new abilities that are levers**, about thirty of them (*House rules*, *Roll it again*, *Lend your shield*, *Parry*, *Take it on the plate*, *Scab over*, *Back on my feet*, *Rest easy*, *Grease the palm*, *I had it planned*, *Made it earlier*, *Won it at cards*, *Knock it together*, *Tune it up*, *Bottle it* and the rest), not all 170.
+9. ***Grasping*** in Appendix B can name one of your items as the cost, gone till you get it back.
 
 ## 16 Nov: the new core
 

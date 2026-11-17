@@ -10,17 +10,13 @@
 // same, and can't break.
 //
 // takeHits() in roots.js does the soaking. What's here is for the screens:
-// the pieces, what each has left, and how a piece is said. The names from
-// when armour had boxes (tickedOf, setTicked, boxesSaid and the rest) are
-// kept and mean soak now, so the screens from before the fixes still draw
-// till prompts 5 and 6 move them.
+// the pieces, what each has left, and how a piece is said.
 
-import { itemSaid, tierName } from "./roots.js";
+import { itemSaid } from "./roots.js";
 
 export const keyOf = (a) => a?.key ?? `item|${a?.name}`;
-// Every piece of armour on the sheet, as items. boxes and quality are its
-// tier and its tier's name, for the screens from before the fixes.
-export const piecesOf = (c) => (Array.isArray(c?.items) ? c.items.filter((it) => it.kind === "armour").map((it) => ({ ...it, boxes: it.tier, quality: tierName(it.tier) })) : []);
+// Every piece of armour on the sheet, as items.
+export const piecesOf = (c) => (Array.isArray(c?.items) ? c.items.filter((it) => it.kind === "armour") : []);
 export const pieceAt = (c, key) => piecesOf(c).find((a) => keyOf(a) === key) ?? null;
 export const isBroken = (s, a) => a?.attuned == null && Boolean(s?.crossed?.[keyOf(a)]);
 // How much a piece soaks a scene, and how much of it's used.
@@ -66,19 +62,3 @@ export function nameOf(c, where, name) {
 }
 // "2 of 3 soak left", for a label.
 export const soakSaid = (s, a) => (isBroken(s, a) ? "broken till it’s mended" : `${leftOf(s, a)} of ${soakFull(a)} soak left`);
-
-// The names from when armour had boxes, kept for the screens that haven't
-// moved (prompts 5 and 6 of notes/fixes-plan.md), meaning soak now. Prompt
-// 8 takes them out.
-export const tickedOf = usedOf;
-export const setTicked = setUsed;
-export const tick = (s, a) => setUsed(s, a, usedOf(s, a) + 1);
-export const boxesOn = soakOn;
-export const boxesSaid = soakSaid;
-export function withQuality(name, quality) {
-  if (!quality) return name;
-  const art = String(name).match(/^(a|an|the|her|his|their) /i)?.[0] ?? "";
-  const rest = String(name).slice(art.length);
-  return `${/^an? $/i.test(art) ? `${art[0]} ` : art}${quality} ${rest}`;
-}
-export const tierSaid = (n) => tierName(n);

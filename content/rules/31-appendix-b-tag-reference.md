@@ -6,7 +6,7 @@ order: 31
 part: "Appendices & Index"
 partNumber: "Part IV"
 source: 2026-10-02 rulebook
-updated: 2026-11-14
+updated: 2026-11-17
 ---
 Every tag in here tells you how it shows up in the story and what it opens up for the crew. Tags don't make a threat's dice bigger. A tag only changes dice when it says so. Players who know a tag can bring it into a roll for 1 Aura. A tag that takes more than one win to strip carries a [multiplier](#s-tough), like *Armoured ×3*, and a tag that makes a hit hurt more is a [vulnerability](#vulnerability-tags).
 
@@ -27,14 +27,14 @@ These tags say what its telegraphs can do to you.
 | **Charming** | It's easy to like. People around it take its side, and so might you. Remember what it did, not what it said. |
 | **Commanding** | It gives orders and people obey. While it watches, the others telegraph a step bigger. Take it out of earshot and they waver. |
 | **Cornered is Worse** | Trap it and it gets more dangerous, not less. Leave it a way out and it might take it. |
-| **Deadly** | Every die of it that gets through is 2 hits, and *Deadly (3)* is 3. Its telegraphs say so, face up, and each one costs its steps once for every hit. Don't let it land. |
+| **Deadly** | Every die of it that gets through is 2 hits, and *Deadly (3)* is 3. Its telegraphs say so, face up, and each one costs its steps and half again for each hit past the first. Don't let it land. |
 | **Fast** | It is on you before the sentence ends. It closes distance, takes the door first, gets the knife in. Slow the ground down and it loses its edge. |
 | **Fast Hands** | Your purse is lighter and you didn't feel it. It takes things mid-conversation. Watch the hands, not the face. |
 | **Faster Than You** | Whoever you are, it's faster. Racing it loses. Tricking it, blocking it or making it choose doesn't. |
 | **Fear** | It aims at your Mind, so your Mind rolls against it and a shield won't stop it. Something in the chest goes cold. Naming what it is takes some of that away. |
 | **Flurry** | Blow after blow. It can aim two dice at one person in a round, and each one has to be stopped on its own. Get out of its reach, or put a shield in front of it. |
 | **Grapple** | It grabs and doesn't let go. Its telegraphs can leave you *Grabbed*, at the die that lands. A friend can pry you loose. |
-| **Grasping** | It wants what you're holding, and it'll take it. Its hits steal as well as hurt. |
+| **Grasping** | It wants what you're holding, and it'll take it. Its hits steal as well as hurt: the GM can name one of your items as the cost, and it's no use to you till you get it back. |
 | **Heavy** | Big hands, big body, big lean. It shoves people through doors. It also can't climb, sneak or turn quickly. |
 | **Hits Like a Wagon** | One swing and the wall behind you cracks. Nobody trades blows with this for long. Duck, dodge, or put something big between you. |
 | **Invisible** | You can't see it. Flour, rain, smoke and footprints can. |
@@ -295,7 +295,7 @@ Each of these is +1 Power whenever it fits the roll, and its people in a scene c
 | --- | --- |
 | **Safehouses** | Once a downtime, one of the crew lies low without spending a slot. |
 | **Rooted** | Once a session, anyone in the crew being chased through the crew's own streets gets away, with no roll. |
-| **A Workshop** | Once a downtime, mend a broken item, or a piece of armour with boxes ticked, without spending a slot. |
+| **A Workshop** | Once a downtime, mend a broken item without spending a slot. |
 | **A Ship** | The crew's own ship. A voyage on it needs no Supplies clock, and while nothing's paying for it, it stays tied up in harbour. |
 | **Deep-Water Docks** | It can trade with anyone across the sea. |
 | **A Fortress** | Its people are *Fortified* while they're holding it from inside. |

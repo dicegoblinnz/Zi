@@ -6,7 +6,7 @@ order: 36
 part: "Appendices & Index"
 partNumber: "Part IV"
 source: 2026-10-02 rulebook
-updated: 2026-11-14
+updated: 2026-11-17
 ---
 :::index-section
 ## A {#a}
@@ -23,7 +23,7 @@ updated: 2026-11-14
 -   **Archetypes** — [The Archetypes](#archetypes), [How Archetypes Work](#s-how-archetypes), [Picking Your Archetypes](#s-picking-archetypes), [Step 2: Archetypes](#s-step-archetypes), [Archetypes and Study at the Table](#s-gm-area)
 -   **Arcs** — [Campaigns](#s-campaigns), [Between Arcs](#s-arcs)
 -   **Area die** — [Area](#s-area), [Area magic](#s-magic-area), [Elementalist](#a-elementalist)
--   **Armour** — [Armour](#s-armour), [Quality](#s-armour-quality), [Broken Armour](#recovering-armour), [Defend](#s-defend)
+-   **Armour** — [Armour and soak](#s-armour), [Kinds of item](#s-item-kinds), [Hits and Consequences](#s-consequences)
 -   **Aspiration** — [Aspiration](#s-aspiration), [A good Aspiration](#s-good-aspiration)
 -   **Assets, a faction's** — [Resources and assets](#s-wealth), [Crew assets](#s-crew-tags), [Assets to borrow from](#faction-strength)
 -   **Attunement** — [Attunement](#s-attunement), [Attuned Things from the Story](#s-rare)
@@ -33,7 +33,6 @@ updated: 2026-11-14
 
 ## B {#b}
 
--   **Bag** — [What You Carry](#s-carrying)
 -   **Bard** — [Bard](#a-bard)
 -   **Blaze** — [Wounds, Scars and the Blaze](#s-blaze)
 -   **Blessings** — [Wards and blessings](#s-wards)
@@ -43,20 +42,20 @@ updated: 2026-11-14
 -   **Bonds** — [Bonds and threads](#s-bonds), [Playing the strain](#s-playing-the-strain), [A faction's bonds](#s-faction-bonds)
 -   **Bond threads** — [Bonds and threads](#s-bonds)
 -   **Boon table** — [The Oracle](#oracle)
--   **Boons** — [Boons and Burdens](#s-boons), [Appendix C](#s-levers-boons)
 -   **Boss** — [Tags are its health](#s-staying), [Multipliers](#s-tough-gm)
--   **Boxes, armour's** — [Quality](#s-armour-quality)
 -   **Bringing in a Root** — [Bringing In a Root](#s-bring), [Aura](#s-aura)
+-   **Broken items** — [Hits and Consequences](#s-consequences), [Mend](#recover)
 -   **Budget** — [Telegraphs a Round](#s-budget), [The Threat Budget](#s-threat-budget)
--   **Burdens** — [Boons and Burdens](#s-boons), [Attunement](#s-attunement)
+-   **Burdens** — [Burdens](#s-boons), [Attunement](#s-attunement), [Appendix C](#s-levers-boons)
 
 ## C {#c}
 
 -   **Campaign, ending a** — [Ending a Campaign](#s-ending)
--   **Carrying** — [What You Carry](#s-carrying)
+-   **Carrying** — [What you carry](#s-carrying), [Items](#s-items)
 -   **Catch** — [Catches and Trouble](#s-trouble), [Attunement](#s-attunement), [Catches and Trouble at the Table](#s-catches-gm)
 -   **Challenge** — [Threats](#s-challenges)
 -   **Character sheet** — [Appendix A](#s-sheet-character)
+-   **Charge** — [Vessels](#s-vessels), [Aura](#s-aura)
 -   **Check-ins** — [Check-Ins](#s-check-ins)
 -   **Climbing dice** — [Things That Climb](#s-climb)
 -   **Clock** — [Stakes, Clocks and Events](#s-stakes)
@@ -83,7 +82,6 @@ updated: 2026-11-14
 
 -   **Elementalist** — [Elementalist](#a-elementalist)
 -   **Epilogues** — [Ending a Campaign](#s-ending)
--   **Equipment** — [What You Carry](#s-carrying)
 -   **Event** — [Stakes, Clocks and Events](#s-stakes)
 -   **Exploding dice** — [Warrior](#a-warrior)
 -   **Exposed** — [Conditions to start with](#s-conditions-list), [Vulnerabilities](#s-vulnerable)
@@ -111,12 +109,13 @@ updated: 2026-11-14
 -   **Going beyond** — [Going Beyond](#s-going-beyond)
 -   **Growing** — [Growing](#growing)
 -   **Guardian** — [Guardian](#a-guardian)
+-   **Guards (shields and the like)** — [Kinds of item](#s-item-kinds), [Answering a Telegraph](#s-answering), [When It Lands](#s-defending)
 
 ## H {#h}
 
 -   **Healer** — [Healer](#a-healer)
 -   **Healing** — [Healing](#s-healing), [Healer](#a-healer), [Appendix C](#s-levers-hurt)
--   **Helmets** — [Armour](#s-armour), [Quality](#s-armour-quality)
+-   **Helmets** — [Armour and soak](#s-armour)
 -   **Hidden tag** — [Hidden tags and weak points](#s-hidden)
 -   **Hiding** — [Shadow](#a-shadow)
 -   **Hits** — [Hits and Consequences](#s-consequences), [Your Points](#s-tracks)
@@ -133,7 +132,7 @@ updated: 2026-11-14
 -   **Intent** — [Intents](#s-intents)
 -   **Intercept** — [Intercept](#s-intercept), [Guardian](#a-guardian)
 -   **Introducing a truth** — [Oracle](#a-oracle), [Studying Something](#s-study)
--   **Items** — [Items](#s-items), [What You Carry](#s-carrying)
+-   **Items** — [Items](#s-items), [Kinds of item](#s-item-kinds), [What you carry](#s-carrying), [Coin and Kit](#upgrading-gear)
 -   **Items, attuned** — [Attunement](#s-attunement), [Attuned Things from the Story](#s-rare)
 
 ## J {#j}
@@ -142,7 +141,7 @@ updated: 2026-11-14
 
 ## K {#k}
 
--   **Keepsake** — [What You Carry](#s-carrying)
+-   **Keepsake** — [What you carry](#s-carrying), [Keepsakes](#keepsakes-10)
 
 ## L {#l}
 
@@ -162,7 +161,6 @@ updated: 2026-11-14
 -   **Magic** — [Magic](#magic), [Schools of Magic](#s-schools)
 -   **Maker** — [Maker](#a-maker)
 -   **Marked** — [Hunter](#a-hunter), [Marked](#s-marked)
--   **Masterwork** — [Quality](#s-armour-quality)
 -   **Material** — [Attunement](#s-attunement)
 -   **Mini factions** — [Mini factions](#s-mini-factions)
 -   **Mending a thread** — [Bonds and threads](#s-bonds), [Playing the strain](#s-playing-the-strain), [Mending Threads](#s-downtime-threads)
@@ -184,6 +182,7 @@ updated: 2026-11-14
 
 ## P {#p}
 
+-   **Packs** — [Kinds of item](#s-item-kinds), [Packs](#s-packs)
 -   **Party sheet** — [The Party Sheet](#party-sheet), [Appendix A](#s-sheet-party)
 -   **Perfected** — [Attunement](#s-attunement)
 -   **Permission** — [Titles and Permissions](#s-permissions), [How it adds up](#how-permissions-stack), [Step 3: Permissions](#s-writing-permissions)
@@ -200,7 +199,6 @@ updated: 2026-11-14
 
 ## Q {#q}
 
--   **Quality, armour's** — [Quality](#s-armour-quality), [Upgrading gear](#upgrading-gear)
 -   **Quick Build** — [Quick Build](#s-quick)
 -   **Quick heal** — [Healing](#s-healing)
 -   **Quick Reference** — [Appendix D](#appendix-quick)
@@ -211,7 +209,8 @@ updated: 2026-11-14
 -   **Range** — [Movement and Range](#s-movement)
 -   **Ready-made characters** — [Six Ready-Made Characters](#s-pregens)
 -   **Reputation** — [The Crew](#s-party-faction)
--   **Resources, a faction's** — [Resources and assets](#s-wealth), [Extra resources](#s-crew-wealth)
+-   **Resources, a faction's or the crew's** — [Resources and assets](#s-wealth), [Extra resources](#s-crew-wealth)
+-   **Resources, your** — [Resources](#s-resources), [Resource ideas](#consumables-20), [Appendix C](#s-levers-story)
 -   **Rest** — [Healing](#s-healing), [Downtime](#downtime)
 -   **Retiring** — [Retiring a character](#s-retiring)
 -   **Ritual** — [Rituals](#rituals)
@@ -233,6 +232,7 @@ updated: 2026-11-14
 -   **Shifter** — [Shifter](#a-shifter)
 -   **Snapping a thread** — [Bonds and threads](#s-bonds), [Playing the strain](#s-playing-the-strain)
 -   **Soul** — [Roots](#s-roots), [Your Points](#s-tracks), [Mind and Soul](#s-fear-gets-through)
+-   **Soak** — [Armour and soak](#s-armour), [Hits and Consequences](#s-consequences), [Appendix C](#s-levers-defence)
 -   **Souls** — [Summoning](#s-summoning), [Summoner](#a-summoner)
 -   **Splitting** — [Splitting](#s-splitting)
 -   **Spotlight** — [A moment for each character](#s-spotlight)
@@ -243,7 +243,7 @@ updated: 2026-11-14
 -   **Study** — [Studying Something](#s-study), [Oracle](#a-oracle), [Archetypes and Study at the Table](#s-gm-area)
 -   **Summoner** — [Summoner](#a-summoner)
 -   **Summoning** — [Summoning](#s-summoning), [Summoner](#a-summoner)
--   **Swapping permissions** — [Grow](#grow), [Boons and Burdens](#s-boons)
+-   **Swapping permissions** — [Grow](#grow)
 
 ## T {#t}
 
@@ -257,6 +257,7 @@ updated: 2026-11-14
 -   **Threat budget** — [The Threat Budget](#s-threat-budget)
 -   **Threat, building a** — [The Threat Builder](#threat-builder)
 -   **Tie** — [The Roll](#s-the-roll)
+-   **Tiers, an item's** — [Tiers](#s-item-tiers), [Upgrading gear](#upgrading-gear)
 -   **Title** — [Step 1: Titles](#s-title), [Titles and Permissions](#s-permissions), [Title Ideas](#s-title-ideas)
 -   **Title ideas** — [Title Ideas](#s-title-ideas)
 -   **Toll** — [Healing](#s-healing), [Healer](#a-healer), [Appendix C](#s-levers-hurt)
@@ -268,10 +269,11 @@ updated: 2026-11-14
 
 ## U {#u}
 
--   **Utility items** — [What You Carry](#s-carrying)
+-   **Upgrading gear** — [Upgrading gear](#upgrading-gear), [Grow](#grow)
 
 ## V {#v}
 
+-   **Vessels** — [Vessels](#s-vessels), [Vessels to use](#s-kit-vessels)
 -   **Vulnerability** — [Vulnerabilities](#s-vulnerable)
 
 ## W {#w}
@@ -282,6 +284,7 @@ updated: 2026-11-14
 -   **Warrior** — [Warrior](#a-warrior)
 -   **Weak point** — [Hidden tags and weak points](#s-hidden)
 -   **Weapon properties** — [Weapons and their properties](#s-weapon-props)
+-   **Weapons** — [Kinds of item](#s-item-kinds), [Weapons and What They Let You Do](#s-weapons-tactics)
 
 ## X {#x}
 

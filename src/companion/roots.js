@@ -381,10 +381,14 @@ export function rootsSheet(base, grown = [], B = null) {
   }
   c.archetypes = (c.archetypes ?? []).map((a) => archOf(typeof a === "string" ? { name: a, id: null } : a, B));
   useTiers(B?.tiers);
-  // The keepsake's free and on top of the six, and the items are a list.
+  // The keepsake's free and on top of the six, and the items are a list. A
+  // build moved across from before the fixes says what its utility items and
+  // bag held (was), for normalCore to write into the notes.
+  const was = c.was && typeof c.was === "object" ? { utility: (Array.isArray(c.was.utility) ? c.was.utility : []).map((x) => text(x, 120)).filter(Boolean), bag: (Array.isArray(c.was.bag) ? c.was.bag : []).map((x) => text(x, 120)).filter(Boolean) } : null;
   delete c.was;
   c.keepsake = text(c.keepsake ?? c.carry?.keepsake, 120) || null;
   c.items = itemsFrom(c, B);
+  if (!c.was && (was?.utility.length || was?.bag.length)) c.was = was;
   c.titles = (c.titles ?? []).filter((t) => t && typeof t === "object").map((t) => titleOf(t, B, core));
   c.points = { start: int(base.points?.start, START), spent: costOf(c).spent };
   if (Array.isArray(grown) && grown.length) growRoots(c, grown, B);
@@ -398,7 +402,10 @@ export function rootsSheet(base, grown = [], B = null) {
   // No tracks on a sheet any more.
   for (const k of ["stamina", "confidence", "resolve"]) delete c.numbers[k];
   delete c.specialties;
-  legacyCarry(c);
+  // What they carried before the fixes is items now (itemsFrom), and the
+  // utility and bag are in was for their notes.
+  delete c.carry;
+  delete c.armour;
   return c;
 }
 
@@ -436,7 +443,7 @@ export function growRoots(c, grown, B = null) {
     const words = text(x.text, 120);
     if (x.k === "perm" && words && root) {
       const t = c.titles[int(x.t, -1)];
-      if (t && slotsOf(t) < MAX_PERMS) t.permissions.push({ text: words, root, g });
+      if (t && t.permissions.length < MAX_PERMS) t.permissions.push({ text: words, root, g });
     } else if (x.k === "boon" && text(x.lever, 40)) {
       // Boons are gone: the permissions it took stay, and it's kept as gone.
       const t = c.titles[int(x.t, -1)];
@@ -637,7 +644,7 @@ export function normalCore(raw, c) {
       if ((c.items ?? []).some((it) => it.key === key)) s.crossed[key] = true;
     }
     const was = [...(c.was?.utility ?? []), ...(c.was?.bag ?? [])];
-    if (was.length) s.notes = `${text(s.notes, 4000)}${text(s.notes, 4000) ? "\n" : ""}What you carried before Resources: ${was.join(", ")}. They're things you can say you've got now, with a Resource.`;
+    if (was.length) s.notes = `${text(s.notes, 4000)}${text(s.notes, 4000) ? "\n" : ""}What you carried before Resources: ${was.join(", ")}. They’re things you can say you’ve got now, with a Resource.`;
   }
   if (moving) {
     // A track's Scars are Scars on its Root now, each locking a point, and a
@@ -1209,34 +1216,6 @@ export function payFor(c, s, k) {
   s.aura -= k.aura ?? 0;
   for (const x of k.charge ?? []) spendCharge(c, s, x.key, x.n);
   return true;
-}
-
-// ---------------------------------------------------------------- for the screens that haven't moved
-
-// The Boons went on 17 Nov (Fix 1 of notes/fixes-plan.md). These stubs give
-// nothing, so the play screen, the builder and downtime still draw till
-// prompts 5 and 6 take them out of those screens. Prompt 8 removes them.
-export const BOON_SLOTS = 2;
-// A Title's slots are its permissions, six at most.
-export const slotsOf = (t) => t?.permissions?.length ?? 0;
-export const boonOf = (x) => ({ lever: text(x?.lever, 40), name: text(x?.name, 40), text: "", on: text(x?.on, 60) });
-export const boonsOf = () => [];
-export const boonCount = () => 0;
-export const withBoons = (c) => c;
-export const boonSaid = () => "";
-export const shrugs = () => false;
-export const freeBeyond = () => false;
-export const restBonus = () => 0;
-
-// What they carry, the way the screens from before the fixes read it, made
-// from the items: equipment is every item that isn't attuned, there's no
-// utility or bag (they're Resources now), and each piece of armour has its
-// tier's name as its quality and its tier as its boxes, keyed by the item.
-// Prompts 5 and 6 move the screens onto c.items, and prompt 8 removes this.
-function legacyCarry(c) {
-  c.carry = { equipment: c.items.filter((it) => it.attuned == null).map((it) => it.name), utility: [], keepsake: c.keepsake, bag: { name: "a bag", max: 10, items: [] } };
-  c.armour = c.items.filter((it) => it.kind === "armour").map((it) => ({ name: it.name, key: it.key, root: it.root, quality: tierName(it.tier), boxes: it.tier, tier: it.tier, ...(it.when ? { when: it.when } : {}) }));
-  return c;
 }
 
 // Everything below is the game on stacking (14 Nov), on a v3 state with

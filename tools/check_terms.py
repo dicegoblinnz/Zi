@@ -119,6 +119,10 @@ RETIRED = [
 ]
 
 
+# The Oracle's own Boon die (Fate, Boon and Bane) isn't a character's Boon.
+SKIP = {("Boons", "21-the-oracle.md")}
+
+
 def chapters(args):
     files = [a for a in args if not a.startswith("--")]
     return files or sorted(glob.glob(str(ROOT / "content/rules/*.md")))
@@ -139,6 +143,8 @@ def check_terms(files):
         hits = []
         for i, line in enumerate(lines, 1):
             for name, pat in RETIRED:
+                if (name, Path(f).name) in SKIP:
+                    continue
                 if re.search(pat, line):
                     hits.append((i, name, line.strip()))
         if hits:

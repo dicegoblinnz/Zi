@@ -6,7 +6,7 @@ order: 17
 part: "The Table"
 partNumber: "Part II"
 source: 2026-10-02 rulebook
-updated: 2026-11-14
+updated: 2026-11-17
 ---
 :::quote
 There aren't any levels in Zi'Dara. Your character grows, and you choose how.
@@ -33,8 +33,7 @@ Nothing on your sheet levels up. You get stronger by putting more on it: every T
 
 -   **Permissions**, one a Grow, up to six on a Title. Each one's 1 more on its Root, so a step bigger whenever you roll it and a point more to lose, and it's another reason you can bring a Root in.
 -   **Abilities**, one a Grow, up to six on an archetype. Each one's something more your archetype can pay for in Aura (see [Abilities](#s-abilities)).
--   **Things you carry**, got in downtime or found in play. Each one does what it is, as far as your equipment, your utility and your bag will hold (see [What you carry](#s-carrying)).
--   **Boons.** Two permission slots on a Title buy a permanent upgrade, like shrugging off the first hit each scene (see [Boons and Burdens](#s-boons)).
+-   **Items**, six at most, got in downtime or found in play. A Grow buys a new one at tier 2 or puts one you've got up a tier, as far as tier 3, and that's a step more on every roll it fits, or a point more of soak. Money buys tier 4, and tiers 5 and 6 only come out of the story (see [Items](#s-items) and [Upgrading gear](#upgrading-gear)).
 -   **Attuned things**, a stage at a time: Awakened, Tempered, Perfected. Each stage needs its material, and each new awakening takes a downtime slot, locks a point of the Root it fits, and is 2 steps on every roll it fits (see [Attunement](#s-attunement)).
 -   **Your Aspiration**, every time it's got its 5 points. Take a new Title, with its 5 Root points spread however you like and the permission it comes with, so that's 6 more across your Roots. Or a new archetype, with its mechanic, its Trait and the ability it comes with. Or a new attuned thing, with its awakening.
 
@@ -101,13 +100,15 @@ Here's what growth actually looks like.
 **Session 1: Creation.** She's the character built in [A Complete Character](#a-complete-character-start-to-finish).
 
 :::sheet[Vesk: The best cat burglar in the city]
-**Points:** 35. Two Titles 10, four more permissions 4, Shadow twice 10, her grappling line 5, and six things she carries 6.
+**Points:** 35. Two Titles 10, four more permissions 4, Shadow twice 10, her grappling line 5, four items 4, and two tiers up 2.
 
 **Titles:** *The best cat burglar in the city* (Body 5) · *Raised by the Guild* (Mind 3, Body 2), with three permissions each.
 
 **Archetypes:** Shadow (*Push*) · Shadow (*Vanish*), so her Push is +3.
 
 **Roots:** Body 11 · Mind 5 · Soul 0. Her hook locks a point of her Body, so she can hold 10.
+
+**Items:** worn leathers (armour, Body, tier 2) · a knife (weapon, tier 2) · soft-soled boots (tool, tier 3) · a set of picks (tool, tier 3) · her grappling line (tool, tier 2, attuned) · 5 of 6. Her keepsake's the first coin she ever stole, and she's got 3 Resources.
 
 **Attuned:** Her grappling line, Awakened, with *Anywhere I can throw a hook* (Body).
 
@@ -120,9 +121,9 @@ Here's what growth actually looks like.
 
 **Session 7: A third Title.** She robs the Vane Estate, and the slot she puts in her Aspiration after it is its fifth point, so it comes good (see [Aspiration](#s-aspiration)). She could take a new attuned thing, or Shadow a third time for a +4 Push, but she takes a Title: *The woman who has never been seen*, Mind 3 and Body 2, with *know who's watching a room* (Mind). Her Body's 13 and her Mind's 9 now, bigger dice and more to lose before she's hurt. She writes *Find out who the fence really is*, with nothing in it, and on her way out she takes a sliver of steel from the vault's bolt, because she's got plans for her picks.
 
-**Session 10: Locks.** A Grow puts *work a lock in the dark* (Body) on her first Title, so her Body's 14. A lock in the dark is her Body, 14 steps, two d12s and a d4, and when *know how a lock's built* brings her Mind in for a point, it's 23, three d12s and a d10.
+**Session 10: Locks.** A Grow puts *work a lock in the dark* (Body) on her first Title, so her Body's 14. A lock in the dark is her Body, 14 steps, and her picks at tier 3, 17, two d12s and a d10, and when *know how a lock's built* brings her Mind in for a point, it's 26, four d12s and a d4.
 
-**Session 12: Her picks.** Her second Aspiration gets its fifth point, and this time she wants her picks bound to her. They're attuned now, at Awakened, so they're on top of what she carries and they can't break. Their awakening is *Open any lock with a mechanism* (Body): 2 steps on every lock she picks with them, and 2 more for each Aura, and it locks another point of her Body. In the downtime after, the vault steel takes them to Tempered, and a slot wakes their second awakening, *Through the ward* (Body): her dice on a lock go through any magic holding it shut, as if it were only steel. That's a third point of her Body locked, so she can hold 11 of its 14. She writes *Train someone who will outlive me*.
+**Session 12: Her picks.** Her second Aspiration gets its fifth point, and this time she wants her picks bound to her. They're attuned now, at Awakened. They were one of her six already, and they still are, still at tier 3, and now they can't break. Their awakening is *Open any lock with a mechanism* (Body): 2 steps on every lock she picks with them, and 2 more for each Aura, and it locks another point of her Body. In the downtime after, the vault steel takes them to Tempered, and a slot wakes their second awakening, *Through the ward* (Body): her dice on a lock go through any magic holding it shut, as if it were only steel. That's a third point of her Body locked, so she can hold 11 of its 14. She writes *Train someone who will outlive me*.
 
 **Session 14: A Blaze.** In a burning warehouse a falling beam takes the last point of her Body, and the next one leaves her Bloodied. On her turn she takes the Blaze: she walks out through the fire with both crewmates over her shoulders. Her player could choose for her to die there, and doesn't, so she leaves the scene, and the burn becomes a Scar on her Body, written down as something she can't do any more: *can't go near open flame without freezing*. The GM holds her to it, and it locks a point of her Body for good, so she can hold 10 of its 14 now, though her dice are still all 14.
 
@@ -130,24 +131,24 @@ Here's what growth actually looks like.
 
 **Session 17: Perfected.** A pin from the Quiet Order's vault lock takes her picks to Perfected, and a slot wakes their third awakening, *Find the trap before it springs* (Mind): 2 steps on any roll at a trap, and 2 more for each Aura. It locks a point of her Mind.
 
-**Session 19: Two for a Boon.** She swaps *fight dirty with a knife* and *find a buyer for anything* for a Boon on *Raised by the Guild*, *Up the Walls*: she climbs at full stride. She hasn't pulled a knife in a year, and after the fence she's done selling. That's 1 off her Body and 1 off her Mind, dice and points both, and she's fine with that.
+**Session 19: Up the walls.** She hasn't pulled a knife in a year, so she swaps *fight dirty with a knife* for *climb a sheer wall* (Body) on *Raised by the Guild*, and gives the knife to a kid on Candle Street. Her grappling line's been up every wall in the city, and a strand of the bell rope from the Quiet Order's tower takes it to Tempered. A slot wakes its second awakening, *Up the walls* (Body): she climbs at full stride, and it's 2 steps on a climb, and 2 more for each Aura. It locks another point of her Body, so she can hold 9 of its 14.
 
 **Session 20: Retirement.**
 
 :::sheet[Vesk, session 20]
-**Points:** 47. Three Titles 15, three more permissions 3, *Up the Walls* 2, Shadow twice 10, her grappling line and her picks 10, two more awakenings 2, and five things she carries 5.
+**Points:** 47. Three Titles 15, five more permissions 5, Shadow twice 10, her grappling line and her picks 10, three more awakenings 3, two items 2, and two tiers up 2.
 
 **Titles (3):** *The best cat burglar in the city* (Body 5) · *Raised by the Guild* (Mind 3, Body 2) · *The woman who has never been seen* (Mind 3, Body 2).
 
-**Permissions:** *move unseen*, *run the rooftops*, *pick a mechanical lock* and *work a lock in the dark* (all Body) on her first Title · *know how a lock's built* (Mind) and *Up the Walls* in two slots on her second · *know who's watching a room* (Mind) on her third.
+**Permissions:** *move unseen*, *run the rooftops*, *pick a mechanical lock* and *work a lock in the dark* (all Body) on her first Title · *know how a lock's built* (Mind), *climb a sheer wall* (Body) and *find a buyer for anything* (Mind) on her second · *know who's watching a room* (Mind) on her third.
 
 **Archetypes:** Shadow (*Push*) · Shadow (*Vanish*), so her Push is +3.
 
-**Roots:** Body 13 · Mind 8 · Soul 0. Her awakenings and her Scar lock 4 of her Body and 1 of her Mind, so she can hold Body 9 and Mind 7.
+**Roots:** Body 14 · Mind 9 · Soul 0. Her awakenings and her Scar lock 5 of her Body and 1 of her Mind, so she can hold Body 9 and Mind 8.
 
-**Carries:** Common worn leathers, a knife, soft-soled boots · a purse of gold, a smoke bomb · the first coin she ever stole (keepsake) · her bag.
+**Items:** worn leathers (armour, Body, tier 2) · soft-soled boots (tool, tier 3) · her picks (tool, tier 3, attuned) · her grappling line (tool, tier 2, attuned) · 4 of 6. Her keepsake's still the first coin she ever stole, and she's got 3 Resources.
 
-**Attuned:** Her picks, Perfected: *Open any lock with a mechanism* (Body), *Through the ward* (Body) and *Find the trap before it springs* (Mind) · her grappling line, Awakened: *Anywhere I can throw a hook* (Body).
+**Attuned:** Her picks, Perfected: *Open any lock with a mechanism* (Body), *Through the ward* (Body) and *Find the trap before it springs* (Mind) · her grappling line, Tempered: *Anywhere I can throw a hook* (Body) and *Up the walls* (Body).
 
 **Threads:** She's written a new bond thread for each Goal the crew finished, and the old ones have all been rewritten at least once. Paying the fence on time strained her hostile thread with him, and keeping his name out of it when the watch came asking snapped it, so she owes him nothing now.
 
@@ -160,7 +161,7 @@ Here's what growth actually looks like.
 
 When she retires, she writes her final Title: *The one who walked away*.
 
-**What changed across twenty sessions:** she went from two Titles to three, from six permissions to six and a Boon, from picks she just carried to Perfected ones, and from 35 points to 47. On a lock she used to roll her Body, 11 steps, a d12 and a d10, or 16 with her Mind brought in. Now her Body's 13 and *Open any lock with a mechanism* is 2 more, so it's 15, two d12s and a d6, and 23 with her Mind, three d12s and a d10, with 2 more for every Aura she puts on the picks. On a warded vault *Through the ward* takes the magic out of the lock. On a trapped lock in the dark, *Find the trap before it springs* fits as well, and with her Mind brought in it's 25: a d12 for the lock, a d12 for the trap, a d12 for the alarm, a d12 for the guard down the hall and a d2 for keeping it quiet, all off one action. She's got less to lose than her dice say, though. Four of her Body's points are locked, so she can take one hit fewer there than when she started.
+**What changed across twenty sessions:** she went from two Titles to three, from six permissions to eight, from picks she just carried to Perfected ones, and from 35 points to 47. On a lock she used to roll her Body and her picks, 14 steps, two d12s and a d4, or 19 with her Mind brought in. Now her Body's 14, her picks are 3 and *Open any lock with a mechanism* is 2 more, so it's 19, three d12s and a d2, and 28 with her Mind, four d12s and a d8, with 2 more for every Aura she puts on the picks. On a warded vault *Through the ward* takes the magic out of the lock. On a trapped lock in the dark, *Find the trap before it springs* fits as well, and with her Mind brought in it's 30: a d12 for the lock, a d12 for the trap, a d12 for the alarm, a d12 for the guard down the hall and a d12 for keeping it quiet, all off one action. She's got less to lose than her dice say, though. Five of her Body's points are locked, so she can take one hit fewer there than when she started, and her leathers still only soak 2.
 
 ## The Crew, Session 1 to 20 {#s-crew-1-20}
 
