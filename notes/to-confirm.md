@@ -16,6 +16,18 @@ Part 3 of the rework (`notes/fixes-plan.md`), from your 17 Nov chat (`notes/play
 8. **Packs give Resources**, half their tier rounded up.
 9. **A vessel holds its tier in charge**, filled only with Aura you'd lose or a point at a time mid-scene, and spent only on your own abilities and awakenings.
 
+### 3a. Abilities I
+
+The Bard, Bloodsworn, Elementalist, Face, Gambler and Guardian in 03a, ten abilities each, on `rules/2026-11-17-fixes-abilities-a`.
+
+1. **Ten each, simplest first, Push first.** Every one that was there is kept word for word. The Bloodsworn and the Gambler hadn't got a Push, so each has one now: the Bloodsworn's on a roll its blood's put steps on, and the Gambler's on a die it's just flipped.
+2. **Three are 2 Aura**, because each does what a whole action or a whole downtime would: *Shield of the storm* (the Elementalist's area on a Defend, so one die stops every blow at everyone in it), *Friends in high places* (the Face's influence left on a faction, turning its whole downtime action) and *House rules* (the Gambler wins every tie for a round). Everything else is 1.
+3. **The faction turn's abilities are paid in a scene**, since there's no Aura in downtime: the Bard's *A song about them* (a song to a crowd counts as the crew's Influence or Undermine, without the crew's action), the Face's *Friends in high places* and the Gambler's *Side bet* (a flip at the next faction turn).
+4. **Bleed out is kept word for word, and it's yours to look at.** It's the one ability left that adds steps by counting something (3 for every point the Body's down), on top of the mechanic's own 3 a point, so a Bloodsworn on 2 of 9 gets 21 steps for 1 Aura. Say if it should go, or become something like "the steps from every hit this round go on the roll you're making now".
+5. **The levers Boons left** went where the plan put them: *Scab over* is the Bloodsworn's Regen (a point back at the round's end, to half its maximum, the way a breath works on Mind, and no Toll), *Back on my feet* is the Guardian's Recovery (its Body rolled twice at a scene's end), and *Stand firm* stays the Guardian's Toughness. Soak gets *Take it on the plate* (the Guardian's armour taking a friend's hit) and *Through the mail* (soak counting for the Bloodsworn's steps, never its Aura).
+6. **Nothing crosses into another archetype's one thing.** No ability gives areas, heal rolls, leading, summoning, free intercepts or flipping to anyone else. The Gambler's *Their bad luck* turns a threat's die the way a Face's influence does, but only on a 1, and the Bard's *Soul song* covers despair and curses at a Soul, which nobody can intercept.
+7. **The examples are as they were**, since no rule they show has moved in 03a. Two of them will once prompt 2 sets the crew's items: Bram's three goblins (his shield's tier goes on both his rolls avoiding harm, and his plate soaks before Stand firm's point comes off his Body) and Ash's five guards (her ember stone's tier goes on her fire).
+
 ### 3c. Abilities III
 
 Written 17 Nov on `rules/2026-11-17-fixes-abilities-c`: ten abilities each for the Shadow, Shifter, Summoner, Teleporter and Warrior, and 03a's opening.

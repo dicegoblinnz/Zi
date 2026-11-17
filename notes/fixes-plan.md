@@ -194,6 +194,14 @@ A chat changes only its own files, its own parts of `tests/` and its own blocks 
 
 Written 17 Nov: the decisions, this plan, the 17 Nov section in `notes/to-confirm.md` and the line in CLAUDE.md, on `rules/2026-11-17-fixes` off `rules/2026-11-16-core`. Prompts 1, 2, 3a, 3b, 3c and 4 can start.
 
+### 3a. Abilities I
+
+Written 17 Nov on `rules/2026-11-17-fixes-abilities-a`. Its calls are under 3a. Abilities I in `notes/to-confirm.md`'s 17 Nov section.
+
+- **The Archetypes (03a)**: ten abilities each for the Bard, Bloodsworn, Elementalist, Face, Gambler and Guardian, each `**Its name (n Aura):**` in its rule box, simplest first, every one there before kept word for word (Bram's *Push* and *Stand firm*, Ash's and Dorrie's *Push* and *Turn them*, Ash's *Push* and *Sculpt*). Three are 2 Aura (*Shield of the storm*, *Friends in high places*, *House rules*), and the rest 1. They reach past fights: songs and lore, oaths, weather and ground, bribes and rumours, luck in the story, escorts and carrying, and the faction turn, paid in a scene. Items' tiers, Resources and soak come in where they fit (*Lend your shield*, *Grease the palm*, *Old favour*, *Won it at cards*, *Take it on the plate*, *Through the mail*). The Traits, mechanics, examples and Title ideas lines are as they were.
+- **`scripts/build-content.mjs`** (prompt 2's file, the smallest change): the warning that an archetype's list holds six at most goes, since six is now how many of them one character holds. `npm run content` reads all sixty with their prices and no warnings.
+- **For the others:** `tools/check_terms.py` still flags "tier" on *Lend your shield* till prompt 1 takes tiers off the retired words. `archetypesOf()` in `roots.js` gives a sheet with no `have` every ability and cuts it to the first six, which with ten on a list is now the six simplest (prompt 2). The builder, downtime and print show whole lists of ten (prompt 6). Bram's Guardian example and Ash's Elementalist example need their dice again once their items are set (prompts 2, 7 or 8).
+
 ### 3c. Abilities III
 
 Built 17 Nov on `rules/2026-11-17-fixes-abilities-c`. Its calls are under 3c in `notes/to-confirm.md`'s 17 Nov section.
