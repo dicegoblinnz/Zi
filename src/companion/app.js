@@ -873,7 +873,7 @@ function vesselsView(c, s) {
     const full = room && lost ? `<button type="button" class="button sm is-aura" data-act="fill"${k} data-from="spill" data-n="${Math.min(lost, room)}">Aura you lost: ${Math.min(lost, room)} in</button>` : "";
     return `<li class="cc-item cc-vessel"><p><b>${esc(cap(R.itemSaid(v)))}</b> ${chargePips(n, v.tier)} <small>${broken ? "broken till it’s mended" : `${n} of ${v.tier} charge${heldSaid.length ? `, ${andList(heldSaid)} held in it` : ""}`}</small></p>${fills || full ? `<div class="cc-row">${fills}${full}</div>` : ""}</li>`;
   };
-  return `<h3 class="cc-h3">${list.length > 1 ? "Your vessels" : "Your vessel"} ${tip("pa-vessel", ["A vessel holds as much charge as its tier, and keeps it between scenes and through downtime.", "Fill it with Aura you’d lose: what’s over your maximum when you finish acting, and Aura that comes in while you’re full. What’s left when a scene ends isn’t lost, so it stays out.", "Or put a point of any Root in for a charge, any time in a scene, with no action. That point’s held in it, like a lock, till its charge is spent, and points are spent first.", "Spend it on your own abilities and your own awakenings’ Aura, a charge for each Aura. It never pays for bringing a Root in, a tie, an intercept, a quick heal or going beyond.", link("s-vessels", "Vessels in the rules")], "How a vessel works")}</h3><ul class="cc-list">${list.map(row).join("")}</ul>`;
+  return `<h3 class="cc-h3">${list.length > 1 ? "Your vessels" : "Your vessel"} ${tip("pa-vessel", ["A vessel holds as much charge as its tier, and keeps it between scenes and through downtime.", "Fill it with Aura you’d lose: what’s over your maximum when you finish acting, and Aura that comes in while you’re full. What’s left when a scene ends isn’t lost, so it stays out.", "Or put a point of any Root in for a charge, any time in a scene, with no action. That point’s held in it, like a lock, till its charge is spent, and points are spent first.", "Spend it on your own abilities and your own awakenings’ Aura, a charge for each Aura. It never pays for bringing a Root in, a tie, an intercept or going beyond.", link("s-vessels", "Vessels in the rules")], "How a vessel works")}</h3><ul class="cc-list">${list.map(row).join("")}</ul>`;
 }
 // Finishing acting with Aura over the maximum: it's gone, or it goes into a
 // vessel with room, in the same tap.
@@ -909,8 +909,8 @@ function panelView(key, c, s) {
     return `<p><b>Aura ${s.aura} of ${max}${s.acting ? ", and you’re acting" : ""}.</b> ${ruleTip("s-aura", "How Aura works", "pa-aura")}</p>
       <div class="cc-row">${s.acting ? `<button type="button" class="button primary" data-act="acting" data-v="0">I’ve finished acting${over ? `: ${over} goes` : ""}</button>${fillOverButtons(c, s, over)}` : '<button type="button" class="button" data-act="acting" data-v="1">I’m acting now</button>'}</div>
       <div class="cc-row"><button type="button" class="button" data-act="aura" data-d="-1"${off(s.aura < 1)}>Spend 1</button><button type="button" class="button" data-act="aura" data-d="1">Get 1 back</button>${free ? "" : `<button type="button" class="button" data-act="aura" data-d="-1" data-why="intercept"${off(s.aura < 1)}>Intercept for a friend: 1 Aura</button>`}
-        <button type="button" class="button" data-act="aura" data-d="-1" data-why="quick"${off(s.aura < 1)}>Quick heal a friend: 1 Aura</button></div>
-      <p class="cc-small">${free ? "You intercept for free." : "Intercepting’s 1 Aura for each friend, and no action."} ${tip("pa-icept", [free ? "As a Guardian you intercept for free, for every friend within your stride." : "Intercepting takes the blows aimed at a friend within your stride, and they come at your Body instead. It’s 1 Aura for each friend, and no action.", "It’s only for what’s at their Body, because nobody can step in front of fear or despair.", "A quick heal’s 1 Aura and your action, and someone you can reach gets a point back on one of their Roots, no roll and no Toll.", link("s-intercept", "Intercept in the rules")], "Intercepts and quick heals")}</p>
+</div>
+      <p class="cc-small">${free ? "You intercept for free." : "Intercepting’s 1 Aura for each friend, and no action."} ${tip("pa-icept", [free ? "As a Guardian you intercept for free, for every friend within your stride." : "Intercepting takes the blows aimed at a friend within your stride, and they come at your Body instead. It’s 1 Aura for each friend, and no action.", "It’s only for what’s at their Body, because nobody can step in front of fear or despair.", link("s-intercept", "Intercept in the rules")], "Intercepts")}</p>
       ${vesselsView(c, s)}`;
   }
   if (key === "res") return resView(c, s);
@@ -3338,12 +3338,11 @@ const ACT = {
   aura: (el) => {
     const d = Number(el.dataset.d);
     const why = el.dataset.why;
-    change(d > 0 ? (why === "threat" ? "a threat falling to you" : "getting 1 Aura back") : why === "intercept" ? "intercepting for a friend" : why === "quick" ? "a quick heal for a friend" : "spending 1 Aura", (s, c) => {
+    change(d > 0 ? (why === "threat" ? "a threat falling to you" : "getting 1 Aura back") : why === "intercept" ? "intercepting for a friend" : "spending 1 Aura", (s, c) => {
       if (d > 0) return `${why === "threat" ? "It fell to you, so you get 1 Aura." : "You get 1 Aura back."}${gainAura(s, c, 1)} Aura’s ${s.aura}.`;
       if (s.aura < 1) return "";
       s.aura -= 1;
       if (why === "intercept") return `1 Aura to intercept for a friend. Their blows come at your Body instead, and your Body rolls for them when they land. Aura’s ${s.aura}.`;
-      if (why === "quick") return `1 Aura and your action for a quick heal. Your friend gets a point back on one of their Roots, no roll, and no Toll. Aura’s ${s.aura}.`;
       return `Spent 1 Aura. Aura’s ${s.aura}.`;
     });
   },

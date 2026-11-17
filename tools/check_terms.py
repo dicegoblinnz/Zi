@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Flag rules words that the 7 Oct to 17 Nov 2026 changes retired, and broken links.
+"""Flag rules words that the 7 Oct to 18 Nov 2026 changes retired, and broken links.
 
 Usage: python3 tools/check_terms.py [FILE.md ...]   (default: every chapter)
        add --links to check every #anchor link points at a real heading id
@@ -119,6 +119,9 @@ RETIRED = [
     ("the bag", r"\b(your|her|his|their|an empty|a|the) bag\b|\bbag (holds|counts?)\b|\b\d+ of 10\)|\bBag\]"),
     ("armour boxes", r"\bbox(es)? (of|on) (\w+ )?armour\b|\barmour['’]?s? box(es)?\b|\b(1|2|3|one|two|three) box(es)?\b|\bbox(es)? ticked\b|\btick(s|ed|ing)? (a|one|its|the|every) (of (its|their|the) )?box(es)?\b|\blast box\b"),
     ("armour quality", r"\b(Common|Fine|Masterwork)( worn| court| plate)? (armour|leathers|plate|shields?|clothes|coat|helmet|piece)\b|\barmour['’]?s? quality\b|\b(Common|Fine|Masterwork) (has|is|armour)\b|\bone piece can be Fine\b"),
+    # 18 Nov 2026: Mo's calls. Nobody pays 1 Aura to put a point back now,
+    # bar the Healer's Hold still.
+    ("quick heal", r"\b[Qq]uick heal(s|ed|ing)?\b"),
 ]
 
 
