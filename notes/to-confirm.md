@@ -38,6 +38,8 @@ Every archetype's ability list was reworked on 18 Nov (designed on Fable, writte
 - **Swap** no longer reaches Named threats or Bosses, and has a range. In the book.
 - **Take them with you and Not There** save a friend from a blow once a scene. Allowed.
 - **Leave a door** reaches anywhere in the same city. Yours to set.
+- **Twins to watch at the table** (the independent review): the Bloodsworn's *Mine to take* and the Guardian's *Put it on me* both take a friend's hit (raw to feed the blood, or soaked), and the Warrior's *Riposte* and the Bard's *Answer back* both send a stopping die back (Body, or Mind and Soul). Kept as different ways to play.
+- **Isolde's Oracle lines stay as they were.** The Fable pass added a line each to *Push* and *Hold it*, and Isolde's paper sheet ran out of room, so both are back to their 17 Nov words.
 - **The Teleporter** still has no Push and nothing for the faction turn.
 - **Parry** is weak beside *Second Skin*. Left. If you want it better, it lasts the scene.
 - **Call them out** has no roll, so the GM's choice is the check. Say if it should roll.

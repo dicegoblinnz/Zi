@@ -156,7 +156,7 @@ The Bloodsworn gets more dangerous every time they bleed.
 
 **Make them bleed (1 Aura):** when one of your dice wins on a roll your blood's put steps on, whatever it beat is *Bleeding* at that die's size, on top of whatever the die was for. Pay again for another die.
 
-**Mine to take (1 Aura):** when a hit gets through to the Body of a friend within your stride, take it yourself, after it's landed. It's a point off your Body instead of theirs, and your armour doesn't soak it, so it's 3 steps on your next action and 1 Aura. Pay again for another hit.
+**Mine to take (1 Aura):** when a hit gets through to the Body of a friend within your stride, take it yourself, after it's landed. It's a point off your Body instead of theirs, and your armour doesn't soak it, so your blood gets its steps and *Paid in Blood* gives you its Aura. Pay again for another hit.
 
 **Now I know you (1 Aura):** when a hit takes a point off your Body, the GM tells you one of the hidden tags of whatever hit you, or that it hasn't got any.
 
