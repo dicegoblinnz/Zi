@@ -456,25 +456,27 @@ Only a Leader leads. An order or a rallying song is an action: a Root at full an
 :::rule
 **Trait:** *Where It's Needed*. Each round, you can move steps around between your own roll and the rolls of friends who can hear or see you, up to 1 step for each of you, counting yourself. Take them off one roll and put them on another before either's rolled. It's free and takes no action, and nobody's roll goes below 1 step.
 
-**Push (1 Aura):** +2 to one of a friend's dice, on a roll your steps went into.
+**Push (1 Aura):** +2 to one of a friend's dice, on a roll your steps went into, once it's rolled and you can see it's needed. A roll your steps went into is any roll this round that got steps from your lead or your *Where It's Needed*.
 
-**Size them up (1 Aura):** before anyone acts this round, ask the GM which threat's in charge, or which one's closest to breaking, and she tells you straight.
+**Size them up (1 Aura):** before anyone acts this round, ask the GM who's in charge here, who's closest to breaking or who's about to run, and she tells you straight. It works on a room full of courtiers the same as a fight. Pay again for another of the three.
 
-**Signal (1 Aura):** your lead reaches a friend who can't hear or see you, as long as you've agreed a signal or sent word. Pay again for another friend.
+**Take charge (1 Aura):** people in the scene who aren't threats, like a crowd or a ship's crew, do what you tell them this round, as long as it's something they'd do for whoever's in charge. There's no roll. They won't fight for you, but what they do changes the ground: the crowd blocks the street, or the crew cuts the anchor. Pay again for another round.
 
-**On me (1 Aura):** every friend who can hear or see you can move their stride again this round, free.
+**On me (1 Aura):** shout, and every friend who can hear or see you can move their stride right now, wherever the round's got to, even off their turn. It's a stride, never an action, so it gets them out of a telegraph aimed at a place before it lands, but one aimed at a person still lands on them wherever they go.
 
-**Rally them (1 Aura):** instead of handing a friend steps, make them *Rallied*, with the die those steps make, a d12 at most. Pay again for another friend.
+**Signal (1 Aura):** this round your lead and your *Where It's Needed* reach one friend who can't hear or see you, as long as you've agreed a signal or sent word. Pay again for another friend.
 
-**Take charge (1 Aura):** people in the scene who aren't threats, like a crowd or a ship's crew, do what you tell them this round, as long as it's something they'd do for whoever's in charge. There's no roll.
+**Rally them (1 Aura):** when you lead, one friend you hand steps to is *Rallied d6* as well. Pay again for another friend.
 
-**Shift the weight (1 Aura):** this round your *Where It's Needed* moves 2 steps for each of you, not 1. Pay again and it's 3.
+**Lead from the front (1 Aura):** keep some of your lead's steps and roll them yourself, as dice with intents of their own, and hand the rest out. Your kept dice are a roll your steps went into, so your *Push* and *Change of plan* work on them.
 
-**Lead from the front (1 Aura):** keep some of your lead's steps and roll them yourself, as dice with intents of their own, and hand the rest out.
+**Change of plan (1 Aura):** once a roll your steps went into has landed, pick one of its dice that lost, or whose job's already done, and send it at something else that friend could reach, with a new intent and the number it rolled. It goes against that target's roll for the round (rolled now if nobody's gone at it yet) or a telegraph's die, and it pays Aura if it wins there. Pay again for another die.
 
-**Everyone gets it (1 Aura):** every friend who can hear or see you gets all your steps, not a share.
+**Follow it up (1 Aura):** lead after a friend's rolled instead of before. Your steps all go to that one friend, and they roll them straight away as more dice on the same roll, each with its own intent. It's still your one action, and it can't go on an Oracle's foresight.
 
-**Orders for the week (1 Aura):** a lead you make in the last scene before downtime can wait for the faction turn, and its steps go on the crew's roll there.
+**Everyone gets it (1 Aura):** every friend who can hear or see you gets all your lead's steps, not a share. With *Lead from the front*, they each get all the steps you didn't keep.
+
+**Orders for the week (1 Aura):** a lead you make in the last scene before downtime can wait for the faction turn, and its steps go on the crew's roll there. You pay for it in the scene.
 :::
 
 :::example[Orders from the doorway]
@@ -502,23 +504,25 @@ A tag works like a permission for whoever's holding the item: it lets them do so
 
 **Push (1 Aura):** +2 to one of your making dice.
 
-**Made it earlier (1 Aura):** say a Resource for you or a friend you can reach without ticking one off, as long as it's something you could have made, like a hook or a key that nearly fits. Pay again for another.
-
-**Knock it together (1 Aura):** tick a Resource and it's an item at tier 1 till the scene ends, like a chair leg made a club. It's on top of your six.
-
-**Tune it up (1 Aura):** a making die that wins can put the item a tier higher till the scene ends instead of giving it a tag, as far as tier 4. Tiers 5 and 6 only come out of the story. Pay again and another winning die can.
-
-**Mend it (1 Aura):** a making die that wins against something broken can mend it instead of giving it a tag, and it stays mended.
-
-**Masterwork (1 Aura):** the tags you make this time last till downtime.
+**Made it earlier (1 Aura):** say something you could have made, like a grapnel or a copy of the duke's seal, and you or a friend you can reach has it: an item at tier 2 till the scene ends, on top of your six, with no Resource ticked. Say what kind it is, a tool, a weapon or a guard, and never armour, a vessel or anything attuned. Pay again for another.
 
 **On the fly (1 Aura):** your making can be one die of a roll instead of your whole action, so you can fix your hook halfway up the wall and keep climbing with the rest.
 
-**Rig it (1 Aura):** your making can go on something nobody carries, like a door, a cart or a crane, and its tags work for the crew there till the scene ends.
+**Rig it (1 Aura):** your making can go on something nobody carries, like a door, a cart or a crane, and its tags work for the crew there till the scene ends. The GM says its size, and anyone using it can break a tag on it instead of taking a hit.
 
-**Know how it's made (1 Aura):** when you win a [Study](#s-study) on something made, like a lock or a construct, the GM tells you its weak point as well, or that it hasn't got one.
+**Mend it (1 Aura):** a making die that wins against something broken mends it instead of giving it a tag, and it stays mended. That's a broken item, something broken in the scene like an axle or a bridge rope, or a tag you made that's been broken, your mark included, which goes straight back on.
 
-**Bottle it (1 Aura):** when Aura you'd lose could go into a vessel, it can go into a friend's you can touch instead, as their charge.
+**Tune it up (1 Aura):** a making die that wins can put the item a tier higher till the scene ends instead of giving it a tag, as far as tier 4. Tiers 5 and 6 only come out of the story. Pay again and another winning die can.
+
+**Know how it's made (1 Aura):** when you win a [Study](#s-study) on something made, like a lock, a ship or a construct, the GM tells you its weak point as well, or that it hasn't got one.
+
+**Built to break (1 Aura):** when a tag you made, or your mark, is broken to turn a hit, it goes off, and whoever landed the blow takes a condition that comes from the tag, at a d6, with no roll. *Fire* leaves them *Burning*, and *catches blades* leaves them *Disarmed*. You can pay it off your turn, wherever you are, 1 Aura for each tag that breaks.
+
+**I built that (1 Aura):** till the scene ends, you can spend your Aura on the awakening of any friend who can hear or see you, without touching their attuned thing.
+
+**Masterwork (1 Aura):** the tags you make this time last till downtime.
+
+**A flaw in it (1 Aura):** when a making die of yours wins on something a faction owns or leans on, like its press, its ship or its gate, pay as the scene ends and it fails them when they need it. At the next faction turn that's a Destroy on that faction, a tick off the asset it's part of, and it doesn't cost the crew its action. It's one tick on a faction a faction turn.
 :::
 
 :::example[Vesk's coin]
@@ -540,23 +544,25 @@ Your foresight's two numbers at most, however many steps you've got, so make the
 :::rule
 **Trait:** *Seen It Coming*. Each round, once the telegraphs are out and before anyone does anything else, you can roll up to 3 of the threats' dice: their telegraphs, or a threat's one roll for the round. They stay as they landed, face up, so the crew knows where to put its dice before anyone commits.
 
-**Push (1 Aura):** +2 to one of your foresight numbers, when you roll them.
+**Push (1 Aura):** +2 to one of your foresight numbers, when you roll them. A 12 on your d12 can be a 14 this way, and it still fits a d12.
 
-**Hold it (1 Aura):** your foresight lasts till you use it or the scene ends.
-
-**See further (1 Aura):** *Seen It Coming* rolls 2 more of the threats' dice this round. Pay again for 2 more.
+**Hold it (1 Aura):** your foresight lasts till you use it or the scene ends. You never hold more numbers than one foresight roll gives you, so if you roll it again while you're holding some, keep whichever you like, up to that many.
 
 **Another glimpse (1 Aura):** your foresight's one number more this time. Pay again for another.
 
-**Look again (1 Aura):** roll one of the threats' dice from *Seen It Coming* again, and keep whichever of the two you like. Pay again for another.
+**See further (1 Aura):** *Seen It Coming* rolls 2 more dice this round, and they can be any dice the GM's about to roll, in a fight or out of one: a lock's, a wall's or a magistrate's. Each one stands as that thing's roll for the round, or for the next try outside rounds. Pay again for 2 more.
+
+**Look again (1 Aura):** roll one of the dice from *Seen It Coming* again, and keep whichever of the two you like. Pay again for another die.
+
+**I'll take that (1 Aura):** when you swap a foresight number in, the number you took off that die is yours. It's a foresight number now, in place of the one you just spent, and it goes once like any other. Pay again each time you keep one.
+
+**Leave an omen (1 Aura):** instead of swapping a foresight number in, hang it on someone you can see as *Blessed* or *Hexed*, at the die it came off, so a 9 off your d12 is *Blessed d12*. Pay again for another number.
 
 **Echoes (1 Aura):** hold something, or stand somewhere, and see the moment that mattered most in its past. The GM tells you what you see.
 
 **What's coming (1 Aura):** ask the GM what'll happen in this scene if the crew leaves it alone, and she tells you straight.
 
 **Foretold (1 Aura):** win a [Study](#s-study) and introduce a truth instead. It's true from now on, and anyone in the crew can bring a Root in on it this scene, like a permission they've all got.
-
-**Leave an omen (1 Aura):** instead of letting a foresight number go, make it *Blessed* or *Hexed* on someone you can see, at the smallest die it fits. Pay again for another.
 
 **Read the year (1 Aura):** as the last scene before downtime ends, roll your foresight with no action and keep it for the faction turn. Its numbers swap into any faction's dice there, the crew's included.
 :::
@@ -584,25 +590,27 @@ When you get into hiding, the dice you rolled to hide go into your **shadow pool
 :::rule
 **Trait:** *Any Shadow Will Do*. Any patch of dark's somewhere you can hide. Everyone else needs something to get behind, like a corner or a pillar, and all you need's a shadow. You still roll to get into hiding.
 
-**Push (1 Aura):** +2 to your roll to hide, or to a shadow die when you use it.
+**Push (1 Aura):** +2 to one die on your roll to hide, or to a pool die when you use it.
 
-**Vanish (1 Aura):** you're hidden again, no roll, even in plain sight. Nothing goes in your pool, because you didn't roll. Pay again and a friend beside you vanishes too.
+**Vanish (1 Aura):** you're hidden again, no roll, even in plain sight. Your pool stays as it is, because you didn't roll. Pay again and a friend beside you vanishes too.
 
 **I had it planned (1 Aura):** say a Resource without ticking one, as long as it's something you could've set up before the scene: a window left on the latch, a guard paid to look the other way, a change of clothes stashed in the laundry. Pay again for another.
 
-**Keep one back (1 Aura):** when you get into hiding again, keep a die from your old pool instead of losing it. Pay again to keep another.
+**Seen from up there (1 Aura):** spend a die from your pool without rolling it, and ask the GM one thing you'd have seen while you were hidden, like where the key's kept or what the steward did when he thought he was alone. She answers it straight, and the answer can be a hidden tag of someone you were watching.
 
 **Pass it on (1 Aura):** give a die from your pool to a friend who can see or hear you. They add it to a roll the way you would, and it's gone once they've used it. Pay again for another die.
 
-**Seen from up there (1 Aura):** spend a die from your pool without rolling it, and ask the GM one thing you'd have seen while you were hidden, like where the key's kept or which door the guard checks. She answers it straight.
-
 **Light fingers (1 Aura):** when a die of yours wins against someone who hasn't seen you, take one thing they're carrying as well as whatever the die was for: a key, a letter, a purse. Pay again for another thing, or another person.
 
-**Out of nowhere (1 Aura):** when you go at someone from hiding, you're still hidden after the roll, as long as there's a shadow to stay in.
+**Never saw it (1 Aura):** when a die of yours wins against someone who hasn't seen you, they're *Exposed* at that die's size as well as whatever the die was for. Pay again for another die.
 
 **Gone into the dark (1 Aura):** one die that gets you into hiding answers a telegraph aimed at you as well, with the same roll. Pay again for another die.
 
-**Wait for it (1 Aura):** while you're hidden, take your action whenever you like this round, even straight after a friend's roll or as the telegraphs land. It's still your one action.
+**Not done yet (1 Aura):** when a pool die you rolled as its own die wins, it goes back in your pool a size smaller instead of being gone, and a d2 that wins is gone. Pay again for another die.
+
+**Wait for it (1 Aura):** while you're hidden, take your action after the telegraphs' dice are rolled and before they land, so you see every number before you choose what your dice do. It's still your one action.
+
+**Kept for later (1 Aura):** a die left in your pool when the last scene before downtime ends keeps for the faction turn, and it goes on the crew's roll there as its own die, as long as what you saw was that faction's business. You pay for it in the scene. Pay again for another die.
 :::
 
 :::example[Under the gallery]
