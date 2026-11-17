@@ -6,7 +6,7 @@ order: 4
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-11-14
+updated: 2026-11-17
 ---
 :::quote
 Everything the crew wants, owns and owes, out on the table where everyone can see it.
@@ -50,7 +50,7 @@ The Goal is what the crew's after this arc, like *clear Dorrie's name*, *free th
 -   **When it climbs past d12, the crew's done it.** Play the moment out. Then the crew grows (see [How the crew grows](#s-crew-grows)), everyone writes one new [thread](#s-bonds), to someone the Goal brought into their life, and the table writes the next Goal, at d2.
 
 :::example[Clearing Dorrie's name]
-**Session 1.** The crew corners the forger who's been signing Dorrie's hand on letters, and the GM says it out loud: the Goal's within reach. The proof's locked in his desk, so Vesk goes at it with her Body, 11 steps, a d12 and a d10. Her best is a 6 against the Goal's d2, which rolls a 2, and it climbs to d4.
+**Session 1.** The crew corners the forger who's been signing Dorrie's hand on letters, and the GM says it out loud: the Goal's within reach. The proof's locked in his desk, so Vesk goes at it with her Body, 11 steps, and her set of picks, tier 3, 14 steps, two d12s and a d4. Her best is a 6 against the Goal's d2, which rolls a 2, and it climbs to d4.
 
 **Downtime.** The crew's action goes on getting the proof in front of the right magistrate, and Dorrie's plainly the right person for it. There's no lie in this, so it's her Soul, 6 steps, a d12, against the d4. She rolls a 3 against its 3, and the tie goes to the Goal. There's no Aura in downtime, so she pays a point of Soul to roll again and gets a 7, so it's d6.
 
@@ -99,7 +99,7 @@ The crew's a faction too, on the same card as the others. It starts small, and i
 :::
 
 -   **Power** is the crew's muscle: how many people turn up when it calls. It's 1 step, plus 1 for each asset that adds Power, so a new crew's a d4. It's the die the crew rolls when it moves on a faction, plus a step for every Reputation and bond thread that fits the roll, and its people are threats with a Challenge to match: a d6 Power sends Challenge 3.
--   **Resources** are permissions for where the crew's money comes from, one line each, like *Odd jobs*. Every asset needs one paying for it, every downtime, and one that isn't paying for anything is an extra resource (see [Extra Resources](#s-crew-wealth)). A purse of gold is still each character's own, a utility item that's worth about a month's wages.
+-   **Resources** are permissions for where the crew's money comes from, one line each, like *Odd jobs*. Every asset needs one paying for it, every downtime, and one that isn't paying for anything is an extra resource (see [Extra Resources](#s-crew-wealth)). A purse of gold is still each character's own, one of their [Resources](#s-resources), worth about a month's wages.
 -   **Assets** are permissions for what the crew can do, one line each, and each one says exactly what it does. An asset that's people who'll turn up when the crew calls, like *Muscle* or *The Dock Lads*, adds Power, and nothing else does. One with nothing paying for it stops counting till something does. There are twelve below, or write your own in the same shape.
 -   **Reputations** are what the city says about the crew, one line each: *The ones who beat the forger's court.* A Reputation works like a Title for the crew. It's a step on any crew roll it fits, and the crew earns one every time a Goal's done, and keeps them all.
 -   **Holdings** are the big things the crew owns together (see [Party Holdings](#s-party-resources)).
@@ -135,7 +135,7 @@ Here are twelve to pick from. There are plenty more in [Appendix B](#faction-str
 | **Rooted** | Once a session, anyone in the crew being chased through the crew's own streets gets away, with no roll. |
 | **A Ship** | The crew's own ship. A voyage on it needs no Supplies clock, and while nothing's paying for it, it stays tied up in harbour. |
 | **Smugglers' Roads** | A journey on the crew's own roads starts with its first stage already behind it. |
-| **A Workshop** | Once a downtime, mend a broken item, or a piece of armour with boxes ticked, without spending a slot. |
+| **A Workshop** | Once a downtime, mend a broken item without spending a slot. |
 | **Healers** | Once a session, between two scenes, everyone in the crew rests a second time: one Root each, rolled unsplit, and they get back what it rolls. It isn't a heal, so it gives no Toll. |
 | **Old Debts** | Once a session, someone the crew once helped turns up and does one thing for them. |
 

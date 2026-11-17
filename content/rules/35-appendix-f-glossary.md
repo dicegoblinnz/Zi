@@ -141,7 +141,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Telegraph](#s-telegraphs)** | The GM saying, face up, what's coming, at whom, how hard, and how many hits when it's more than one. One aimed at you lands wherever you've gone. Fear, lies and pressure come as telegraphs too. |
 | **[Tempered](#s-attunement)** | An attuned thing's second stage: 2 awakenings, and 2 more with a Burden. |
 | **[Thread](#s-bonds)** | One truth you share with a bond. A bond thread's something good: borrow one thing off their sheet through it for 1 Aura, or strain it and you get a point of Soul back. A hostile thread's gone bad, and it bites like a Catch. You start with two bond threads with the crew, and three if you write a hostile one too. A faction's threads go one way, and they're how it sees the crew. |
-| **[Threat budget](#s-threat-budget)** | What the GM builds a scene's threats with, growing as the crew does. It sizes multipliers and how long a scene runs. |
+| **[Threat budget](#s-threat-budget)** | What the GM builds a scene's threats with, growing as the crew does. It sizes the round budget and how long a scene runs. |
 | **[Tick](#s-stakes)** | A clock or an event stepping down one, a faction's agenda climbing one, one win off a multiplier, or one hit on you. |
 | **[Tier](#s-item-tiers)** | How good an item is, from 1 to 6, and how many steps it adds when it fits. Tier 6 is a d12's worth. Each one's got a name: Plain, Trusty, Proven, Storied, Sung and Mythic. |
 | **[Title](#s-title)** | Who you are: one role or one school of magic, real and specific, with up to six permissions. It's 5 points and puts 5 on your Roots, spread however you like, and it comes with one permission. It's separate from your archetypes. |

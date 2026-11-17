@@ -6,7 +6,7 @@ order: 14
 part: "The Table"
 partNumber: "Part II"
 source: 2026-10-02 rulebook
-updated: 2026-11-14
+updated: 2026-11-17
 ---
 :::quote
 Some players need the table set up a bit differently, and it's usually easy to sort.
@@ -35,7 +35,7 @@ When you act against a threat, you roll its die too, in another colour, so you c
 -   **No grid, if the grid's hard to see.** Use the bands from [Playing Without a Grid](#s-theatre) instead.
 
 :::example[One die at a time]
-Wren joins Bram's roll on the guard captain, so it's Bram's Body, 9 steps, and *Ring the bell* fits his hammer, 2 more, and Wren brings her Body, 8 more. That's 19 steps between them, three d12s and a d2: a d12 to knock his sword away, a d12 to floor him, a d12 to make him give up, and the d2 to keep his men back. The captain's Challenge 3, and his d6 only gets rolled once this round, so Bram's player rolls it first and leaves it showing: a 4. Then he calls all three and rolls his dice one at a time, saying each one out loud. The sword's 5 against 4, and it goes skittering. The floor's 2 against 4, so the captain keeps his feet. Giving up is 4 against 4, and Bram lets the tie go. The d2's a 1.
+Wren joins Bram's roll on the guard captain, so it's Bram's Body, 9 steps, his hammer's tier 2, and *Ring the bell* fits it, 2 more, and Wren brings her Body, 8 more. That's 21 steps between them, three d12s and a d6: a d12 to knock his sword away, a d12 to floor him, a d12 to make him give up, and the d6 to keep his men back. The captain's Challenge 3, and his d6 only gets rolled once this round, so Bram's player rolls it first and leaves it showing: a 4. Then he calls all three and rolls his dice one at a time, saying each one out loud. The sword's 5 against 4, and it goes skittering. The floor's 2 against 4, so the captain keeps his feet. Giving up is 4 against 4, and Bram lets the tie go. The d6's a 1.
 :::
 
 ## Hearing {#s-access-hearing}
@@ -57,7 +57,7 @@ If throwing dice is hard work, ask a friend to roll for you. **Every call's stil
 Cut down the bits to handle, too. Tokens for Aura are easier than rubbing out a number, and so is a pile of tokens for each Root's points, because those move all scene. The clocks can go on the whiteboard, so nobody's swapping dice at the end of every round.
 
 :::example[A friend's hands]
-Bram's player has asked Dorrie's player to roll for him tonight. Bram answers the spear at Isolde, and his player builds it: getting his shield in front of her is his Body, 9 steps, a d12 and a d6, both on the spear. Dorrie's player rolls them with the spear's d10: his best is a 7, against a 7. It's a tie, and it's Bram's player who decides to pay 1 Aura to win it.
+Bram's player has asked Dorrie's player to roll for him tonight. Bram answers the spear at Isolde, and his player builds it: getting his shield in front of her is his Body, 9 steps, and his shield's a guard on a roll that's only stopping a blow, 2 more, 11 steps, a d12 and a d10, both on the spear. Dorrie's player rolls them with the spear's d10: his best is a 7, against a 7. It's a tie, and it's Bram's player who decides to pay 1 Aura to win it.
 :::
 
 :::note
@@ -69,7 +69,7 @@ Bram's player has asked Dorrie's player to roll for him tonight. Bram answers th
 The book's in plain words, and every rule term's in the [glossary](#appendix-glossary) at the back, one line each. The web book's search finds any word, on a phone or a computer, and the Player app's got the rules too, searchable, with short lessons on how to play.
 
 -   **Skip the long build.** [Quick Build](#s-quick) gets you a character in ten minutes, or you can pick a [ready-made character](#s-pregens) and play. The same six are in the Player app.
--   **Let your sheet count for you.** Your Roots have their steps written on your sheet, so a roll's your Root, and another one if a permission brings it in. Keep the steps-to-dice ladder from the player reference beside you, and the table can help you: "Your Body's 11, and it's your grappling line, so *Anywhere I can throw a hook* is 2 more. That's 13, two d12s and a d2."
+-   **Let your sheet count for you.** Your Roots have their steps written on your sheet, so a roll's your Root and the item doing the work, and another Root if a permission brings it in. Keep the steps-to-dice ladder from the player reference beside you, and the table can help you: "Your Body's 11, your grappling line's tier 2, and *Anywhere I can throw a hook* is 2 more. That's 15, two d12s and a d6."
 -   **A cut-down sheet.** Copy your Roots onto one card, with their steps and their points, in big, clear writing, and list your permissions under the Root each one's on, so you can run a finger down them when you want to bring another Root in. Keep the full sheet nearby for the rest.
 -   **Say your sheet out loud.** Before you play, read your permissions to the table as plain *I can* lines. Then everyone knows what you're good at, and anyone can say "your cloak fits that" when you've missed one.
 -   **Use your own words.** You don't need the game's terms. Say what your character does, and the table turns it into a roll: "I'm burning that arrow out of the air before it gets to Isolde" is an answer, and the GM says so.
@@ -89,7 +89,7 @@ The book's in plain words, and every rule term's in the [glossary](#appendix-glo
 
 ## Talking at the Table {#s-access-voice}
 
-You don't have to do voices, or talk as your character at all. Say what they do, in the third person if that's easier: "Dorrie gives the clerk a false name and flashes her signet pin." It's the same roll either way: her Mind, 7 steps, and her signet pin's *Someone who matters*, 2 more, so 9 steps, a d12 and a d6. The 1 Aura the GM can give for [a great setup that doesn't land](#getting-it-back) works the same way. It's for what your character does, so it counts however you tell it.
+You don't have to do voices, or talk as your character at all. Say what they do, in the third person if that's easier: "Dorrie gives the clerk a false name and flashes her signet pin." It's the same roll either way: her Mind, 7 steps, her signet pin's tier 2, and its *Someone who matters*, 2 more, so 11 steps, a d12 and a d10. The 1 Aura the GM can give for [a great setup that doesn't land](#getting-it-back) works the same way. It's for what your character does, so it counts however you tell it.
 
 -   **Take the spotlight when you want it.** Want a moment? Ask for one: "Can Dorrie have a go at the clerk?" If you'd rather sit back for a scene, tell the GM and she'll aim it at someone else. When your moment comes, it can be a roll instead of a speech.
 -   **Ask before putting anyone on the spot.** The GM asks players to make up bits of the world (see [The Conversation](#s-conversation)). Some love it and some don't, so she gives a heads-up and a way out: "Isolde, in a minute I'll ask what your order's sigils mean, so have a think. Or I'll make it up, if you'd rather."

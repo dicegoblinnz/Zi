@@ -102,6 +102,20 @@ Written 17 Nov on `rules/2026-11-17-fixes-abilities-c`: ten abilities each for t
 8. **The Summoner's souls on the new core are still open.** I've written its abilities to the rules as they stand, and three things don't sit right: summons act in the round like anyone (a horde's dice on top of your own one action), they fade and take hits in sizes while everyone else takes points, and nothing about them uses soak or wounds. *Take it for me* and *Soul for a soul* lean on summons intercepting, so they'll move with whatever you decide.
 9. **Six is how many a character holds, never the list.** The build warned past six abilities on an archetype, and now it warns on one that costs under 1 Aura instead (a small change in `scripts/build-content.mjs`, prompt 2's).
 
+### 7. The rest of the book
+
+Written 17 Nov on `rules/2026-11-17-fixes-book`: the GM's numbers, A Full Fight, the rest of the book, Appendices B and C, the index and the Learn deck.
+
+1. **The GM piles on from round 2, and the budgets stay.** With the crew's real items the fight's still 45 minutes, but Wren's cloak is a tool, not a guard, so a GM piling on from round 1 Bloodies her in round 2. Spreading round 1 and piling on from round 2 puts the first Bloodied back in round 3 with the same minutes, so I moved the advice rather than the 72. If you'd rather Wren's cloak was a guard (03 lists "a cloak that blurs you" as one), that's the other fix.
+2. **Multipliers stay as written as the crew grows, but not as the crew's size changes.** Prompt 4 only ran growth, so two characters still halve them and six make them half again, since that's fewer or more actions a round.
+3. **A Root of 0 gets one die a round**, and Running the Game reminds the players of Defend with a Root that fits and 2 for 1 onto their armour, as prompt 4 proposed.
+4. **A Full Fight**: Isolde's reading lens doesn't fit a Study across the corridor, Bram offers the pin as a hit his plate soaks, Vesk's leathers soak the sweep where they used to split, and Dorrie says an apron off the laundry line as a Resource. None of the four carries a vessel, so the vessel's lesson is the 5 Aura Dorrie lost at her maximum.
+5. **Vesk's Session 19** was two permissions for a Boon. Now she swaps *fight dirty with a knife* for *climb a sheer wall*, gives the knife away, and a strand of the Quiet Order's bell rope takes her grappling line to Tempered for *Up the walls* (Body), climbing at full stride. She's still worth 47.
+6. **A caught soul in Magic and Appendix C** is the 03a way: a die on it, and it ticks one of your Resources till downtime.
+7. **The Learn deck stays at 40**: Awakenings folded into Attuned things to make room for Resources, What you carry became Items (keeping its id for bookmarks), and the first card's strongbox became a roof jump, so no item's on a roll before the deck teaches items.
+8. **Appendix C lists the new abilities that are levers**, about thirty of them (*House rules*, *Roll it again*, *Lend your shield*, *Parry*, *Take it on the plate*, *Scab over*, *Back on my feet*, *Rest easy*, *Grease the palm*, *I had it planned*, *Made it earlier*, *Won it at cards*, *Knock it together*, *Tune it up*, *Bottle it* and the rest), not all 170.
+9. ***Grasping*** in Appendix B can name one of your items as the cost, gone till you get it back.
+
 ## 16 Nov: the new core
 
 **Not built yet.** Part 2 of the rework (`notes/core-plan.md`), from your 16 Nov chat (`notes/playtest-sheets/2026-11-16-chat-decisions.md`). These are the calls Claude made writing it down, before any chat built it. Each chat adds its own in a subsection below.

@@ -6,7 +6,7 @@ order: 15
 part: "The Table"
 partNumber: "Part II"
 source: 2026-10-02 rulebook
-updated: 2026-11-14
+updated: 2026-11-17
 ---
 :::quote
 Before you touch a die, sit down together and have one conversation.
@@ -42,7 +42,7 @@ The GM reads [the promises](#s-gm-promises) from *Running the Game* out loud. Th
 
 ## 5. The Characters and Their Threads {#the-character-connections}
 
-Make your characters at the table, so everyone hears everyone else's Titles and archetypes as they go down. You each build on 35 points, and most of you will write two Titles, spread their Root points and put three permissions on each, take two [archetypes](#archetypes) with their abilities, attune one thing and fill in what you carry, then add up your Roots. [Building Your Character](#building-character) takes you through it a step at a time.
+Make your characters at the table, so everyone hears everyone else's Titles and archetypes as they go down. You each build on 35 points, and most of you will write two Titles, spread their Root points and put three permissions on each, take two [archetypes](#archetypes) with their abilities, attune one thing, pick your items and their tiers, then add up your Roots. Nobody lists their small stuff: you've each got 3 [Resources](#s-resources) to say when you need them. [Building Your Character](#building-character) takes you through it a step at a time.
 
 Then go around the table with the [ten crew questions](#s-connect). Everyone answers at least two, naming another character each time, and the answers are where your [threads](#s-bonds) come from. Turn two of them into your bond threads. An answer that's gone bad makes a good hostile thread, and if you write one, with anyone, you've got room for a third bond thread. A thread with someone in the crew goes on both your sheets and counts for both of you, so agree on it together before it's written down. Dorrie and Isolde settle on *I keep her secrets at court. She keeps mine.* It's Dorrie's bond thread, it goes on both their sheets, and if either of them strains it, it's strained for both.
 
@@ -69,7 +69,7 @@ Players who've played other roleplaying games bring habits with them, and most o
 -   **Nobody goes first.** The GM shows you everything that's coming, then the crew acts in any order. Talk it through.
 -   **Most threats don't have hit points.** They have tags, and every win strips one, so look for the weak point instead of grinding. The big ones carry multipliers, like *Armoured ×4*, which takes four wins.
 -   **You roll their dice too.** The GM almost never rolls, so pick up the threat's die in another colour.
--   **Your Roots are your health.** The number you roll with is how many hits you can take there too, and pushing yourself spends from it.
+-   **Your Roots are your health.** The number you roll with is how many hits you can take there too, and pushing yourself spends from it. Armour soaks hits before they touch it, and it's all back when the scene ends.
 
 There's more in [Welcome to Zi'Dara](#s-from-dnd).
 

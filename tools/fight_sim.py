@@ -36,8 +36,8 @@ You and Good Hunting pay. A Root that's 0 takes its wound before 2 for 1,
 since the wound costs nothing in the scene, unless the other Root's got soak
 to take it. The GM (--gm) spreads it (even), puts the first die at each Body
 and two in three of the rest on the Body that's hurting most (hard, the
-default, the big fight), or piles the rest on the weakest Root anywhere, a 0
-one first (cruel). --reach says how many friends Bram can get in front of,
+default, the big fight, from round 2, or --pile-from 1 for round 1 as well),
+or piles the rest on the weakest Root anywhere, a 0 one first (cruel). --reach says how many friends Bram can get in front of,
 --before plays an earlier fight first and carries the crew in, --deadly puts
 hits on Redhand's dice and --deadly-price says what each hit past the first
 costs. A fight's length is in minutes, from what a round takes at the table:
@@ -60,12 +60,22 @@ Scars each of them in over half of hard fights. Till 17 Nov the hard GM's
 third die of every three went at Body too, so it never reached a Mind or a
 Soul, and deadly telegraphs cost their steps once.
 
+With the crew's real items from 03b (prompt 7, 17 Nov, 3,000 fights): Bram's
+helmet makes his Body soak 5, Wren's cloak is a tool so she's got no guard,
+and Ash has a scorched coat and a tier 3 coal horn. The fight's 52 minutes
+plain and 42 hard, still 45 between them, but with the GM piling on from
+round 1 the first Bloodied moves to round 2 (33% of fights at --reach 1, 17%
+in round 3), since it's Wren's Body every time and nothing guards it. Piling
+on from round 2, as Running the Game says now, puts it back in round 3 (31%
+at --reach 1, 3% in round 2, and 66% of fights played plain), with the same
+45 minutes, so the budgets stay.
+
   python3 tools/fight_sim.py                         the big fight on the fixes
   python3 tools/fight_sim.py --rules core            the same on 16 Nov's core
   python3 tools/fight_sim.py --gm even               the same at Even
   python3 tools/fight_sim.py --gm cruel --reach 1    piled on the weakest, Bram beside one friend
   python3 tools/fight_sim.py --before hard           two Hard fights back to back
-  python3 tools/fight_sim.py --vessel 2 --vessel-pts every vessel-holder with a tier 2 vessel, topped up with points
+  python3 tools/fight_sim.py --vessel 2 --vessel-pts Bram and Wren a tier 2 vessel too, all topped up with points
   python3 tools/fight_sim.py --find --picks 4        the factor a 45-minute fight
                                                      needs, and each pick against none
   python3 tools/fight_sim.py --grid 72,84,96         --find at each round budget
@@ -885,27 +895,28 @@ LAND_DIE = 0.05   # each defence die
 PER_HIT = 0.1     # each hit paid: soak, a point, 2 for 1 or a wound, and writing it down
 PHONE = 0.7       # a phone reads the dice, adds the steps and keeps the Aura: the per-die, per-choice and per-hit parts times this
 
-# The 17 Nov fixes (notes/fixes-plan.md), what the four carry. Items add their
-# tier on a roll they fit, one a roll: a weapon on their fighting roll, a guard
-# only on a roll avoiding harm (their Body when it lands), armour soaks (a
-# point of soak a point), and a vessel holds charge. Prompt 2's crew may
-# differ a little; these are the plan's prices (an item's 1 point at tier 2,
-# 1 more a tier, tier 3 at most), and an attuned thing comes at tier 2.
-#   Bram: Named plate armour (armour, Body, tier 3), a Trusty shield (guard,
-#         tier 2), his war hammer (weapon, tier 2, attuned).
-#   Vesk: Trusty worn leathers (armour, Body, tier 2), a Trusty knife (weapon,
-#         tier 2), her grappling line (tool, tier 2, attuned, no use in a
-#         straight fight, as on 16 Nov).
-#   Wren: a Named longbow (weapon, tier 3, attuned), her hooded cloak (guard,
-#         tier 2, a cloak that blurs you), a Trusty hunting knife.
+# The 17 Nov fixes (notes/fixes-plan.md), what the four carry, as 03b has
+# them. Items add their tier on a roll they fit, one a roll: a weapon on their
+# fighting roll, a guard only on a roll avoiding harm (their Body when it
+# lands), armour soaks (a point of soak a point, every piece on a Root), and a
+# vessel holds charge.
+#   Bram: plate armour (armour, Body, tier 3) and a helmet (armour, Body,
+#         tier 2), so his Body soaks 5, a shield (guard, tier 2), his war
+#         hammer (weapon, tier 2, attuned).
+#   Vesk: worn leathers (armour, Body, tier 2), a knife (weapon, tier 2), her
+#         grappling line (tool, tier 2, attuned, no use in a straight fight,
+#         as on 16 Nov), boots and picks (tools, tier 3).
+#   Wren: her longbow (weapon, tier 3, attuned), her hooded cloak (a tool,
+#         tier 3, so no guard), a hunting knife (weapon, tier 3) she doesn't
+#         fight with, a snare kit.
 #   Ash:  her ember stone (tool, tier 2, attuned), which fits every roll she
-#         throws fire with. Her scorched coat isn't armour (--coat makes it a
-#         Trusty coat on Body, tier 2).
+#         throws fire with, a scorched coat (armour, Body, tier 2) and a coal
+#         horn (vessel, tier 3).
 KIT = {
-    "Bram": dict(weapon=2, guard=2, armour={"Body": 3}),
+    "Bram": dict(weapon=2, guard=2, armour={"Body": 5}),
     "Vesk": dict(weapon=2, guard=0, armour={"Body": 2}),
-    "Wren": dict(weapon=3, guard=2, armour={}),
-    "Ash": dict(weapon=2, guard=0, armour={}),
+    "Wren": dict(weapon=3, guard=0, armour={}),
+    "Ash": dict(weapon=2, guard=0, armour={"Body": 2}, vessel=3),
 }
 
 
@@ -943,7 +954,7 @@ class CoreChar:
     # on the Root they fight with, dice and points both.
     PICK = 2
 
-    def __init__(self, name, picks=0, kit=True, vessel=0, coat=False):
+    def __init__(self, name, picks=0, kit=True, vessel=0):
         self.name = name
         self.kit = kit
         self.s = core_sheet(name)
@@ -956,11 +967,9 @@ class CoreChar:
         k = KIT[name] if kit else dict(weapon=0, guard=0, armour=self.s["armour"])
         self.weapon, self.guard = k["weapon"], k["guard"]
         self.worn = dict(k["armour"])          # soak each Root holds (16 Nov: boxes, which don't come back)
-        if coat and kit and name == "Ash":
-            self.worn["Body"] = 2
         self.armour = dict(self.worn)
-        # a vessel only goes to someone whose awakenings take Aura in a fight
-        self.vessel = vessel if (kit and self.s["awk"]) else 0
+        # a vessel: what they carry, or --vessel's for someone whose awakenings take Aura in a fight
+        self.vessel = max(vessel, k.get("vessel", 0)) if (kit and self.s["awk"]) else 0
         self.charge = 0
         self.toll = 0
         self.max = 5
@@ -1014,8 +1023,10 @@ class CoreFight:
     from an earlier scene."""
 
     def __init__(self, names, R, f=1.0, policy="plain", rng=None, picks=0, deadly=1, focus=False, mults=None,
-                 kit=True, vessel=0, vessel_pts=False, cruel=False, coat=False, crew=None, reach=9, deadly_price=1.0):
+                 kit=True, vessel=0, vessel_pts=False, cruel=False, crew=None, reach=9, deadly_price=0.5,
+                 pile_from=2):
         self.focus = focus or cruel
+        self.pile_from = pile_from
         self.cruel = cruel
         self.policy = policy
         self.plain = policy == "plain"
@@ -1023,9 +1034,9 @@ class CoreFight:
         self.kit = kit
         self.vessel_pts = vessel_pts
         self.reach = reach              # how many friends the Guardian can get in front of a round
-        self.deadly_price = deadly_price  # each hit past the first costs this many times its steps (the book: 1)
+        self.deadly_price = deadly_price  # each hit past the first costs this many times its steps (the book: 0.5)
         self.first_bloodied_who = None
-        self.crew = crew if crew is not None else [CoreChar(n, picks, kit, vessel, coat) for n in names]
+        self.crew = crew if crew is not None else [CoreChar(n, picks, kit, vessel) for n in names]
         self.R = R
         self.f = f
         self.deadly = deadly
@@ -1162,8 +1173,10 @@ class CoreFight:
                          if not (r == "Body" and g is not None and x is not g and x.pts["Body"] == 0)]
                 if cands:
                     _, _, c, root = min(cands)
-            if c is None and self.focus and i % 3:
-                # pressing: two in three of the rest go at the Body that's hurting most
+            if c is None and self.focus and i % 3 and self.round >= self.pile_from:
+                # pressing: from round 2 (pile_from), two in three of the rest go at the
+                # Body that's hurting most. Round 1 spreads them round the Roots, since
+                # piling on from the start Bloodies the crew's softest Body in round 2
                 root = "Body"
                 pool = [x for x in crew if not (g is not None and x is not g and x.pts["Body"] == 0)] or crew
                 c = min(pool, key=lambda x: (x.pts["Body"] + x.armour.get("Body", 0), self.rng.random()))
@@ -1683,12 +1696,12 @@ def main():
     ap.add_argument("--mults", default="4,3", help="core: Redhand's Armoured and Feeds (4,3)")
     ap.add_argument("--deadly", type=int, default=1, help="core: hits on each of Redhand's dice that get through "
                                                           "(each costs its steps once a hit)")
-    ap.add_argument("--vessel", type=int, default=0, help="fixes: a vessel of this tier for each of the crew whose awakenings take Aura")
+    ap.add_argument("--vessel", type=int, default=0, help="fixes: a vessel of this tier for each of the crew whose awakenings take Aura (Ash carries a tier 3 one)")
     ap.add_argument("--vessel-pts", action="store_true", help="fixes: hard play tops vessels up with points from a spare Root")
-    ap.add_argument("--coat", action="store_true", help="fixes: Ash's scorched coat as Trusty armour on her Body (tier 2)")
+    ap.add_argument("--pile-from", type=int, default=2, help="core and fixes: the round the hard GM starts piling on (1 was 17 Nov's prompt 4)")
     ap.add_argument("--reach", type=int, default=9, help="core and fixes: friends the Guardian can intercept for a round")
-    ap.add_argument("--deadly-price", type=float, default=1.0,
-                    help="core and fixes: each hit past the first costs this many times a deadly telegraph's steps (the book: 1)")
+    ap.add_argument("--deadly-price", type=float, default=0.5,
+                    help="core and fixes: each hit past the first costs this many times a deadly telegraph's steps (the book: half again, 0.5, since 17 Nov, and 1 before)")
     ap.add_argument("--before", choices=("even", "hard"), help="core and fixes: an earlier fight first, and what they carry in")
     ap.add_argument("--minutes", type=float, default=45, help="core --find: how long the fight should run")
     ap.add_argument("--f", type=float, default=1.0, help="boss multipliers times this (now, stack)")
@@ -1707,7 +1720,7 @@ def main():
         R0 = a.budget or (72 if hard else 48)
         mults = tuple(int(x) for x in a.mults.split(","))
         kw = dict(kit=a.rules == "fixes", vessel=a.vessel, vessel_pts=a.vessel_pts, cruel=a.gm == "cruel",
-                  coat=a.coat, before=a.before, reach=a.reach, deadly_price=a.deadly_price)
+                  before=a.before, reach=a.reach, deadly_price=a.deadly_price, pile_from=a.pile_from)
         for policy in [a.policy] if a.policy else ["plain", "table"]:
             if a.find or a.grid:
                 for R in [int(x) for x in a.grid.split(",")] if a.grid else [R0]:

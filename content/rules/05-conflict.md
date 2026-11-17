@@ -602,7 +602,7 @@ The corridor's thirty feet of polished marble, lit by candles in iron brackets. 
 **Telegraphs:** three quarters of a starting crew's 64 points is 48, but the Wardens are only half-woken, so the GM runs it as a breather, about half that: 24.
 :::
 
-That's four keeps-it-going tags each, so grinding a Warden down will take four wins. The crew doesn't know yet that there's a faster way. Everyone's on full points, which for Vesk is 10 of her Body's 11 and for Bram 7 of his 9, since their awakenings lock the rest, and Isolde's Body is 0. Bram's wearing Fine plate and a Common shield, three boxes on his Body, and Vesk's got her Common worn leathers, one box on hers. Everyone's got 5 Aura, and it'll come and go all fight.
+That's four keeps-it-going tags each, so grinding a Warden down will take four wins. The crew doesn't know yet that there's a faster way. Everyone's on full points, which for Vesk is 10 of her Body's 11 and for Bram 7 of his 9, since their awakenings lock the rest, and Isolde's Body is 0. Bram's plate is tier 3 and his helmet tier 2, so his Body soaks 5 before it loses a point, and his shield's a guard, 2 steps whenever he's getting out of the way. Vesk's worn leathers soak 2 on her Body. Dorrie's court clothes and Isolde's silver-threaded coat are Mind armour, and a vault at midnight isn't a scene they fit. Everyone's got 5 Aura, which'll come and go all fight, and 3 Resources nobody's said yet.
 
 ### Round 1: The telegraph {#round-1-the-telegraph}
 
@@ -617,13 +617,13 @@ That's 5 + 4 + 5 + 5 + 2 = 21 steps, a breather for four players, and it's five 
 :::example
 **Bram:** Isolde's right beside me, well inside my stride, so I'm intercepting that spear. And I'm Defending.
 
-**GM:** You're a Guardian, so the intercept's free, and it doesn't touch your action. That's 1 Aura for *Better Me Than You*, though you're on 5 already, so it's gone once you're done. The spear at Isolde comes at you instead, along with the pin. Vesk's too far off, and the doorway's aimed at the stake, not a friend, so those stay put. When they land, you'll roll your Body, and your Body again for the Defend.
+**GM:** You're a Guardian, so the intercept's free, and it doesn't touch your action. That's 1 Aura for *Better Me Than You*, though you're on 5 already, so it's gone once you're done. The spear at Isolde comes at you instead, along with the pin. Vesk's too far off, and the doorway's aimed at the stake, not a friend, so those stay put. When they land, you'll roll your Body, your Body again for the Defend, and your shield once.
 :::
 
 **Isolde** studies the right Warden, and she wants more than one thing out of it.
 
 :::example
-**Isolde:** It's old, so it's my Mind, 9 steps. And whatever's holding it together is a ward for the dead, so *draw a ward the dead can't cross* brings my Soul in. I'll pay 3 Aura for it, not a point, because I'll want my Soul later. That's 16 steps, two d12s and a d8. A d12 for what's holding it together, a d12 for what else it's hiding, and the d8's a ward on Vesk, since she's the one going near it.
+**Isolde:** It's old, so it's my Mind, 9 steps. And whatever's holding it together is a ward for the dead, so *draw a ward the dead can't cross* brings my Soul in. I'll pay 3 Aura for it, not a point, because I'll want my Soul later. That's 16 steps, two d12s and a d8. A d12 for what's holding it together, a d12 for what else it's hiding, and the d8's a ward on Vesk, since she's the one going near it. My reading lens is for reading up close, and the Warden's across the corridor, so it's no use here.
 
 **GM:** Nobody's gone at it yet this round, so roll its d10 too. Whatever it rolls stands till the round's over. Nothing's pushing back on the ward, so that d8's Vesk's *Warded d8*.
 
@@ -646,25 +646,25 @@ That changes the whole fight, because now nobody has to grind through four tags.
 **Dorrie:** She's terrified. Of what? **GM:** She saw Bram's face on the stair. That's the hidden tag on *Leave no trace*: *A Servant Saw Bram*.
 :::
 
-Her d12 won and her d2 landed on its top face, so that's 2 Aura, but she's on 5 already, and she's got nothing to spend it on this round, so it's gone when she's done.
+Her d12 won and her d2 landed on its top face, so that's 2 Aura, but she's on 5 already, and she's got nothing to spend it on this round, so it's gone when she's done. She hasn't got a [vessel](#s-vessels) to catch it.
 
 **Vesk** doesn't bother with the Wardens. She goes for the stake.
 
 :::example
-**Vesk:** The paintings. Those padlocks are mine. That's my Body, 11 steps, and *know how a lock's built* brings my Mind in. I'll pay a point of Mind for it, so that's 16 steps, two d12s and a d8, and it's all on stripping *Three of Them*.
+**Vesk:** The paintings. Those padlocks are mine. That's my Body, 11 steps, my picks, 3 more, and *know how a lock's built* brings my Mind in. I'll pay a point of Mind for it, so that's 19 steps, three d12s and a d2, and it's all on stripping *Three of Them*.
 
 **GM:** It's Challenge 4, so roll a d8 for it.
 
-**Vesk:** 9, 3 and 1, and the d8's a 4. **GM:** Three padlocks open, three canvases cut free, and one roll under your arm. Only *Heavy Load* is left in the way.
+**Vesk:** 9, 3, 1 and a 2 on the d2, and the d8's a 4. **GM:** Three padlocks open, three canvases cut free, and one roll under your arm. Only *Heavy Load* is left in the way.
 :::
 
-Her Mind's on 4 now, and her dice are still 5 steps whenever she rolls it. The d12 that won is 1 Aura, and she's on her maximum, so it goes.
+Her picks are the one item on that roll, since they're doing the work, and her Mind brings her Mind and nothing else. Her Mind's on 4 now, and her dice are still 5 steps whenever she rolls it. The d12 that won and the d2's top face are 2 Aura, and she's on her maximum, so they go.
 
 **End of Round 1.** The maid was answered, and Bram intercepted the spear at Isolde, so four telegraphs land.
 
 -   **The doorway** (aimed at the stake) lands with no roll. The right Warden fills the vault door, and *Get the paintings out* gains a new tag in the way: *Blocked*.
--   **The pin and the spear at Bram.** He Defended, so he rolls his Body twice, a d12 and a d6 each time, four dice for two blows. The pin's d10 rolls 10 and the spear's rolls 6. Bram's d12s roll 7 and 4, and his d6s 3 and 2. The 7 stops the spear, and that's 1 Aura, but he's full, and so's everyone else. Nothing he's got can stop the pin, and his Push wouldn't get the 4 there, so the GM names *Pinned*. Bram doesn't want to be stuck against the wall with another Warden coming, so he offers a hit instead: it cracks his ribs on the stone, but he's free, and his Body's on 6.
--   **The sweep at Vesk.** She rolls her Body, 11 steps, and the ward's step with it, 12, so that's two d12s, and she gets 5 and 1. The sweep rolls 7, so it gets through, and that's a hit. Vesk could spend the ward on it, but it's still a step on her defence and there are more spears coming, so she offers her leathers instead. They split down the side, and she crosses them out until they're mended.
+-   **The pin and the spear at Bram.** He Defended, so it's his Body twice and his shield once, 20 steps, and he rolls them as three d12s and a d4 for two blows. The pin's d10 rolls 10 and the spear's rolls 6. Bram's d12s roll 7, 4 and 3, and his d4 a 2. The 7 stops the spear, and that's 1 Aura, but he's full, and so's everyone else. Nothing he's got can stop the pin, and his Push wouldn't get the 7 there, so the GM names *Pinned*. Bram doesn't want to be stuck against the wall with another Warden coming, so he offers a hit instead: the Warden slams him into the stone, his plate takes it, and he's free. That's 1 of his 5 soak gone, and his Body's still on 7.
+-   **The sweep at Vesk.** She rolls her Body, 11 steps, and the ward's step with it, 12, so that's two d12s, and she gets 5 and 1. The sweep rolls 7, so it gets through, and that's a hit. Vesk could spend the ward on it, but it's still a step on her defence and there are more spears coming, and her leathers soak it anyway. They've got 1 left this scene.
 
 Nobody worked *Leave no trace*, so its clock steps down to a d6. *The household wakes* steps down to a d6 as well, and Vesk's ward fades to a d6.
 
@@ -685,11 +685,11 @@ The table talks it through. The sigil under the left Warden is the target, and B
 
 **GM:** That's one thing, so it's a combo. Who's rolling?
 
-**Isolde:** Me, on my Soul, 7. It's my order's binding, and breaking it's my Soul's job. **Bram:** And I'm bringing my Body, since I'm the one lifting it. **Isolde:** So it's 16 between us, two d12s and a d8, and the whole lot goes on the sigil.
+**Isolde:** Me, on my Soul, 7. It's my order's binding, and breaking it's my Soul's job, and I'm cutting the line with my chalk and salt, tier 2. **Bram:** And I'm bringing my Body, since I'm the one lifting it. My hammer's not doing the lifting, so that's all I bring. **Isolde:** So it's 18 between us, three d12s, and the whole lot goes on the sigil.
 
 **Bram:** And the spears going at Dorrie and Isolde, I'm intercepting those. They're both in my stride. That's 2 Aura for *Better Me Than You*, and I'm spending 1 of it on *Stand firm*, because I'm not Defending this time.
 
-**GM:** Free for a Guardian, so they're yours. When they land it's just your Body, split two ways, and one die only stops one. The next two hits that get through to you take 1 point between them.
+**GM:** Free for a Guardian, so they're yours. When they land it's your Body and your shield, 11 steps, split two ways, and one die only stops one. The next two hits that get through to you take 1 point between them.
 :::
 
 Isolde rolls for the combo. Nobody's gone at the left Warden yet this round, so its d10 rolls too, and it comes up 9. Her dice come up 11, 4 and 2. The chalk bites through the old line and the left Warden stops mid-step. The armour empties out like a coat coming off a hook, and clatters to the marble, and its d10 at Bram goes with it.
@@ -703,20 +703,20 @@ One Warden's down, and three of its four keeps-it-going tags weren't even touche
 
 **GM:** That strips *Blocked*, because you don't need the door. But hauling three canvases up a rope is *Heavy Load*.
 
-**Vesk:** My Body, 11 steps, and it's my line, so *Anywhere I can throw a hook* is 2 more. I'll put 1 Aura on it for another 2, so that's 15, two d12s and a d6, all on *Blocked*. ...7, 3 and 2, and the stake's d8 is a 6. **GM:** You're up the rope before the Warden turns around.
+**Vesk:** My Body, 11 steps, my line's tier 2, and *Anywhere I can throw a hook* is 2 more. I'll put 1 Aura on it for another 2, so that's 17, two d12s and a d10, all on *Blocked*. ...7, 3 and 2, and the stake's d8 is a 6. **GM:** You're up the rope before the Warden turns around.
 
 **Vesk:** I can't haul three canvases up on my own. **Bram:** Stay up there. I'll get it to you next round.
 :::
 
 Her 7 won, so the Aura she put on the hook comes straight back.
 
-**Dorrie's** action goes on the stake nobody's watching: *Leave no trace*. She sits the maid down and gives her a story to tell. Her Mind's 7 steps, a d12 and a d2, against *A Servant Saw Bram*. The stake is Challenge 3, so it rolls a d6, and her 5 beats its 2. The maid saw a stranger, and she'll swear to it.
+**Dorrie's** action goes on the stake nobody's watching: *Leave no trace*. She sits the maid down and gives her a story to tell. Her Mind's 7 steps, a d12 and a d2, against *A Servant Saw Bram*. The stake is Challenge 3, so it rolls a d6, and her 5 beats its 2. The maid saw a stranger, and she'll swear to it. The win's 1 Aura, and she's full, so it goes.
 
 **End of Round 2.** The left Warden's gone, so its d10 at Bram never lands. The rest do.
 
--   **The spear at Vesk.** She's on the rope when it finds her, because climbing away doesn't stop a telegraph aimed at you. Her Body's 11 steps and what's left of the ward is a step on top, two d12s again. She rolls 3 and 1, and the d8 rolls 6, so it gets through. Vesk spends the ward, and the hit lands on it instead of her, so her Body stays on 10.
--   **The spears at Dorrie and Isolde** come at Bram, because he intercepted them. His Body's 9 steps, and he splits it to meet two of them, a d10 and a d8. He gets 3 and 2. The spears roll 6 and 4, so neither's stopped. That's two hits, and *Stand firm* makes them 1 point between them, so his Body's on 5.
--   **The portrait's whisper** goes against Isolde's Mind, a d12 and a d6, and she rolls 2 and 3. The d6 rolls 4, so it gets through. Her coat's for a hearing, not a vault, so it doesn't fit the scene, and it's a point of her Mind. She's on 8. The portrait goes quiet, and keeps looking at her.
+-   **The spear at Vesk.** She's on the rope when it finds her, because climbing away doesn't stop a telegraph aimed at you. Her Body's 11 steps and what's left of the ward is a step on top, two d12s again. She rolls 3 and 1, and the d8 rolls 6, so it gets through. Vesk spends the ward, and the hit lands on it instead of her, so her leathers keep their last point of soak and her Body stays on 10.
+-   **The spears at Dorrie and Isolde** come at Bram, because he intercepted them. His Body's 9 steps and his shield's 2, and he splits the 11 to meet two of them, a d12 and a d10. He gets 3 and 2. The spears roll 6 and 4, so neither's stopped. That's two hits, and *Stand firm* makes them 1 point between them, which his plate soaks. He's got 3 soak left, and his Body's still on 7.
+-   **The portrait's whisper** goes against Isolde's Mind, a d12 and a d6, and she rolls 2 and 3. The d6 rolls 4, so it gets through. Her coat's for a hearing, not a vault, so it doesn't fit the scene and soaks nothing, and it's a point of her Mind. She's on 8. The portrait goes quiet, and keeps looking at her.
 
 The work on *Leave no trace* kept its clock where it was, and *The household wakes* steps down to a d4.
 
@@ -726,21 +726,24 @@ The GM leans in. The right Warden abandons the doorway and comes for Isolde with
 
 Isolde doesn't go for the second sigil. She speaks the name instead, which is the other way to end it, because the hidden tag *A Person Inside* is a weak point of its own. That's her Soul and *speak with the recently dead*, 7 steps. A hundred years isn't recent, so speaking to this one is going beyond, and that's 1 Aura. The name's in her order's old tongue, so *read dead languages* brings her Mind in, and she pays 3 Aura for it. That's 16 steps, two d12s and a d8, all on the name. The right Warden's d10 rolls 6, and her dice come up 12, 7 and 4. Two of them won and one was its top face, so that's 3 Aura back, and she's on 4. The right Warden kneels on the marble, and its three telegraphs go with it.
 
-Bram ties the bundle on and heaves it up the rope, and Vesk puts her action into the same thing, hauling from the top. Bram rolls, on his Body, 9, and Vesk brings her Body, 11, since she's hauling, and it's her line they're hauling on, so *Anywhere I can throw a hook* is 2 more. That's 22 steps, three d12s and a d8, against the stake's d8: 7, 2, 5 and 1 against 3. *Heavy Load* is gone, and the paintings are theirs. Two of Bram's dice won, so that's 2 Aura for him.
+Bram ties the bundle on and heaves it up the rope, and Vesk puts her action into the same thing, hauling from the top. Bram rolls, on his Body, 9, and Vesk brings her Body, 11, since she's hauling, and it's her line they're hauling on, so it's her one item, tier 2, and *Anywhere I can throw a hook* is 2 more. That's 24 steps, four d12s, against the stake's d8: 7, 2, 5 and 1 against 3. *Heavy Load* is gone, and the paintings are theirs. Two of Bram's dice won, so that's 2 Aura for him.
 
-Bram took the crew's spears last round, and Dorrie could spend her action and 1 Aura on a quick heal to get a point of his Body back. The butler matters more. She meets him at the foot of the main stair as the housekeeper, with a smile and a story about the wind and a loose shutter. That's her Mind, 7 steps, and talking her way past him is *talk my way past a door*, so she pays a point of Soul and brings it in, 6 more. That's 13 steps, two d12s and a d2, so she's got a d12 to answer the lantern and a d12 to strip *Watched*. The lantern's d8 rolls 4 against her 6, and the stake's d6 rolls 3 against her 4. Both won, so that's 2 Aura. *Leave no trace* is theirs too.
+Isolde's a point down on her Mind, and Dorrie could spend her action and 1 Aura on a quick heal to put it back. The butler matters more. She says a Resource first: she lifted an apron and a cap off the laundry line on the way in, so she ticks 1 of her 3. It's never steps, but it's why the butler sees a housekeeper. She meets him at the foot of the main stair with a smile and a story about the wind and a loose shutter. That's her Mind, 7 steps, and talking her way past him is *talk my way past a door*, so she pays a point of Soul and brings it in, 6 more. That's 13 steps, two d12s and a d2, so she's got a d12 to answer the lantern and a d12 to strip *Watched*. The lantern's d8 rolls 4 against her 6, and the stake's d6 rolls 3 against her 4. Both won, so that's 2 Aura, and she's full again, so they go. *Leave no trace* is theirs too.
 
 At the end of the round the household clock steps down to its last die. When it runs out there'll be lamps lit on every floor, but by then the crew will be three roofs away, and the maid will be swearing she saw a stranger.
 
-When the scene ends, everyone rests: every Root that's below its maximum rolls unsplit and gets back what it rolls. Bram's Body is on 5 of the 7 it can hold, and its d12 and d6 roll 3 and 2, so he's back on 7. Isolde's Mind, Vesk's Mind and Dorrie's Soul were a point down each, and all three roll more than 1, so they're full again. Vesk's leathers stay crossed out until they're mended in downtime. Nobody took a heal, so nobody's got any Toll.
+When the scene ends, everyone rests. Bram's plate and helmet are back to soaking 5, and Vesk's leathers to 2, since soak's all back at the end of every scene and nothing broke. Every Root that's below its maximum rolls unsplit and gets back what it rolls. Isolde's Mind, Vesk's Mind and Dorrie's Soul were a point down each, and all three roll more than 1, so they're full again. Bram never lost a point of Body. Nobody took a heal, so nobody's got any Toll, and Dorrie's got 2 Resources left till downtime.
 
 ### What the fight taught {#what-the-fight-taught}
 
 -   **The crew never ground a Warden down.** They studied, found a weak point and a hidden tag, and took both routes.
 -   **The stakes mattered more than the enemies.** Vesk spent her whole first round on padlocks instead of spears, and it won the scene.
 -   **Every die was an intent.** Isolde's one roll found the weak point, found the hidden tag and warded Vesk, and Dorrie's answered the lantern and stripped *Watched* in one go.
--   **Every cost was out in the open.** Bram traded a pin for a point of Body, Vesk gave up her leathers to keep her ward, *Stand firm* made two spears one point, and Isolde's coat didn't fit the vault, so the portrait took a point of her Mind. Nobody lost anything they didn't see coming.
--   **One die stops one.** In round 1 Bram Defended, so he had four dice for two telegraphs. In round 2 his action went on the sigil, so his Body split 9 steps to meet two spears, and both got through.
+-   **Every cost was out in the open.** Bram traded a pin for a point of soak, Vesk's leathers took the sweep and her ward took the spear, *Stand firm* made two spears one point and Bram's plate took that too, and Isolde's coat didn't fit the vault, so the portrait took a point of her Mind. Nobody lost anything they didn't see coming.
+-   **Armour soaked, and it was all back by the end.** Bram's plate took three hits for 2 points of soak, with *Stand firm*'s help, and his Body never moved. He had 3 soak left, so three more hits and he'd have been losing points. It came back with everything else when the scene ended.
+-   **One item a roll, the one doing the work.** Vesk's picks went on the padlocks and her line on the climb and the haul, Isolde's chalk cut the sigil, Bram's shield went on every landing, and Isolde's lens stayed in her coat because it didn't fit. Dorrie's apron was a Resource, so it made the story true and never added a step.
+-   **Full means it goes.** Dorrie was on her maximum every time her dice paid, and lost 5 Aura over the fight, 2, then 1, then 2. A vessel at tier 3, like Ash's coal horn, would've caught 3 of it as charge for her own *Push* or *Turn them* next scene, and the last 2 would still have gone.
+-   **One die stops one.** In round 1 Bram Defended, so he had four dice for two telegraphs. In round 2 his action went on the sigil, so his Body and his shield split 11 steps to meet two spears, and both got through.
 -   **Bringing a Root in is where it got clever.** Vesk paid a point of Mind for knowing how the locks were built, Isolde paid Aura for her Soul on the Study and her Mind on the name, and Dorrie paid a point of Soul to talk her way past the butler. Each one was a permission said out loud.
 -   **One action each made them work together.** The sigil and the canvases fell to combos, Bram intercepted the spears at Dorrie and Isolde for free, and Dorrie had to choose between patching Bram up and the butler.
 

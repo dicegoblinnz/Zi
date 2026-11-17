@@ -5,6 +5,24 @@ updated: 2026-11-17
 ---
 This is the record of every rules change since the 2 Oct 2026 book, newest first. Each entry's date is the day the change went to the table. When a later change replaces an earlier one, the earlier entry says so. The rules chapters always show the game as it is now, so if you only want to play, read those and skip this.
 
+## 17 Nov 2026: The GM's numbers, for items and soak {#c-2026-11-17-budgets}
+
+To go with [Items with tiers, armour that soaks, Resources and vessels](#c-2026-11-17-fixes). The fight sim's run again with what the crew really carry: items add about a tenth to the crew's wins a round, and the bigger rolls take a bit longer to read, so the big fight still runs about 45 minutes at Hard on the same budgets. The threat budget (64), the round budget (48, and 72 at Hard) and multipliers at a Challenge less 2 all stay.
+
+**At Hard, pile it on from round 2.** Round 1's a die at each of the crew's Bodies and the rest spread round their Minds, their Souls and the scene. From round 2 it's two or three more from different threats at whoever's hurting most, past the Guardian's reach. Piled on from round 1, the crew's softest Body is Bloodied in round 2. It replaces piling it on from the start. See [Spending it](#spending-it).
+
+**One die a round at a Root of 0**, unless the story's turned on them, since piling on Vesk's or Wren's Soul Scars one of them in more than half the fights. See [Spending it](#spending-it).
+
+**The round budget's the most you can spend, not what you must.** Once every threat's aimed at everyone it can reach, let the rest go, or put a big die on the scene clock. See [Spending it](#spending-it).
+
+**A deadly telegraph costs its steps and half again for each hit past the first**, so a d12 at 2 hits is 9 and at 3 hits it's 12. It replaces its steps once for every hit, which made a deadly threat weaker than spending the same steps on smaller dice. See [Spending it](#spending-it), [Building a threat](#building-a-threat) and [How it comes at you](#how-it-comes-at-you).
+
+**Multipliers stay as they're written as the crew grows**, and the round budget grows with the threat budget instead. A different number of characters still moves them: halved for two, and half again for six. It replaces multiplying them by the threat budget and dividing by 64, which ran the big fight half as long again once a crew had grown. See [The Threat Budget](#s-threat-budget).
+
+**The fight of the session runs about 45 minutes**, about four rounds of 10 or 11 minutes at Hard, with the first of the crew Bloodied in round 3 or 4. It replaces four or five rounds. See [How hard it pushes](#how-hard-it-pushes).
+
+The book's examples are on items, soak and Resources too: [A Full Fight](#s-fight), [Vesk, Session 1 to 20](#vesk-session-1-to-20), [Magic Is a Permission](#s-magic) and every lever in [Appendix C](#appendix-levers).
+
 ## 17 Nov 2026: Items with tiers, armour that soaks, Resources and vessels, and no Boons {#c-2026-11-17-fixes}
 
 Mo's calls in chat, the third part of the rework that comes in parts, on top of [The new core](#c-2026-11-16-core).
@@ -39,13 +57,13 @@ To go with [The new core](#c-2026-11-16-core). With one action each and one Root
 
 **Multipliers start at a threat's Challenge less 2**, so Redhand's *Armoured ×4 (first)* and *Feeds ×3* now, eight wins the long way, and a dragon's *Hide ×5*. A boss still takes three or four rounds to bring down the long way. It replaces four times its Challenge, and *Armoured ×24* and *Feeds ×15*. See [Multipliers](#s-tough-gm) and [Building a Threat, Start to Finish](#building-a-threat-start-to-finish).
 
-**The threat budget's the crew's Roots added up**, 16 for a character as they start, so 64 for four, and 6 more on a character for every new Title. Multiply every multiplier by the threat budget and divide by 64. It replaces 15 a character and a third more for every Title, archetype or attuned thing. See [The Threat Budget](#s-threat-budget).
+**The threat budget's the crew's Roots added up**, 16 for a character as they start, so 64 for four, and 6 more on a character for every new Title. Multiply every multiplier by the threat budget and divide by 64. (Since 17 Nov they stay as written as the crew grows.) It replaces 15 a character and a third more for every Title, archetype or attuned thing. See [The Threat Budget](#s-threat-budget).
 
 **The round budget's three quarters of the threat budget**, 48 for a starting crew of four, 12 a player, so 24 for a breather and 72 at Hard. It grows as their Roots do. It replaces about 11 steps a player. See [Telegraphs a Round](#s-budget).
 
-**At Hard, pile it on.** The first die at each of the crew's Bodies, then two or three more from different threats at whoever's hurting most. A telegraph that's 2 hits costs its steps twice. See [Spending it](#spending-it).
+**At Hard, pile it on.** The first die at each of the crew's Bodies, then two or three more from different threats at whoever's hurting most. A telegraph that's 2 hits costs its steps twice. (Since 17 Nov the piling on starts in round 2, and a hit past the first costs half again.) See [Spending it](#spending-it).
 
-**The fight of the session runs about 45 minutes**, four or five rounds at Hard, and the first of the crew should be Bloodied in round 3 or 4. Sooner means ease off, and nobody hurt by round 5 means push harder. See [How hard it pushes](#how-hard-it-pushes).
+**The fight of the session runs about 45 minutes**, four or five rounds at Hard (about four, since 17 Nov), and the first of the crew should be Bloodied in round 3 or 4. Sooner means ease off, and nobody hurt by round 5 means push harder. See [How hard it pushes](#how-hard-it-pushes).
 
 **How long a scene runs** is everything standing in the crew's way divided by the wins they land a round, about one for each of them. It replaces all the actions they take, bought ones included. See [How long a scene runs](#s-size-scene).
 

@@ -6,7 +6,7 @@ order: 19.3
 part: "The GM"
 partNumber: "Part III"
 source: 2026-10-02 rulebook
-updated: 2026-11-14
+updated: 2026-11-17
 ---
 :::quote
 You don't need a page of numbers for every monster. A threat is a Challenge and a few tags.
@@ -18,7 +18,7 @@ This chapter's just the procedure. [Running the Game](#s-building-threats) has t
 
 1.  **Decide what it is.** Roll on the table below, or pick one. That gives you a Challenge and a couple of tags to start with.
 2.  **Choose its size.** A mook has one tag that keeps it going, or none. A named threat has two, and a boss has three or more, plus a weak point. A boss that should last gets [multipliers](#s-tough-gm) on its big tags, as big as it needs. Start from its Challenge less 2 and go up or down from there, and put them where they say what it is: a dragon's hide might be *Hide ×5*, and a dark paladin who's the villain of the arc might be *Plate Armour ×4* and *Shield ×3*. A special encounter can be [Layered](#s-layered).
-3.  **How it comes at you.** Give it one or two. They're what its telegraphs will look like. A threat that should frighten a crew on full points can be *Deadly*: every die of it that gets through is 2 hits, or more, and it says so on every telegraph. Keep it for the few that earn it, because each of its telegraphs costs your round budget twice.
+3.  **How it comes at you.** Give it one or two. They're what its telegraphs will look like. A threat that should frighten a crew on full points can be *Deadly*: every die of it that gets through is 2 hits, or more, and it says so on every telegraph. Keep it for the few that earn it, because each of its telegraphs costs its steps and half again for each hit past the first.
 4.  **What keeps it going.** Give it as many as its size says. That's its health, and a tag with a multiplier counts as that many wins.
 5.  **What drives it.** Anything with a name gets at least one. It's how the crew talks to it, buys it, scares it or turns it.
 6.  **What it's weak to, if anything.** A [vulnerability](#s-vulnerable), like *Vulnerable to fire* or *Dry as Tinder*, adds a tick to every win it fits, and the player chooses where it goes: another off the same tag, or one off another tag that keeps it going. So Ash's fire on a *Dry as Tinder* Warden can take two off its armour, or one off its armour and one off something else the fire can reach. One vulnerability can strip two tags in a single hit, so it's a big deal on any threat. They're often hidden, and [Study](#s-study) finds them.
@@ -116,6 +116,6 @@ For how he comes at you, she rolls a 9, *Calls for Help*, and decides that's his
 **What you notice:** The wolf arrives first. It always does.
 :::
 
-Three plain tags would be three wins against his d12, and a crew of four can manage that in a round. So she gives his big ones [multipliers](#s-tough-gm), as big as he needs. She starts from his Challenge less 2, which is 4, and his armour's what makes him a wall, so that's where it goes: *Armoured ×4*, and it still comes first. His feeding's part of him too, but a smaller part, so it's *Feeds ×3*. Her table's a starting crew of four, a [threat budget](#s-threat-budget) of 64, so they stay as they are. Once each of them has a third Title it'd be 88, and they'd be ×6 and ×4. Now he's eight wins the long way: four through the armour, one for *Relentless* and three to stop him feeding. A crew of four lands three or four wins a round, so that's two or three rounds, longer with his wolf and his men in the way, or one win if the crew has read Vane's ledger. That makes him a boss worth a session, because he's hard to grind down and he's got a secret worth hunting for.
+Three plain tags would be three wins against his d12, and a crew of four can manage that in a round. So she gives his big ones [multipliers](#s-tough-gm), as big as he needs. She starts from his Challenge less 2, which is 4, and his armour's what makes him a wall, so that's where it goes: *Armoured ×4*, and it still comes first. His feeding's part of him too, but a smaller part, so it's *Feeds ×3*. Her table's a crew of four, and they stay as they are as the crew grows, since the [round budget](#s-threat-budget) grows instead. Now he's eight wins the long way: four through the armour, one for *Relentless* and three to stop him feeding. A crew of four lands three or four wins a round, so that's two or three rounds, longer with his wolf and his men in the way, or one win if the crew has read Vane's ledger. That makes him a boss worth a session, because he's hard to grind down and he's got a secret worth hunting for.
 
 At the table, Redhand telegraphs from the round budget like everything else. His axe is a d12 at someone's Body, and *Reach* lets it pin someone at the end of it. His wolf goes for the scene's clock with a d12: *it howls, and the pack answers.* Write three like that on his card before the session, and you'll never be stuck for what he does next.
