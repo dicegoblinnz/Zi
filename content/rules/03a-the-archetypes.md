@@ -28,10 +28,16 @@ Start with how they work, then find yours in [Picking Your Archetypes](#s-pickin
 ### Abilities {#s-abilities}
 
 :::rule
-**Each ability says its Aura**, and you pay it when you use it. Most are 1 Aura, and a few bigger ones are 2. **They stack.** Pay again and you get it again: another +2, another target, another round, whatever the ability says you get more of.
+**Each ability says its Aura**, and you pay it when you use it. Most are 1 Aura, and a few bigger ones are more. **They stack.** Pay again and you get it again: another +2, another target, another round, whatever the ability says you get more of.
 
 **You can't pay Aura you haven't got.** While you're acting, what's past your maximum is yours to spend like the rest. A [vessel](#s-items)'s charge can pay for your own abilities instead, a charge for each Aura.
+
+**Held** abilities change what's true of you for the scene, like a sense, a form or a weapon that guards. You pay once and it stays up till the scene ends or you drop it, and while it's up its Aura comes off your maximum. One that makes a thing in the scene, like ground or a tag, isn't held, however long the thing lasts.
+
+**Signature** abilities are an archetype's one big thing, at 4 or 5 Aura. They're once a scene, with no roll, and paying again gets you nothing more. A vessel's charge can't pay for one at 5.
 :::
+
+Say Bram took Warrior too. With its *Parry* held, his war hammer's a guard every time blows land at his Body till the scene ends, and his Aura maximum's 4 while it's up. A Guardian's *Not while I stand* is 4 Aura, once a scene, and every blow at her Body that round is stopped with no roll at all.
 
 An ability's never steps on a roll. It does what it says, and that's all. It can work with what you've got, though: an item's tier, your Resources, a vessel's charge or your armour's soak. With the Warrior's *Parry*, your weapon's tier goes on your roll when blows land, which a weapon never does on its own, and with the Shadow's *I had it planned*, you say a Resource without ticking one. The Maker's *Tune it up* puts an item a tier higher for the scene, and *Made it earlier* hands you one at tier 2, and it's the item's tier that goes on the roll, never the ability. Wren's roll to mark a creature is her Body as usual, and paying for Mark the pack sends that roll at two more.
 
@@ -104,7 +110,7 @@ The Bard's for nerve. You're the one keeping the crew's heads straight, and Defe
 
 **Push (1 Aura):** +2 to one of your song dice.
 
-**Crescendo (1 Aura):** pay as you Lift them, and everyone who hears you gets 2 points back, not 1. It's once a Lift, so paying again doesn't make it 3.
+**Crescendo (2 Aura):** pay as you Lift them, and everyone who hears you gets 2 points back, not 1. It's once a Lift, so paying again doesn't make it 3.
 
 **Hymn (1 Aura):** pay as you sing, and the song's for the Soul. A Lift puts its points back on everyone's Soul instead of their Mind, and a Hold them stops despair, temptation and curses at your Souls instead of fear, lies and pressure at your Minds. It's one or the other for the whole song, never both, and it's still not a heal.
 
@@ -114,9 +120,9 @@ The Bard's for nerve. You're the one keeping the crew's heads straight, and Defe
 
 **Odd one out (1 Aura):** while you're singing, playing or telling a story to a room, ask the GM who isn't watching you and what they're doing instead. It's no action, and she tells you straight, or tells you everyone's watching.
 
-**Marching song (1 Aura):** sing as you go, with no action. This round everyone who can hear you can move as far as whoever of you moves furthest, as long as they could go the same way, so nobody keeps up with a friend who flies. Pay again for another round.
+**Marching song (1 Aura, held):** sing as you go, with no action, and while you keep singing, everyone who can hear you can move as far as whoever of you moves furthest, as long as they could go the same way, so nobody keeps up with a friend who flies. It lasts till the scene ends or you stop.
 
-**Answer back (1 Aura):** when one of your song dice stops something at anyone's Mind, or at a Soul under a Hymn, that die goes back at whoever sent it, with its number, against that threat's roll for the round (roll it now if it hasn't got one). Its intent's anything a word can do, like stripping a tag of that kind, shaming it or leaving it *Shaken*. Pay again for another die that stopped something.
+**Throw it back (2 Aura):** as a threat puts *Frightened*, *Charmed*, *Taunted* or *Shaken* on you or a friend who can hear you, and before the GM's spent it, it goes on that threat instead, at the same die. It's no action and no roll, and it fades and gets spent like any condition. A threat that couldn't feel it (the GM's call) doesn't take it, but your friend's still clear. Pay again for another condition. Once it's on, it's *Shake it off*'s job.
 
 **Sing them through it (1 Aura):** with no action, one friend who can hear you can bring their Mind into their roll this round with your song as the reason, and no permission needed. They still pay for it the usual way, a point of Mind or 3 Aura. Pay again for another friend.
 
@@ -148,9 +154,11 @@ The Bloodsworn gets more dangerous every time they bleed.
 
 **Bleed for it (1 Aura):** before you roll, spend a point of your Body for nothing but the blood, and your mechanic puts its 3 steps on this roll. Pay again to spend another point for 3 more.
 
-**Scab over (1 Aura):** pay any time in the round, and your Body gets a point back at the end of it, as far as half what it holds, rounded up. It isn't a heal, so it adds no Toll. Pay again for another.
+**Scab over (1 Aura):** pay any time in the round, and your Body gets a point back at the end of it, as far as half what it holds, rounded up. It isn't a heal, so it adds no Toll. It's once a round.
 
-**Red mist (1 Aura):** pay before the telegraphs land. This round, fear, lies and pressure at your Mind come at your Body instead, and your Body rolls against them and the blows in one roll. What gets through is a hit on your Body, never the condition it carried, so it feeds your mechanic and *Paid in Blood*.
+**Bite down (1 Aura):** any time, with no action and no roll, spend a point of your Body and break one condition on you, before the GM spends it or as she does. It's a point lost, so your blood gets its steps and *Paid in Blood* pays. Pay again for another condition and another point. You can't with your Body on 0, and it only breaks conditions, never wounds or Scars.
+
+**Red mist (2 Aura):** pay before the telegraphs land. This round, fear, lies and pressure at your Mind come at your Body instead, and your Body rolls against them and the blows in one roll. What gets through is a hit on your Body, never the condition it carried, so it feeds your mechanic and *Paid in Blood*.
 
 **Not yet (1 Aura):** when your blood's put steps on your next action, hold them instead, till you let go of them this scene. Anything more your blood gives you while you wait joins them, and when you let go it all goes on one roll. You can act in between, and whatever's still held at the end of the scene is gone.
 
@@ -158,11 +166,11 @@ The Bloodsworn gets more dangerous every time they bleed.
 
 **Mine to take (1 Aura):** when a hit gets through to the Body of a friend within your stride, take it yourself, after it's landed. It's a point off your Body instead of theirs, and your armour doesn't soak it, so your blood gets its steps and *Paid in Blood* gives you its Aura. Pay again for another hit.
 
-**Now I know you (1 Aura):** when a hit takes a point off your Body, the GM tells you one of the hidden tags of whatever hit you, or that it hasn't got any.
+**Now I know you (1 Aura):** when a hit takes a point off your Body, the GM tells you how whatever hit you comes at you: one of its hidden tags of that kind, or that it hasn't got one.
 
 **Blood oath (1 Aura):** cut your palm as you swear something, and spend a point of your Body. Everyone who sees it knows you mean it, and nobody can take it for a bluff or a lie, though they can still say no. The point's 3 steps go on your next action, and it pays *Paid in Blood*.
 
-**Scent of blood (1 Aura):** till the scene ends you can smell blood. You know where anything that's bleeding is, a long way off, you can follow a blood trail at a run, and you know if blood's been spilled where you're standing.
+**Scent of blood (1 Aura, held):** till the scene ends or you drop it, you can smell blood. You know where anything that's bleeding is, a long way off, you can follow a blood trail at a run, and you know if blood's been spilled where you're standing.
 :::
 
 :::example[Two hits]
@@ -207,6 +215,8 @@ It doesn't cost Aura. Everyone the story puts in it defends against your other d
 **Two shapes (1 Aura):** one more of your dice can be an area, with its own shape and its own die going at everyone in it, and Sculpt's paid for each area. Pay again for another.
 
 **Shield of the storm (2 Aura):** when you [Defend](#s-defend), one of your dice can be your area, and another stops every blow at the Body of anyone in it that it meets or beats, not just one, and pays Aura once. It only stops blows your element could, and it's one number, so anything that rolls over it gets through to everyone.
+
+**Let it loose (5 Aura, signature):** as your action, with no roll, your element takes the whole scene till it ends: a tag on the scene, like *Change the weather*'s, and every threat in the scene takes your element's condition at a d8 then and there (*Burning* for fire, *Blinded* for fog or smoke, *Staggered* for a gale or a quake, *Stunned* for lightning). You and your friends aren't touched. It never does a hit, and the conditions fade as usual. A threat your element couldn't touch (the GM's call) doesn't take it.
 :::
 
 :::example[Five guards]
@@ -272,7 +282,7 @@ The Gambler turns a die over after it lands, whoever's it is.
 
 **Roll it again (1 Aura):** any one die you can see rolls again, a threat's or a friend's as well as yours, and the new number stands. If it's yours or a friend's, it pays Aura like any die.
 
-**Double or nothing (1 Aura):** flip every die in one roll at once, the good with the bad: everything one person rolled together, or everything one threat's rolled this round. It's on top of your flip for the round.
+**Double or nothing (2 Aura):** flip every die in one roll at once, the good with the bad: everything one person rolled together, or everything one threat's rolled this round. It's on top of your flip for the round.
 
 **Luck of the draw (1 Aura):** flip something in the story that comes down to luck, like a coin, a card, a drawn lot or which door the guard tries first, and it goes the other way.
 
@@ -285,6 +295,8 @@ The Gambler turns a die over after it lands, whoever's it is.
 **Their bad luck (1 Aura):** when a threat's die comes up 1, you say what it does instead, as long as the story allows, like hitting one of its own or the ground. A die you flipped to a 1 counts.
 
 **Side bet (1 Aura):** before the scene ends, name a faction in it. At the next [faction turn](#s-faction-turn) you can flip one die that faction rolls, or one rolled against it.
+
+**Loaded (3 Aura):** when a die of yours or a friend's has just landed, it reads as its top face. Like a flip, it pays no Aura and doesn't explode, and it isn't your flip for the round. It's once a roll, and never on a threat's die or one that's been flipped or swapped.
 :::
 
 :::example[The guard's lucky night]
@@ -318,13 +330,13 @@ If you're a Teleporter as well, you intercept for every friend within 10 units (
 
 **In the way (1 Aura):** intercept a telegraph aimed at a stake, a place or a clock, if you can get in front of it, like the runner going for the bell or the ram at the gate. It comes at your Body as a blow. Stop it and it doesn't happen, and if it gets through you take its hits, but it still doesn't do what it said. Pay again for another.
 
-**Knock it back (1 Aura):** when one of your dice stops a blow you intercepted, whoever threw it is *Staggered* at that die's size. Pay again for another die.
+**Hold the line (1 Aura, held):** everywhere within your stride is difficult ground for threats, never for friends, and it moves with you. It lasts till the scene ends, you drop it or you go down. It doesn't stop a teleport or something flying over.
 
-**Your turn (1 Aura):** when one of your dice stops a blow you intercepted, the friend it was meant for gets a die that size, to roll fresh with their next roll as one more die with an intent of its own. It's gone once it's rolled or the scene ends, and they hold one of these from you at a time. Pay again for another die.
-
-**Put it on me (1 Aura):** when a hit gets through to the Body of a friend within your stride, or one of them misses and the GM names what it costs them, it's yours instead. A hit comes off you the usual way, soak first, and a cost has to be one you could take standing there, like the guard grabbing you instead of them. It isn't an intercept, so *Better Me Than You* doesn't pay. Pay again for another hit or cost.
+**Put it on me (1 Aura):** when a friend within your stride misses and the GM names what it costs them, it's yours instead. It has to be a cost you could take standing there, like the guard grabbing you instead of them, and if it's a hit, it comes off you soak first. It isn't an intercept, so *Better Me Than You* doesn't pay. Pay again for another cost.
 
 **Keep watch (1 Aura):** in the last scene before downtime, say what you're guarding: one of the crew, or an asset or resource on the party sheet. If a faction's action goes at it in the next faction turn, you Obstruct it with your Body at full (see [The Six Outcomes](#s-faction-outcomes)), and it doesn't cost the crew its action. Pay again to guard another.
+
+**Not while I stand (4 Aura, signature):** as the telegraphs land, with no action and no roll, every blow at your Body this round is stopped, your own and the ones you intercepted. It's blows only. No die stopped them, so there's no Aura for a win and nothing that needs your die to stop a blow goes off, but *Better Me Than You* still pays for each intercept.
 :::
 
 :::example[Three goblins]
@@ -364,7 +376,7 @@ A heal reaches one person. Anyone can [quick heal](#s-healing) for 1 Aura, thoug
 
 **Pull them back (1 Aura):** when someone you can reach takes a Scar, they stay in the scene instead of leaving it. It costs no action. That Root's still wounded and on 0, so they'll want to keep their head down. Pay again for another.
 
-**Close the wound (2 Aura):** your heal clears a wound as well, so that Root can heal to its maximum again, starting with this heal. It's still a heal, so it gives Toll and loses for Toll the same as any other.
+**Close the wound (5 Aura, signature):** as your action, with no roll, clear one wound on someone you can reach, so that Root can heal to its maximum again. It isn't a heal, so it gives no points and no Toll. It never touches a Scar.
 :::
 
 :::example[Healing Vesk]
