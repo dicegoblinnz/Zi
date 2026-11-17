@@ -723,6 +723,7 @@ export function normalCore(raw, c) {
   const sig = Array.isArray(s.sig) ? [...new Set(s.sig.filter((k) => typeof k === "string").map((k) => text(k, 130)))] : [];
   if (sig.length) s.sig = sig;
   else delete s.sig;
+  if (s.sat !== true) delete s.sat;
   s.acting = Boolean(s.acting);
   // Past the maximum only while acting.
   s.aura = clamp(s.aura, 0, s.acting ? 99 : auraMax(c, s));
@@ -1016,6 +1017,7 @@ export function sceneEnd(c, s, rolls = {}, { fill = {} } = {}) {
   }
   s.toll = Math.max(0, int(s.toll, 0) - 1);
   delete s.out;
+  delete s.sat;
   return { healed, toll: s.toll, filled };
 }
 // Downtime puts everything back: wounds and Toll clear, every Root's full,
@@ -1024,6 +1026,7 @@ export function sceneEnd(c, s, rolls = {}, { fill = {} } = {}) {
 export function downtimeRest(c, s) {
   s.wound = { Body: false, Mind: false, Soul: false };
   s.toll = 0;
+  delete s.sat;
   for (const r of ROOTS) s.pts[r] = capOf(c, s, r);
   s.soak = {};
   s.res = [];
@@ -1172,6 +1175,19 @@ export function dropHeld(c, s, key) {
 export const sigUsed = (s, key) => Array.isArray(s?.sig) && s.sig.includes(key);
 // Can it be paid this way: once a scene, and never with charge at 5.
 export const sigOk = (s, key, cost, { charge = false } = {}) => !sigUsed(s, key) && !(charge && int(cost, 0) >= 5);
+// A Gambler's flips on a roll (18 Nov): one a round for free, or once Hot
+// streak's paid, any number till the round ends, never the same die twice.
+export const STREAK = /\bflip any die you can see\b/i;
+export const canFlip = (r) => Boolean(r) && (Boolean(r.streak) || !r.flips);
+export const flipsDie = (r, d) => Boolean(d) && !(r?.streak && d.flip);
+// A Healer's Sit with them (18 Nov), on the patient's phone: 1 Toll off,
+// once a scene for each patient, and it isn't a heal.
+export function satWith(s) {
+  if (s.sat || !(int(s.toll, 0) > 0)) return false;
+  s.toll = int(s.toll, 0) - 1;
+  s.sat = true;
+  return true;
+}
 export function useSig(s, key, cost, opts = {}) {
   if (!sigOk(s, key, cost, opts)) return false;
   s.sig = [...(Array.isArray(s.sig) ? s.sig : []), key];
