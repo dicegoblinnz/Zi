@@ -5,6 +5,24 @@ updated: 2026-11-18
 ---
 This is the record of every rules change since the 2 Oct 2026 book, newest first. Each entry's date is the day the change went to the table. When a later change replaces an earlier one, the earlier entry says so. The rules chapters always show the game as it is now, so if you only want to play, read those and skip this.
 
+## 18 Nov 2026: Mo's calls on the abilities {#c-2026-11-18-calls}
+
+**The quick heal's gone.** Nobody pays 1 Aura and an action to put a point back any more. Mid-scene, points come back from a Healer's heal, the Healer's *Hold still* (1 Aura, once a round, no action, a point on one Root), a Bard's *Lift them*, taking a breath, straining a bond thread, *Heartened*, a *Medical kit* and the abilities that say so. A medical kit's a point of Body for your action now, where it was a free quick heal. See [Healing](#s-healing) and [Aura](#s-aura).
+
+**The Leader's *Everyone gets it*** is 1 Aura for 1 step more for one friend, on top of whatever you handed them, and pay again for another step. Their roll's one your steps went into, so *Push* and *Go again* reach it. Before, 1 Aura gave everyone you led all your steps. See [Leader](#a-leader).
+
+**The Bloodsworn** spend points of Body for their 3 steps as they act, as many as they like, with no Aura, and *Bleed for it* is gone into the mechanic. *Paid in Blood* pays only for a point a hit takes, never one you spend, and your armour soaks only when you want it to. See [Bloodsworn](#a-bloodsworn).
+
+**The Summoner.** A starting soul's a d8, where it was a d4. Calling one out is 1 Aura for a d4, 2 for a d8 and 3 for a d12, held off your maximum while it's out, and a vessel's charge can pay. Summons roll in your throw whenever you act, a win pays you 1 Aura, each one guards one person from the first blow a round, and a hit knocks one down a size. They never fade. Catching a soul's one of your dice, any time before the scene ends. *Call the horde* is five d4s at once with nothing held. See [Summoning](#s-summoning) and [Summoner](#a-summoner).
+
+**The Hunter's Mark rides on a win.** Once a roll, a die of yours that wins against a creature Marks it as well, so marking costs no die. Your Mark's on one creature at a time. *Draw blood* is *Head it off*, and *Good Hunting* pays on a stake or event you've Marked too. See [Hunter](#a-hunter) and [Marked](#s-marked).
+
+**Four mechanics are a die's intent now.** Any of your dice can be a Face's influence, a Maker's making die, a Shifter's go at an animal tag or an Illusionist's illusion, rolled once against the highest Challenge among whoever it's meant to fool. Before, each took your whole action. *In passing* and *On the fly* are gone into their mechanics, and a Maker's item holds one made tag at a time. See [Face](#a-face) · [Maker](#a-maker) · [Shifter](#a-shifter) · [Illusionist](#a-illusionist).
+
+**The Gambler's *Bad Luck Pays*** pays only on a d4 or bigger. See [Gambler](#a-gambler).
+
+**Out:** the Warrior's *Kill stroke* is *Cut them down*, one winning die that wins against every other threat in reach too, and *Loaded* stays. The Healer's *Pull them back* is *Hold still*. See [Warrior](#a-warrior) · [Healer](#a-healer).
+
 ## 18 Nov 2026: Held and signature abilities, and the levers pass {#c-2026-11-18-levers}
 
 A second pass on the abilities, checking each one against what it actually moves at the table. Most of them haven't changed. Before, every ability was paid each time you used it, at 1 or 2 Aura. See [Abilities](#s-abilities).

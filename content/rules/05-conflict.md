@@ -184,7 +184,7 @@ When a telegraph's aimed at a friend's Body and they're within your stride, you 
 -   **A [Guardian](#a-guardian) intercepts for free**, for every friend within their stride.
 -   **Only what you can get in front of.** You can take a blade or an arrow for a friend, but fear and despair are inside their head, so nobody can step in front of what's at their Mind or their Soul. Keeping fear off the crew is a [Bard](#a-bard)'s job.
 -   **The GM's people can intercept too**, without Aura, like the bodyguard who throws himself in front of the knife meant for his lord. She says so before you roll, and your die has to beat his defence instead.
--   **A summon intercepts for free**, and every hit that gets through knocks a size off it (see [Summoning](#s-summoning)).
+-   **A summon guards for free.** Once a round, the first blow at the Body of the person it's guarding comes at it instead, and anything that gets through knocks it down a size (see [Summoning](#s-summoning)).
 
 :::example[Intercepting]
 The brute's club is coming down at Isolde's Body again, a d8, and her Body's 0, so if it gets through she's Bloodied. Vesk's right beside her, so she spends 1 Aura and intercepts it. It doesn't take her action, so she can still go at the brute with her knife. At the end of the round the club comes at Vesk, and she rolls her Body, a d12 and a d10: 9 against the club's 3, so it's stopped, and she gets her Aura back.
@@ -452,12 +452,12 @@ Isolde's got nothing to beat, so she doesn't roll. A Warden's a dead thing walki
 
 ### Marked {#s-marked}
 
-***Marked*** is a special condition, and it's the [Hunter](#a-hunter)'s. A Hunter puts a die on a creature to mark it, and if it wins, it's *Marked* with the die it won with. It doesn't work like the rest: it doesn't give a step, and nobody spends it. Instead, anyone who acts against that creature rolls the Mark die too, as one more die against it. It fades a size every round, like any condition.
+***Marked*** is a special condition, and it's the [Hunter](#a-hunter)'s. Once a roll, when one of a Hunter's dice wins against a creature, it's *Marked* with that die, as well as whatever the die was for. A Hunter's Mark is on one creature at a time, so Marking another moves it. It doesn't work like the rest: it doesn't give a step, and nobody spends it. Instead, anyone who acts against that creature rolls the Mark die too, as one more die against it. It fades a size every round, like any condition.
 
 **The Mark jumps.** When a *Marked* creature falls, the Mark moves to another creature the Hunter can see, with the die it had.
 
 :::example[Marked]
-Wren marks the Warden with her Body, 8 steps, her Proven longbow, 3 more, and *Long shot*, 2 more, two d12s and a d2, and the best of them wins, so it's *Marked d12*. Bram swings at it and rolls the Mark's d12 with his own dice. Next round it's *Marked d10*, and when it falls, the Mark jumps to the second Warden, still a d10.
+Wren shoots the Warden with her Body, 8 steps, her Proven longbow, 3 more, and *Long shot*, 2 more, two d12s and a d2. Her best d12 wins, so the arrow hits and the Warden's *Marked d12* as well. Bram swings at it and rolls the Mark's d12 with his own dice. Next round it's *Marked d10*, and when it falls, the Mark jumps to the second Warden, still a d10.
 :::
 
 ## Vulnerabilities {#s-vulnerable}
@@ -546,7 +546,7 @@ You don't have to wait for the end of the scene, but only a [Healer](#a-healer) 
 Say you're a Healer, and your Title's *The field surgeon of the Red Company*. Your Soul's 6, so your heal's a d12. Vesk's on 2 points of Body after the roof, and you roll an 8, so she's back on 10, her maximum. That's her first heal this scene, so it's whole, and now she's got 1 Toll. Two rounds later she's down to 4, and your next heal rolls 5. Your Healer's Trait ignores a step of Toll, so that one's whole too, and she's on 9 with 2 Toll. When you heal her again it rolls 9, less 5 for the step your Trait doesn't cover, so it's 4. Bram's right beside her and nobody's healed him yet, so a heal on him would be whole.
 :::
 
-**Quick heal.** Anyone can do this one. Pay 1 Aura and your action, and someone you can reach gets 1 point back on one of their Roots, no roll. It isn't a heal roll, so Toll doesn't touch it and it doesn't give any. It's how a crew with no Healer gets by: Dorrie can't stitch a wound, but she can spend the Aura and her action to keep Bram on his feet.
+**Without a Healer**, nobody puts points back mid-scene just by paying Aura. A crew with no Healer gets by on the rest: [Take a breath](#s-actions) for your own Mind, a [Bard](#a-bard)'s *Lift them*, spending *Heartened*, straining a bond thread for a point of Soul, a Resource like a *Medical kit*, and the abilities that say so. Dorrie can't stitch a wound, but if Bram's down to his last point of Body, she can say one of her Resources is a medical kit, tick it and spend her action, and he gets a point of Body back.
 
 **Anything that says it heals**, an item or a Resource, works the way it's written.
 
@@ -728,7 +728,7 @@ Isolde doesn't go for the second sigil. She speaks the name instead, which is th
 
 Bram ties the bundle on and heaves it up the rope, and Vesk puts her action into the same thing, hauling from the top. Bram rolls, on his Body, 9, and Vesk brings her Body, 11, since she's hauling, and it's her line they're hauling on, so it's her one item, tier 2, and *Anywhere I can throw a hook* is 2 more. That's 24 steps, four d12s, against the stake's d8: 7, 2, 5 and 1 against 3. *Heavy Load* is gone, and the paintings are theirs. Two of Bram's dice won, so that's 2 Aura for him.
 
-Isolde's a point down on her Mind, and Dorrie could spend her action and 1 Aura on a quick heal to put it back. The butler matters more. She says a Resource first: she lifted an apron and a cap off the laundry line on the way in, so she ticks 1 of her 3. It's never steps, but it's why the butler sees a housekeeper. She meets him at the foot of the main stair with a smile and a story about the wind and a loose shutter. That's her Mind, 7 steps, and talking her way past him is *talk my way past a door*, so she pays a point of Soul and brings it in, 6 more. That's 13 steps, two d12s and a d2, so she's got a d12 to answer the lantern and a d12 to strip *Watched*. The lantern's d8 rolls 4 against her 6, and the stake's d6 rolls 3 against her 4. Both won, so that's 2 Aura, and she's full again, so they go. *Leave no trace* is theirs too.
+Isolde's a point down on her Mind, but the butler matters more. She says a Resource first: she lifted an apron and a cap off the laundry line on the way in, so she ticks 1 of her 3. It's never steps, but it's why the butler sees a housekeeper. She meets him at the foot of the main stair with a smile and a story about the wind and a loose shutter. That's her Mind, 7 steps, and talking her way past him is *talk my way past a door*, so she pays a point of Soul and brings it in, 6 more. That's 13 steps, two d12s and a d2, so she's got a d12 to answer the lantern and a d12 to strip *Watched*. The lantern's d8 rolls 4 against her 6, and the stake's d6 rolls 3 against her 4. Both won, so that's 2 Aura, and she's full again, so they go. *Leave no trace* is theirs too.
 
 At the end of the round the household clock steps down to its last die. When it runs out there'll be lamps lit on every floor, but by then the crew will be three roofs away, and the maid will be swearing she saw a stranger.
 
@@ -745,6 +745,6 @@ When the scene ends, everyone rests. Bram's plate and helmet are back to soaking
 -   **Full means it goes.** Dorrie was on her maximum every time her dice paid, and lost 5 Aura over the fight, 2, then 1, then 2. A vessel at tier 3, like Ash's coal horn, would've caught 3 of it as charge for her own *Push* or *Turn them* next scene, and the last 2 would still have gone.
 -   **One die stops one.** In round 1 Bram Defended, so he had four dice for two telegraphs. In round 2 his action went on the sigil, so his Body and his shield split 11 steps to meet two spears, and both got through.
 -   **Bringing a Root in is where it got clever.** Vesk paid a point of Mind for knowing how the locks were built, Isolde paid Aura for her Soul on the Study and her Mind on the name, and Dorrie paid a point of Soul to talk her way past the butler. Each one was a permission said out loud.
--   **One action each made them work together.** The sigil and the canvases fell to combos, Bram intercepted the spears at Dorrie and Isolde for free, and Dorrie had to choose between patching Bram up and the butler.
+-   **One action each made them work together.** The sigil and the canvases fell to combos, and Bram intercepted the spears at Dorrie and Isolde for free.
 
 Isolde doesn't take a Scar this time. She takes something better: the name of the person who was inside the armour, and the knowledge that there are more of them in this house.

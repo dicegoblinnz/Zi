@@ -242,9 +242,9 @@ Anything that works on its own, like a summoned beast or a raised servant acting
 -   **Go beyond** what something normally does, for **1**.
 -   **Win a tie** when you're the one acting, for **1**.
 -   **Intercept** for a friend within your stride, for **1**: take any of the blows aimed at their Body, and they come at you instead (see [Intercept](#s-intercept)). A [Guardian](#a-guardian) does it for free. Fear and despair are inside your friend's head, so nobody can step in front of those.
--   **Quick heal** someone, for **1** and your action (see [Healing](#s-healing)), or keep a Catch quiet this time, for **1**.
+-   **Keep a Catch quiet** this time, for **1**.
 
-**A vessel's charge stands in for Aura** on your own abilities and on your own awakenings' extra steps, a charge for each Aura they'd cost. That's all it pays for, and it never pays for a signature at 5. It never counts towards your maximum, you can't hand it to a friend, and it never brings a Root in, wins a tie, intercepts, quick heals, goes beyond or borrows.
+**A vessel's charge stands in for Aura** on your own abilities and on your own awakenings' extra steps, a charge for each Aura they'd cost, and a [Summoner](#a-summoner)'s can call a summon out. That's all it pays for, and it never pays for a signature at 5. It never counts towards your maximum, you can't hand it to a friend, and it never brings a Root in, wins a tie, intercepts, goes beyond or borrows.
 
 ### Getting it back {#getting-it-back}
 

@@ -25,7 +25,7 @@ The character sheet is one A4 sheet, printed back to back. The front's for play 
 -   Under the Roots: a hit's a point off, or 2 off another Root, armour on that Root soaks it first, a hit at 0 wounds the Root and it heals to half, a hit on it wounded at 0 is a Scar and you leave, three slots grow a Scar into a Trait, and the Blaze
 -   A roll (one Root at full, the one item that fits adding its tier, bringing another Root in on a permission for a point of it or 3 Aura, an awakening's 2 steps and 2 more for each Aura, and splitting any way) and the steps into dice under it (1 step is a d2, 6 is a d12, 12 is two d12s, and 24 is four)
 -   Conditions (4 · the die that placed it, with its size to ring · it steps down a size every round)
--   Getting it back (when a scene ends, roll each Root below what it holds, unsplit, and get back what you roll, and your armour's soak is all back · downtime puts everything back, your Resources too, and a vessel keeps its charge · a heal, and the quick heal)
+-   Getting it back (when a scene ends, roll each Root below what it holds, unsplit, and get back what you roll, and your armour's soak is all back · downtime puts everything back, your Resources too, and a vessel keeps its charge · a heal)
 -   Aspiration (five boxes, one ticked for each point in it · a downtime slot's a point, and there's no roll · at 5 it comes good: a new Title, archetype or attuned thing, with the one it comes with, and a new Aspiration with nothing in it)
 -   Party Goal (d2 → d4 → d6 → d8 → d10 → d12 · past d12: the crew's done it, and everyone writes a new thread)
 -   Points (spent \_\_\_ of \_\_\_ · banked \_\_\_, for any you haven't spent yet)

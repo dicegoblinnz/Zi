@@ -26,7 +26,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Aspiration](#s-aspiration)** | What your character wants: one thing, and you'd know the day it's done (see [A good Aspiration](#s-good-aspiration)). It takes 5 points, a downtime slot each, and there's no roll. At 5 it comes good: you get what you were after, and a new Title, archetype or attuned thing, your pick. |
 | **[Asset](#s-wealth)** | A permission on a faction's card for what it can do. People who turn up, like *Standing Army*, are +1 Power, and the rest do one thing. It needs a resource paying for it every downtime, or it stops counting. |
 | **[Attunement](#s-attunement)** | Something personal bound to you, for 5 points. It's an item, one of your six, keeping its tier, it's got awakenings, each locking a point of the Root it fits, it grows in three stages, and it can't be broken. |
-| **[Aura](#s-aura)** | Your luck and flair. Up to 5, full every scene. 3 brings a Root in, and 1 puts 2 more steps on an awakening, pays for an ability, borrows through a bond thread, goes beyond, wins a tie when you're acting, intercepts for a friend or pays for a quick heal. 1 back for every die that wins, every top face, and every time you let a Catch bite. A vessel's charge can stand in for it on your own abilities and awakenings. |
+| **[Aura](#s-aura)** | Your luck and flair. Up to 5, full every scene. 3 brings a Root in, and 1 puts 2 more steps on an awakening, pays for an ability, borrows through a bond thread, goes beyond, wins a tie when you're acting or intercepts for a friend. 1 back for every die that wins, every top face, and every time you let a Catch bite. A vessel's charge can stand in for it on your own abilities and awakenings. |
 | **[Awakened](#s-attunement)** | An attuned thing's first stage: 1 awakening, and 1 more with a Catch. |
 | **[Awakening](#s-attunement)** | Something an attuned thing does. It locks a point of the Root it fits for as long as it's attuned, and it's 2 steps on a roll it fits, 2 more for every Aura you put in it. |
 | **[Blaze](#s-blaze)** | Going out on your own terms while you're wounded: on your turn, take the Scar, declare something extraordinary and it happens, no roll, then leave the scene. From your first Blaze, you can choose to die instead. |
@@ -76,9 +76,9 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Hollow](#s-blaze)** | Your Soul's wound, from a hit on it with no points left. It heals only to half its maximum till downtime or a story moment clears it. |
 | **[Hook](#s-aftermath)** | Something at the end of a session that pulls the crew into the next one. |
 | **[Hostile thread](#s-bonds)** | A thread that's gone bad, like a debt you can't pay or a grudge. It bites like a Catch: 1 Aura when it brings you real trouble, a point of Soul for a big bite. |
-| **[Influence](#a-face)** | A Face's dice, built but not rolled, sitting on a threat. Roll them before one of its telegraphs lands, and every one of its dice your best one beats does what you say. |
+| **[Influence](#a-face)** | A Face's dice, any of them put down unrolled instead of rolled, sitting on a threat. Roll them before one of its telegraphs lands, and every one of its dice your best one beats does what you say. |
 | **[Intent](#s-intents)** | What a die is for, and who or what it's aimed at. Say it before you roll. Every die's as good as an action. |
-| **[Intercept](#s-intercept)** | 1 Aura and no action: take the blows at a friend's Body within your stride, and your own Body or Defend rolls against them. One friend for each Aura. A Guardian or a summon does it free. Nothing at a friend's Mind or Soul can be intercepted. |
+| **[Intercept](#s-intercept)** | 1 Aura and no action: take the blows at a friend's Body within your stride, and your own Body or Defend rolls against them. One friend for each Aura. A Guardian does it free, and a summon takes the first blow each round at the one it's guarding. Nothing at a friend's Mind or Soul can be intercepted. |
 | **[Item](#s-items)** | Real gear you've got ready: a weapon, a guard, armour, a tool good enough to matter, a pack or a vessel. Six at most, attuned things included. When it's what's doing the work on a roll, it puts its tier on in steps, one item a roll. |
 | **[Keeps it going](#s-staying)** | The tags that are a threat's health. Every win strips one, or ticks one off its multiplier. Strip the last and it falls, unless a tag like *Forms* says otherwise. |
 | **[Keepsake](#s-items)** | Something that matters to your character, carried on top of your six items. It's story, never steps, and it has no rule of its own. |
@@ -89,7 +89,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Lines and veils](#s-lines-veils)** | What the table won't have in the story at all (a line), or won't play out in detail (a veil). |
 | **[Locked](#s-tracks)** | A point a Root can't hold, one for each awakening on it and each Scar. It still counts on your dice. |
 | **[Log](#s-log)** | One sentence a session, kept with the party sheet. |
-| **[Marked](#a-hunter)** | The Hunter's special condition on a creature, at the die they won with. It gives no step and nobody spends it: anyone who acts against it rolls the Mark die too. It fades a size a round. |
+| **[Marked](#a-hunter)** | The Hunter's special condition on a creature, put on once a roll by a die of theirs that wins against it, at that die. One creature at a time. It gives no step and nobody spends it: anyone who acts against it rolls the Mark die too. It fades a size a round. |
 | **[Material](#s-attunement)** | What an attuned thing needs before it reaches its next stage, found in the story or bought. A summoning attunement's material is souls. |
 | **[Maximum](#s-tracks)** | A Root's number less its locked points and any held in a vessel. Its points never go past it, and a wounded Root heals only to half of it. |
 | **[Mend](#s-bonds)** | Making a strained thread right with them, by playing it out, doing them a favour or paying them, in downtime or in a scene with them. Then it's whole again. |
@@ -113,7 +113,6 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Project](#s-projects)** | Something the crew sets out to build or bring about. Starts at d2 and climbs. Past d12, what you wrote happens. |
 | **[Push](#s-abilities)** | The ability most archetypes have: +2 on one die of the mechanic after you roll, for 1 Aura, and +3 if you've taken the archetype twice. A die it takes to its top face gives no Aura. |
 | **[Pushing yourself](#s-tracks)** | Spending a Root's points, to bring it in or to roll again. It never hurts you, since you can't spend what you haven't got, and spending to 0 only leaves you exposed. |
-| **[Quick heal](#s-healing)** | Anyone's: 1 Aura and your action, and someone you can reach gets 1 point back on one of their Roots, no roll. It isn't a heal roll, so Toll doesn't touch it. |
 | **[Reputation](#s-party-faction)** | What the city says about the crew, in one line. A step on any crew roll it fits. One for every Goal done. |
 | **[Resource, a faction's](#s-wealth)** | A permission on a faction's card for where its money comes from, like *Silver Mine*. The crew's resources are these too. Each one pays for one asset every downtime, and an extra one, paying for nothing, hires another faction, buys something or goes in a trade. |
 | **[Resources, your](#s-resources)** | Three ordinary things you say you've got in the moment you need them, like *as it happens, I've got rope on me*. Tick one and it's real. It does what the thing does, never steps or soak, and all three come back in downtime. |
@@ -130,14 +129,14 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Slot](#downtime)** | A unit of downtime. You get two, and the crew takes one action, which a slot of yours can go into. |
 | **[Snap](#s-bonds)** | What a thread does when you strain it again before it's mended. You still get your point of Soul back, but cross the thread out. When the last one goes, so does the bond. |
 | **[Soak](#s-consequences)** | What armour takes before your Root does: as many points as its tier, a point of soak for each point. It's all back at the end of every scene. |
-| **[Soul, a Summoner's](#s-summoning)** | A fallen creature a Summoner's caught, rolling against its Challenge, and kept in their summoning attunement. It comes out as a summon, no bigger than its own die. |
+| **[Soul, a Summoner's](#s-summoning)** | A fallen creature a Summoner's caught, with one of their dice against its Challenge, and kept in their summoning attunement. It comes out as a summon, no bigger than its own die. |
 | **[Split](#s-splitting)** | Turning your steps into more, smaller dice: as many as you like and any sizes, as long as they add up to your steps. |
 | **[Stake](#s-stakes)** | Something the crew wants from a scene, with tags in the way. |
 | **[Step](#s-building-die)** | The unit of a roll. Each step is one size of die: 1 is a d2, 6 is a d12. |
 | **[Strain](#s-bonds)** | A thread that's nearly snapped. Leaning on a bond thread in the story, like calling in the favour or using their name, strains it and gets you a point of Soul back, free. Doing right by someone strains a hostile thread. You can't borrow through a strained thread. |
 | **[Stride](#s-movement)** | Free movement every round. 3 squares to start. A Teleporter's can be a teleport of up to 10 units. |
 | **[Study](#s-study)** | An intent that finds a hidden tag or a straight answer. An Oracle can pay for *Foretold* and introduce a truth instead. |
-| **[Summon](#s-summoning)** | A soul a Summoner calls out with Aura, as part of an action: a d4 of summons for each Aura. It acts in the round like anyone, fades a size every round, and loses a size to every hit that gets through. |
+| **[Summon](#s-summoning)** | A soul a Summoner calls out with Aura, as part of an action: 1 for a d4, 2 for a d8, 3 for a d12, never bigger than the soul, and held off their maximum while it's out. Its die goes in their throw whenever they act, it guards one person, and it loses a size to every hit that gets through. It never fades. |
 | **[Swap](#grow)** | In downtime, trading a permission for another that fits your Title. |
 | **[Tag](#s-challenges)** | Something true about a threat, a stake or a place. It does what it says, and a big one carries a multiplier. A Maker can give an item tags for the scene, and they work like permissions. |
 | **[Take a breath](#s-actions)** | Your action: 1 point back on your Mind, as far as half its maximum, rounded up. |
@@ -150,7 +149,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Title](#s-title)** | Who you are: one role or one school of magic, real and specific, with up to six permissions. It's 5 points and puts 5 on your Roots, spread however you like, and it comes with one permission. It's separate from your archetypes. |
 | **[Title idea](#s-title-ideas)** | A place to start a Title: twenty-nine roles and schools, each with the archetypes it suits, and permissions and going-beyond ideas to pick from. |
 | **[Toll](#s-healing)** | What healing takes out of you. Every heal from someone or something else is 1 Toll, and a heal loses 5 for each Toll you've already got. It drops by 1 at the end of each scene, and downtime clears it. |
-| **[Top face](#s-the-roll)** | A die's highest number. 1 Aura back, unless a Push took it there, it's a summon's, an Oracle swapped it in or a Gambler flipped it. A Warrior's explodes. |
+| **[Top face](#s-the-roll)** | A die's highest number. 1 Aura back, unless a Push took it there, it's a summon's (whose wins still pay), an Oracle swapped it in or a Gambler flipped it. A Warrior's explodes. |
 | **[Trait](#s-how-archetypes)** | Something that's always true of you because of your archetype, written in its rule box. Every archetype has one, most cost nothing, and some get you Aura back. Take the same archetype twice and it's still the one Trait. Traits only come from archetypes, and from a Scar grown into one. |
 | **[Trouble](#s-trouble)** | Something going wrong for you that the GM can run with. You bring it yourself, by letting a Catch bite or with no Catch at all, and take 1 Aura for it. |
 | **[Vessel](#s-vessels)** | An item that holds charge, as much as its tier: a lantern of captured light, a prayer string. Fill it only with Aura you'd lose, never what's left when a scene ends, or a point mid-scene, and spend it only on your own abilities and awakenings, a charge for each Aura. It keeps through downtime. |

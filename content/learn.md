@@ -315,10 +315,10 @@ Bram's Body is Bloodied when the Warden comes for the gate. On his turn he Blaze
 ::::
 
 ::::card[Healing]{#l-healing teaches=s-healing}
-At the end of every scene, your soak's back, and you roll each Root that's down, unsplit, and get back what it rolls. Only a [Healer](#a-healer) makes a **heal roll**: a Root unsplit, and the patient gets back what it rolls, across any of their Roots. Every heal they take gives them a **Toll**, and the next heal loses 5 for each one. Anyone can **quick heal**: 1 Aura and your action, a point back, no roll.
+At the end of every scene, your soak's back, and you roll each Root that's down, unsplit, and get back what it rolls. Only a [Healer](#a-healer) makes a **heal roll**: a Root unsplit, and the patient gets back what it rolls, across any of their Roots. Every heal they take gives them a **Toll**, and the next heal loses 5 for each one. With no Healer, points come back from a breath, a bond thread, a Resource or an ability that says so.
 
 :::example
-The crew's got no Healer, so Dorrie spends 1 Aura and her action to get a point of Bram's Body back, and he's on 4.
+The crew's got no Healer, so Dorrie says one of her Resources is a medical kit, ticks it and spends her action, and Bram gets a point of Body back, so he's on 4.
 :::
 ::::
 

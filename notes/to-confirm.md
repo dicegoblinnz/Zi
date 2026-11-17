@@ -2,82 +2,115 @@
 
 Your rules left a few gaps, and the book has to say something in each one, so Claude made a call. Every one of these is in the book now, written as a rule. Tell Claude "yes", "no, do this instead" or "leave it for now", and the book and the change log get updated. Your own open questions are at the bottom of `content/changes.md`, and your decisions are in `notes/playtest-sheets/` (the 27 Oct ones in `2026-10-27-chat-decisions.md`).
 
+## 18 Nov: Mo's calls, and Fable's
+
+Mo's calls on the abilities, and the rest he handed to Fable, the lead designer. The rest of the book's on them (`c-2026-11-18-calls`), and 03a's being written by two other chats.
+
+**Mo decided:**
+- ***Everyone gets it*** is 1 step for one friend for each Aura, and that friend's roll is one your steps went into.
+- **Signatures** all stay, one each.
+- ***Loaded* stays and *Kill stroke* goes**, for the Warrior's *Cut them down* (4): one winning die wins against every other threat in reach.
+- ***Paid in Blood* is fixed**, not removed: it pays only when a hit takes the point.
+- ***Pull them back* and the quick heal are gone.** The Healer's *Hold still* (1 Aura, once a round, no action, 1 point) is what's left of the quick heal.
+- **Fable's in charge of the rest.**
+
+**Fable decided, a line each:**
+- **Summoner:** summons hold their Aura off your maximum, roll in your throw, never fade, guard one person, and drop a size to a hit. A starting soul's a d8.
+- **Hunter:** once a roll, a winning die Marks as well, one Mark at a time bar *Mark the pack*.
+- **Gambler:** *Bad Luck Pays* only on a d4 or bigger.
+- **Face:** any die can go down as influence, on more than one threat, and *In passing* is cut.
+- **Maker:** any die can be a making die, one made tag an item at a time, and *On the fly* is cut.
+- **Shifter:** any die can go for an animal tag.
+- **Illusionist:** any die can be an illusion, rolled once against the highest Challenge among whoever it's meant to fool.
+- **Healer's *On the move*** stays at 1, and the **Bard's *Lift them*** stays as it is.
+- **Bloodsworn:** *Bleed for it* goes into the mechanic, and armour soaks only when they want it to.
+- ***Put it on me*** and ***Wait for it*** stay as written.
+- **Hunter's list** stays, bar *Draw blood*, now *Head it off*. *One by one* as written, and *Good Hunting* pays on a Marked stake.
+- ***Press your luck*** stays.
+- **Everything else open stays as the book has it**: *Shield of the storm* and *Friends in high places* at 2, *Turn them* at 1, *Close the wound* at 5, *Crescendo* at 3, *Opened* off an explosion, *Sit with them*, *Blood oath*'s hex, *Showstopper*, *Call them out* at 2 with no roll, *Tooth and claw* on top of the six, *Where It's Needed*, the Shadow's pool, *All Eyes on Me*, *Sing them through it*, *Leave a door* in a city, and the faction turn on four lists.
+
+**For Mo, in a line each:**
+- The medical kit still gives a point of Body for a Resource and an action. Say if that should go too.
+- A starting soul's a d8, and a vessel's charge can call a summon out.
+- The Bloodsworn can bleed as many points as they like on one roll.
+- The levers skill needs the quick heal, the Summoner's prices and the mechanics list updated.
+
 ## 18 Nov: the abilities rework
 
 Every archetype's ability list was reworked on 18 Nov (designed on Fable, written on Opus). These are the designers' calls that are yours, each with what they'd do. Nothing below is in the book yet unless it says so.
 
-- **Bard's Lift** is the strong part, not the list. If it's still too much: Lift's point only goes to friends whose Mind lost one to a hit this scene.
+- **Bard's Lift** is the strong part, not the list. If it's still too much: Lift's point only goes to friends whose Mind lost one to a hit this scene. *(Answered 18 Nov (Fable): left as it is.)*
 - **All Eyes on Me** doesn't make a watched threat helpless (no opening), as written.
 - **Sing them through it** hands a friend the reason to bring a Root in. The designer reads it as clear of leading.
-- **Bleed for it** pays its own Aura back through *Paid in Blood*, so every Bloodsworn takes it. Kept. The other way: put it in the mechanic and drop the ability.
-- **A Bloodsworn in armour:** add to the mechanic "you can always let a hit through instead of soaking it" (*Through the mail* is cut).
-- **Shield of the storm** and **Friends in high places** stay at 2 Aura.
-- **The Face's influence as a die:** "any of your dice can go down as influence", like marking. Then *In passing* goes and *Play them off* comes back. Recommended.
-- **Influence on two threats at once:** yes, each put down on its own.
-- **The Gambler's Trait on d2s:** every d2 pays 1 Aura (a 1 pays *Bad Luck Pays*, a 2's a top face). Fix: it pays on a 1 on a d4 or bigger. The designer's biggest call.
-- **Press your luck** gives one die two wins. Say if that's the Warrior's ground.
-- **The Hunter's marking rides on a win:** when a die of yours wins against a creature, it can be *Marked* with that die as well, one Mark a roll. *Draw blood* goes for *Cornered*. Recommended, and it's what makes Wren feel good.
-- **One by one** rolls a die off your turn. Play it as written, and if it runs long, the Mark drops a size each jump.
-- **Good Hunting on a Marked stake** (with *Mark the way*): pay it there too. Recommended.
-- **Several Marks at once:** written as any number, a Mark only jumping to a creature that isn't *Marked*.
+- **Bleed for it** pays its own Aura back through *Paid in Blood*, so every Bloodsworn takes it. Kept. The other way: put it in the mechanic and drop the ability. *(Answered 18 Nov: Mo fixed *Paid in Blood*, and *Bleed for it* went into the mechanic.)*
+- **A Bloodsworn in armour:** add to the mechanic "you can always let a hit through instead of soaking it" (*Through the mail* is cut). *(Answered 18 Nov (Fable): armour soaks only when the Bloodsworn wants it to.)*
+- **Shield of the storm** and **Friends in high places** stay at 2 Aura. *(Answered 18 Nov (Fable): both stay at 2.)*
+- **The Face's influence as a die:** "any of your dice can go down as influence", like marking. Then *In passing* goes and *Play them off* comes back. Recommended. *(Answered 18 Nov (Fable): yes, and *In passing* is cut.)*
+- **Influence on two threats at once:** yes, each put down on its own. *(Answered 18 Nov (Fable): yes.)*
+- **The Gambler's Trait on d2s:** every d2 pays 1 Aura (a 1 pays *Bad Luck Pays*, a 2's a top face). Fix: it pays on a 1 on a d4 or bigger. The designer's biggest call. *(Answered 18 Nov (Fable): it pays on a d4 or bigger.)*
+- **Press your luck** gives one die two wins. Say if that's the Warrior's ground. *(Answered 18 Nov (Fable): kept.)*
+- **The Hunter's marking rides on a win:** when a die of yours wins against a creature, it can be *Marked* with that die as well, one Mark a roll. *Draw blood* goes for *Cornered*. Recommended, and it's what makes Wren feel good. *(Answered 18 Nov (Fable): yes, once a roll, one Mark at a time, and *Draw blood* is *Head it off*.)*
+- **One by one** rolls a die off your turn. Play it as written, and if it runs long, the Mark drops a size each jump. *(Answered 18 Nov (Fable): as written.)*
+- **Good Hunting on a Marked stake** (with *Mark the way*): pay it there too. Recommended. *(Answered 18 Nov (Fable): yes.)*
+- **Several Marks at once:** written as any number, a Mark only jumping to a creature that isn't *Marked*. *(Answered 18 Nov (Fable): one Mark of yours at a time, bar *Mark the pack*.)*
 - **The Guardian's Your turn** hands a friend a die. Read as clear of leading, and the fallback's *Heartened* at that die. *(Superseded by the levers pass: *Your turn* is replaced by *Not while I stand*.)*
 - **Put it on me** takes the cost of a friend's miss too, not just a hit, which puts the Guardian in every scene. Look at it. *(Answered by the levers pass: it takes only a miss's cost now, never a landed hit.)*
 - **Close the wound** stays at 2 Aura. *(Superseded by the levers pass: it's a signature at 5 Aura, with no heal and no Toll.)*
-- **The Illusionist's illusion as one die's intent**, against the highest Challenge in the room, rolled once. Recommended.
+- **The Illusionist's illusion as one die's intent**, against the highest Challenge in the room, rolled once. Recommended. *(Answered 18 Nov (Fable): yes.)*
 - **Make it real** takes a blow but doesn't hit back on its own, since that's summoning.
-- ***Everyone gets it* kept at 1 Aura.** Its designer said 2, since at 1 it turns Bram's 4 steps into 20 every round. The lead kept it at 1, so Bram's sheet doesn't move.
-- **The Maker's making as one die's intent**, like marking. Then *On the fly* goes. Recommended.
-- **One made tag an item at a time**, a new one replacing it, with your Mark on top. Recommended.
-- **Where It's Needed** left as it is. If rounds drag: one roll to one other, once a round.
-- **The Shadow's pool as steps** left as it is, and *Not done yet* only works on a pool die rolled as a die.
+- ***Everyone gets it* kept at 1 Aura.** Its designer said 2, since at 1 it turns Bram's 4 steps into 20 every round. The lead kept it at 1, so Bram's sheet doesn't move. *(Answered 18 Nov: Mo's call, 1 step for one friend for each Aura.)*
+- **The Maker's making as one die's intent**, like marking. Then *On the fly* goes. Recommended. *(Answered 18 Nov (Fable): yes, and *On the fly* is cut.)*
+- **One made tag an item at a time**, a new one replacing it, with your Mark on top. Recommended. *(Answered 18 Nov (Fable): yes.)*
+- **Where It's Needed** left as it is. If rounds drag: one roll to one other, once a round. *(Answered 18 Nov (Fable): left.)*
+- **The Shadow's pool as steps** left as it is, and *Not done yet* only works on a pool die rolled as a die. *(Answered 18 Nov (Fable): left.)*
 - **The Shifter's Tooth and claw** makes an animal tag an item at tier 2 on top of your six, the way *Made it earlier* does. Say if it should count among them. *(The levers pass made it held. Whether it counts among the six is still open.)*
 - **Become it** lasts the scene and can't take a hit. **All beast** is 1 Aura. Both in the book. *(The levers pass made *All beast* held, still 1 Aura.)*
-- **The Shifter's collecting as one die's intent**, like catching a soul. Recommended.
-- **The Summoner's mechanic fix:** a summon's win pays you 1 Aura (top faces still don't), summons roll in your throw on your action, one hit that gets through sends one back, and a summon guards one person. Recommended, not in the book.
-- **The Summoner's smaller calls:** Push on a summon's die too, a starting soul at a d6, a soul caught any time in the scene it fell, and a vessel's charge paying for calling out.
+- **The Shifter's collecting as one die's intent**, like catching a soul. Recommended. *(Answered 18 Nov (Fable): yes.)*
+- **The Summoner's mechanic fix:** a summon's win pays you 1 Aura (top faces still don't), summons roll in your throw on your action, one hit that gets through sends one back, and a summon guards one person. Recommended, not in the book. *(Answered 18 Nov (Fable): built, with the Aura held off your maximum and no fading.)*
+- **The Summoner's smaller calls:** Push on a summon's die too, a starting soul at a d6, a soul caught any time in the scene it fell, and a vessel's charge paying for calling out. *(Answered 18 Nov (Fable): yes, but a starting soul's a d8.)*
 - **Swap** no longer reaches Named threats or Bosses, and has a range. In the book.
 - **Take them with you and Not There** save a friend from a blow once a scene. Allowed.
-- **Leave a door** reaches anywhere in the same city. Yours to set.
+- **Leave a door** reaches anywhere in the same city. Yours to set. *(Answered 18 Nov (Fable): anywhere in the same city.)*
 - **Twins to watch at the table** (the independent review): the Bloodsworn's *Mine to take* and the Guardian's *Put it on me* both take a friend's hit (raw to feed the blood, or soaked), and the Warrior's *Riposte* and the Bard's *Answer back* both send a stopping die back (Body, or Mind and Soul). Kept as different ways to play. *(Superseded by the levers pass: *Answer back* is *Throw it back*, and *Put it on me* no longer takes a hit.)*
 - **Isolde's Oracle lines stay as they were.** The Fable pass added a line each to *Push* and *Hold it*, and Isolde's paper sheet ran out of room, so both are back to their 17 Nov words.
 - **The Teleporter** still has no Push and nothing for the faction turn. *(Levers pass 2: the faction turn's on four lists now, the Face, Leader, Oracle and Gambler, so that's by design.)*
 - **Parry** is weak beside *Second Skin*. Left. If you want it better, it lasts the scene. *(Answered by the levers pass: *Parry* is held, so it lasts the scene.)*
-- **Call them out** has no roll, so the GM's choice is the check. Say if it should roll.
+- **Call them out** has no roll, so the GM's choice is the check. Say if it should roll. *(Answered 18 Nov (Fable): no roll, at 2.)*
 
 ## 18 Nov: the levers pass
 
 A second pass on the abilities against the levers map (designed on Fable, 18 Nov). 31 of 179 changed, and all of it's in the book and the change log as `c-2026-11-18-levers`. These are yours to say yes or no to.
 
 - **Signatures are new:** the Guardian's *Not while I stand* (4), the Summoner's *Call the horde* (4), the Elementalist's *Let it loose* (5), the Healer's *Close the wound* (5), the Illusionist's *Grand illusion* (5) and the Teleporter's *Everybody out* (5). *(Levers pass 2: every archetype has one now, eleven more.)*
-- ***Close the wound* at 5**, against the 2 you had. The middle road: 3 Aura to lift a wound's cap for the scene on a heal.
+- ***Close the wound* at 5**, against the 2 you had. The middle road: 3 Aura to lift a wound's cap for the scene on a heal. *(Answered 18 Nov (Fable): stays at 5.)*
 - **Held is new:** *Marching song*, *Scent of blood*, *Hold the line*, *I built that*, *Tooth and claw*, *All beast*, *Borrow its knack* and *Parry*.
 - **New levers used from the map:** a condition turned back (*Throw it back*), a point to break a condition (*Bite down*), a die read as its top face (*Loaded*, 3, the game's only 3), reach as difficult ground (*Hold the line*), a stride after a win (*Press on*), a point back when a threat falls (*Blood up*), acting before the first telegraphs (*First to move*, 2), a clock not ticking (*Not today*, 2), a charm (*Keep this on you*), a multiplier's ticks (*Where it's soft*) and a wound cleared (*Close the wound*, 5). *(Levers pass 2: *Bite down* is cut, for *Blood for blood*.)*
 - **Near a guardrail:** *Blood up* and *Scab over* (Aura into points, both once a round with no paying again), *Keep this on you* (close to the cut *Bottle it*), *First to move* (it goes before the telegraphs, but it isn't an extra action) and *Press on* (a free stride off a win).
 - **Up to 2 Aura:** *Crescendo*, *Red mist*, *Double or nothing*, *On me* and *That was never me*. *(Levers pass 2: *Crescendo*'s 3 now.)*
 - **The twins:** *Answer back* replaced, *Put it on me* keeps only a miss's cost, and *Your turn* replaced.
-- **Still yours:** *Everyone gets it* and *Turn them* at 1 Aura, *Bleed for it* paying itself back, and *On the move*, *On the fly* and *In passing*.
+- **Still yours:** *Everyone gets it* and *Turn them* at 1 Aura, *Bleed for it* paying itself back, and *On the move*, *On the fly* and *In passing*. *(Answered 18 Nov: see the 18 Nov calls above.)*
 
 The second levers pass (Fable, 18 Nov) changed 30 more and added one, and it's in the same change log entry. Yours to say yes or no to:
 
 - **A signature on every archetype**, eleven new: yes or no to the idea, then each one. The strongest are *Bought and paid for*, *Borrowed time* and *Hot streak*.
 - **The faction turn's on four lists** (Face, Leader, Oracle, Gambler), down from twelve, and none hands out a free outcome. Say if you want it on more.
-- ***Paid in Blood* pays on points you spend yourself**, so every Bloodsworn ability priced with a point is free in Aura. The fix is in the Trait (it pays when a hit takes the point), or *Bleed for it* once a roll.
-- ***Crescendo* at 3**, the ladder's price for the whole crew.
-- ***Opened* only off an explosion.** On any win it'd be 2 Aura.
-- ***Kill stroke* pays no Aura** for the die it sets on its top face, and it's close to the Gambler's *Loaded*.
-- ***Sit with them* takes 1 Toll off** for an action and 1 Aura, once a scene a patient, the first thing that does.
-- ***Blood oath* hexes whoever breaks their word** at a d8, up to the next downtime, so the GM has to remember it.
-- ***Showstopper* in a fight** pulls every telegraph onto the Bard for a round. Watch it beside a Guardian, who gets Aura for each one he takes.
+- ***Paid in Blood* pays on points you spend yourself**, so every Bloodsworn ability priced with a point is free in Aura. The fix is in the Trait (it pays when a hit takes the point), or *Bleed for it* once a roll. *(Answered 18 Nov: Mo's fix, it pays only when a hit takes the point.)*
+- ***Crescendo* at 3**, the ladder's price for the whole crew. *(Answered 18 Nov (Fable): stays at 3.)*
+- ***Opened* only off an explosion.** On any win it'd be 2 Aura. *(Answered 18 Nov (Fable): yes.)*
+- ***Kill stroke* pays no Aura** for the die it sets on its top face, and it's close to the Gambler's *Loaded*. *(Answered 18 Nov: Mo kept *Loaded* and cut *Kill stroke* for *Cut them down*.)*
+- ***Sit with them* takes 1 Toll off** for an action and 1 Aura, once a scene a patient, the first thing that does. *(Answered 18 Nov (Fable): kept.)*
+- ***Blood oath* hexes whoever breaks their word** at a d8, up to the next downtime, so the GM has to remember it. *(Answered 18 Nov (Fable): kept.)*
+- ***Showstopper* in a fight** pulls every telegraph onto the Bard for a round. Watch it beside a Guardian, who gets Aura for each one he takes. *(Answered 18 Nov (Fable): kept.)*
 - **Investigation's thinner** on the Bard, Elementalist, Gambler, Illusionist, Leader and Shifter lists. Study still does that job for everyone.
 - **The Leader's signature is *Go again*** in the book, where the design had *Again!*.
 
 ### The final review (18 Nov)
 - ***Call them out*** (Warrior) went from 1 to 2 Aura: it pulls a threat's telegraphs onto you the way the Bard's *Showstopper* does for a whole scene, so 1 was under the ladder.
-- **Near-twins left on purpose:** *Loaded* (Gambler, a die that's landed reads as its top face) and *Kill stroke* (Warrior, set a die on its top face before you roll, and it explodes). Say if one should go.
-- **The Hunter's list** leans on moving the Mark (five of ten). It's the mechanic, but it's the narrowest list.
-- ***Pull them back*** (Healer) keeps someone in the scene after a Scar. It never heals the Scar, but it's close to that line.
-- ***Wait for it*** (Shadow) sees the threats' numbers before you act, which edges toward the Oracle.
-- ***Everyone gets it*** at 1 Aura is the one the review says is most underpriced (the ladder says the whole crew is 3), and it stacks with the Leader's *Go again*.
+- **Near-twins left on purpose:** *Loaded* (Gambler, a die that's landed reads as its top face) and *Kill stroke* (Warrior, set a die on its top face before you roll, and it explodes). Say if one should go. *(Answered 18 Nov: Mo cut *Kill stroke*.)*
+- **The Hunter's list** leans on moving the Mark (five of ten). It's the mechanic, but it's the narrowest list. *(Answered 18 Nov (Fable): left, bar *Draw blood*, now *Head it off*.)*
+- ***Pull them back*** (Healer) keeps someone in the scene after a Scar. It never heals the Scar, but it's close to that line. *(Answered 18 Nov: Mo cut it, and *Hold still* takes its place.)*
+- ***Wait for it*** (Shadow) sees the threats' numbers before you act, which edges toward the Oracle. *(Answered 18 Nov (Fable): kept as written.)*
+- ***Everyone gets it*** at 1 Aura is the one the review says is most underpriced (the ladder says the whole crew is 3), and it stacks with the Leader's *Go again*. *(Answered 18 Nov: Mo's call, 1 step a friend for each Aura.)*
 
 ## 17 Nov: the fixes
 
@@ -143,7 +176,7 @@ Written into The Core, Conflict (bar A Full Fight), Downtime, Appendix D and the
 Written 17 Nov on `rules/2026-11-17-fixes-abilities-b`: ten abilities each for the Healer, Hunter, Illusionist, Leader, Maker and Oracle in 03a, the old ones word for word.
 
 1. **Abilities that reach the faction turn are paid in the scene before it**, since there's no Aura in downtime: the Hunter's *Hunt them down*, the Leader's *Orders for the week* and the Oracle's *Read the year*. *(Levers pass 2: *Hunt them down* is cut, for *Nowhere to run*.)*
-2. **Marking's one die, not your action.** The Hunter's mechanic said "spend your action", where Conflict's Marked and Appendix C already had it as a die's intent, so the Hunter's section says a die now.
+2. **Marking's one die, not your action.** The Hunter's mechanic said "spend your action", where Conflict's Marked and Appendix C already had it as a die's intent, so the Hunter's section says a die now. *(Answered 18 Nov: marking rides on a win now.)*
 3. **Toll stays a cost for the Healer.** Nothing ignores it past *Good Hands*: *Take the Toll* moves a heal's Toll onto the Healer, *Share it* gives every patient their own, and *Close the wound* (2 Aura) clears a wound mid-scene and is still a heal, Toll and all. *(Superseded by the levers pass: *Close the wound* is a 5 Aura signature and not a heal, so no Toll.)*
    Superseded by the 18 Nov abilities rework: *Take the Toll* is cut and *Share it* is *Go round*.
 4. **The Maker's tier for the scene comes off a making die.** *Tune it up* lets a winning making die put an item a tier higher till the scene ends instead of a tag, as far as tier 6, so Aura never buys a tier on its own. (Prompt 8 capped it at tier 4, the lead's call: tiers 5 and 6 only come out of the story.)
@@ -151,7 +184,7 @@ Written 17 Nov on `rules/2026-11-17-fixes-abilities-b`: ten abilities each for t
    Superseded by the 18 Nov abilities rework: *Knock it together* is cut, folded into *Made it earlier*, which is an item at tier 2 now.
 6. **The Maker can fill a friend's vessel.** *Bottle it* lets Aura the Maker would lose go into a friend's vessel they can touch, and it's that friend's charge, spent only on their own abilities and awakenings, so nothing's farmed and the cap's still the vessel's tier.
    Superseded by the 18 Nov abilities rework: *Bottle it* is cut.
-7. **A heal or a making can be one die of a roll** (*On the move*, *On the fly*), so the rest of the dice do something else. It's still one action, and the heal's still one die, unsplit.
+7. **A heal or a making can be one die of a roll** (*On the move*, *On the fly*), so the rest of the dice do something else. It's still one action, and the heal's still one die, unsplit. *(Answered 18 Nov: a making's any die now and *On the fly* is cut, and *On the move* stays.)*
 8. **The Oracle's *Look again* rerolls a threat's die** it rolled with *Seen It Coming*, keeping either. It's a reroll, never a flip, so the Gambler keeps flipping to itself. *(Superseded by the levers pass: *Look again* is replaced by *Not today*.)*
 9. **The Leader's *Take charge*** has people who aren't threats, like a crowd or a ship's crew, do what the Leader says for a round, with no roll, as long as they'd do it for whoever's in charge.
 10. **A character saved before stacking keeps the abilities its archetype had on 16 Nov**, never the longer list (`HAD_ABILITIES` and `hadOf()` in `roots.js`, used by `builder.js`), since a save with no `have` came with every ability its archetype had then. And the build no longer warns on a list past six, since a character holds six and the list's ten.
@@ -182,8 +215,8 @@ Written 17 Nov on `rules/2026-11-17-fixes-abilities-c`: ten abilities each for t
 4. **A caught soul ticks one of your Resources** till downtime, in place of a utility slot, since the slots went with Fix 3 and Resources are the three things that come back in downtime the way the slots did. 07, Appendix C and Appendix D still say utility slot (prompts 7 and 1). Say if you'd rather souls were carried some other way.
 5. **Catching a soul is a die**, put on it like any intent, where 03a said your action. Appendix D and the 16 Nov core already had it that way.
 6. **Bram's Push example rolls 11 steps**, his Body and his shield as a guard at tier 2 (a Trusty shield), so it's a d12 and a d10 and the story's the same. If prompt 2 gives him another shield or none, the dice move.
-7. **A vessel can't pay for calling out summons**, since calling out is the Summoner's mechanic and charge only pays for abilities and awakenings. It can pay for *Call the horde* and the rest. Whether a Summoner's vessel should hold souls' Aura is yours to say.
-8. **The Summoner's souls on the new core are still open.** I've written its abilities to the rules as they stand, and three things don't sit right: summons act in the round like anyone (a horde's dice on top of your own one action), they fade and take hits in sizes while everyone else takes points, and nothing about them uses soak or wounds. *Take it for me* and *Soul for a soul* lean on summons intercepting, so they'll move with whatever you decide.
+7. **A vessel can't pay for calling out summons**, since calling out is the Summoner's mechanic and charge only pays for abilities and awakenings. It can pay for *Call the horde* and the rest. Whether a Summoner's vessel should hold souls' Aura is yours to say. *(Superseded 18 Nov: a vessel's charge can call a summon out.)*
+8. **The Summoner's souls on the new core are still open.** I've written its abilities to the rules as they stand, and three things don't sit right: summons act in the round like anyone (a horde's dice on top of your own one action), they fade and take hits in sizes while everyone else takes points, and nothing about them uses soak or wounds. *Take it for me* and *Soul for a soul* lean on summons intercepting, so they'll move with whatever you decide. *(Answered 18 Nov (Fable): see the 18 Nov calls.)*
    Superseded in part by the 18 Nov abilities rework: *Take it for me* and *Soul for a soul* are cut, and the mechanic fix is under 18 Nov.
 9. **Six is how many a character holds, never the list.** The build warned past six abilities on an archetype, and now it warns on one that costs under 1 Aura instead (a small change in `scripts/build-content.mjs`, prompt 2's).
 
@@ -272,7 +305,7 @@ Written into The Core, Conflict (bar A Full Fight), Downtime, Appendix D and the
 7. **Everything that put your Resolve up a size gets you a point of Soul back**: a big bite from a Catch or a hostile thread, and straining or snapping a bond thread. *Take a breath* is 1 point back on your Mind, as far as half its maximum, where it was a size of Confidence, as far as d6. The conditions that moved a track move a point: *Heartened* gives you a point of Mind back, *Shaken* and refusing *Charmed* are a hit at your Mind, and *Poisoned* has your Body defend as a d2.
 8. **The Blaze is your action, on your turn, while you're wounded**, since there are no last-moment reactions. So the hit that Scars you only takes you out of the scene, and the Blaze is for going out on your own terms first.
 9. **A Scar that locks a Root's last point is your last scene**, and your character dies or retires, your call, the way a Scar on a track's last size was your last Blaze. A Root with no points has nothing for a Scar to lock.
-10. **A quick heal's 1 point on one Root, no roll, and it isn't a heal roll, so Toll doesn't touch it and it gives none.** It was a size, and a hit's a point now. A heal reaches one person, since it's rolled unsplit. A flat bonus on a heal goes on before the Toll comes off.
+10. **A quick heal's 1 point on one Root, no roll, and it isn't a heal roll, so Toll doesn't touch it and it gives none.** It was a size, and a hit's a point now. A heal reaches one person, since it's rolled unsplit. A flat bonus on a heal goes on before the Toll comes off. *(Superseded 18 Nov: the quick heal's gone.)*
 11. **A deadly threat's hits are said on its telegraph**, face up like its die (*a d12, 2 hits*), and a vulnerability's one more on top.
 12. **Items, the ground and your threads are never steps.** A plain weapon does what it does. Bringing the ground, a tag or a Catch in as a step goes with counting, and *Guided*'s spend finds your way with no roll, where it brought the ground in. A bond thread still borrows one thing off a friend's sheet for 1 Aura, and it does on your roll what that thing does, so their permission can bring a Root of yours in. Prompt 2 writes threads, so that's theirs to settle.
 13. **2 for 1 keeps its name**, for taking a hit on another Root for 2 points of it, and with several hits, each one goes where you like.
@@ -294,7 +327,7 @@ Written into 03, 03a, 03b and 18 on 16 Nov, with the crew in `notes/core-plan.md
 9. **The Healer's heal is a Root rolled unsplit**, less 5 for each Toll. Its Trait keeps your name, *Good Hands*, and ignores a step of Toll now, since nothing healed gives Aura any more. If you'd rather it had a new name, like *Come Prepared*, it's a word in 03a and Appendix D. Its Push is the flat bonus, +2 a heal. *Pull them back* keeps someone in the scene when they take a Scar.
 10. **The Guardian's *Stand firm* makes the next two hits take 1 point between them**, not nothing. *Better Me Than You* pays 1 Aura for every blow he takes, so with both in Aura, nothing would ever get through him.
 11. **The Bard's Lift is a point back on the Mind** of every friend who hears it, and Crescendo makes it 2, then 3. It isn't a heal, so it adds no Toll.
-12. **The Bloodsworn's 3 steps are for every point of Body lost.** *Bleed for it* (1 Aura) spends a point for 3 steps, *Bleed out* (1 Aura) is 3 for every point it's down, and *Paid in Blood* is 1 Aura a point.
+12. **The Bloodsworn's 3 steps are for every point of Body lost.** *Bleed for it* (1 Aura) spends a point for 3 steps, *Bleed out* (1 Aura) is 3 for every point it's down, and *Paid in Blood* is 1 Aura a point. *(Superseded 18 Nov: *Bleed for it*'s in the mechanic, and *Paid in Blood* pays only for a hit.)*
 13. **The Oracle's foresight stays two numbers an action**, however it's split, or with no limit on splitting it could swap a pile of 1s into every telegraph. *Foretold*'s truth lets anyone in the crew bring a Root in on it this scene, like a permission they've all got, which The Core and Appendix D say too (1's call 15).
 14. **The Maker spends Aura on a friend's awakening**, 2 steps each, where it powered it. A Maker's tags and a Shifter's animal tags work like permissions, so they can justify bringing a Root in.
 15. **The Shadow's extra action for coming out of hiding goes**, with extra actions.
@@ -339,7 +372,7 @@ Built on 16 Nov on `rules/2026-11-16-core-play`: the play screen, When it lands,
 11. **Out of the scene** after a Scar, no more hits land on you, and New scene brings you back.
 12. **The rest at the end of a scene** rolls each Root that's below what it holds, unsplit, with the Recovery Boon's 2 on top, and drops Toll by 1. Its top faces aren't counted for Aura, since Aura's full when the next scene starts anyway.
 13. **A heal coming in is on the patient's phone**: what it heals (what was rolled and any bonus), whether it's from someone or something else (1 Toll once it's done) or their own, whether the healer's heals ignore a step of Toll, and where it goes, the most room first, which they can move. A Healer's roll card has A heal, unsplit and with nothing to beat, and says what it heals, with the bonus from any awakening that says it adds to every heal. It's for me heals the Healer with no Toll.
-14. **A quick heal is two taps on two phones**: 1 Aura off the giver's Aura panel, and A point back on the patient's Root.
+14. **A quick heal is two taps on two phones**: 1 Aura off the giver's Aura panel, and A point back on the patient's Root. *(Superseded 18 Nov: the quick heal's gone.)*
 15. **Take a breath** is a point back on your Mind, as far as half what it holds, as The Core has it.
 16. **Regen** rolls the Root that's lost most, unsplit, and each top face is a point back.
 17. **A wound clears** with downtime, or with The story clears it on that Root's panel, for when the GM says so.
@@ -676,7 +709,7 @@ Your chat from 6 to 8 Nov (`notes/playtest-sheets/2026-11-08-chat-decisions.md`)
 20. **Summons:** a Summoner's attunement holds a soul to each awakening, calling one spends Aura for a d4 each (no bigger than the soul's own die), and a hit that gets through knocks a size off.
 21. **Extra actions:** holding your action, coming out of hiding and the Boon are on top of the one per archetype you can buy.
 22. **Downtime rolls** lost their slot's step, to match no step for the action.
-23. **Quick heal** stays (1 Aura and your action, one track up a size), and a Healer's heal roll puts a track up a size for each die that rolls 4 or more.
+23. **Quick heal** stays (1 Aura and your action, one track up a size), and a Healer's heal roll puts a track up a size for each die that rolls 4 or more. *(Superseded 18 Nov: the quick heal's gone.)*
 24. **The crew:** Vesk Body 5, Mind 3, Soul 0. Dorrie 1, 5, 2. Bram 5, 1, 2. Isolde 0, 5, 3. Wren 4, 4, 0. Ash 0, 2, 6. Each one's best specialty is 3 or 4, and their archetypes are as they were (Vesk and Wren twice over).
 25. **Done in stage 2 (9 Nov, above):** the round budget and the threats are retuned for rolls of 6 to 11 steps against tracks of d12. Ranged attacks are still yours to sort out.
 
@@ -852,7 +885,7 @@ Your 26 Oct answers settled how big a multiplier is, Defend and Confidence, inte
    - The Hurt Burden: you Blaze a size sooner, on a Hurt at d10.
    - *Tend the Crew* is once per scene: when the scene ends, everyone in the crew who was in it rolls two Confidence dice for their rest, and the best counts.
    - Heals, quick heals, *Field Dressing*, *Healer's Hands*, the medical kit and the Bloodsworn's Aura all step the wound die down a size, and nothing heals anyone below their Scars.
-   - The Healer's *Pull them back*: someone who Blazes stays in the scene, still takes the Scar, and their wound die goes to d10 (or their Scars). Their extraordinary moment and the choice to die still happen.
+   - The Healer's *Pull them back*: someone who Blazes stays in the scene, still takes the Scar, and their wound die goes to d10 (or their Scars). Their extraordinary moment and the choice to die still happen. *(Superseded 18 Nov: *Pull them back* is cut.)*
 7. **Factions.**
    - A big asset takes as many wins as its multiplier to destroy or to take, and the taker gets it whole.
    - A hostile thread only adds a tick to a Destroy or an Acquire.
@@ -908,7 +941,7 @@ Your 26 Oct answers settled how big a multiplier is, Defend and Confidence, inte
 - When a threat with Forms changes, its multipliers come back on whichever of its new tags matter most.
 - Captain Marrow has *Flurry*, so her two telegraphs at whoever's facing her can land in the same round. A threat's telegraph at everyone leaves out whoever's already got one of its dice coming.
 - Lanternfall's project gives the crew *Copies of the Ledgers*, so the Lamplighters keep *The Ledgers*. That reward and *An Ear in the Sickroom* need a resource paying for them.
-- The Healer's *Pull them back* costs no action.
+- The Healer's *Pull them back* costs no action. *(Superseded 18 Nov: *Pull them back* is cut.)*
 - On the phone: lines brought into a defence roll for 1 Aura, and conditions, count once, even when you Defend. Broken or used-up kit comes off your set actions until it's mended. The rest roll is the Confidence die on its own, with no conditions. The Guardian's +2 shows on his Defend when he answers a telegraph with it too.
 - Old saved characters on the phone: each old Hurt box is one Hurt on the wound die, old Scars stay as Scars waiting for their Catch to be written, the old Hurt Catches go into Notes in their own words, and the Armour die's dropped (an old build's armour becomes a line on Defend).
 - Not on the phone yet: the Bard's *Hold them*, the Oracle's foresight, and *Poisoned*'s spend (you tap the lines off yourself). An intercept takes the Aura, and you add the dice you took when the telegraphs land.
@@ -955,7 +988,7 @@ Your 9 Nov answer (no more traits) settled the calls about traits, so they're go
 3. **Title ideas stay as ideas.** The twenty-nine roles and schools are still in Title Ideas and the Crew, and each now says which archetypes it suits (Rogue a Shadow, Captain a Leader, Medium a Summoner or an Oracle, the Face idea a Face or a Shadow, and so on). Long Haul's three ideas: Pilot a Warrior or Leader, Spacer a Maker, Systems a Scholar or Face.
 6. **The downtime reroll** costs 1 Resolve (it was a Spark). All your Resolve comes back after downtime, so it's free in effect. Fine, or should it come out of next session's Resolve?
 7. **Conditions on friends.** You said wards and blessings reach one person, or two with a split. The book does the same for every good condition you put on a friend (*Heartened*, *Rallied*, *Inspired* and the rest), because the area that used to spread them is gone. Two at most?
-8. **Healing permissions on attuned things** (Sister Hale's Thimble, the Surgeon's Casebook). For a Healer they're a line on the heal roll. For anyone else they're a free quick heal once a scene. Keep that, or cut the second half?
+8. **Healing permissions on attuned things** (Sister Hale's Thimble, the Surgeon's Casebook). For a Healer they're a line on the heal roll. For anyone else they're a free quick heal once a scene. Keep that, or cut the second half? *(Superseded 18 Nov: the quick heal's gone, so it's the heal roll line only.)*
 
 ## Name clashes
 
@@ -971,7 +1004,7 @@ Your 9 Nov answer (no more traits) settled the calls about traits, so they're go
 - A Layered threat rolls all its dice the first time it's attacked in a round, and its best one stands.
 - The attunement stages are called Awakened, Tempered and Perfected. An attuned thing counts through its permissions. You can give a starting attuned thing its Catch at creation. Handing one over carries the Boon its Burden paid for.
 - The twenty rare and legendary things are now Tempered and Perfected attuned things, with Burdens.
-- The Medical kit is a quick heal without the Aura.
+- The Medical kit is a quick heal without the Aura. *(Superseded 18 Nov: it's a point of Body for your action.)*
 - Keepsakes lost their old mechanics until you decide what a keepsake does.
 - Party holdings cost 1 Aura to bring in.
 - In a combo, whoever rolls gets the Aura for every top face. Steps a Leader hands out don't give a split, and a lead can be a combo.
