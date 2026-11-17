@@ -67,21 +67,26 @@
 //                   "in the crowd")
 //     seen          when it reached the player's phone, or 0
 //     ans           how someone answered it: { user, ch, name, root, bring,
-//                   steps, rid, dice, opp, real, won, at, late, with }, or
-//                   null. root is the Root they rolled, bring the Roots they
-//                   brought in on it, steps everything in it (howOf() says
-//                   it) and rid the roll it was, so the rest of what that
+//                   steps, item, rid, dice, opp, real, won, at, late, with },
+//                   or null. root is the Root they rolled, bring the Roots
+//                   they brought in on it, steps everything in it, the item
+//                   doing the work's tier included, item that item in the
+//                   phone's words (17 Nov), howOf() saying it all, and rid
+//                   the roll it was, so the rest of what that
 //                   roll did is the same action. One from before stacking
 //                   has act, the Root and specialty it rolled, in place of
 //                   root, and reads as it was.
 //     def           their When it lands, once it's landed: { on, stopped,
-//                   mine, v, paid, real, at, hits, lost, box, wound, scar },
+//                   mine, v, paid, real, at, hits, lost, soaked, box, wound,
+//                   scar },
 //                   or null. on is what stopped it or what it rode on: its
 //                   Root or Defend (a track's name on one from before the new
 //                   core, read as its Root by onOf()). What got through, when
 //                   it did: hits, how many (its own and a vulnerability's),
 //                   lost, the points it took off each Root ({ Body: 2 }, 2
-//                   for 1 included), box, armour's boxes it ticked, and wound
+//                   for 1 included), soaked, what armour soaked first (17
+//                   Nov), box, the same number for a phone from before soak
+//                   (armour's boxes it ticked, on a round from then), and wound
 //                   and scar, the Root it wounded or Scarred, or "". paid is
 //                   what it cost in the player's words. A lost answer lands
 //                   then and there with no defence, and the one it landed on
@@ -150,7 +155,7 @@ export const MOST_HITS = 6;
 export const hitsOf = (t) => Math.min(MOST_HITS, Math.max(1, Math.floor(Number(t?.hits)) || 1));
 // more and list are only how much a round's record holds, more for one from
 // before, when extra actions could be bought.
-export const MAX = { who: 60, does: 140, one: 140, name: 60, act: 60, paid: 80, tele: 24, rounds: 12, more: 20, list: 24, ground: 8, stakes: 6, events: 6, tags: 8, text: 140, tag: 80 };
+export const MAX = { who: 60, does: 140, one: 140, name: 60, act: 60, item: 60, paid: 80, tele: 24, rounds: 12, more: 20, list: 24, ground: 8, stakes: 6, events: 6, tags: 8, text: 140, tag: 80 };
 // Where an extra action came from, on a round from before the new core:
 // Aura (3, then 4, then 5), holding last round's, coming out of hiding and
 // the Extra action Boon. From before Roots, 1 Resolve reads as Aura and a
@@ -201,24 +206,27 @@ export function settleActs(mine, has) {
   for (const a of joins(has)) if (!joins(mine).some((x) => x.id === a.id)) aura -= Number(a.paid) || 0;
   return { aura, bought };
 }
-// How a roll went, in words: its steps on the Root it rolled, and the Roots
-// it brought in ("20 steps on Body and Mind"). One from before stacking says
-// the Root and specialty it rolled, as it was ("Body and Archery").
+// How a roll went, in words: its steps on the Root it rolled, the Roots it
+// brought in, and the item doing the work, whose tier is in the steps ("20
+// steps on Body and Mind, with a Proven longbow"). One from before stacking
+// says the Root and specialty it rolled, as it was ("Body and Archery").
 export const stepsSaid = (n) => `${n} ${n === 1 ? "step" : "steps"}`;
 const rootsSaid = (a) => [a.root, ...(Array.isArray(a.bring) ? a.bring : [])].join(" and ");
-export const howOf = (a) => (ROOTS.includes(a?.root) ? `${stepsSaid(Number(a.steps) || 1)} on ${rootsSaid(a)}` : String(a?.act ?? ""));
+export const howOf = (a) => (ROOTS.includes(a?.root) ? `${stepsSaid(Number(a.steps) || 1)} on ${rootsSaid(a)}${a.item ? `, with ${a.item}` : ""}` : String(a?.act ?? ""));
 // What someone put into a friend's answer: their Root, all of it ("9 steps on
 // Body"), the steps one from stacking put in, or the specialty one from before
 // stacking put in.
 export const joinHow = (a) => (a?.act ? String(a.act) : ROOTS.includes(a?.root) ? howOf(a) : stepsSaid(Number(a?.steps) || 1));
 // What getting through cost, in words, off a When it lands: what the player
-// wrote, or what the numbers say ("2 hits, 2 points off Body and Bloodied").
+// wrote, or what the numbers say ("2 hits: 1 soaked by armour, a point off
+// Body"). One from before soak says armour's boxes.
 export function costOf(def) {
   if (!def || def.stopped) return "";
   const parts = [];
   const lost = def.lost && typeof def.lost === "object" ? def.lost : {};
+  if (def.soaked) parts.push(`${def.soaked} soaked by armour`);
+  else if (def.box) parts.push(def.box === 1 ? "a box of armour" : `${def.box} boxes of armour`);
   for (const r of ROOTS) if (lost[r]) parts.push(`${lost[r] === 1 ? "a point" : `${lost[r]} points`} off ${r}`);
-  if (def.box) parts.push(def.box === 1 ? "a box of armour" : `${def.box} boxes of armour`);
   if (ROOTS.includes(def.wound)) parts.push(WOUNDS[def.wound]);
   if (ROOTS.includes(def.scar)) parts.push(`a Scar on ${def.scar}`);
   const hits = Number(def.hits) || 0;
@@ -486,7 +494,10 @@ export function answerFrom(a) {
     if (bring.length) how.bring = bring;
   }
   const rid = ID.test(String(a.rid ?? "")) ? { rid: String(a.rid) } : {};
-  return { ...how, steps: num(a.steps, 1, 99) ?? 1, ...rid, dice, opp, real: a.real === true, won: dice.some((x) => x.out === "beat" || x.out === "won") };
+  // The item doing the work, in the phone's words ("a Proven longbow"). Its
+  // tier's already in the steps.
+  const item = how.root && line(a.item, MAX.item) ? { item: line(a.item, MAX.item) } : {};
+  return { ...how, steps: num(a.steps, 1, 99) ?? 1, ...item, ...rid, dice, opp, real: a.real === true, won: dice.some((x) => x.out === "beat" || x.out === "won") };
 }
 
 // When it lands, for one telegraph: whether a die stopped it, what that die
@@ -513,7 +524,11 @@ export function defenceFrom(r) {
     if (n) lost[x] = n;
   }
   if (Object.keys(lost).length) out.lost = lost;
-  const box = num(r.box, 0, 9);
+  // What armour soaked, and box, the same number, for a phone from before
+  // soak, which says it as boxes.
+  const soaked = num(r.soaked, 0, 30);
+  if (soaked) out.soaked = soaked;
+  const box = num(r.box, 0, 30);
   if (box) out.box = box;
   for (const k of ["wound", "scar"]) if (ROOTS.includes(r[k])) out[k] = r[k];
   return out;

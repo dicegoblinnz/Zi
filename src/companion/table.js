@@ -1570,13 +1570,17 @@ export function makeTable(d) {
   const goneView = (title, why) => `${head(title)}<div class="dlg-body"><p class="cc-lead">${why}</p></div>`;
 
   // Putting your action into whoever answers a friend's telegraph: the Root
-  // that fits how you're helping, all of it, and 2 steps for each of your
-  // awakenings that fits, the way it'd go on a roll of your own. It costs no
-  // Aura, and it's your action.
+  // that fits how you're helping, all of it, the one item doing your part
+  // (a weapon or a tool, or a guard, since an answer that stops a blow is
+  // getting it out of the way), and 2 steps for each of your awakenings that
+  // fits, the way it'd go on a roll of your own. It costs no Aura, and it's
+  // your action.
+  const joinItems = (c, s) => (c.items ?? []).filter((it) => ["weapon", "tool", "guard"].includes(it.kind) && (it.attuned != null || !s.crossed?.[it.key]));
   function joinStepsOf(c, s, r) {
     const root = ROOTS.includes(r.root) ? r.root : null;
     const awk = R.awakeningsOf(c, s).filter((w) => w.works && (r.awk ?? []).includes(w.key));
-    return { root, awk, steps: root ? Math.max(1, (Number(c.roots?.[root]) || 0) + R.AWK_STEPS * awk.length) : 0 };
+    const item = joinItems(c, s).find((it) => it.key === r.item) ?? null;
+    return { root, awk, item, steps: root ? Math.max(1, (Number(c.roots?.[root]) || 0) + (item?.tier ?? 0) + R.AWK_STEPS * awk.length) : 0 };
   }
   function joinView(r) {
     const ch = d.current();
@@ -1584,16 +1588,19 @@ export function makeTable(d) {
     const hit = findTele(local(r.camp), r.id);
     if (!c || !hit) return goneView("Put your action in", "That telegraph’s gone. The GM might have taken it back.");
     const t = hit.t;
-    const { root, awk, steps } = joinStepsOf(c, ch.state, r);
+    const { root, awk, item, steps } = joinStepsOf(c, ch.state, r);
     const tiles = `<div class="tg-roots" role="group" aria-label="Which Root you bring">${ROOTS.map((x) => `<button type="button" class="tile card tg-root" data-act="tg" data-do="jroot" data-r="${x}"${pressedAttr(root === x)}><span class="tg-rootn" aria-hidden="true">${Number(c.roots?.[x]) || 0}</span><span class="tile-name">${x} <span class="visually-hidden">${Number(c.roots?.[x]) || 0}</span></span><span class="tile-says">${ROOT_FOR[x]}</span></button>`).join("")}</div>`;
     const awks = R.awakeningsOf(c, ch.state).filter((w) => w.works);
     const awkHtml = root && awks.length ? `<h3 class="tg-h3">Your awakenings <small>2 steps each that fits</small></h3><div class="cc-chips tg-things">${awks.map((w) => `<button type="button" class="cc-chipbtn" data-act="tg" data-do="jawk" data-k="${esc(w.key)}"${pressedAttr(awk.some((x) => x.key === w.key))}><em>${esc(w.name)}</em></button>`).join("")}</div>` : "";
-    const ask = tip(`tg-join-${t.id}`, [`Whoever answers ${esc(lower(t.who))} rolls it, and the Root that fits how you’re helping goes in with it, all of it, with 2 steps for each of your awakenings that fits.`, "It costs no Aura, and it’s your action this round. It has to be one thing in the story.", ruleLink("s-teamwork", "Working together")], "How a combo works");
+    const items = joinItems(c, ch.state);
+    const itemHtml = root && items.length ? `<h3 class="tg-h3">The item doing your part <small>its tier in steps</small></h3><div class="cc-chips tg-things">${items.map((it) => `<button type="button" class="cc-chipbtn" data-act="tg" data-do="jitem" data-k="${esc(it.key)}"${pressedAttr(item?.key === it.key)}><em>${esc(R.itemSaid(it))}</em> <small>${it.kind === "guard" ? "a guard, " : ""}+${it.tier}</small></button>`).join("")}</div>` : "";
+    const ask = tip(`tg-join-${t.id}`, [`Whoever answers ${esc(lower(t.who))} rolls it, and the Root that fits how you’re helping goes in with it, all of it, with the one item doing your part and 2 steps for each of your awakenings that fits.`, "A guard like a shield goes in when you’re only stopping the blow, and a weapon when you’re hitting back.", "It costs no Aura, and it’s your action this round. It has to be one thing in the story.", ruleLink("s-teamwork", "Working together")], "How a combo works");
     return `${head("Put your action in", "It’s a combo: one roll between you.")}
     <div class="dlg-body tg-pick tg-join">
       <ol class="tg-list">${card(t, hit.round)}</ol>
       <p class="cc-lead">Pick the Root that fits the way you’re helping. ${ask}</p>
       ${tiles}
+      ${itemHtml}
       ${awkHtml}
     </div>
     <div class="dlg-foot"><button type="button" class="button primary" data-act="tg" data-do="jput"${root ? "" : " disabled"}>${root ? `Put your ${root} in, ${stepsSaid(steps)}` : "Pick a Root first"}</button></div>`;
@@ -1648,7 +1655,7 @@ export function makeTable(d) {
       <h3 class="tg-h3">Or roll on a Root ${tip("tg-else-roll", "Go at a threat, strip a tag, lead, heal, whatever it is. It goes down as your action, then the roll card opens on that Root at full, and every die can go at something different.", "Rolling on a Root")}</h3>
       ${rootTiles(c, "owith")}
       <label class="tg-label" for="tg-else-text">Or say what it is</label>
-      <div class="tg-else-row"><input id="tg-else-text" data-tg="else" maxlength="${MAX.act}" autocomplete="off" placeholder="Pull the rope out of my bag" value="${esc(r.text ?? "")}"><button type="button" class="button" data-act="tg" data-do="other-text">That’s it</button></div>
+      <div class="tg-else-row"><input id="tg-else-text" data-tg="else" maxlength="${MAX.act}" autocomplete="off" placeholder="Kick the table over" value="${esc(r.text ?? "")}"><button type="button" class="button" data-act="tg" data-do="other-text">That’s it</button></div>
     </div>`;
   }
 
@@ -2112,6 +2119,11 @@ export function makeTable(d) {
       r.root = ROOTS.includes(el.dataset.r) ? el.dataset.r : null;
       d.renderDialog();
     },
+    jitem: (el) => {
+      const r = d.roll();
+      r.item = r.item === el.dataset.k ? null : el.dataset.k;
+      d.renderDialog();
+    },
     jawk: (el) => {
       const r = d.roll();
       const k = el.dataset.k;
@@ -2126,13 +2138,13 @@ export function makeTable(d) {
       const last = current(doc);
       const hit = findTele(doc, r.id);
       if (!c || !hit || !last || hit.round !== last || last.over) return d.closeDialog();
-      const { root, steps } = joinStepsOf(c, ch.state, r);
+      const { root, steps, item } = joinStepsOf(c, ch.state, r);
       if (!root) return;
       d.closeDialog();
       spend(ch, r.camp, last.id, "putting your action in", (rec) => {
         if (rec.list.some((x) => x.k === "join" && x.ref === hit.t.id)) return false;
         rec.list.push({ id: newId(), k: "join", ref: hit.t.id, root, steps, t: Date.now() });
-        return `Your ${root}, ${stepsSaid(steps)}, goes in with whoever answers ${lower(hit.t.who)}.`;
+        return `Your ${root}${item ? ` and ${R.itemSaid(item)}` : ""}, ${stepsSaid(steps)}, goes in with whoever answers ${lower(hit.t.who)}.`;
       });
     },
     work: (el) => {

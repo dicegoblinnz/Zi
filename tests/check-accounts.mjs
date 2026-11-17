@@ -1853,9 +1853,10 @@ try {
 
   // ------------------------------------------------------------ 6e. hits, wounds and Scars
   // On the new core: Mo telegraphs a deadly knight at Vesk, 2 hits a die, and
-  // it's said face up on her phone and the TV. It gets through to her Body:
-  // her last point and Bloodied, said on Mo's page, his crew lines and the
-  // TV. Bram's Scarred and leaves the scene, so Mo can't aim at him and his
+  // it's said face up on her phone and the TV. It gets through to her Body,
+  // Exposed, so 3 hits: her leathers soak the one they've got left (soaked,
+  // with box for a phone from before soak), then her last point and
+  // Bloodied, said on Mo's page, his crew lines and the TV. Bram's Scarred and leaves the scene, so Mo can't aim at him and his
   // phone says he's out, till Mo ends the fight and he's back.
   console.log("6e. Hits, wounds and Scars");
   await mo.page.goto(`${BASE}/characters/?camp=${tuesday.id}`);
@@ -1892,14 +1893,15 @@ try {
   // What got through, as Vesk's and Bram's phones write it on the new core.
   const knight = await teleOf("The knight");
   const squire = await teleOf("The squire");
-  same((await got(kai.page, "POST", `/api/campaigns/${tuesday.id}/table`, { dev: "kais-phone-screen-1", now: Date.now(), ops: [{ n: 4, o: "defend", id: knight.id, ch: "vesk-aaaaaa", r: { on: "Body", stopped: false, mine: 3, v: 11, hits: 2, lost: { Body: 1 }, wound: "Body" } }] })).json?.no, [], "the knight gets through Vesk's Body: her last point, and Bloodied");
+  same((await got(kai.page, "POST", `/api/campaigns/${tuesday.id}/table`, { dev: "kais-phone-screen-1", now: Date.now(), ops: [{ n: 4, o: "defend", id: knight.id, ch: "vesk-aaaaaa", r: { on: "Body", stopped: false, mine: 3, v: 11, hits: 3, soaked: 1, box: 1, lost: { Body: 1 }, wound: "Body" } }] })).json?.no, [], "the knight gets through Vesk's Body: soaked, her last point, and Bloodied");
+  same([(await teleOf("The knight"))?.def?.soaked, (await teleOf("The knight"))?.def?.box], [1, 1], "the table keeps what her armour soaked, and box beside it");
   same((await got(sam.page, "POST", `/api/campaigns/${tuesday.id}/table`, { dev: "sams-tablet-0001", now: Date.now(), ops: [{ n: 4, o: "defend", id: squire.id, ch: "bram-ssssss", r: { on: "Body", stopped: false, mine: 2, v: 9, hits: 1, scar: "Body" } }] })).json?.no, [], "and the squire Scars Bram");
-  await until(async () => (await cardText(mo.page, "The knight")).includes("It got through. Vesk’s Body came up 3 against its 11. 2 hits: a point off Body and Bloodied"), "Mo's page says what it cost Vesk", 6000);
+  await until(async () => (await cardText(mo.page, "The knight")).includes("It got through. Vesk’s Body came up 3 against its 11. 3 hits: 1 soaked by armour, a point off Body and Bloodied"), "Mo's page says what it cost Vesk, soak first", 6000);
   await until(async () => (await mo.page.$$eval('.tg-crewlist li:has(b:text-is("Vesk")) .tg-chip.is-hurt', (els) => els.map((e) => e.textContent)).catch(() => [])).join() === "Bloodied", "and his crew lines have her Bloodied", 4000);
   same(await mo.page.$$eval('.tg-crewlist li:has(b:text-is("Bram")) .tg-chip.is-hurt', (els) => els.map((e) => e.textContent)), ["Scarred, and out of the scene"], "and Bram Scarred, and out of the scene");
   await until(async () => (await tv.page.locator('.ts-p:has(.ts-pn:text-is("Vesk")) .ts-ph').count()) && (await tv.page.locator('.ts-p:has(.ts-pn:text-is("Vesk")) .ts-ph').textContent()) === "Bloodied", "the TV has Vesk Bloodied", 4000);
   same(await tv.page.locator('.ts-p:has(.ts-pn:text-is("Bram")) .ts-ph').textContent(), "Scarred, and out of the scene", "and Bram out of the scene");
-  has(await tvCard("The knight").locator(".ts-v").textContent(), "2 hits: a point off Body and Bloodied.", "with what the knight cost her on its card");
+  has(await tvCard("The knight").locator(".ts-v").textContent(), "3 hits: 1 soaked by armour, a point off Body and Bloodied.", "with what the knight cost her on its card, soak and all");
   await shot(tv.page, "screen-tv-wounds");
   // Bram's out, so Mo can't aim at him, and his phone says so.
   await mo.page.click('.tg-sec [data-do="compose"]');

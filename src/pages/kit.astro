@@ -16,8 +16,7 @@ import "../styles/kit.css";
 import book from "../generated/book.json";
 import { die, diceFor, inline, pips, aura, scars, boxes, condition, tag, crest, telegraph, cost, seal, glyph, DEFS, SIGILS, SHAPES, SIZES, CHARGES, FIELDS, MARKS, GLYPHS } from "../kit/kit.js";
 import { diceLabel, stepsToDice } from "../companion/dice.js";
-import { withQuality } from "../companion/armour.js";
-import { WOUNDS, awakeningsOf, capOf, countRoll, freshCore, lockedOf, rootsSheet, thingsOf } from "../companion/roots.js";
+import { WOUNDS, awakeningsOf, capOf, countRoll, freshCore, itemSaid, lockedOf, rootsSheet, thingsOf } from "../companion/roots.js";
 
 const crew = Object.fromEntries(book.crew.map((c) => [c.id, rootsSheet(c, [], book.companion.build)]));
 const archOf = (c) => c.archetypes.map((a) => a.name);
@@ -27,11 +26,13 @@ for (const a of ARCH) if (!SIGILS[a.name]) throw new Error(`The kit has no sigil
 const vesk = crew.vesk;
 const n = vesk.numbers;
 const order = ["vesk", "dorrie", "bram", "isolde", "wren", "ash"];
-// A roll off a crew sheet on the new core (16 Nov, notes/core-plan.md): one
-// Root at full, a Root brought in on a permission (its words on the sheet),
-// and 2 for each awakening named. The build stops if a sheet's lost a
-// permission or an awakening, or a roll doesn't come to the plan's steps.
-function rollOf(c, root, { awk = [], bring = [], want = 0 } = {}) {
+// A roll off a crew sheet on the new core (16 Nov, notes/core-plan.md) and
+// the 17 Nov fixes: one Root at full, the item doing the work (its name on
+// the sheet) with its tier, a Root brought in on a permission (its words on
+// the sheet), and 2 for each awakening named. The build stops if a sheet's
+// lost a permission, an item or an awakening, or a roll doesn't come to the
+// book's steps.
+function rollOf(c, root, { awk = [], bring = [], item = "", avoid = false, want = 0 } = {}) {
   const woke = awakeningsOf(c, {});
   const perms = thingsOf(c, {}).filter((x) => x.kind === "perm");
   const keys = awk.map((name) => {
@@ -44,19 +45,27 @@ function rollOf(c, root, { awk = [], bring = [], want = 0 } = {}) {
     if (!p) throw new Error(`The kit's ${c.name} hasn't got "${b.perm}" on her sheet any more. Check src/pages/kit.astro against 03b.`);
     return { root: b.root, perm: p.key, pay: "pt" };
   });
-  const k = countRoll(c, freshCore(c), { root, awk: keys, bring: brought });
-  if (want && k.total !== want) throw new Error(`The kit's ${c.name} comes to ${k.total} steps on ${root}, not ${want}. Check src/pages/kit.astro against notes/core-plan.md.`);
-  return { ...k, names: awk, perms: bring.map((b) => b.perm) };
+  const it = item ? c.items.find((x) => x.name.endsWith(item)) : null;
+  if (item && !it) throw new Error(`The kit's ${c.name} hasn't got "${item}" in her items any more. Check src/pages/kit.astro against 03b.`);
+  const k = countRoll(c, freshCore(c), { root, awk: keys, bring: brought, ...(it ? { item: it.key, avoid } : {}) });
+  if (want && k.total !== want) throw new Error(`The kit's ${c.name} comes to ${k.total} steps on ${root}, not ${want}. Check src/pages/kit.astro against The Core and Conflict.`);
+  return { ...k, names: awk, perms: bring.map((b) => b.perm), it };
 }
 const bram = crew.bram;
 // Vesk at the vault door: her Body, 11 steps, a d12 and a d10.
 const lock = rollOf(vesk, "Body", { want: 11 });
 // Bram barks an order: his Soul, 4 steps, a d8.
 const barked = rollOf(bram, "Soul", { want: 4 });
-// Over Lord Vane's roof: her Body and her hook's awakening, two d12s and a d2.
-const roof = rollOf(vesk, "Body", { awk: [vesk.attuned[0].awakenings[0].name], want: 13 });
-// Bram Defends: his Body at full, 9 steps.
+// Over Lord Vane's roof: her Body, her grappling line, a tier 2 tool, and
+// its awakening, 15 steps, two d12s and a d6.
+const roof = rollOf(vesk, "Body", { item: "grappling line", awk: [vesk.attuned[0].awakenings[0].name], want: 15 });
+// Bram Defends: his Body at full, 9 steps, and his shield's a guard, 2
+// more, once a landing.
 const bramDefend = rollOf(bram, "Body", { want: 9 });
+const bramGuard = rollOf(bram, "Body", { item: "shield", avoid: true, want: 11 }).it;
+// His armour, soaking on his Body.
+const bramArmour = bram.items.filter((x) => x.kind === "armour");
+const bramSoak = bramArmour.reduce((t, x) => t + x.tier, 0);
 // The Core's own example: Bram's hammer at the guard captain, his Mind
 // brought in on spot who's in charge for a point of Mind, 12 steps.
 const captain = rollOf(bram, "Body", { bring: [{ root: "Mind", perm: "spot who’s in charge" }], want: 12 });
@@ -250,7 +259,7 @@ const glyphWords = { agenda: doesOf(/agenda/i), crew: doesOf(/crew/i) };
       <!-- Your points -->
       <section id="tracks" class="ksec">
         <h2>Your points</h2>
-        <p>A Root’s number is its dice, its health and what you spend. Bram’s Body is {crew.bram.roots.Body}, and his hammer’s awakenings lock {bramLock}, so he holds {bramCap} points of it. A hit takes a point, and his dice never shrink: he still rolls {diceLabel(stepsToDice(crew.bram.roots.Body))} on his last one.</p>
+        <p>A Root’s number is its dice, its health and what you spend. Bram’s Body is {crew.bram.roots.Body}, and his hammer’s awakenings lock {bramLock}, so he holds {bramCap} points of it. A hit that gets past his armour’s soak takes a point, and his dice never shrink: he still rolls {diceLabel(stepsToDice(crew.bram.roots.Body))} on his last one.</p>
         <div class="swingdemo">
           <span class="pts-now" data-cap={bramCap} data-lock={bramLock}><Fragment set:html={pips(bramCap)} /></span>
           <p class="small" aria-live="polite" data-swing-say>His Body’s on {bramCap} of {bramCap}.</p>
@@ -274,20 +283,21 @@ const glyphWords = { agenda: doesOf(/agenda/i), crew: doesOf(/crew/i) };
       <!-- Defend -->
       <section id="defend" class="ksec">
         <h2>Defend</h2>
-        <p>When the telegraphs land, Bram rolls his Body at full against everything at it, {stepsSaid(bramDefend.total)}, {diceLabel(stepsToDice(bramDefend.total))}, split however he likes, and each die stops one telegraph. Defend as his action and a Root rolls on top: his Body again, so two d12s and two d6s for four blows.</p>
+        <p>When the telegraphs land, Bram rolls his Body at full against everything at it, {stepsSaid(bramDefend.total)}, {diceLabel(stepsToDice(bramDefend.total))}, split however he likes, and each die stops one telegraph. His {itemSaid(bramGuard).replace(/^an? /, "")}’s a guard, {bramGuard.tier} more, once a landing. Defend as his action and a Root rolls on top: his Body again, so two d12s, two d6s and a d4 for five blows.</p>
         <div class="defends">
           <div class="dfn">
             <ul>
               <li><Fragment set:html={pips(bramDefend.rootN)} /><span>His Body, as it lands</span></li>
               <li><Fragment set:html={pips(bramDefend.rootN)} /><span>His Body again, for Defend</span></li>
+              <li><Fragment set:html={pips(bramGuard.tier)} /><span>His shield, once</span></li>
             </ul>
-            <Fragment set:html={diceFor(bramDefend.total * 2)} />
+            <Fragment set:html={diceFor(bramDefend.total * 2 + bramGuard.tier)} />
           </div>
         </div>
-        <p>Armour’s on a Root, and every piece has a box for every hit it can take there instead of you losing a point, from its quality: Common 1, Fine 2 and Masterwork 3. A ticked box is ember, and the last one breaks it.</p>
+        <p>Armour’s on a Root, and every piece soaks as many points there as its tier, a plate for each, before a hit takes one off you. Soak that’s used is ember, and it’s all back at the end of every scene. Bram’s armour soaks {bramSoak} on his Body a scene.</p>
         <div class="chips">
-          {crew.bram.armour.map((a) => <span class="armourline"><span>{withQuality(a.name, a.quality)}, on {a.root}</span><Fragment set:html={boxes(0, a.boxes, { label: `${a.boxes} ${a.boxes === 1 ? "box" : "boxes"}, none ticked` })} /></span>)}
-          <span class="armourline"><span>His plate, after a hit</span><Fragment set:html={boxes(1, crew.bram.armour[0]?.boxes ?? 2)} /></span>
+          {bramArmour.map((a) => <span class="armourline"><span>{itemSaid(a)}, on {a.root}</span><Fragment set:html={boxes(0, a.tier, { label: `soaks ${a.tier}, none used` })} /></span>)}
+          <span class="armourline"><span>His plate, after a hit</span><Fragment set:html={boxes(1, bramArmour[0]?.tier ?? 2, { label: `${(bramArmour[0]?.tier ?? 2) - 1} of ${bramArmour[0]?.tier ?? 2} soak left` })} /></span>
         </div>
       </section>
 
@@ -401,7 +411,7 @@ const glyphWords = { agenda: doesOf(/agenda/i), crew: doesOf(/crew/i) };
             <Fragment set:html={crest(archOf(vesk), { size: "sm", label: "Vesk" })} />
             <span class="rk">Example</span><span class="rn">Building a roll</span>
           </div>
-          <p><b>A Root at full:</b> Vesk’s going over Lord Vane’s roof without a sound. That’s her Body and her grappling line’s <em>{roof.names[0]}</em>, {stepsSaid(roof.total)}: <Fragment set:html={stepsToDice(roof.total).map((d) => `a ${inline(d)}`).join(" and ")} />.</p>
+          <p><b>A Root at full:</b> Vesk’s going over Lord Vane’s roof without a sound. That’s her Body, {itemSaid(roof.it).replace(/^(Her|A|An) /, (m) => m.toLowerCase())}, a tier {roof.it.tier} tool, and its <em>{roof.names[0]}</em>, {stepsSaid(roof.total)}: <Fragment set:html={stepsToDice(roof.total).map((d) => `a ${inline(d)}`).join(" and ")} />.</p>
           <p><b>Bringing one in:</b> Bram swings at the guard captain. His Body’s {crew.bram.roots.Body}, and <em>{captain.perms[0]}</em> is how his Mind gets in on it, so he pays a point of Mind and it’s {stepsSaid(captain.total)}, <Fragment set:html={stepsToDice(captain.total).map((d) => `a ${inline(d)}`).join(" and ")} />. He could have paid <Fragment set:html={cost(3)} /> instead.</p>
         </div>
       </section>

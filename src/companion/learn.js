@@ -1,10 +1,11 @@
 // The learning round, at /characters/?learn, on the new core (16 Nov 2026,
-// notes/core-plan.md). The brute swings his club at Isolde's Body, and a new
-// player answers it with Wren and Bram, the way it goes in Answering a
-// Telegraph (#s-answering): Wren's Body and her longbow's awakening, Long
-// shot, for an arrow into his arm, and Bram's action in on it as a combo, his
-// Body and his war hammer's Ring the bell for getting his hammer under the
-// club, in one roll. Everything comes off their sheets (roots.js), so the
+// notes/core-plan.md) and the 17 Nov fixes. The brute swings his club at
+// Isolde's Body, and a new player answers it with Wren and Bram, the way it
+// goes in Answering a Telegraph (#s-answering): Wren's Body, her longbow (the
+// item doing the work, its tier in steps) and its awakening, Long shot, for an
+// arrow into his arm, and Bram's action in on it as a combo, his Body and his
+// shield, a guard on a roll that's only stopping a blow, for getting it under
+// the club, in one roll. Everything comes off their sheets (roots.js), so the
 // round follows the rules: Isolde's Body if nobody answers (it's 0, so a d2,
 // and a hit there leaves her Bloodied), Aura for every die that wins and
 // every top face, past Wren's maximum while she's acting, and a hit at
@@ -57,16 +58,17 @@ export function makeLearn(k) {
   const wren = crew("wren");
   const bram = crew("bram");
   // What goes in, off their sheets, found by what each thing is so the book
-  // can reorder a sheet: Wren's Body and the first awakening on her bow, and
-  // Bram's Body and the first awakening on his hammer.
+  // can reorder a sheet: Wren's Body, her longbow and the first awakening on
+  // it, and Bram's Body and his best guard.
   const bowOf = (c) => c?.attuned.findIndex((a) => /bow\b/i.test(a.name)) ?? -1;
-  const hammerOf = (c) => c?.attuned.findIndex((a) => /\bhammer\b/i.test(a.name)) ?? -1;
+  const bowItem = (c) => c?.items?.find((it) => it.attuned === bowOf(c) && R.addsSteps(it)) ?? null;
+  const guardOf = (c) => (c?.items ?? []).filter((it) => it.kind === "guard").sort((a, b) => b.tier - a.tier)[0] ?? null;
   const wakeOn = (c, i) => (c ? R.awakeningsOf(c, R.freshCore(c)).find((w) => w.a === i && w.works) : null);
   const longShot = () => wakeOn(wren, bowOf(wren));
-  const bell = () => wakeOn(bram, hammerOf(bram));
-  const ready = () => Boolean(isolde && wren && bram && bowOf(wren) >= 0 && hammerOf(bram) >= 0 && longShot() && bell());
-  const wrenRoll = (plus = 0) => R.countRoll(wren, R.freshCore(wren), { root: "Body", awk: [{ key: longShot().key, aura: 0 }], plus });
-  const bramRoll = () => R.countRoll(bram, R.freshCore(bram), { root: "Body", awk: [{ key: bell().key, aura: 0 }] });
+  const ready = () => Boolean(isolde && wren && bram && bowOf(wren) >= 0 && bowItem(wren) && longShot() && guardOf(bram));
+  const wrenRoll = (plus = 0) => R.countRoll(wren, R.freshCore(wren), { root: "Body", item: bowItem(wren).key, awk: [{ key: longShot().key, aura: 0 }], plus });
+  // Bram's only stopping the blow, so his shield's a guard on it.
+  const bramRoll = () => R.countRoll(bram, R.freshCore(bram), { root: "Body", item: guardOf(bram).key, avoid: true });
   const bramSteps = () => bramRoll().total;
   const total = () => wrenRoll(bramSteps()).total;
   const auraMax = () => wren.numbers.aura ?? 5;
@@ -74,6 +76,8 @@ export function makeLearn(k) {
   const body = () => isolde.roots.Body ?? 0;
   const bodyDie = () => stepsToDice(body())[0] ?? 2;
   const thing = (c, i) => c.attuned[i].name.replace(/^(Her|His|Their) /, (m) => m.toLowerCase());
+  // An item the way her sheet says it, its tier's name first: her Proven longbow.
+  const said = (it) => R.itemSaid(it).replace(/^(A|An|The|Her|His|Their) /, (m) => m.toLowerCase());
   let L;
   let stop = null;
   const reset = () => {
@@ -120,10 +124,13 @@ export function makeLearn(k) {
     const sum = wrenRoll(bs);
     const dice = stepsToDice(sum.total);
     const all = dice.length === 2 ? "Both dice" : `All ${WORDS[dice.length] ?? dice.length} dice`;
-    return `<p>To answer a telegraph, you spend your action and pick the Root that fits the way you’re stopping it. All of it goes on, and an awakening that fits is 2 steps more. ${tip("ln-fits", ["Your Root’s number is its steps, whatever points it’s got left.", "You can bring another Root in on a permission that explains it, for a point of that Root or 3 Aura, and every awakening that fits is 2 steps, and 2 more for each Aura on it."], "What goes in")}</p>
-    <p>Wren puts an arrow into the brute’s arm, so that’s her Body, ${w.rootN}, and ${esc(thing(wren, bowOf(wren)))}’s <em>${esc(longShot().name)}</em> is 2 more. Tap it to put her action in.</p>
-    ${tile("wren", "Wren’s arrow", `Body ${w.rootN}, and <em>${esc(longShot().name)}</em> · ${stepsSaid(w.total)}`, w.total)}
-    ${L.in.includes("wren") ? `<p>Bram puts his action into the same thing, getting his hammer under the club. Two actions going into one thing is a <b>combo</b>: one of you rolls, and everyone who put an action in brings the Root that fits how they’re helping. ${tip("ln-combo", [`For Bram that’s his Body, ${b.rootN}, and ${esc(thing(bram, hammerOf(bram)))}’s <em>${esc(bell().name)}</em>, 2 more. It’s Wren’s roll, so she gets the Aura.`], "What Bram puts in")} Tap Bram’s hammer.</p>${tile("bram", "Bram’s hammer", `Body ${b.rootN}, and <em>${esc(bell().name)}</em> · ${stepsSaid(bs)}`, bs)}` : ""}
+    const bow = bowItem(wren);
+    const shield = guardOf(bram);
+    const his = said(shield).replace(/^an? /, "his ");
+    return `<p>To answer a telegraph, you spend your action and pick the Root that fits the way you’re stopping it. All of it goes on, the item doing the work puts its tier on top, and an awakening that fits is 2 steps more. ${tip("ln-fits", ["Your Root’s number is its steps, whatever points it’s got left.", "One item a roll, the one doing the work, and its tier’s how many steps it adds.", "You can bring another Root in on a permission that explains it, for a point of that Root or 3 Aura, and every awakening that fits is 2 steps, and 2 more for each Aura on it."], "What goes in")}</p>
+    <p>Wren puts an arrow into the brute’s arm, so that’s her Body, ${w.rootN}, ${esc(said(bow))}, ${bow.tier} more, and its <em>${esc(longShot().name)}</em> fits a shot like that, 2 more. Tap it to put her action in.</p>
+    ${tile("wren", "Wren’s arrow", `Body ${w.rootN}, ${esc(said(bow))} and <em>${esc(longShot().name)}</em> · ${stepsSaid(w.total)}`, w.total)}
+    ${L.in.includes("wren") ? `<p>Bram puts his action into the same thing, getting his shield under the club. Two actions going into one thing is a <b>combo</b>: one of you rolls, and everyone who put an action in brings the Root that fits how they’re helping, and the one item doing their part. ${tip("ln-combo", [`For Bram that’s his Body, ${b.rootN}, and ${esc(his)}, ${shield.tier} more. A shield’s a guard, so it only goes on a roll that’s getting out of the way, and stopping the club is.`, "It’s Wren’s roll, so she gets the Aura."], "What Bram puts in")} Tap Bram’s shield.</p>${tile("bram", "Bram’s shield", `Body ${b.rootN} and ${esc(his)} · ${stepsSaid(bs)}`, bs)}` : ""}
     ${both ? `<div class="ln-sum"><div class="ln-dice">${dice.map((d) => die(d, { cls: "big" })).join("")}</div>
       <p><b>${stepsSaid(w.total)} and ${stepsSaid(bs)} is ${stepsSaid(sum.total)}</b> from two actions, on Wren’s roll. ${howDice(sum.total)}. ${tip("ln-split", "A combo doesn’t cost Aura, and every die’s an intent, so Wren could split those dice any way she likes and send some of them at something else.", "What a combo costs")}</p>
       <p>${all} go on the club, and your best die counts.</p></div>${rule("s-teamwork")}` : rule("s-answering")}
@@ -174,13 +181,13 @@ export function makeLearn(k) {
     const rows = L.dice.map((d, i) => `<li class="res is-${spin ? "spin" : i === first ? mark : "none"}">${face(d, i)}<span class="res-die">d${d.size}</span>${!spin && i === first ? '<b class="res-out">Your best</b>' : ""}${!spin && d.nat === d.size ? '<span class="res-note">Top face</span>' : ""}</li>`).join("");
     const from = body();
     const mind = isolde.roots.Mind ?? 0;
-    const coat = (isolde.armour ?? []).find((a) => a.root !== "Body");
+    const coat = (isolde.items ?? []).find((a) => a.kind === "armour" && a.root !== "Body");
     const words = {
       beat: `<h3 id="ln-out" tabindex="-1">It never lands</h3><p>Your ${b} beats the brute’s ${L.opp}, so the club never comes down. Isolde’s fine, and Wren and Bram have both used their action for the round.</p>`,
       won: `<h3 id="ln-out" tabindex="-1">It never lands</h3><p>You pay 1 Aura, so the tie’s yours, and the club never comes down. Isolde’s fine, and Wren and Bram have both used their action for the round.</p>`,
       tie: `<h3 id="ln-out" tabindex="-1">A tie</h3><p>Your ${b} ties the brute’s ${L.opp}. A tie’s a loss, unless you pay 1 Aura.</p><div class="cc-row">${btn("win", "Win the tie: 1 Aura")}${btn("lose", "Let it land")}</div>`,
       lands: `<h3 id="ln-out" tabindex="-1">It lands on Isolde</h3><p>${b === L.opp ? `Your ${b} ties the brute’s ${L.opp}, and a tie’s a loss` : `The brute’s ${L.opp} beats your best, a ${b}`}, so the club lands on Isolde at once, and nobody rolls her Body against it. Answering’s a gamble, and this one didn’t pay off.</p>
-        <p>That’s a hit, and a hit takes a point off the Root it was at. ${from ? `Isolde’s Body drops from ${from} to ${from - 1}.` : `Isolde’s Body is 0, so there’s nothing there to lose, and she’s <b>Bloodied</b>. She could take it on her Mind instead, 2 of her ${mind} points.`}${coat ? ` Armour on her Body could have taken it, but ${coat.name.replace(/^an? /i, "her ")} is on her ${coat.root}.` : ""} ${tip("ln-hit", ["A hit on a Root at 0 wounds it, and a wounded Root heals only to half what it can hold till downtime.", "A hit on a wounded Root at 0 is a Scar, and she leaves the scene."], "Wounds")}</p>
+        <p>That’s a hit, and a hit takes a point off the Root it was at. ${from ? `Isolde’s Body drops from ${from} to ${from - 1}.` : `Isolde’s Body is 0, so there’s nothing there to lose, and she’s <b>Bloodied</b>. She could take it on her Mind instead, 2 of her ${mind} points.`}${coat ? ` Armour on her Body would have soaked it first, but ${coat.name.replace(/^an? /i, "her ")} is on her ${coat.root}.` : ""} ${tip("ln-hit", ["A hit on a Root at 0 wounds it, and a wounded Root heals only to half what it can hold till downtime.", "A hit on a wounded Root at 0 is a Scar, and she leaves the scene."], "Wounds")}</p>
         <div class="ln-hurt"><span class="k">Isolde’s Body</span><b>${from ? `${from} → ${from - 1}` : "Bloodied"}</b></div>`,
     };
     return `<div class="ln-roll"${spin ? ' data-act="learn" data-do="skip"' : ""}>
@@ -204,7 +211,7 @@ export function makeLearn(k) {
     <header class="cc-head"><p class="kicker">Step ${L.step + 1} of ${STEPS.length}</p><h1>Learn to play</h1>
       <p class="cc-small">One round with Isolde, Wren and Bram. You play Wren and Bram, and the phone does the counting.</p>
       <ol class="ln-dots" aria-hidden="true">${STEPS.map((_, i) => `<li${i <= L.step ? ' class="on"' : ""}></li>`).join("")}</ol></header>`;
-    if (!ready()) return `${head}<div class="cc-note is-warn"><p>The learning round needs Isolde, Wren and Bram from the crew, with Wren’s longbow and its awakening, and Bram’s war hammer and its awakening, and one of them isn’t in the rules right now.</p></div>`;
+    if (!ready()) return `${head}<div class="cc-note is-warn"><p>The learning round needs Isolde, Wren and Bram from the crew, with Wren’s longbow and its awakening, and Bram’s shield, and one of them isn’t in the rules right now.</p></div>`;
     const turn = L.turn;
     L.turn = null;
     const body = [stepTelegraph, stepAnswer, stepRoll, stepRound][L.step]();

@@ -6,7 +6,7 @@
 // the punctuation or an accent changed, and never a number or a word like
 // "not" or "more".
 
-import { nameOf } from "./armour.js";
+import { itemSaid, packRes, resOf } from "./roots.js";
 
 const plain = (html) => String(html ?? "").replace(/<[^>]+>/g, "").replace(/&#(\d+);/g, (m, n) => String.fromCharCode(Number(n))).replace(/&amp;/g, "&").replace(/\s+/g, " ").trim();
 const note = (x) => (x ? ` (${x})` : "");
@@ -23,7 +23,6 @@ export function placesOf(c) {
   return {
     titles: at(c.titles),
     perms: c.titles.map((t) => at(t.permissions)),
-    boons: c.titles.map((t) => at(t.boons ?? [])),
     attuned: c.attuned.map((a) => at(a.awakenings ?? [])),
     threads: Object.fromEntries(c.threads.map((p) => [p.person, at(p.threads)])),
   };
@@ -48,7 +47,6 @@ export function linesOf(c) {
     const title = `your ${ORD[i] ?? "next"} Title`;
     add(`title:${P.titles[i]}`, `${t.text ?? t.name} (${spreadOf(t) || "nothing on a Root"})`, `Your ${ORD[i] ?? "next"} Title`);
     t.permissions.forEach((p, j) => add(`perm:${P.titles[i]}:${P.perms[i][j]}`, `${p.text} (${p.root || "no Root"})`, `A permission on ${title}`));
-    (t.boons ?? []).forEach((b, k) => add(`boon:${P.titles[i]}:${P.boons[i][k]}`, `${b.name ? `${b.name}, ` : ""}the ${b.lever} Boon${b.on ? ` (${b.on})` : ""}: ${b.text}`, `A Boon on ${title}`));
   });
   // Each archetype once, with what it's got between every time it's taken.
   const archs = new Map();
@@ -62,16 +60,18 @@ export function linesOf(c) {
     const trait = a.trait?.name ? ` Trait: ${a.trait.name}${a.trait.text ? `, ${plain(a.trait.text)}` : ""}.` : "";
     add(`arch:${name}`, `${name}.${trait}${abilities.length ? ` ${abilities.map((x) => `${x.name}${x.cost ? ` (${x.cost} Aura)` : ""}, ${plain(x.html ?? x.text)}`).join(" ")}` : ""}`, name);
   }
-  const kit = c.carry;
-  // Armour says its quality and its Root, so a change to either is marked too.
-  const armourOf = (x) => {
-    const a = (c.armour ?? []).find((p) => p.name === x);
-    return a ? `${nameOf(c, "equipment", x)} (${a.root ?? "Body"}${a.when ? `, ${a.when}` : ""})` : x;
-  };
-  add("kit:equipment", kit.equipment.map(armourOf).join(", ") || "nothing", "Equipment");
-  add("kit:utility", kit.utility.join(", ") || "nothing", "Utility");
-  if (kit.keepsake) add("kit:keepsake", kit.keepsake, "Keepsake");
-  add("kit:bag", `${kit.bag.name}${kit.bag.items?.length ? `: ${kit.bag.items.join(", ")}` : ""}`, "The bag");
+  // Each item by its key, with its tier's name, its kind and what its tier
+  // does (armour's Root, a pack's Resources, a weapon's properties), so a
+  // change to any of them is marked. Since the 17 Nov fixes these are where
+  // the kit lines (kit:equipment, kit:utility and kit:bag) were, so a sheet
+  // the phone saw before says those are gone.
+  for (const it of c.items ?? []) {
+    const said = itemSaid(it);
+    const what = [it.kind, `tier ${it.tier}`, it.kind === "armour" ? `on ${it.root ?? "Body"}${it.when ? `, ${it.when}` : ""}` : "", it.kind === "pack" ? `${packRes(it.tier)} more Resources` : "", it.attuned != null ? "attuned" : "", ...(it.props ?? [])].filter(Boolean).join(", ");
+    add(`item:${it.key}`, `${said} (${what})`, said.charAt(0).toUpperCase() + said.slice(1));
+  }
+  if (c.keepsake) add("keepsake", c.keepsake, "Keepsake");
+  if (Array.isArray(c.items)) add("res", `Resources ${resOf(c)}`, "Resources");
   c.attuned.forEach((a, i) => {
     const name = a.name.charAt(0).toUpperCase() + a.name.slice(1);
     add(`att:${i}`, `${a.name}${note(a.props)}, ${a.stage || "Awakened"}${a.catch ? `, its Catch ${a.catch}` : ""}${a.burden ? `, its Burden ${a.burden}` : ""}`, name);

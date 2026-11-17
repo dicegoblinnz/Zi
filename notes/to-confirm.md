@@ -91,6 +91,20 @@ Written 17 Nov on `rules/2026-11-17-fixes-abilities-c`: ten abilities each for t
 8. **The Summoner's souls on the new core are still open.** I've written its abilities to the rules as they stand, and three things don't sit right: summons act in the round like anyone (a horde's dice on top of your own one action), they fade and take hits in sizes while everyone else takes points, and nothing about them uses soak or wounds. *Take it for me* and *Soul for a soul* lean on summons intercepting, so they'll move with whatever you decide.
 9. **Six is how many a character holds, never the list.** The build warned past six abilities on an archetype, and now it warns on one that costs under 1 Aura instead (a small change in `scripts/build-content.mjs`, prompt 2's).
 
+### 5. The play screen and the table
+
+Built 17 Nov on `rules/2026-11-17-fixes-play`: the play screen, When it lands, the learning round, `/kit/` and the live table on items, soak, Resources and vessels.
+
+1. **A guard shows on a roll card that's answering a telegraph at someone**, as well as When it lands and Defend, since an answer that only stops a blow is getting out of the way (your call 3 from prompt 1). Picking it marks the roll as avoiding harm, and a combo's friend can bring theirs the same way.
+2. **Your best guard starts on When it lands**, on the first roll at your Body, and a tap takes it off or moves it to Defend. It's on almost every time, so it's the fewer taps.
+3. **Waking an awakening on an attuned weapon or tool puts that thing on as the item doing the work**, when nothing else is, so Vesk's line and its awakening are one tap, 15 steps, the book's own roof.
+4. **Soak's automatic and goes piece by piece in the sheet's order**, so the player never picks which armour takes a hit, and All n settles a deadly telegraph's hits in one tap. Each plate can still be tapped by hand.
+5. **Aura you'd lose goes into a vessel unless you say no**: at New scene (a chip on the rest card, or straight in with Undo when there's nothing to roll) and as the telegraphs land while you're still acting. Finishing acting from the Aura panel offers it as its own button. It's never worse to fill it, since that Aura's gone otherwise.
+6. **Charge pays a Push too**, since Push is an ability, as well as other abilities and an awakening's Aura on any roll. It never pays for bringing in a Root, a tie, an intercept, a quick heal or going beyond.
+7. **The GM giving a Resource back isn't a button.** Undo takes back a mistake, and downtime puts them all back. Say if the restock wants one.
+8. **When it lands writes `box` the same as `soaked`**, so a phone from before soak still says something came off armour.
+9. **A gone Boon is one row in Yours to choose with Got it**, and the points it gave back are the points row's to spend, so there's one Spend button, not two.
+
 ## 16 Nov: the new core
 
 **Not built yet.** Part 2 of the rework (`notes/core-plan.md`), from your 16 Nov chat (`notes/playtest-sheets/2026-11-16-chat-decisions.md`). These are the calls Claude made writing it down, before any chat built it. Each chat adds its own in a subsection below.

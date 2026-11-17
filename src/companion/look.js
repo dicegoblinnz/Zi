@@ -1,6 +1,7 @@
 // A GM looking at one of her players' characters (campaigns.js), read only:
-// the trackers, the Roots with the dice each rolls and the points it's got
-// left, the last roll,
+// the trackers (each Root's points and its armour's soak, Aura and any
+// vessel's charge, conditions and Resources), the Roots with the dice each
+// rolls and the points it's got left, the last roll,
 // the rest of the sheet in folds that read at a glance (where each Root's
 // points came from among them), and print. It's drawn with the same pieces as
 // the player's own screen (app.js hands them over), from what their phone last
@@ -22,11 +23,14 @@ export function whenOf(at) {
 }
 
 // The trackers in a line, for a card in the party: each Root's points out of
-// what it can hold, and its wound, then Aura, Toll and Scars.
+// what it can hold, its wound and the soak its armour's got left, then Aura
+// and any charge, Toll and Scars, and the Resources left to say.
 export function trackLine(c, s, esc) {
   const scars = R.ROOTS.reduce((t, k) => t + (s.scars?.[k]?.length ?? 0), 0);
   const pts = (r) => s.pts?.[r] ?? 0;
-  return `<span class="cc-glance">${R.ROOTS.map((r) => `<span>${kitMini(Math.min(12, Math.max(2, 2 * (c.roots?.[r] ?? 0))))}${r} ${pts(r)}/${R.capOf(c, s, r)}${s.wound?.[r] ? `, ${R.WOUNDS[r]}` : ""}</span>`).join("")}<span>Aura ${s.aura}/${R.auraMax(c, s)}${s.toll ? `, Toll ${s.toll}` : ""}${scars ? `, ${scars} ${scars === 1 ? "Scar" : "Scars"}` : ""}</span></span>${s.conditions.length ? `<span class="cc-glance">${s.conditions.map((x) => `<span class="cc-tag is-${x.kind}">${kitMini(x.die, { own: x.kind === "for" ? "you" : "harm" })}<em>${esc(x.name)}</em> d${x.die}</span>`).join("")}</span>` : ""}`;
+  const soak = (r) => (R.armourOn(c, s, r).length ? `, soak ${R.soakOf(c, s, r)}` : "");
+  const charge = R.vesselsOf(c).map((v) => `, ${R.chargeOf(c, s, v.key)} charge`).join("");
+  return `<span class="cc-glance">${R.ROOTS.map((r) => `<span>${kitMini(Math.min(12, Math.max(2, 2 * (c.roots?.[r] ?? 0))))}${r} ${pts(r)}/${R.capOf(c, s, r)}${s.wound?.[r] ? `, ${R.WOUNDS[r]}` : ""}${soak(r)}</span>`).join("")}<span>Aura ${s.aura}/${R.auraMax(c, s)}${charge}${s.toll ? `, Toll ${s.toll}` : ""}${scars ? `, ${scars} ${scars === 1 ? "Scar" : "Scars"}` : ""}</span><span>Resources ${R.resLeft(c, s)}/${R.resOf(c)}</span></span>${s.conditions.length ? `<span class="cc-glance">${s.conditions.map((x) => `<span class="cc-tag is-${x.kind}">${kitMini(x.die, { own: x.kind === "for" ? "you" : "harm" })}<em>${esc(x.name)}</em> d${x.die}</span>`).join("")}</span>` : ""}`;
 }
 
 export function lookView(ch, c, x) {
