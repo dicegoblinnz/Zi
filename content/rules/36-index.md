@@ -201,7 +201,6 @@ updated: 2026-11-18
 ## Q {#q}
 
 -   **Quick Build** — [Quick Build](#s-quick)
--   **Quick heal** — [Healing](#s-healing)
 -   **Quick Reference** — [Appendix D](#appendix-quick)
 -   **Quick Rulings** — [Quick Rulings](#s-rulings)
 

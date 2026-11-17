@@ -45,7 +45,7 @@ updated: 2026-11-18
 -   You roll the threat's die too, in another colour. The GM almost never rolls in a round.
 -   A threat rolls its defence once a round, the first time anyone goes at it, and every die at it that round has to beat that roll.
 -   **Beat it:** you did it. **Tie:** the defender wins (you when it comes at you, them when you act), but if you're acting, answering included, 1 Aura wins it. An Illusionist meets or beats. **Under:** you didn't, and it only costs you when it matters.
--   **Aura:** 1 for every die of yours that wins, and 1 for every top face, defence and recovery included. Never for what a heal heals, and not for a summon's die, a die something added to after you rolled, a number an Oracle swapped in or a flipped die.
+-   **Aura:** 1 for every die of yours that wins, and 1 for every top face, defence and recovery included. Never for what a heal heals, and not for a summon's top face, a die something added to after you rolled, a number an Oracle swapped in or a flipped die.
 -   **Failed?** A point of Soul rerolls it, all your dice or just one. The threat's dice stay where they landed.
 
 ## Your action {#s-qr-action}
@@ -59,7 +59,7 @@ updated: 2026-11-18
 
 -   Up to 5. You're full every scene, and there's none in downtime. While you're acting it can go past your maximum, and once you've finished acting for the round, anything over is gone. Off your turn it stops at your maximum, and you can give the rest to a friend in the scene.
 -   **Vessel:** holds its tier in charge, and keeps it through downtime. Fill it only with Aura you'd lose (over your maximum when you finish acting, or past it off your turn), never what's left when a scene ends, or a point from any Root mid-scene, no action. A point in it is held there, like a lock, till it's spent, and points are spent first. Spend it only on your own abilities and awakenings' extra steps, a charge for each Aura. It never counts towards your maximum or goes to a friend.
--   **Spend 1:** an ability, each time you use it · 2 more steps on an awakening that fits · borrow one thing through a bond thread · go beyond · win a tie when you're acting · intercept for a friend within your stride · a quick heal · keep a Catch quiet.
+-   **Spend 1:** an ability, each time you use it · 2 more steps on an awakening that fits · borrow one thing through a bond thread · go beyond · win a tie when you're acting · intercept for a friend within your stride · keep a Catch quiet.
 -   **Get 1 back:** every die of yours that wins · every top face · letting a Catch bite, as often as you like, as long as it's real trouble · bringing real trouble on yourself with no Catch · a great setup that didn't land, if the GM says so.
 -   **Spend 3:** bring a Root in, when a permission explains it, instead of paying a point of that Root.
 
@@ -73,7 +73,7 @@ updated: 2026-11-18
 -   **Scar:** a hit on a wounded Root at 0. You leave the scene, and it's something you can't do, held to, that locks a point for good. Three downtime slots grow it into a Trait. One that locks a Root's last point is your last.
 -   **Blaze:** while you're wounded, on your turn, take the Scar, declare something extraordinary and it happens, no roll, then leave the scene. From your first Blaze, you can choose to die.
 -   **They come back:** at the end of every scene, roll each Root below its maximum, unsplit, and get back what you roll. Downtime puts everything back, wounds and Toll included. A big bite from a Catch or a hostile thread, or straining a bond thread, gets you a point of Soul back.
--   **Heal** (the Healer's): an action, rolled unsplit, and the patient gets back what it rolls, spread across their Roots. It reaches one person. **Toll:** every heal from someone or something else is 1 Toll, and a heal loses 5 for each Toll they've already got, never below 0. It drops by 1 at the end of each scene, and downtime clears it. **Quick heal**, for anyone: 1 Aura and your action, 1 point back on one Root, no roll and no Toll.
+-   **Heal** (the Healer's): an action, rolled unsplit, and the patient gets back what it rolls, spread across their Roots. It reaches one person. **Toll:** every heal from someone or something else is 1 Toll, and a heal loses 5 for each Toll they've already got, never below 0. It drops by 1 at the end of each scene, and downtime clears it. Nobody else puts points back mid-scene for Aura. The Healer's *Hold still* (1 Aura, once a round, no action) is 1 point back on one Root, no roll and no Toll.
 
 ## Study {#study}
 
@@ -92,7 +92,7 @@ Roll against its Challenge. Win, and pick one: a hidden tag · a straight answer
 -   **Dodging** is your Body, and a guard that fits puts its tier on any roll avoiding harm, once a landing. A weapon never does.
 -   **Let it ride:** whatever you don't answer lands at the end of the round. Roll each Root something's landing on, once, at full, split how you like, and each die stops one telegraph it meets or beats. Everything else is a hit.
 -   **Defend:** your action. When they land, roll a Root that fits how you're defending, at full, on top, and your guard's tier goes on once between the two. Each die stops one it meets or beats, as long as how you're defending fits it.
--   **Intercept:** 1 Aura and no action. Take the blows at a friend's Body within your stride, and your Body rolls against them. A Guardian does it free, for every friend within his stride, and so does a summon. Nobody can intercept what's at a Mind or a Soul.
+-   **Intercept:** 1 Aura and no action. Take the blows at a friend's Body within your stride, and your Body rolls against them. A Guardian does it free, for every friend within his stride, and a summon takes the first blow each round at the Body of the one it's guarding. Nobody can intercept what's at a Mind or a Soul.
 -   **One die at each of you** from each threat, unless a tag like *Flurry* says it can do more.
 -   **Running doesn't dodge.** One aimed at you lands wherever you've gone. Only one aimed at a place can be walked out of.
 -   At a stake, a place or a clock there's no defence. Unanswered, it happens.
@@ -118,7 +118,7 @@ A hit, soak first, then a point off the Root it's at · something breaks, crosse
 -   A condition you put on a friend, like a ward or a blessing, goes on one friend at the die you built. The second die of a split can put it on another friend you can touch.
 -   It steps down a size every round, and it's gone past d2. Break it with a die that beats its die. One of each on a target, and the same one goes on once a round. Placed again later, the new one replaces it.
 -   On a threat, spending *Burning*, *Bleeding* or *Poisoned* strips a tag with no roll (on a multiplier, it ticks one off), and a lost action is a telegraph gone.
--   *Marked* is the Hunter's. It gives no step and nobody spends it: anyone who acts against whatever's *Marked* rolls the Mark die too. When what it's on falls, the Mark jumps to another creature the Hunter can see.
+-   *Marked* is the Hunter's: once a roll, a Hunter's die that wins against a creature Marks it with that die, one creature at a time. It gives no step and nobody spends it: anyone who acts against whatever's *Marked* rolls the Mark die too. When what it's on falls, the Mark jumps to another creature the Hunter can see.
 
 ## Stakes, clocks, events {#stakes-clocks-events}
 
@@ -151,20 +151,20 @@ A hit, soak first, then a point off the Root it's at · something breaks, crosse
 Each ability's 1 Aura, or 2 or 3 for a few big ones, and they stack. A **held** one's paid once and stays up for the scene, its Aura off your maximum while it's up. A **signature**'s 4 or 5 Aura, once a scene, with no roll, and never stacks. Most have a Push: +2 on one die of the mechanic after you roll, +3 if you've taken it twice. Each one's Trait comes after its mechanic, and the whole of each is in [The Archetypes](#archetypes).
 
 -   **Bard:** your action gives every friend who can hear you a point back on their Mind, or your song Defends you all against fear, split as you like. *All Eyes on Me:* 1 Aura a threat, and it watches only you while you perform.
--   **Bloodsworn:** every point your Body loses is 3 steps on your action, and you can spend them on purpose. *Paid in Blood:* 1 Aura for every point your Body loses.
+-   **Bloodsworn:** every point your Body loses is 3 steps on your action, and you can spend as many as you like on the roll you're making, for nothing but the blood. Your armour soaks only when you want it to. *Paid in Blood:* 1 Aura for every point a hit takes off your Body, never one you spend.
 -   **Elementalist:** one of your dice can be an area, a burst, a cone or a line, for no Aura. *Eye of the Storm:* your areas and your loose element never hurt you.
--   **Face:** put your dice on a threat unrolled, as influence, and roll them before one of its telegraphs lands: each of its dice your best one beats does what you say. *I Know a Guy:* once a scene, someone you know turns up and helps.
--   **Gambler:** once a round, flip any die you can see after it lands: its size plus 1, less what it rolled. *Bad Luck Pays:* 1 Aura for each 1 of yours that stays a 1.
+-   **Face:** any of your dice can go on a threat unrolled, as influence, and roll them before one of its telegraphs lands: each of its dice your best one beats does what you say. *I Know a Guy:* once a scene, someone you know turns up and helps.
+-   **Gambler:** once a round, flip any die you can see after it lands: its size plus 1, less what it rolled. *Bad Luck Pays:* 1 Aura for each 1 of yours, on a d4 or bigger, that stays a 1.
 -   **Guardian:** you intercept for free, for every friend within your stride. *Better Me Than You:* 1 Aura for each blow you intercept for a friend.
 -   **Healer:** only you make heal rolls: a Root, unsplit, and they get back what it rolls, less 5 for each Toll. *Good Hands:* your heals ignore a step of Toll.
--   **Hunter:** mark a creature, and anyone acting against it rolls your Mark die too, which jumps when it falls. *Good Hunting:* 1 Aura for each die a friend wins against your Mark.
--   **Illusionist:** meet or beat the threats' Challenge, and they believe your illusion till they interact with it or try to get through. *Made You Look:* 1 Aura when a threat swings at, talks to or walks into one.
+-   **Hunter:** once a roll, a die of yours that wins against a creature Marks it with that die, and anyone acting against it rolls your Mark die too, which jumps when it falls. *Good Hunting:* 1 Aura for each die a friend wins against your Mark, a Marked stake or event included.
+-   **Illusionist:** any of your dice can be an illusion, rolled once: meet or beat the highest Challenge among whoever it's meant to fool, and they believe your illusion till they interact with it or try to get through. *Made You Look:* 1 Aura when a threat swings at, talks to or walks into one.
 -   **Leader:** an order hands its steps to friends who can hear or see you. *Where It's Needed:* each round, move 1 step for each of you from roll to roll.
--   **Maker:** each die that beats an item's size gives it a tag for the scene, and you can spend Aura on a friend's awakening. *Maker's Mark:* one item keeps a tag of yours, a permission or a hit taken.
+-   **Maker:** any of your dice can be a making die, and one that beats an item's size gives it a tag for the scene, one made tag an item at a time, and you can spend Aura on a friend's awakening. *Maker's Mark:* one item keeps a tag of yours, a permission or a hit taken.
 -   **Oracle:** roll your action as foresight, and swap the numbers into anyone's dice that round, if they fit. *Seen It Coming:* each round, roll 3 of the threats' dice before anyone moves. *Foretold* (1 Aura): a Study you win can be a truth.
 -   **Shadow:** the dice you hide with go in your shadow pool, for any roll after. *Any Shadow Will Do:* any patch of dark's enough to hide in.
--   **Shifter:** catch animal tags against their die, and keep them till downtime. *Something of the Beast:* a beast's sense or size, picked each scene.
--   **Summoner:** only you catch souls and summon them. *Pocket Summon:* one soul out free once a scene, with no action.
+-   **Shifter:** any of your dice can go for an animal tag against its die, and keep them till downtime. *Something of the Beast:* a beast's sense or size, picked each scene.
+-   **Summoner:** only you catch souls and summon them. *Pocket Summon:* one named soul out once a scene, at its own die, with no action and no Aura, holding none.
 -   **Teleporter:** your stride can be a 10-unit teleport, and 1 Aura opens a portal. *Not There:* once a scene, teleport, and what's landing on you misses.
 -   **Warrior:** your dice explode in a fight. *Second Skin:* your armour's a guard as well, its tier on a roll avoiding harm, and it still soaks.
 
@@ -188,10 +188,12 @@ Each ability's 1 Aura, or 2 or 3 for a few big ones, and they stack. A **held** 
 
 ## Summoning {#s-qr-summoning}
 
--   Only a Summoner catches souls and summons them. A summoning attunement holds souls, one to an awakening, on the same ladder. Starting souls are d4s.
--   **Catch one:** when a creature falls, put a die on it and roll against its Challenge. Beat it and you carry its soul, with its Challenge die, till it goes into your attunement in downtime. It isn't one of your items, and it ticks one of your Resources till then. Miss and it's gone.
--   **Call one out:** each soul's an active awakening, so calling it out spends Aura, as part of your action, with a reason in the story. Each Aura's a d4 of summons, built into one or several, none bigger than the soul's own die.
--   A summon acts like anyone and rolls its own die. It drops a size every round and for every hit that gets through, and past d2 it's gone, back in your attunement. It intercepts for free and rolls its die to stop one of the dice it took. A horde rolls as one throw. Summons can't combo, and their dice never give Aura. They all go back at the end of the scene.
+-   Only a Summoner catches souls and summons them. A summoning attunement holds souls, one to an awakening, on the same ladder. A starting soul's a d8.
+-   **Catch one:** any time before the scene ends, put one of your dice on a creature that fell this scene, against its Challenge die. Beat it and you carry its soul, with that die, till it goes into your attunement in downtime. It isn't one of your items, and it ticks one of your Resources till then. Miss and it's gone.
+-   **Call one out:** as part of your action, before you roll, with a reason in the story. 1 Aura is a d4 summon, 2 a d8 and 3 a d12, never bigger than the soul's own die, and 1 more on a later action puts one up a size. The Aura's held off your maximum while it's out. A vessel's charge can pay instead, and then it holds nothing.
+-   **In your throw:** whenever you act, every summon moves its stride and its die goes in your roll with an intent of its own. It's never split, merged or added to, bar a *Push*. A win pays you 1 Aura, and its top face nothing.
+-   **Guarding:** each one guards one person within its stride, and the first blow each round at their Body comes at it, free.
+-   **Harm:** it rolls its die, and meeting or beating stops it. Anything through knocks it down a size (d12 or d10 to d8, d8 or d6 to d4, a d4's gone), freeing 1 Aura it held. Summons never fade, and they go back at the end of the scene, when a hit sends them back, or when you send them.
 
 ## Downtime {#s-qr-downtime}
 

@@ -377,7 +377,7 @@ Any ordinary thing can be a Resource. These ones you use up, and each does what 
 
 | Resource | What it does |
 | --- | --- |
-| **Medical kit** | Break *Bleeding*, *Burning* or *Poisoned* on someone, no roll. Or use it for a [quick heal](#s-healing) that costs no Aura. |
+| **Medical kit** | Break *Bleeding*, *Burning* or *Poisoned* on someone, no roll. Or, as your action, someone you can reach gets 1 point back on their Body. It isn't a [heal](#s-healing), so there's no Toll. |
 | **Antidote** | Break *Poisoned*, no roll. Nothing can poison you for the rest of the scene. |
 | **Acid vial** | Strip one protective tag (*Armoured*, *Warded*, *Fortified*) from a threat, or one tick off it if it's got a multiplier. No roll. |
 | **Smoke bomb** | A burst of smoke one square out from where it lands, for one round. Anything aimed into it or out of it is one step less. |
@@ -661,8 +661,8 @@ A **vessel** is an item that holds charge, like a lantern of captured light, a p
 -   **Fill it with Aura you'd lose.** That's the Aura past your maximum when you finish acting, and Aura that comes in while you're not acting and would stop at your maximum, if you'd rather keep it than give it to a friend. Any of it can go in instead. The Aura you've got left when a scene ends isn't lost, since you start the next one full, so it stays out.
 -   **Or fill it with points.** Any time in a scene, with no action, a point from any Root is a charge. That's pushing, so it can leave you exposed, and it never wounds you. You can't do it at a scene's end or in downtime.
 -   **A point in a vessel stays held there** till its charge is spent, the way an awakening locks one. The Root can't get it back at a scene's end or in downtime while it's in the vessel. When you spend charge, the points go first, and a point spent is just a point spent, which comes back the usual way.
--   **Spend it only on your own** abilities and your own awakenings' extra steps, a charge for each Aura they'd cost, and never on a signature at 5.
--   **It isn't Aura.** It never counts towards your maximum, you can't hand it to a friend, and it never pays for bringing in a Root, a tie, an intercept, a quick heal, going beyond or borrowing.
+-   **Spend it only on your own** abilities and your own awakenings' extra steps, a charge for each Aura they'd cost, and never on a signature at 5. A [Summoner](#a-summoner) can call a summon out with it too, and that summon holds nothing off their maximum.
+-   **It isn't Aura.** It never counts towards your maximum, you can't hand it to a friend, and it never pays for bringing in a Root, a tie, an intercept, going beyond or borrowing.
 
 It only takes Aura you'd have lost, it never turns back into Aura, and it can't hold more than its tier, so once it's full, the Aura past your maximum goes the way it always did.
 
