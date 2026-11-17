@@ -395,7 +395,9 @@ function archetypesFrom(doc, inline, qr) {
     }
     if (!forLine.get(archetype)) companionWarn(`the ${archetype} archetype isn't in the table in Picking Your Archetypes, so its card in the builder has nothing to say what it's for`);
     if (!abilities.length) companionWarn(`the ${archetype} archetype has no abilities I can read (**Its name (1 Aura):** what it does)`);
-    if (abilities.length > 6) companionWarn(`the ${archetype} archetype has ${abilities.length} abilities, and an archetype holds six at most`);
+    // About ten to an archetype since 17 Nov: six is how many a character
+    // holds, never the list. Every ability prints its Aura, and it's never 0.
+    for (const a of abilities) if (!(a.cost >= 1)) companionWarn(`the ${archetype}'s ${a.name} costs ${a.cost} Aura, and an ability's 1 Aura at least`);
     out[archetype] = { id, summary: inline(text.trim().split(/\n\s*\n/)[0]), for: forLine.get(archetype) ?? "", trait, abilities };
   }
   return out;

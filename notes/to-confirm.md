@@ -16,6 +16,20 @@ Part 3 of the rework (`notes/fixes-plan.md`), from your 17 Nov chat (`notes/play
 8. **Packs give Resources**, half their tier rounded up.
 9. **A vessel holds its tier in charge**, filled only with Aura you'd lose or a point at a time mid-scene, and spent only on your own abilities and awakenings.
 
+### 3c. Abilities III
+
+Written 17 Nov on `rules/2026-11-17-fixes-abilities-c`: ten abilities each for the Shadow, Shifter, Summoner, Teleporter and Warrior, and 03a's opening.
+
+1. **Ten each, the old ones first and word for word**, then the rest simplest first. Every one's 1 Aura bar the Shifter's *All beast* (2 Aura, a whole scene as the animal). The Shadow's lean on its pool and on Resources (*I had it planned* says one without ticking it), the Shifter's on animal tags and its Trait, the Summoner's on souls, the Teleporter's on its stride and portals, and the Warrior's on exploding dice, its weapon's tier (*Parry*) and what a win does.
+2. **The Teleporter still has no Push.** Its mechanic's a stride with no roll, so there's no die for a +2 to go on.
+3. **Second Skin is on tiers.** When something lands and you didn't Defend, your armour on that Root adds its tier the way a guard's would, one item a roll, in place of 1 step a piece, since armour's no steps now and counting pieces is what the core took out. Appendix D's short line for it (prompt 1's) still says 1 step a piece.
+4. **A caught soul ticks one of your Resources** till downtime, in place of a utility slot, since the slots went with Fix 3 and Resources are the three things that come back in downtime the way the slots did. 07, Appendix C and Appendix D still say utility slot (prompts 7 and 1). Say if you'd rather souls were carried some other way.
+5. **Catching a soul is a die**, put on it like any intent, where 03a said your action. Appendix D and the 16 Nov core already had it that way.
+6. **Bram's Push example rolls 11 steps**, his Body and his shield as a guard at tier 2 (a Trusty shield), so it's a d12 and a d10 and the story's the same. If prompt 2 gives him another shield or none, the dice move.
+7. **A vessel can't pay for calling out summons**, since calling out is the Summoner's mechanic and charge only pays for abilities and awakenings. It can pay for *Call the horde* and the rest. Whether a Summoner's vessel should hold souls' Aura is yours to say.
+8. **The Summoner's souls on the new core are still open.** I've written its abilities to the rules as they stand, and three things don't sit right: summons act in the round like anyone (a horde's dice on top of your own one action), they fade and take hits in sizes while everyone else takes points, and nothing about them uses soak or wounds. *Take it for me* and *Soul for a soul* lean on summons intercepting, so they'll move with whatever you decide.
+9. **Six is how many a character holds, never the list.** The build warned past six abilities on an archetype, and now it warns on one that costs under 1 Aura instead (a small change in `scripts/build-content.mjs`, prompt 2's).
+
 ## 16 Nov: the new core
 
 **Not built yet.** Part 2 of the rework (`notes/core-plan.md`), from your 16 Nov chat (`notes/playtest-sheets/2026-11-16-chat-decisions.md`). These are the calls Claude made writing it down, before any chat built it. Each chat adds its own in a subsection below.

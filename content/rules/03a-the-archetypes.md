@@ -21,24 +21,24 @@ Start with how they work, then find yours in [Picking Your Archetypes](#s-pickin
 -   **An archetype's 5 points** when you make your character, and it comes with its mechanic, its Trait and one ability. You can take as many as you can pay for, and they don't have to be different: Vesk's a Shadow twice over. They're separate from your Titles: Bram's a Guardian and a Leader, and his Titles are *The wall that held the harbour gate* and *A sergeant who lost his stripes*.
 -   **Your mechanic** is the thing only your archetype can do, and it's free. When it has you roll, you roll the usual way, one Root at full and any you bring in (see [Steps and Dice](#s-building-die)). Bram's orders come off his Soul, the same as anything else he says.
 -   **Your Trait** is something that's always true of you because of your archetype, and every archetype's got one, in its own section. Most cost nothing and never switch off. A few cost Aura or come once a scene, and those say so. Take an archetype twice and it's still the one Trait. Bram's a Guardian, so every blow he intercepts for a friend gives him 1 Aura, whether it gets through or not.
--   **Your abilities** are in your archetype's section. Your archetype comes with one, your pick off its list, Push included. More are a point each when you make your character, or a downtime slot later on, and an archetype holds six at most. Each one costs Aura when you use it, and how that works is just below.
+-   **Your abilities** are in your archetype's section, about ten to each. Your archetype comes with one, your pick off its list, Push included. More are a point each when you make your character, or a downtime slot later on, and an archetype holds six at most. Each one costs Aura when you use it, and how that works is just below.
 -   **One action a round**, the same as everyone. Your archetypes don't give you more of them. More dice is how you do more (see [Splitting](#s-splitting)).
 -   **A new archetype** can come when your [Aspiration](#s-aspiration) comes good, instead of a Title or an attuned thing, with the ability it comes with.
 
 ### Abilities {#s-abilities}
 
 :::rule
-**Each ability costs 1 Aura** when you use it. **They stack.** Pay again and you get it again: another +2, another target, another round, whatever the ability says you get more of.
+**Each ability says its Aura**, and you pay it when you use it. Most are 1 Aura, and a few bigger ones are 2. **They stack.** Pay again and you get it again: another +2, another target, another round, whatever the ability says you get more of.
 
-**You can't pay Aura you haven't got.** While you're acting, what's past your maximum is yours to spend like the rest.
+**You can't pay Aura you haven't got.** While you're acting, what's past your maximum is yours to spend like the rest. A [vessel](#s-items)'s charge can pay for your own abilities instead, a charge for each Aura.
 :::
 
-An ability's never steps on a roll. It does what it says, and that's all. Wren's roll to mark a creature is her Body as usual, and paying for Mark the pack sends that roll at two more.
+An ability's never steps on a roll. It does what it says, and that's all. It can work with what you've got, though: an item's tier, your Resources, a vessel's charge or your armour's soak. With the Warrior's *Parry*, your weapon's tier goes on your roll when blows land, which a weapon never does on its own, and with the Shadow's *I had it planned*, you say a Resource without ticking one. Wren's roll to mark a creature is her Body as usual, and paying for Mark the pack sends that roll at two more.
 
 **Push** is the one most archetypes have on their list: +2 to one die on your mechanic, once you've rolled and you know you need it. A die the +2 takes to its top face, or past it, doesn't pay Aura. **Take the same archetype twice** and its Push is +3, three times it's +4, and so on. You only need Push the once: Vesk's first Shadow came with Push and her second with Vanish, and her Push is +3.
 
 :::example[Bram stays on the wall]
-The brute's club comes at Bram, a d10 to knock him off the wall. It's at his Body, so when it lands he rolls his Body at full, 9 steps, and keeps it as a d12 and a d6. The club comes up 9, and Bram rolls 7 and 3. Nothing's stopped it, and he isn't going off that wall, so he pays 1 Aura for his Guardian's Push and makes the 7 a 9. That's a tie, and ties go to him, so he's still standing on the wall, with all his points. If he'd taken Guardian twice, it'd be a 10.
+The brute's club comes at Bram, a d10 to knock him off the wall. It's at his Body, so when it lands he rolls his Body at full, 9 steps, and his Trusty shield's a guard, so its tier's 2 more. That's 11, and he keeps it as a d12 and a d10. The club comes up 9, and Bram rolls 7 and 3. Nothing's stopped it, and he isn't going off that wall, so he pays 1 Aura for his Guardian's Push and makes the 7 a 9. That's a tie, and ties go to him, so he's still standing on the wall, with all his points. If he'd taken Guardian twice, it'd be a 10.
 :::
 
 ### What only one archetype does {#only-one-archetype}
@@ -397,6 +397,22 @@ When you get into hiding, the dice you rolled to hide go into your **shadow pool
 **Push (1 Aura):** +2 to your roll to hide, or to a shadow die when you use it.
 
 **Vanish (1 Aura):** you're hidden again, no roll, even in plain sight. Nothing goes in your pool, because you didn't roll. Pay again and a friend beside you vanishes too.
+
+**I had it planned (1 Aura):** say a Resource without ticking one, as long as it's something you could've set up before the scene: a window left on the latch, a guard paid to look the other way, a change of clothes stashed in the laundry. Pay again for another.
+
+**Keep one back (1 Aura):** when you get into hiding again, keep a die from your old pool instead of losing it. Pay again to keep another.
+
+**Pass it on (1 Aura):** give a die from your pool to a friend who can see or hear you. They add it to a roll the way you would, and it's gone once they've used it. Pay again for another die.
+
+**Seen from up there (1 Aura):** spend a die from your pool without rolling it, and ask the GM one thing you'd have seen while you were hidden, like where the key's kept or which door the guard checks. She answers it straight.
+
+**Light fingers (1 Aura):** when a die of yours wins against someone who hasn't seen you, take one thing they're carrying as well as whatever the die was for: a key, a letter, a purse. Pay again for another thing, or another person.
+
+**Out of nowhere (1 Aura):** when you go at someone from hiding, you're still hidden after the roll, as long as there's a shadow to stay in.
+
+**Gone into the dark (1 Aura):** one die that gets you into hiding answers a telegraph aimed at you as well, with the same roll. Pay again for another die.
+
+**Wait for it (1 Aura):** while you're hidden, take your action whenever you like this round, even straight after a friend's roll or as the telegraphs land. It's still your one action.
 :::
 
 :::example[Under the gallery]
@@ -417,6 +433,22 @@ You collect **animal tags**, the way a [Summoner](#a-summoner) catches souls. Sp
 **Push (1 Aura):** +2 to one of your Shifter dice.
 
 **Become it (1 Aura):** take any animal tag with no roll, even a breath attack. Pay again for another.
+
+**Another beast (1 Aura):** swap your *Something of the Beast* for another one now, in the middle of the scene. Pay again to swap again.
+
+**Nose for it (1 Aura):** your *Something of the Beast* finds one thing nobody else in the crew could, and the GM tells you what fits it: where someone's hiding, what's been through here, or what's coming. Pay again for another.
+
+**Kin (1 Aura):** till the scene ends, one kind of animal treats you as one of its own, so a guard dog won't bark at you, a horse lets you up, or a hawk shows you where it's been. Pay again for another kind.
+
+**Share the shape (1 Aura):** a friend you're touching gets one of your animal tags till the scene ends, and it does for them what it does for you. It's still yours too, and only you can strip it. Pay again for another tag, or another friend.
+
+**Slip it (1 Aura):** strip one of your animal tags to break a condition on you, with no roll. An eel's skin slips the grip, and wings get you out from under the net. Pay again for another.
+
+**Thick hide (1 Aura):** when you strip an animal tag instead of taking a hit, it takes every hit that telegraph brings, not just the one.
+
+**The pounce (1 Aura):** when an animal tag's moving you, like wings or a cat's spring, a die you put on moving can have an intent of its own as well. You land on them, and if it beats their defence, it happens. Dice on moving still add up for how far you go. Pay again for another die.
+
+**All beast (2 Aura):** you're the animal, whole, till the scene ends or you change back. Anyone who sees you sees a stray dog or a crow on the gutter, and nobody looks twice. You can't talk or hold anything it couldn't, and your animal tags work the same.
 :::
 
 :::example[Wings]
@@ -433,7 +465,7 @@ The Summoner catches the souls of fallen creatures and calls them back out when 
 
 Catching souls and summoning are the Summoner's, and nobody else can do them. Here's what you'll need at the table, and the rest is in [Summoning](#s-summoning).
 
--   **Catching a soul:** when a creature falls, spend your action and roll against its Challenge. Beat it and its soul goes into one of your utility slots. Miss and it's gone. In downtime, put it into your summoning attunement.
+-   **Catching a soul:** when a creature falls, put a die on it and roll against its Challenge. Beat it and you're carrying its soul, which ticks one of your Resources till downtime. Miss and it's gone. In downtime, put it into your summoning attunement.
 -   **Your souls live in your summoning attunement**, one to each awakening, on the same stages as any attuned thing (see [Attunement](#s-attunement)). A soul's die is its Challenge die when you caught it. A soul's in an awakening's place, but it isn't steps, so it doesn't lock a point the way an awakening does.
 -   **Calling one out** spends Aura, as part of an action: a d4 of summons for each Aura, built into one summon or several, and none of them bigger than that soul's own die. It needs a reason in the story.
 -   **A soul is what it was.** A caught courtier talks and a hound tracks. Summons act in the round like anyone, fade a size every round, and lose a size to every hit that gets through. Their dice never pay Aura.
@@ -445,6 +477,22 @@ Catching souls and summoning are the Summoner's, and nobody else can do them. He
 **Push (1 Aura):** +2 to one of your dice when you're catching a soul.
 
 **Call the horde (1 Aura):** this time each Aura you spend calls up a d6, not a d4, still no bigger than the soul's own die. Pay again and it's a d8.
+
+**Hold together (1 Aura):** one of your summons doesn't fade at the end of this round. Pay again for another summon.
+
+**Ask the dead (1 Aura):** ask a soul in your attunement one thing it knew while it was alive, without calling it out. It answers as well as it can, and a hound's answer is a hound's.
+
+**Borrow its knack (1 Aura):** one thing a soul in your attunement could do is yours till the scene ends, like a permission, so it can bring a Root in: the courtier's manners, or the hound's nose. Pay again for another.
+
+**Speak through it (1 Aura):** see and hear what one of your summons does, and talk through it, wherever it goes till it fades. Send the rats under the door and you're in the room.
+
+**Call it now (1 Aura):** call a summon out the moment you need it, without waiting for your action: in the middle of someone else's go, or as the telegraphs land. You still pay its Aura.
+
+**Catch it whole (1 Aura):** when a die of yours puts a creature down, the same die catches its soul as well, with no die of its own on the catch.
+
+**Take it for me (1 Aura):** when something gets through to you, one of your summons beside you takes it instead, once the dice are down. Each hit knocks a size off it, the way it would if it had intercepted.
+
+**Soul for a soul (1 Aura):** this round your summons can intercept what's aimed at a friend's Soul as well as their Body, since a soul can get in front of a curse.
 :::
 
 :::example[Sable calls them out]
@@ -465,6 +513,22 @@ Your [stride](#s-movement) can be a teleport of up to 10 units. If you're a [Gua
 **Portal (1 Aura):** open a portal and link it to another spot within 10 units. It lasts the round, and anyone who steps in comes out the other end. Pay again for another.
 
 **Swap (1 Aura):** swap places with anyone you can see, friend or foe. Pay again for another swap.
+
+**Further (1 Aura):** your teleport goes 10 units further this round. Pay again for 10 more.
+
+**Hold it open (1 Aura):** a portal of yours stays open another round. Pay again for another round.
+
+**Take them with you (1 Aura):** when you teleport, bring someone you're touching with you. Pay again for another.
+
+**Fetch (1 Aura):** something you can see within 10 units that nobody's holding on to is in your hand, or something in your hand goes there. Pay again for another thing.
+
+**Step through (1 Aura):** your teleport can take you somewhere within 10 units you can't see, as long as you've been there or know it well: the other side of a door, the room upstairs, or the vault you cased last week.
+
+**Through the portal (1 Aura):** this round, your dice and the crew's can go through a portal you've got open, at anything near its other end.
+
+**In and out (1 Aura):** this round your dice can go at anyone within 10 units as if you were right beside them, and you finish the round back where you started.
+
+**Drop them (1 Aura):** when a die of yours wins against someone you're touching, you send them anywhere within 10 units you can see, as well as whatever the die was for: off the wall, into the cell, or back across the square. Pay again for another.
 :::
 
 :::example[Out through the portal]
@@ -482,17 +546,33 @@ The Warrior's for fighting, with dice that don't stop at their top face.
 Your dice **explode** when you fight. A die that lands on its top face gives you 1 Aura as usual, then you roll it again and add the new number on, the only time dice add apart from moving and what abilities add. It keeps going as long as it keeps landing on top, so a d8 that comes up 8, then 5, is a 13.
 
 :::rule
-**Trait:** *Second Skin*. Your armour fights with you even when you haven't Defended. When something lands at a Root and Defend wasn't your action, every piece of armour on that Root that isn't broken is 1 step more on your roll.
+**Trait:** *Second Skin*. Your armour fights with you even when you haven't Defended. When something lands at a Root and Defend wasn't your action, your armour on that Root adds its tier to your roll, the way a guard's would. It's still one item a roll, so it's your armour or your shield.
 
 **Push (1 Aura):** +2 to any one of your dice in a fight. If that takes it to its top face or past, there's no Aura for it, but it still explodes.
 
 **Opened (1 Aura):** when one of your dice wins in a fight, the target's *Opened* till the round ends. *Opened* is the Warrior's own [vulnerability](#s-vulnerable), so it stacks with fire, blades and the rest. Every hit on it ticks once more till the round ends, starting with the one that opened it. Two Warriors can each open the same target, and both count. Pay again to open another target your dice beat.
+
+**Not just fights (1 Aura):** your dice explode on this roll even when it isn't a fight: a door to break, a wall to climb, or a man to stare down.
+
+**Parry (1 Aura):** this round, your weapon's tier goes on your roll when things land at your Body, the way a guard's would. It's still one item a roll.
+
+**Read the fighter (1 Aura):** when one of your dice wins in a fight, the GM tells you one of the target's hidden tags as well. Pay again for another.
+
+**Face me (1 Aura):** when one of your dice wins against a threat, its next telegraph has to come at you, as well as whatever the die was for. Pay again for another threat your dice beat.
+
+**Follow through (1 Aura):** when one of your dice explodes, roll the new one as a die of its own, with its own intent, instead of adding it on. It can explode too. Pay again for another.
+
+**Through them (1 Aura):** when one of your dice puts a mook down, it goes on at another within your reach, with the same number, against their defence. Pay again and it goes on again.
+
+**Riposte (1 Aura):** when one of your dice stops a blow as it lands, it goes at whoever swung it as well, with an intent you give it, against their defence. Pay again for another die.
+
+**Show them how (1 Aura):** a friend beside you rolls dice that explode in this fight, the way yours do, till the round ends. Pay again for another friend.
 :::
 
 :::example[The sellsword]
 Say you're a Warrior, and your swing's your Body, 8 steps, which you keep as a d12 and a d4. You go at a sellsword whose d10 comes up 9. Your d12 lands on 7, so you pay 1 Aura and it's a 9, a tie, and you pay 1 Aura more to win it. A d12 that lands on 12 would have given you 1 Aura and rolled again, and so would your d4 on a 4.
 
-You're in Fine mail and a Common helm, and next round you're swinging again, not Defending, when two blades come at your Body. When they land, your Body's 8 steps and your armour's 2 more, 10, and you make it two d10s, one for each blade.
+You're in a Trusty mail shirt, tier 2 armour, and next round you're swinging again, not Defending, when two blades come at your Body. When they land, your Body's 8 steps and your mail's tier is 2 more, 10, and you make it two d10s, one for each blade. Whatever gets through takes its point off the mail's soak before it gets to your Body.
 :::
 
 **Title ideas:** [Warrior](#k-warrior) · [Sailor](#k-sailor) · [Kinesis](#k-kinesis)

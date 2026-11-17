@@ -193,3 +193,19 @@ A chat changes only its own files, its own parts of `tests/` and its own blocks 
 ### 0. Write it down
 
 Written 17 Nov: the decisions, this plan, the 17 Nov section in `notes/to-confirm.md` and the line in CLAUDE.md, on `rules/2026-11-17-fixes` off `rules/2026-11-16-core`. Prompts 1, 2, 3a, 3b, 3c and 4 can start.
+
+### 3c. Abilities III
+
+Built 17 Nov on `rules/2026-11-17-fixes-abilities-c`. Its calls are under 3c in `notes/to-confirm.md`'s 17 Nov section.
+
+- **03a's opening:** about ten abilities to an archetype, still one with it and six held at most, each printing its Aura (most 1, a few 2) and stacking, a vessel's charge paying for your own abilities a charge an Aura, and abilities working with an item's tier, Resources, charge and soak. Bram's Push example rolls his Trusty shield as a guard (11 steps). No Boons and no permission trade anywhere in it.
+- **The Shadow, Shifter, Summoner, Teleporter and Warrior:** ten abilities each, the old ones first and word for word (Vesk's and Dorrie's Push and Vanish), the rest simplest first. The Warrior's *Second Skin* adds its armour's tier as a guard's, and its example's in a Trusty mail shirt with soak. A caught soul ticks a Resource and is caught with a die.
+- **The build:** `npm run content` reads all fifty with their prices (0 warnings). `build-content.mjs` no longer warns past six abilities on an archetype, and warns on one under 1 Aura.
+- **Checks:** `tests/check-companion.mjs` part 1 and 1e pass, `check_terms.py --links` has no broken links, and voice_check flags nothing in these parts.
+
+What the other prompts need from it:
+
+- **1:** Appendix D's Warrior line says *Second Skin* is 1 step a piece, and the build takes the paper sheet's short words from it: it's the armour's tier now. Its Summoner line still says a utility slot. `check_terms.py` flags *tier* as retired, on five of these lines.
+- **2:** Bram's example assumes a tier 2 shield as a guard.
+- **6:** `allOf()` in `builder.js` gives a build from before stacking the first six of the book's list, which is the old abilities and then new ones now. It wants the abilities each archetype had then (two to four, first in every list), not the first six. The builder's archetype cards show ten to pick from.
+- **7:** 07's Summoning and Appendix C's *Catch its soul* still say a utility slot, and the Summoner's souls are still Mo's (call 8).
