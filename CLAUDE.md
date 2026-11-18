@@ -85,6 +85,15 @@ Every chat comes out of Mo's usage, so get the most done for the least.
 - The independent check is one agent on Sonnet that reviews the diff and reports in a few hundred words, since an open-ended review can cost as much as the build.
 - Don't narrate between steps, and ask Mo only about the decisions that are his.
 
+## Helpers on Haiku
+
+You lead on Opus: you plan, decide, write and check. Legwork goes to the helpers in `.claude/agents/`, which run on Haiku at about a fortieth of Opus's price while a job stays under 100,000 tokens (about an eighth past that), so brief them tight.
+- `zi-scout`: where something lives (a rule's section, a function, a check's part, a call in the notes). Read-only, answers with `file:line` and quotes rules exactly.
+- `zi-tests`: the terms and voice checks, the build, a part of a check file with `ZI_ONLY` or `ZI_UPTO`, or the full runs before you finish, reporting failures with the shortest output that shows why.
+- `zi-mechanic`: a mechanical change you've fully specified (a rename, an exact word swap you've written out, the same code edit in many files, a list of values), then the check you give it.
+
+What stays with you, always: the rules and every word of the book, the Learn deck and the change log (Mo's voice), design and how the companion feels, the crew's numbers, deciding what a failure means, and judging the work. The independent check stays as above, one agent on Sonnet reviewing the diff. Treat a helper's report as a lead, not a fact: open the lines it points to before you build on them. Brief each one with the exact question, where to start looking and what to report, and send independent ones at once. One that comes back unsure, or that would need a judgement call, is yours to finish, not to send again.
+
 ## The voice
 
 Write as Mo, teaching at the table with dice in hand. Use the `zi-voice` skill when it's available.
