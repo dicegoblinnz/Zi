@@ -29,7 +29,7 @@ updated: 2026-11-18
 -   **Attunement** — [Attunement](#s-attunement), [Attuned Things from the Story](#s-rare)
 -   **Aura** — [Aura](#s-aura)
 -   **Awakened** — [Attunement](#s-attunement)
--   **Awakenings** — [Attunement](#s-attunement), [How to write one](#how-to-write-one)
+-   **Awakenings** — [Attunement](#s-attunement), [Awakening ideas](#awakenings-30), [How to write one](#how-to-write-one)
 
 ## B {#b}
 

@@ -2,6 +2,19 @@
 
 Your rules left a few gaps, and the book has to say something in each one, so Claude made a call. Every one of these is in the book now, written as a rule. Tell Claude "yes", "no, do this instead" or "leave it for now", and the book and the change log get updated. Your own open questions are at the bottom of `content/changes.md`, and your decisions are in `notes/playtest-sheets/` (the 27 Oct ones in `2026-10-27-chat-decisions.md`).
 
+## 18 Nov: awakenings that do more than steps
+
+Mo's ask in chat (armour for each Root, charged dice, Aura on 1s, a reroll, a Root paid to heal), built from the lever map he approved and the `zidara-levers` skill. The 30 are in Step 6, Awakening ideas (`c-2026-11-18-awakenings`). The book only: the builder's pick list and the play screen still treat every awakening as 2 steps.
+
+1. **A kind takes the steps' place.** An awakening's either the usual 2 steps or one other lever, never both, since both together makes each one worth about two.
+2. **A Ward's 2 soak for its locked point**, on any Root, after armour, and 1 Aura as a hit lands soaks 1 more. A narrow one's 3, against one kind of harm.
+3. **A charged die sets off free once a round**, and 1 Aura each time after.
+4. **Aura on 1s is once a roll**, on rolls with the thing, so it stays well short of the Gambler's Trait.
+5. **Paying a Root to heal is 1 for 1**, once a round, no action and no Toll, with no Aura to buy more.
+6. **Number 20 pays on a hit, not on a point you spend**, to keep your call on *Paid in Blood*.
+7. **The free ability (21) is a 1 Aura one**, so it never makes a held ability or a signature free.
+8. **The ones to watch at the table:** 14 (Mind stopping blows at your Body), 17, 10, 22 and 18.
+
 ## 18 Nov: Mo's calls, and Fable's
 
 Mo's calls on the abilities, and the rest he handed to Fable, the lead designer. The rest of the book's on them (`c-2026-11-18-calls`), and 03a's being written by two other chats.

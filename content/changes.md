@@ -5,6 +5,18 @@ updated: 2026-11-18
 ---
 This is the record of every rules change since the 2 Oct 2026 book, newest first. Each entry's date is the day the change went to the table. When a later change replaces an earlier one, the earlier entry says so. The rules chapters always show the game as it is now, so if you only want to play, read those and skip this.
 
+## 18 Nov 2026: Awakenings that do more than steps {#c-2026-11-18-awakenings}
+
+Mo's call in chat, on top of [Mo's calls on the abilities](#c-2026-11-18-calls).
+
+**An awakening can do something else in place of its 2 steps.** It still locks a point of its Root, and it still does what it says. Now it can soak hits on your Body, your Mind or your Soul, charge one of your dice with an element, a curse or a poison, pay you Aura when a die comes up 1, roll a die again, or put a point back on you or a friend for a point of your own. It replaces every awakening being 2 steps on a roll it fits and nothing more. See [Attunement](#s-attunement).
+
+**Awakening ideas: 30.** Thirty to pick from and rename, in six lists: dice, charged dice, armour, Aura, healing, and getting around, knowing and people. Each says its Root, what it does and what 1 Aura more buys. See [Awakening ideas](#awakenings-30).
+
+**Charged dice.** Name one of your dice before you roll with the thing. It does its intent like any other, and once you've seen it land you choose whether to set it off, so one win can strip a tag and leave the threat *Burning* as well. It's free once a round, and 1 Aura each time after. See [Charged dice](#s-charged-die).
+
+**An awakening can raise your Aura maximum.** *Runs deep* makes it 6. It replaces nothing but a Burden changing it. See [Attunement](#s-attunement).
+
 ## 18 Nov 2026: Mo's calls on the abilities {#c-2026-11-18-calls}
 
 **The quick heal's gone.** Nobody pays 1 Aura and an action to put a point back any more. Mid-scene, points come back from a Healer's heal, the Healer's *Hold still* (1 Aura, once a round, no action, a point on one Root), a Bard's *Lift them*, taking a breath, straining a bond thread, *Heartened*, a *Medical kit* and the abilities that say so. A medical kit's a point of Body for your action now, where it was a free quick heal. See [Healing](#s-healing) and [Aura](#s-aura).
