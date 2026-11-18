@@ -13,7 +13,7 @@ Mo's call in chat, on top of [Mo's calls on the abilities](#c-2026-11-18-calls).
 
 **Awakening ideas: 30.** Thirty to pick from and rename, in six lists: dice, charged dice, armour, Aura, healing, and getting around, knowing and people. Each says its Root, what it does and what 1 Aura more buys. See [Awakening ideas](#awakenings-30).
 
-**Charged dice.** Name one of your dice before you roll with the thing. It does its intent like any other, and once you've seen it land you choose whether to set it off, so one win can strip a tag and leave the threat *Burning* as well. It's free once a round, and 1 Aura each time after. See [Charged dice](#s-charged-die).
+**Charged dice.** Name one of your dice before you roll with the thing. It does its intent like any other, and once you've seen it land you choose whether to set it off, so one win can strip a tag and leave the threat *Burning* as well. Each awakening says how often. Most are free once a round, and 1 Aura sets one off once more, on something else. See [Charged dice](#s-charged-die).
 
 **An awakening can raise your Aura maximum.** *Runs deep* makes it 6. It replaces nothing but a Burden changing it. See [Attunement](#s-attunement).
 

@@ -460,13 +460,13 @@ You don't have to write an awakening from nothing. Pick one off these lists and 
 -   **It does what its row says**, whenever that fits, with no roll and no Aura. The first one's the usual 2 steps, and the rest do something else in their place.
 -   **1 Aura gets you more**, where the last column says what. Where it says nothing, there's nothing to buy.
 -   **Change the Root if yours works another way.** A fiddle that curses people is Soul, and a poisoned knife's Body. Keep the rest of the row.
--   **Take one twice** and it locks two points and its number doubles: 4 steps, 4 soak, twice a scene.
+-   **Take one twice** and it locks two points and its number doubles: 4 steps, 4 soak, twice a scene. Where there's no number to double, a second one does nothing more.
 
 Don't pick them all from one list. A sword with three fighting awakenings is no help anywhere else, and a thing that fights, climbs and hears a lie is.
 
 #### Charged dice {#s-charged-die}
 
-A few of these work on a **charged die**. Before you roll with the thing, name one of your dice. That's the charged die. It rolls and does its intent like any other, and once you've seen it land, you choose whether to set it off.
+A few of these work on a **charged die**. Before you roll with the thing, your defence included, name one of your dice. That's the charged die. It rolls and does its intent like any other, and once you've seen it land, you choose whether to set it off.
 
 #### Dice {#awakenings-dice}
 
@@ -482,21 +482,21 @@ A few of these work on a **charged die**. Before you roll with the thing, name o
 
 | \# | Awakening | Root | What it does | 1 Aura more |
 | --- | --- | --- | --- | --- |
-| 6 | *Everything it touches burns* | Soul | Your charged die's fire, so it hits anything vulnerable to fire. Once a round, when it wins, it does its intent and leaves *Burning* at that die as well. Name your own element: frost leaves *Pinned*, lightning *Staggered* and light *Blinded*. | Set it off again this round |
-| 7 | *Says their name backwards* | Soul | Once a round, a charged die that wins does its intent and leaves *Hexed* at that die as well. Name your own curse: *Shaken*, *Frightened*, *Silenced* or *Hunted*. | Set it off again this round |
-| 8 | *A slow green edge* | Body | Once a round, a charged die that lands a hit leaves *Poisoned* at that die as well. | Set it off again this round |
-| 9 | *Bites the hand* | Body | Once a round, a die of your Body's defence that stops a blow leaves whoever swung *Bleeding*, at that die. | Again this round |
-| 10 | *Drinks what it spills* | Body | Once a round, a charged die that lands a hit gives you a point of Body back. | Nothing |
-| 11 | *Frost where it falls* | Soul | A charged die that wins leaves *Black ice* on the ground there till the scene ends, and anyone can use it. | Nothing |
+| 6 | *Everything it touches burns* | Soul | Your charged die's fire, so it hits anything vulnerable to fire. Once a round, when it wins, it does its intent and leaves *Burning* at that die as well. Name your own element: frost leaves *Pinned*, lightning *Staggered* and light *Blinded*. | Set it off once more this round, on something else |
+| 7 | *Says their name backwards* | Soul | Once a round, a charged die that wins does its intent and leaves *Hexed* at that die as well. Name your own curse: *Shaken*, *Frightened*, *Silenced* or *Hunted*. | Set it off once more this round, on something else |
+| 8 | *A slow green edge* | Body | Once a round, a charged die that wins and does harm, a hit or a tag stripped, leaves *Poisoned* at that die as well. | Set it off once more this round, on something else |
+| 9 | *Bites the hand* | Body | Your charged die can be one of your Body's defence. Once a round, when it stops a blow, it leaves whoever swung *Bleeding*, at that die. | Once more this round, on someone else |
+| 10 | *Drinks what it spills* | Body | Once a round, a charged die that wins and does harm, a hit or a tag stripped, gives you a point of Body back. | Nothing |
+| 11 | *Frost where it falls* | Soul | Once a round, a charged die that wins leaves the ground there *Icy* till the scene ends. It's one of the ground's tags now, so anyone can use it. | Nothing |
 
 #### Armour {#awakenings-armour}
 
 | \# | Awakening | Root | What it does | 1 Aura more |
 | --- | --- | --- | --- | --- |
-| 12 | *Turns the blade* | Body | 2 soak on your Body, back every scene, after any armour you're wearing. Take it for your Mind as *A quiet place behind my eyes*, or for your Soul as *Not mine to take*. | 1 more soak, as a hit lands |
-| 13 | *The dead can't lay a hand on me* | Soul | 3 soak on your Body, but only against the dead. Name your own: fire, steel, fear, curses. | 1 more soak, as a hit lands |
-| 14 | *See it coming* | Mind | Once a round, when blows land at your Body, roll your Mind to stop them. | Again this round |
-| 15 | *Not today* | Body | Once a scene, the hit that'd leave you *Bloodied* leaves your Body on 0, and that's all. | Nothing |
+| 12 | *Turns the blade* | Body | 2 soak on your Body, back every scene. It counts as armour with no tier of its own, and it soaks after any armour you're wearing. Take it for your Mind as *A quiet place behind my eyes*, or for your Soul as *Not mine to take*. | 1 more soak, as a hit lands |
+| 13 | *The dead can't lay a hand on me* | Soul | 3 soak on your Body, as armour with no tier of its own, but only against the dead. Name your own Root and harm: fire or steel at your Body, fear at your Mind, curses at your Soul. | 1 more soak, as a hit lands |
+| 14 | *See it coming* | Mind | Once a round, when blows land at your Body, roll your Mind in your Body's place, at full and split as you like. | Again this round |
+| 15 | *Not today* | Body | Once a scene, one hit that'd leave you *Bloodied* doesn't, and your Body stays on 0. | Nothing |
 | 16 | *Cold iron calm* | Mind | Nothing can make you *Frightened*. Name your own condition when you take it. | Nothing |
 
 #### Aura {#awakenings-aura}
@@ -506,7 +506,7 @@ A few of these work on a **charged die**. Before you roll with the thing, name o
 | 17 | *Luck in the lining* | Soul | On a roll with it, the first die that comes up 1 gives you 1 Aura. | Nothing |
 | 18 | *Runs deep* | Soul | Your Aura maximum's 6. | Nothing |
 | 19 | *Holds a charge* | Mind | It holds 2 charge, the way a [vessel](#s-vessels) does, and it doesn't need a vessel's item slot. | Nothing |
-| 20 | *It takes its due* | Body | The first hit that gets through to your Body each round gives you 1 Aura. | Nothing |
+| 20 | *It takes its due* | Body | The first hit each round that takes a point of your Body gives you 1 Aura. | Nothing |
 | 21 | *Knows the trick by heart* | Mind | One of your abilities that costs 1 Aura, named when you take this, costs nothing the first time you use it each scene. | Nothing |
 
 #### Healing {#awakenings-healing}
@@ -525,13 +525,13 @@ A few of these work on a **charged die**. Before you roll with the thing, name o
 | 26 | *Up any wall* | Body | You climb at your full stride. Name your own: swimming, leaping, squeezing through. | Nothing |
 | 27 | *Hears the lie* | Mind | When someone lies to your face, you know it's a lie. It doesn't tell you what's true. | Nothing |
 | 28 | *The other half of the pair* | Soul | You and whoever carries its twin can hear each other anywhere in the scene. | Nothing |
-| 29 | *Wakes before I do* | Soul | You start every scene *Warded* at a d4. Name your own condition when you take it. | It starts at a d8 |
+| 29 | *Wakes before I do* | Soul | You start every scene *Warded* at a d4. Name your own condition when you take it. | Paid as the scene starts, it's a d8 |
 | 30 | *Comes back to my hand* | Body | Nobody can take it off you, and it's in your hand the moment you call it. | Nothing |
 
 :::example[A ward and a charged die]
 Isolde's Body is 0, so the first blow that gets through to her leaves her *Bloodied*. Say her chalk and salt goes Tempered and she takes *The dead can't lay a hand on me* (Soul). That's a second point of her Soul locked, so she holds 5 of its 7. Down in the vault, a Warden's spear gets through to her three times and all three are soaked. It'd take a fourth to leave her *Bloodied*, and 1 Aura as that one lands soaks it too.
 
-Say Ash gives her ember stone its Catch, and takes *Everything it touches burns* (Soul) with it. She throws fire at the Warden and names one of her d12s as the charged die. It comes up 9 against the Warden's 6, and its intent was to burn the shield off its arm, so *Shield*'s gone. She sets the die off, and now the Warden's *Burning d12* as well, for Bram to spend next round.
+Say Ash gives her ember stone its Catch, and takes *Everything it touches burns* (Soul) with it. She throws fire at the Warden and names one of her d12s as the charged die. It comes up 9 against the Warden's 6, and its intent was to burn through its armour, so *Armoured*'s gone. She sets the die off, and now the Warden's *Burning d12* as well, for Bram to spend next round.
 :::
 
 ### Catch ideas: 12 {#catches-12}

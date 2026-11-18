@@ -228,7 +228,7 @@ Anything that works on its own, like a summoned beast or a raised servant acting
 
 **Aura** is your character's luck and flair, the bit of soul they put into a moment when skill alone won't get them there. It comes and goes all scene, and it's what you spend when you want more than your Roots give you.
 
--   **You start every scene full.** Your maximum's **5**. A scene is one place and one problem, and the next one starts when that problem's sorted or the crew moves on. There's no Aura in downtime.
+-   **You start every scene full.** Your maximum's **5**, bar a Burden or an awakening that says otherwise. A scene is one place and one problem, and the next one starts when that problem's sorted or the crew moves on. There's no Aura in downtime.
 -   **Every die of yours that wins gives you 1 back, and so does every top face** (see [The Roll](#s-the-roll)).
 -   **While you're acting, it can go past your maximum.** Once you've finished acting for the round, anything over that's gone, so spend it first. When it comes in while you're not acting, like off your defence, it stops at your maximum, and you can give the rest to a friend in the scene.
 -   **A vessel catches what you'd lose.** If you're carrying one, the Aura past your maximum when you finish acting, and what comes in past it while you're not, if you'd rather keep it than give it to a friend, can go into it as charge instead. What you've got left when a scene ends isn't lost, since you start the next one full, so it doesn't go in (see [Vessels](#s-vessels)).
