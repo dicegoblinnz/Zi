@@ -9,7 +9,7 @@ Eleven individuals Abnu created to stop the dead jumping back. Seven are the vir
 ## What's true
 - Abnu created eleven. (Canon)
 - Seven are the seven virtues: the traits that make a good person, morally and in idea. People worship the Seven. (Canon)
-- Their names are to be Sumerian, not the Bible's. (Canon, 23 Nov, replacing "they go by the virtues' names")
+- Their names are Sumerian, not the Bible's (23 Nov, replacing "they go by the virtues' names"): **Gina** (truth, standing firm), **Zid** (faithfulness, doing right), **Sisa** (justice, made straight), **Arhush** (compassion), **Kuzu** (wisdom), **Ursag** (courage) and **Ni** (reverence, humility). (Canon)
 - Mo would like eleven virtues in all if that can be made to work. (Proposed, his maybe)
 - Four stand above the Seven: (Canon)
   - **The Oracle** sees the future, and helps the Seven and the others act on it.
@@ -22,7 +22,7 @@ Eleven individuals Abnu created to stop the dead jumping back. Seven are the vir
 - [[abnu-and-the-moons]]: their maker.
 
 ## Open
-- Which seven traits, and their names. The older Abnu had Courage, Wisdom, Compassion, Justice, Humility, Integrity and Resilience.
+- Sisa's Sumerian source (niĝ-si-sá) is from Claude's memory and still to be checked. Anukush (untiring) is a spare name.
 - Alysta's soul is pure "now". Was it ever otherwise? The older Abnu had him an emperor taking his sons' bodies.
 - Are the eleven made from nothing, or are they souls Abnu chose?
 - Why are the four above the Seven? Rank, age, or only that their tasks are harder?
@@ -31,4 +31,3 @@ Eleven individuals Abnu created to stop the dead jumping back. Seven are the vir
 
 ## Proposed
 - The plan failed through its own maker: the dagger never reached the Infiltrator, because the dagger-maker wouldn't hand it to anyone. (Claude)
-- Names for the Seven, from real Sumerian words shortened for the table: Gina (truth, standing firm), Zid (faithfulness, doing right), Sisa (justice, made straight), Arhush (compassion, from the word for womb), Kuzu (wisdom), Ursag (courage), Ni (reverence, humility). Spare: Anukush (untiring). (Claude; Sisa and Ni from memory, the rest checked)
