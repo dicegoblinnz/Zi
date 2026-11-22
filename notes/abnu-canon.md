@@ -1,5 +1,7 @@
 # Abnu: the canon
 
+> **Reference only since 23 Nov 2026.** Mo is rebuilding Abnu from his own telling in `notes/abnu/` (branch `abnu`), and that folder is the canon now. This file stays for ideas and for asking him about, and where the two disagree, `notes/abnu/` wins.
+
 Abnu's lore, put together on 30 Oct 2026 for its whole world (stages 15 and 16 of `notes/builder-plan.md`). Those stages write Abnu from this file and nothing else, so it holds all of it: Mo's picks, what his sources agree on, the calls Claude made where they don't, and what stays open. Nothing from his old systems' rules is here: no dice ladders, no Gates or soul abilities as rules, no Flow permissions, Consequences, Truth or cards. On a card or a page, what something is at the table is said in Zi'Dara's terms.
 
 - Everything here is canon unless it's marked **Claude's call** or **open**.
