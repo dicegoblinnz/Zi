@@ -2,7 +2,7 @@
 
 Abnu is Mo's world, and this folder is its one home from 23 Nov 2026. Read this file and `open.md` before any Abnu session. The `abnu-canon` skill says how a session runs.
 
-This folder lives on the branch `abnu`. Commit and push there after every session. It goes to `main` only when Mo says, like everything else in the repo.
+This folder lives on the branch `abnu-canon`. Commit and push there after every session. It goes to `main` only when Mo says, like everything else in the repo.
 
 ## What counts
 
