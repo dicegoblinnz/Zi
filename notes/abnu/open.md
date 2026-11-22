@@ -2,11 +2,11 @@
 
 Most load-bearing first. A question leaves this list when Mo answers it and the answer's in an entry.
 
-## Asked 23 Nov, waiting on Mo
-1. Does Abnu have a will? It made the eleven, so something decided.
-2. What happens to the soul already in a body when someone jumps into it?
-3. Was there an older first people before the twins' tribes?
-4. The Seven: the Bible's names, or Abnu's own names for the same seven ideas?
+## Asked 23 Nov (second round), waiting on Mo
+1. Do souls in the Garden get born again, or stay for good? The harm to Abnu hangs on it.
+2. Cancer as the disease, with the memory cost as the eleven's seal?
+3. World as Body, Garden as Mind, Abnu as Soul, taught by the Prophet?
+4. The Seven's traits and names (list in the-eleven).
 5. The twins' names.
 
 ## Next

@@ -7,6 +7,7 @@ Settled spellings and each culture's sounds. Mo dictates, so every new name is c
 - **Garden of Souls**
 - **soul eyes**
 - **the Seven**
+- **Alysta**: the Prophet.
 - **the Oracle**, **the Prophet**: two of the four above the Seven.
 
 ## Working labels, not names
