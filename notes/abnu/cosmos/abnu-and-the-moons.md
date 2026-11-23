@@ -8,6 +8,7 @@ Abnu is the special rock the moons are made of, and it's where souls are made. T
 
 ## What's true
 - The world started with ten moons. (Canon)
+- One of the moons fell. It's the big event the world's history turns on. (Canon)
 - The moons are made of a special rock, called Abnu. (Canon)
 - Abnu makes the life force of people: souls are created there and sent down to the planet to be born and live a life. (Canon)
 - There's a creator, but like on Earth he isn't present, so the setting has no need to mention gods. People worship the Seven instead. (Canon)
