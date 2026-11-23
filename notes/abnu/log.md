@@ -2,6 +2,16 @@
 
 Newest first. What became canon, what's still proposed, and where to pick up.
 
+## 23 Nov 2026, second telling
+
+Mo told the rest of the world's making: the twins' rule by force, the Anunnaki against the ordinary souls, the meteor shower that made Montia's islands, the Queen and the Anunnaki trapped in a moon, the moon shaken into the sea, memory wiped and souls weakening, and the Seven making rebirth (one soul in ten, and the source of natural talent). Also his first pass at the magic: four awakenings and four schools (brave, divine, ambitious, empathetic), which he isn't married to.
+
+New entries: `peoples/anunnaki`, `history/the-queens-war`, `history/the-fall-of-the-moon`, `history/timeline`, `cosmos/rebirth`, `lands/montia`. Answered from the open list: how the moon fell, why rebirth was needed, whether the Queen was sealed.
+
+One contradiction raised and waiting: memory loss was settled as the eleven's seal, and this telling has it as the moon's fall. Proposed and waiting: the Anunnaki as the returned dead; the Seven only able to take a soul at death, with the Infiltrator bringing about the mass death; the body as a fourth-awakening soul's weak point; the Prophet touched first because he's the one born into lives; the dagger never used.
+
+Pick up with Mo's answers to the five questions in `open.md`, then the magic session in a fresh chat.
+
 ## 23 Nov 2026
 
 Set up the store. Mo's calls: canon lives in this repo, the older Abnu material is reference only, and Claude challenges ideas that don't click.
