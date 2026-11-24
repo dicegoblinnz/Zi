@@ -2,12 +2,11 @@
 
 Most load-bearing first. A question leaves this list when Mo answers it and the answer's in an entry.
 
-## Asked 23 Nov, waiting on Mo
-1. Who are the Anunnaki, and why can only they reach the fourth awakening? (Proposed: the returned dead.)
-2. Why jumping costs memory: the eleven's seal, or the moon's fall? (Newest is the fall.)
-3. When the moon hit the sea, did the Queen get out?
-4. Where is the brother at the last battle, and is he in the moon?
-5. What beats a fourth-awakening soul? (Proposed: the body it leaves behind.)
+## Asked 24 Nov, waiting on Mo
+1. How has the Spymaster kept his memory and stayed free for over a thousand years? (Proposed: he wasn't at the last battle, and he goes body to body without ever dying.)
+2. Lock the Anunnaki as the returned dead? Mo's happy to play along, not locked.
+3. Where does a table's crew stand beside Dimitri's story?
+4. Alysta and soul: can't he use it, or won't he?
 
 ## Next up: the magic session
 Mo wants to sit down and build the magic properly. The first pass is in `cosmos/the-soul.md`.
@@ -17,13 +16,18 @@ Mo wants to sit down and build the magic properly. The first pass is in `cosmos/
 - "Divine" in a world with no gods.
 - Four schools beside the game's three Roots.
 - Is there something past the fourth?
+- Better names for the four awakenings, and for the divine soul.
+- Destroying a soul by giving your own.
+- Abnu items that work against soul.
 
 ## Next
 - What "the field" is that the moon fell through, and where the Garden sits.
-- Why the Prophet was touched first, what he's losing, and when he becomes Alysta.
+- What the Prophet is losing, and when he becomes Alysta.
+- Dimitri: who he is and why he can free her. Mo's next telling on him.
+- The brother's death: who did it and when.
 - Rebirth: who gets to line up, where a reborn soul goes, whether anyone can tell.
 - Who led the ordinary souls against the Queen.
-- Why the Seven could trap the Anunnaki "effortlessly" then and not before.
+- What the Seven's long plan needed in place.
 - The dagger: was it ever used, and what's it for now?
 - Is Abnu the rock, the one moon, the world, or all three?
 - What each of the ten moons did.

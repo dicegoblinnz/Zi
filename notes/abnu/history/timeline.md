@@ -1,6 +1,6 @@
 # Abnu: the order of things
 
-**Changed:** 2026-11-23
+**Changed:** 2026-11-24
 
 The order Mo has told it in. No dates or lengths yet.
 
@@ -13,4 +13,5 @@ The order Mo has told it in. No dates or lengths yet.
 7. Generations pass.
 8. [[the-fall-of-the-moon]]: she shakes the moon into the sea. Memory is wiped on the way down, and souls weaken.
 9. Awakening grows rare. The Seven make [[rebirth]].
-10. Now. How long after isn't said.
+10. Now. More than a thousand years after the Queen was trapped. She's still in the moon on the seabed, and the Spymaster is working to free her.
+11. To come, in Mo's planned story: the first chronicle is Dimitri's journey, and the second starts with the Spymaster releasing the Queen.

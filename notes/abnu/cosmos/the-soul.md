@@ -2,7 +2,7 @@
 
 **Kind:** cosmos
 **Status:** Canon, first pass. Mo isn't married to the awakenings or the schools and wants a session to build the magic properly.
-**Changed:** 2026-11-23
+**Changed:** 2026-11-24
 
 Soul is power. A person who awakens their soul can bend it, and what it becomes depends on who they are. How much of it they can bend goes up through four awakenings, and what they bend it into falls into four schools.
 
@@ -17,7 +17,11 @@ How much soul a person can control. (Canon, first pass. Mo may rename "awakening
 - **Second.** A body part's worth of soul, such as a whole limb. The whole hand hardened, five or ten daggers carried, another person's thoughts and perceptions worked on.
 - **Third.** A whole body's worth of soul. It's as far as an ordinary soul can go.
 - **Fourth.** The soul works outside the body. The body becomes a sort of limb and the soul is unbound by the physical world, so it can travel at incredible speeds, up to feats at the speed of light. Only the [[anunnaki]] can reach it.
-- Each step up is a massive jump in power, and the fourth over the third is bigger again. (Canon)
+- Each step up is a massive jump in power, and the fourth over the third is bigger again. Massive isn't infinite: about ten at the third can take down one at the fourth. (Canon)
+- If the body is killed while a fourth-awakening soul is out of it, the soul is severed and forced out into the Garden of Souls. (Canon)
+- A soul can be destroyed for good. Someone gave their own soul to disintegrate the Queen's brother's. See [[the-twins]]. (Canon)
+- Abnu items work against soul. Alysta beat a fourth-awakening Anunnaki with those and expertise, and no soul of his own. (Canon)
+- The four need better names. (Canon; Mo's call, for the magic session)
 
 ### The four schools
 What a soul is bent into. (Canon, first pass, working names.)
@@ -42,7 +46,9 @@ What a soul is bent into. (Canon, first pass, working names.)
 - How does someone awaken: training, a crisis, age, a teacher? And what moves them to the second and third?
 - Does a person have one school or can they learn several? Is the school chosen or is it who they are?
 - The body while a fourth-awakening soul is out of it: helpless, or still fighting?
-- "Divine" in a world that doesn't mention gods. Keep the name?
+- Giving your soul to destroy another's: who can do it, and why isn't it done more?
+- Abnu items: what they are, who makes them, who's allowed them.
+- A new name for the "divine" soul. Mo is happy to change it. It's the healing side.
 - Four schools beside the game's three Roots (Body, Mind, Soul). How do they sit together?
 - How common awakening was in the twins' time, at its height, and now.
 - Mo called the fourth "the penultimate one". Is there something past it?

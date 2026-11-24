@@ -8,17 +8,20 @@ Settled spellings and each culture's sounds. Mo dictates, so every new name is c
 - **soul eyes**
 - **the Seven**
 - **Gina, Zid, Sisa, Arhush, Kuzu, Ursag, Ni**: the Seven.
-- **Alysta**: the Prophet. Dictation hears it as "Alistair".
+- **Alysta**: the Prophet. Mo confirmed the spelling on 24 Nov. Dictation writes "Alistair"; always read it as Alysta.
 - **the Oracle**, **the Prophet**: two of the four above the Seven.
 - **Anunnaki**: the Queen's people, who can reach the fourth awakening.
 
 ## To check with Mo
+- **Dimitri**: held from dictation.
 - **Montia**, **Montian**: the archipelago kingdom. Dictated as "Montea" and "Montaian". Held as the older material spells it.
 
 ## Working labels, not names
 - the Queen, her brother, the twins
 - the dagger-maker, the Infiltrator, the Abnu dagger
 - the first people
+- the Spymaster
+- the first and second chronicle: Mo's planned story
 - souls, normal souls, generic souls, new souls: everyone who isn't Anunnaki
 - the first, second, third and fourth awakening (Mo may rename the later ones)
 - the brave soul, the divine soul, the ambitious soul, the empathetic soul: the four schools

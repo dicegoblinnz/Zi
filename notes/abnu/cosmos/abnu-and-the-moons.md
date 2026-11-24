@@ -2,7 +2,7 @@
 
 **Kind:** cosmos
 **Status:** Canon
-**Changed:** 2026-11-23
+**Changed:** 2026-11-24
 
 Abnu is the special rock the moons are made of, and it's where souls are made. The word is Sumerian for rock.
 
@@ -13,11 +13,12 @@ Abnu is the special rock the moons are made of, and it's where souls are made. T
 - Abnu makes the life force of people: souls are created there and sent down to the planet to be born and live a life. (Canon)
 - The ten moons each served a purpose and worked in synchronicity, a perfect balance for making souls. (Canon)
 - Abnu suspends souls and stops their use. That's what makes it so powerful, and a soul trapped inside it is as good as dead, if not worse. (Canon)
+- Things made of Abnu work against soul. The dagger is one, and Alysta used anti-soul Abnu items to beat one of the Anunnaki. (Canon)
 - There were rocks between the moons. The Queen pulled them down as her meteor shower. See [[the-queens-war]]. (Canon)
 - There's a creator, but like on Earth he isn't present, so the setting has no need to mention gods. People worship the Seven instead. (Canon)
 - When people abused coming back from death, Abnu created eleven individuals to stop it. See [[the-eleven]]. (Canon)
 - Abnu never speaks. Nobody knows whether it has a will. The eleven woke already knowing their tasks, and it acts the way a body fights an infection. (Canon)
-- One of the moons fell into the deepest part of the ocean, shaken down by the Queen from inside it. Nine are left, and the souls they make are weaker. See [[the-fall-of-the-moon]]. (Canon)
+- One of the moons fell into the deepest part of the ocean, shaken down by the Queen from inside it. The Queen is still inside it. Nine are left, and the souls they make are weaker. See [[the-fall-of-the-moon]]. (Canon)
 - Taught in the world: the world is the Body, the Garden of Souls the Mind and Abnu the Soul. (Canon)
 
 ## Ties

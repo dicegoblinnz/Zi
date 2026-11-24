@@ -2,6 +2,14 @@
 
 Newest first. What became canon, what's still proposed, and where to pick up.
 
+## 24 Nov 2026
+
+Mo answered the round. Canon now: memory loss is purely the moon's fall (the seal version is retired); the Seven only take a soul at death, and trapping the Anunnaki was easy because it was long planned; killing the body severs a fourth-awakening soul to the Garden; about ten thirds can take a fourth, and Alysta once took one with no soul and anti-soul Abnu items; the brother was destroyed for good earlier, taking a soul-destroying blow meant for her, and she became the mad queen; she's still in the moon on the seabed; the Prophet suffered first because he keeps living lives. New: the Spymaster, an Anunnaki plotting over a thousand years to free her, and Dimitri, the lead of Mo's planned story, whose second chronicle starts with her release. Alysta's spelling confirmed.
+
+Still proposed: the Anunnaki as the returned dead (Mo likes it, not locked); the Infiltrator bringing the mass death about; the dagger never used; the Spymaster going body to body without dying.
+
+Pick up with the four questions in `open.md`, then the magic session in a fresh chat.
+
 ## 23 Nov 2026, second telling
 
 Mo told the rest of the world's making: the twins' rule by force, the Anunnaki against the ordinary souls, the meteor shower that made Montia's islands, the Queen and the Anunnaki trapped in a moon, the moon shaken into the sea, memory wiped and souls weakening, and the Seven making rebirth (one soul in ten, and the source of natural talent). Also his first pass at the magic: four awakenings and four schools (brave, divine, ambitious, empathetic), which he isn't married to.
