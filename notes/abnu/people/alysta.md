@@ -12,9 +12,14 @@ One of the four above the Seven, made to guide the living toward the virtues. He
 - After the moon fell he began losing his memory, in the first half of his journey, and was the first to suffer from the fall. (Canon)
 - He realised the next jump might cost him everything, so the amulet was made, with the Seven, to hold his soul once he was back down on the world. (Canon)
 - He made that jump, and it did take his memory. (Canon)
-- His soul, his entire person, is now trapped in the amulet. In it he never goes up and down again, so he keeps everything from then on. (Canon)
-- Whoever wears the amulet has their soul kicked out of their body, and he takes over. It doesn't trap them inside, the way the Anunnaki's jumping did. (Canon)
-- Nobody in the world knows he's the Prophet. He doesn't know it himself. (Canon)
+- In his teens in that life the Seven came to him, gave him the amulet and told him to wear it: that it was his destiny, to help him with his country. He took it. (Canon)
+- His soul, his entire person, has been trapped in the amulet since. In it he never goes up and down again, so he keeps everything from then on, and nothing from before. (Canon)
+- He was loyal to the Seven for centuries. Then he realised he was simply trapped, and turned on them: the Seven are horrible and nobody should worship them. That's why his whole nation is banned from worshipping the Seven. See [[alystan-empire]]. (Canon)
+- Once, he told someone to take the amulet and bury it deep where nobody would find it. A century or two later someone did, recognised it as an heirloom of the empire and took it to the emperor of the day. (Canon)
+- When the emperor put it on, Alysta came back, knocking that man's soul out, and found himself fat, surrounded by corrupt officials, in a city and nation on the brink of collapse. Everything he'd built had come to nothing. (Canon)
+- He decided he shouldn't just leave. He'd stay, keep constant watch so his people are good and better off for it, and actively look for a way to break all of this. That's when he went to the extreme side: experiments. (Canon)
+- Any body will do: whoever puts the amulet on has their soul kicked out, up to the Garden of Souls, and he takes over. It doesn't trap them inside, the way the Anunnaki's jumping did. (Canon)
+- Nobody in the world knows he's the Prophet. He doesn't know it himself: the Seven told him it was his destiny, not what he is. (Canon)
 - It's intended that the Prophet does the very thing the Seven were made to stop. One person doing it, for a particular job, is excusable where many weren't. (Canon)
 - The Seven let it go on because, despite everything, his nature is to care for his people and want them to do good. His presence and actions ripple out and make the world better, and that good outweighs the horrific things he does. Which puts a question over the Seven and their motives. (Canon)
 - Mo counts him as technically Anunnaki, in that sense. (Canon)
@@ -31,12 +36,9 @@ Not said yet. Not that he's a prophet.
 - [[the-eleven]], [[the-soulless]], [[the-fall-of-the-moon]], [[anunnaki]], [[dimitri]].
 
 ## Open
-- If the last jump took his memory, what does he think he is? Who told him to put the amulet to use, and what does he believe it's for?
-- Whose bodies does he wear, and how is the next one chosen?
-- Where does the kicked-out soul go?
+- Who was he in that life, the boy the Seven came to? Did he found the empire before or after the amulet?
+- The Seven wanted a prophet and now have an emperor who bans their worship. Why do they still let him be?
+- What the experiments are, and what they've cost.
 - What is he to the world in Dimitri's time? The older Abnu had him an emperor.
 - When does he come to be called Alysta?
 - What would freeing himself mean: a last death?
-
-## Proposed
-- The kicked-out soul goes up to the Garden, so each new body is a killing. Cleaner than what the Anunnaki did, and still a death. (Claude)

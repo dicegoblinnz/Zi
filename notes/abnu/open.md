@@ -2,10 +2,8 @@
 
 Most load-bearing first. A question leaves this list when Mo answers it and the answer's in an entry.
 
-## Asked 24 Nov (fourth round), waiting on Mo
-1. Alysta's last jump took his memory, so the man in the amulet remembers everything since and nothing of being the Prophet. Is that the reading?
-2. Whose bodies do he and the Soulless wear?
-3. The Soulless can't awaken, because of the amulet. Is that the name? (Proposed.)
+## Asked 24 Nov (last round), waiting on Mo
+1. Do the fit people given a Soulless amulet know what it does?
 
 ## Next up: the magic session
 Mo wants to sit down and build the magic properly. The first pass is in `cosmos/the-soul.md`.
@@ -22,6 +20,8 @@ Mo wants to sit down and build the magic properly. The first pass is in `cosmos/
 - Staying on the earth with no body.
 
 ## Next
+- The Alystan Empire: its name, and how it's ruled by an emperor who never really changes.
+- Why the Seven still leave Alysta be, now he bans their worship.
 - Are the Seven good? What do they want?
 - What Alysta is to the world in Dimitri's time.
 - The commander of the Queen's guard who beat the farmer. Mo's to tell.
