@@ -10,7 +10,9 @@ Still proposed: the Anunnaki as the returned dead (Mo likes it, not locked); the
 
 Later the same day, a second round. Canon now: the Anunnaki are the returned dead (Mo's yes); a handful survive, and Sumerian names are theirs; the Spymaster was away spying at the last battle; the Collector, or the Genie, who needs no body and trades wishes for souls; the farmer who refused her, trapped in an orb that lights a cavern; the molefolk who live by it; the serpent, loyal and waiting; Alysta's Abnu amulet, which shuts his soul, and his Abnu-laced gear; the setting playable in several times; Dimitri's spelling. New entries for each. Proposed and waiting: a Sumerian name for the serpent and him as a soul in a beast; the amulet holding Alysta's memory; the Spymaster as the farmer's killer; the Collector and the Seven as rivals for the dying.
 
-Pick up with the five questions in `open.md`, then the magic session in a fresh chat.
+Third round, same day. Canon now: the serpent is Ushumgal (name checked), coiled round the fallen moon, after Mo cut him and brought him back; Sumerian is the old tongue and the Anunnaki named the Seven in it; the orb isn't Abnu, and storing a soul in Abnu is a rare skill of the Seven; the Spymaster goes body to body and never reaches the Garden; a commander of the Queen's guard beat the farmer; Alysta's whole person is in his amulet and he takes over whoever wears it, and the amulet will hold the Soulless's soul too. Retired proposals: the Spymaster as the farmer's killer, and Alysta as born not taking. Proposed: Alysta was reborn first and the amulet came after.
+
+Pick up with the three questions in `open.md`, then the magic session in a fresh chat.
 
 ## 23 Nov 2026, second telling
 

@@ -16,6 +16,7 @@ Also called the Genie. One of the surviving Anunnaki, who needs no body, grants 
 - He carries the souls in a massive gourd on his back. (Canon; Mo wants it Sumerian-themed)
 - With them he could raise an army that topples nations if he wished. (Canon)
 - A soul can be spent to disintegrate another, and that works with a soul you hold as well as your own. So he's one of the most powerful beings in the world. (Canon)
+- Mo may give him the rare skill of storing a soul in Abnu. (Proposed, Mo's maybe)
 - He didn't oppose the Queen and he didn't want to help her. He has his own agenda, which Mo hasn't worked out yet. (Canon)
 
 ## What people believe

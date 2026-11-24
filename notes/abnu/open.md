@@ -2,12 +2,10 @@
 
 Most load-bearing first. A question leaves this list when Mo answers it and the answer's in an entry.
 
-## Asked 24 Nov (second round), waiting on Mo
-1. The serpent: a Sumerian name, and is he a soul that jumped into a sea beast?
-2. Alysta's amulet: does it hold his memory and shut his soul?
-3. How the Spymaster has kept his memory since the fall. (Proposed: body to body, never dying.)
-4. Sumerian as the old tongue: the Anunnaki, the Seven and Abnu.
-5. Who beat the farmer. (Proposed: the Spymaster.)
+## Asked 24 Nov (third round), waiting on Mo
+1. Alysta's order: reborn life after life first, then the amulet? (Proposed.)
+2. Does the world know the Prophet takes bodies, and do his wearers?
+3. Where a wearer's soul goes, and the Soulless. Mo's to tell.
 
 ## Next up: the magic session
 Mo wants to sit down and build the magic properly. The first pass is in `cosmos/the-soul.md`.
@@ -24,6 +22,8 @@ Mo wants to sit down and build the magic properly. The first pass is in `cosmos/
 - Staying on the earth with no body.
 
 ## Next
+- The commander of the Queen's guard who beat the farmer. Mo's to tell.
+- How one of the Anunnaki came to be a serpent.
 - What the Collector wants, and how the Seven stand him.
 - The molefolk: Mo's "whole thing" on them, what buried them, whether anyone knows.
 - A Sumerian word for the Collector's gourd (to look up, not guess).

@@ -14,23 +14,21 @@ The returned dead: souls that came back from the Garden into the living world. T
 - One Anunnaki was devastating, but the power isn't infinite: a group of about ten can still take one down. It's hard, and a big deal, but not impossible. (Canon)
 - Alysta took one down using no soul at all, only his expertise and anti-soul Abnu items. It was a massive feat. (Canon)
 - At the Queen's death the Seven trapped the Anunnaki who died with her in the moon. Not all of them died in that last encounter, and a handful weren't in it. See [[the-queens-war]]. (Canon)
-- Sumerian names are reserved for the Anunnaki. (Canon)
+- Sumerian is the old tongue, the first civilisation's, and it's theirs. They named the Seven in it and the names stuck, which is why people still use them. (Canon)
 
 ### Who's left
 Mo wants it a handful, to keep them super rare. These are the ones he has so far. (Canon)
 - [[the-spymaster]]: the Queen's spymaster, away spying when the last battle came. Working to free her.
 - [[the-collector]], also the Genie: needs no body, trades wishes for souls. His own side.
 - [[the-farmer]]: his soul, trapped in an orb, lighting a cavern.
-- [[the-serpent]]: a great sea serpent, loyal to the Queen, waiting.
+- [[the-serpent]]: Ushumgal, a great sea serpent coiled round the fallen moon, loyal to the Queen, waiting.
 
 ## Ties
 - [[the-twins]], [[the-jumping]], [[first-people]].
-- [[the-eleven]]: Mo notes that Alysta keeps returning too, so he's "kind of" Anunnaki, though he didn't come back from the dead to do it.
+- [[the-eleven]]: Alysta lives in an amulet and takes over whoever wears it, so Mo counts him as technically Anunnaki.
 
 ## Open
 - Is anyone who jumps back Anunnaki, or only those who did it before the fall and kept themselves?
-- Where the line sits between an Anunnaki and Alysta.
+- An Anunnaki's jump leaves the body's own soul trapped inside, watching. Alysta's amulet kicks it out. Why the difference?
 - What ordinary souls call themselves, and what people today think the Anunnaki were.
 
-## Proposed
-- The line: an Anunnaki takes a living body that already has someone in it. Alysta is born. One is theft and the other is the lawful way, and that's why he's one of the eleven and not one of them. (Claude)

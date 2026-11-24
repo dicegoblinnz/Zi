@@ -14,11 +14,12 @@ Settled spellings and each culture's sounds. Mo dictates, so every new name is c
 
 - **Dimitri**: confirmed 24 Nov. Not Sumerian, on purpose.
 
+- **Ushumgal**: the serpent. Sumerian ušum-gal, great serpent or great dragon. Dictation may write "Ushmugal". Replaces Jormungandr.
+
 ## Rule
-- Sumerian names are reserved for the Anunnaki (Mo, 24 Nov). Still to square: the Seven and Abnu itself carry Sumerian names too.
+- Sumerian is the old tongue of the first civilisation, so it belongs to the Anunnaki and to what they named: the Seven, and Abnu. Later people, like Dimitri, aren't named in it. (Mo, 24 Nov)
 
 ## To check with Mo
-- **Jormungandr**: Mo's name for the serpent. Norse, and he's Anunnaki. Ushumgal offered.
 - **Montia**, **Montian**: the archipelago kingdom. Dictated as "Montea" and "Montaian". Held as the older material spells it.
 
 ## Working labels, not names

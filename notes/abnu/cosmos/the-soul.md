@@ -51,7 +51,7 @@ What a soul is bent into. (Canon, first pass, working names.)
 - The body while a fourth-awakening soul is out of it: helpless, or still fighting?
 - Giving your soul to destroy another's: who can do it, and why isn't it done more?
 - Abnu gear: who makes it now, who's allowed it.
-- Soul containers: the orb, the gourd, the amulet, the moon. One craft or several? Abnu stills a soul, and the orb shines.
+- Soul containers: Abnu ones (the moon, the amulet) still the soul, and built ones (the orb) let it shine. What's the gourd?
 - Where nature sits in the four schools.
 - A new name for the "divine" soul. Mo is happy to change it. It's the healing side.
 - Four schools beside the game's three Roots (Body, Mind, Soul). How do they sit together?
