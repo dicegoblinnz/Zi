@@ -21,30 +21,18 @@ Eleven individuals Abnu created to stop the dead jumping back. Seven are the vir
 - They planned the mass eradication of the Queen and the Anunnaki for a long time. Because of that planning, when she died at the end of her war, catching her and the rest and putting them in one of the moons was easy. See [[the-queens-war]]. (Canon)
 - Putting them in the moon is all the eleven's seal was. It isn't the cause of memory loss. (Canon)
 - The Infiltrator died in that battle and is trapped in the moon with her. They knew what they were signing up for and are at peace with it. (Canon)
-- The Prophet keeps living life after life, to keep pushing people toward the virtues. So after the moon fell he was the first to suffer from it, and for a while the only one, slowly losing parts of himself. He wasn't yet called Alysta. See [[the-fall-of-the-moon]]. (Canon)
-- Alysta's Abnu amulet is a stone the Seven made with him to fight his memory loss. His soul is trapped inside it: his entire person is held there. (Canon)
-- Whoever wears the amulet has their soul kicked out of their body, and he takes over. In that sense, Mo says, Alysta is technically Anunnaki. (Canon)
-- The amulet will also trap the soul of the Soulless. Mo will tell that later. (Canon)
-- Holding Abnu suppresses the soul, so wearing it means he can never awaken his. He's always dormant and can't command his soul to do anything. (Canon)
-- He developed Abnu-laced gear instead: handcuffs, whips, bolas and nets with Abnu shaved to dust and worked into the material, which drain a person's ability to use their soul. (Canon)
-- With those and his expertise he took down one of the Anunnaki. A massive feat. (Canon)
-- In the story to come, Alysta is among those who have to stop the Queen once she's released. See [[dimitri]]. (Canon)
 - The Seven saw souls weakening and made [[rebirth]]. (Canon)
+- The Prophet has his own entry: [[alysta]]. He now lives in an Abnu amulet the Seven made with him, takes its wearers' bodies, and doesn't know he's the Prophet. The Seven let it go on because the good he does outweighs it, which is a question over them. (Canon)
 
 ## Ties
 - [[the-twins]]: their targets.
 - [[abnu-and-the-moons]]: their maker.
 - [[rebirth]]: their answer to the fall.
+- [[alysta]], [[the-soulless]].
 
 ## Open
+- Are the Seven good? They made a rule against taking bodies and keep one man who breaks it.
 - Sisa's Sumerian source (niĝ-si-sá) is from Claude's memory and still to be checked. Anukush (untiring) is a spare name.
-- Alysta's soul is pure "now". Was it ever otherwise? The older Abnu had him an emperor taking his sons' bodies.
-- What is the Prophet losing, and what does a prophet who's forgetting teach?
-- Where does a wearer's soul go when it's kicked out: the Garden, or into the amulet?
-- Do wearers know what putting it on means? Does anyone else?
-- The Prophet of the virtues takes bodies, which is the thing the eleven were made to stop. Is that the point of him?
-- Earlier: he suffered first after the fall because he kept living life after life. Now: he lives in the amulet and takes its wearers. Which came first?
-- When and why does he come to be called Alysta?
 - Are the eleven made from nothing, or are they souls Abnu chose?
 - Why are the four above the Seven? Rank, age, or only that their tasks are harder?
 - The dagger: it exists and its maker won't let go of it, but the Queen was taken by the moon, not the dagger. Was it ever used? What's it for now?
@@ -52,5 +40,4 @@ Eleven individuals Abnu created to stop the dead jumping back. Seven are the vir
 - Names for the four.
 
 ## Proposed
-- The order: at first he was reborn life after life and the fall stripped him each time. The Seven made the amulet to stop that. It worked, and the price is that he now lives only by taking whoever wears it. (Claude)
 - The dagger never reached the Infiltrator, because the dagger-maker wouldn't hand it to anyone. The moon was the plan that worked without it. (Claude)

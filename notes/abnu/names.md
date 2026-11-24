@@ -26,6 +26,7 @@ Settled spellings and each culture's sounds. Mo dictates, so every new name is c
 - the Queen, her brother, the twins
 - the dagger-maker, the Infiltrator, the Abnu dagger
 - the first people
+- the Soulless: Alysta's agents (Mo's name, may be final)
 - the Spymaster, the Collector (also the Genie), the farmer, the serpent, the molefolk
 - the first and second chronicle: Mo's planned story
 - souls, normal souls, generic souls, new souls: everyone who isn't Anunnaki

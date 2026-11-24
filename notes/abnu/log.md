@@ -12,6 +12,8 @@ Later the same day, a second round. Canon now: the Anunnaki are the returned dea
 
 Third round, same day. Canon now: the serpent is Ushumgal (name checked), coiled round the fallen moon, after Mo cut him and brought him back; Sumerian is the old tongue and the Anunnaki named the Seven in it; the orb isn't Abnu, and storing a soul in Abnu is a rare skill of the Seven; the Spymaster goes body to body and never reaches the Garden; a commander of the Queen's guard beat the farmer; Alysta's whole person is in his amulet and he takes over whoever wears it, and the amulet will hold the Soulless's soul too. Retired proposals: the Spymaster as the farmer's killer, and Alysta as born not taking. Proposed: Alysta was reborn first and the amulet came after.
 
+Fourth round, same day. Alysta has his own entry now. Canon: he was reborn life after life into fresh bodies, began losing memory after the fall, had the amulet made, and lost his memory on the last jump down; he lives in the amulet, kicks out its wearer's soul, and doesn't know he's the Prophet, and nor does anyone; it's intended that he does what the Seven were made to stop, and they allow it because his good outweighs it; rebirth takes a fresh body, and trapping the body's soul was the Anunnaki's way only; the Soulless are his loyal, consenting agents in copies of the amulet, promised freedom when he frees himself. Proposed: the kicked-out soul goes to the Garden; the Soulless are named for never being able to awaken.
+
 Pick up with the three questions in `open.md`, then the magic session in a fresh chat.
 
 ## 23 Nov 2026, second telling

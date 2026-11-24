@@ -25,10 +25,9 @@ Mo wants it a handful, to keep them super rare. These are the ones he has so far
 
 ## Ties
 - [[the-twins]], [[the-jumping]], [[first-people]].
-- [[the-eleven]]: Alysta lives in an amulet and takes over whoever wears it, so Mo counts him as technically Anunnaki.
+- [[alysta]]: he lives in an amulet and takes over whoever wears it, so Mo counts him as technically Anunnaki.
 
 ## Open
 - Is anyone who jumps back Anunnaki, or only those who did it before the fall and kept themselves?
-- An Anunnaki's jump leaves the body's own soul trapped inside, watching. Alysta's amulet kicks it out. Why the difference?
 - What ordinary souls call themselves, and what people today think the Anunnaki were.
 

@@ -2,10 +2,10 @@
 
 Most load-bearing first. A question leaves this list when Mo answers it and the answer's in an entry.
 
-## Asked 24 Nov (third round), waiting on Mo
-1. Alysta's order: reborn life after life first, then the amulet? (Proposed.)
-2. Does the world know the Prophet takes bodies, and do his wearers?
-3. Where a wearer's soul goes, and the Soulless. Mo's to tell.
+## Asked 24 Nov (fourth round), waiting on Mo
+1. Alysta's last jump took his memory, so the man in the amulet remembers everything since and nothing of being the Prophet. Is that the reading?
+2. Whose bodies do he and the Soulless wear?
+3. The Soulless can't awaken, because of the amulet. Is that the name? (Proposed.)
 
 ## Next up: the magic session
 Mo wants to sit down and build the magic properly. The first pass is in `cosmos/the-soul.md`.
@@ -22,6 +22,8 @@ Mo wants to sit down and build the magic properly. The first pass is in `cosmos/
 - Staying on the earth with no body.
 
 ## Next
+- Are the Seven good? What do they want?
+- What Alysta is to the world in Dimitri's time.
 - The commander of the Queen's guard who beat the farmer. Mo's to tell.
 - How one of the Anunnaki came to be a serpent.
 - What the Collector wants, and how the Seven stand him.
