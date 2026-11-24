@@ -14,9 +14,11 @@ Third round, same day. Canon now: the serpent is Ushumgal (name checked), coiled
 
 Fourth round, same day. Alysta has his own entry now. Canon: he was reborn life after life into fresh bodies, began losing memory after the fall, had the amulet made, and lost his memory on the last jump down; he lives in the amulet, kicks out its wearer's soul, and doesn't know he's the Prophet, and nor does anyone; it's intended that he does what the Seven were made to stop, and they allow it because his good outweighs it; rebirth takes a fresh body, and trapping the body's soul was the Anunnaki's way only; the Soulless are his loyal, consenting agents in copies of the amulet, promised freedom when he frees himself. Proposed: the kicked-out soul goes to the Garden; the Soulless are named for never being able to awaken.
 
-Last round of the night. Canon: the Seven gave the teenage Alysta the amulet as his destiny; he was loyal for centuries, then turned on them and banned their worship across his empire; he once had the amulet buried, it came back to the emperor of the day a century or two later, and he woke in a rotten empire and chose to stay, watch over it and experiment for a way out; any body will do for an amulet, the Soulless pick fit ones, they fight with skill and gear, and the kicked-out soul goes to the Garden. New stub: the Alystan Empire.
+Last round of the night. Canon: the Seven gave the teenage Alysta the amulet as his destiny; he was loyal for centuries, then turned on them and banned their worship across his empire; he once had the amulet buried, it came back to the emperor of the day a century or two later, and he woke in a rotten empire and chose to stay, watch over it and experiment for a way out; any body will do for an amulet, the Soulless pick fit ones, they fight with skill and gear, and the kicked-out soul goes to the Garden. New stub: the Alystarian Empire.
 
-Pick up with the magic session in a fresh chat. One question waiting in `open.md`.
+Then Mo settled the last two: it's the Alystarian Empire, and the fit people given a Soulless amulet don't know what it does.
+
+Pick up with the magic session in a fresh chat. Nothing is waiting on Mo.
 
 ## 23 Nov 2026, second telling
 

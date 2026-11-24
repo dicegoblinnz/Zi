@@ -14,7 +14,7 @@ One of the four above the Seven, made to guide the living toward the virtues. He
 - He made that jump, and it did take his memory. (Canon)
 - In his teens in that life the Seven came to him, gave him the amulet and told him to wear it: that it was his destiny, to help him with his country. He took it. (Canon)
 - His soul, his entire person, has been trapped in the amulet since. In it he never goes up and down again, so he keeps everything from then on, and nothing from before. (Canon)
-- He was loyal to the Seven for centuries. Then he realised he was simply trapped, and turned on them: the Seven are horrible and nobody should worship them. That's why his whole nation is banned from worshipping the Seven. See [[alystan-empire]]. (Canon)
+- He was loyal to the Seven for centuries. Then he realised he was simply trapped, and turned on them: the Seven are horrible and nobody should worship them. That's why his whole nation is banned from worshipping the Seven. See [[alystarian-empire]]. (Canon)
 - Once, he told someone to take the amulet and bury it deep where nobody would find it. A century or two later someone did, recognised it as an heirloom of the empire and took it to the emperor of the day. (Canon)
 - When the emperor put it on, Alysta came back, knocking that man's soul out, and found himself fat, surrounded by corrupt officials, in a city and nation on the brink of collapse. Everything he'd built had come to nothing. (Canon)
 - He decided he shouldn't just leave. He'd stay, keep constant watch so his people are good and better off for it, and actively look for a way to break all of this. That's when he went to the extreme side: experiments. (Canon)
