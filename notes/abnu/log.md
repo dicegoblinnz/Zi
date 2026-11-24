@@ -8,7 +8,9 @@ Mo answered the round. Canon now: memory loss is purely the moon's fall (the sea
 
 Still proposed: the Anunnaki as the returned dead (Mo likes it, not locked); the Infiltrator bringing the mass death about; the dagger never used; the Spymaster going body to body without dying.
 
-Pick up with the four questions in `open.md`, then the magic session in a fresh chat.
+Later the same day, a second round. Canon now: the Anunnaki are the returned dead (Mo's yes); a handful survive, and Sumerian names are theirs; the Spymaster was away spying at the last battle; the Collector, or the Genie, who needs no body and trades wishes for souls; the farmer who refused her, trapped in an orb that lights a cavern; the molefolk who live by it; the serpent, loyal and waiting; Alysta's Abnu amulet, which shuts his soul, and his Abnu-laced gear; the setting playable in several times; Dimitri's spelling. New entries for each. Proposed and waiting: a Sumerian name for the serpent and him as a soul in a beast; the amulet holding Alysta's memory; the Spymaster as the farmer's killer; the Collector and the Seven as rivals for the dying.
+
+Pick up with the five questions in `open.md`, then the magic session in a fresh chat.
 
 ## 23 Nov 2026, second telling
 

@@ -20,7 +20,10 @@ How much soul a person can control. (Canon, first pass. Mo may rename "awakening
 - Each step up is a massive jump in power, and the fourth over the third is bigger again. Massive isn't infinite: about ten at the third can take down one at the fourth. (Canon)
 - If the body is killed while a fourth-awakening soul is out of it, the soul is severed and forced out into the Garden of Souls. (Canon)
 - A soul can be destroyed for good. Someone gave their own soul to disintegrate the Queen's brother's. See [[the-twins]]. (Canon)
-- Abnu items work against soul. Alysta beat a fourth-awakening Anunnaki with those and expertise, and no soul of his own. (Canon)
+- Abnu suppresses soul when it's held or worn, and its dust can be laced into gear. Alysta beat a fourth-awakening Anunnaki with that and expertise, and no soul of his own. (Canon)
+- A soul can be trapped before it leaves the body (the farmer's orb), carried (the Collector's gourd), and spent to destroy another soul, your own or one you hold. (Canon)
+- A soul strong enough can stay on the earth with no body and not go up. The Collector does. (Canon)
+- Nature is a way of bending soul too: every plant is a soul, and the farmer linked to them deeply enough to grow and command them. (Canon; which school it is isn't said)
 - The four need better names. (Canon; Mo's call, for the magic session)
 
 ### The four schools
@@ -47,7 +50,9 @@ What a soul is bent into. (Canon, first pass, working names.)
 - Does a person have one school or can they learn several? Is the school chosen or is it who they are?
 - The body while a fourth-awakening soul is out of it: helpless, or still fighting?
 - Giving your soul to destroy another's: who can do it, and why isn't it done more?
-- Abnu items: what they are, who makes them, who's allowed them.
+- Abnu gear: who makes it now, who's allowed it.
+- Soul containers: the orb, the gourd, the amulet, the moon. One craft or several? Abnu stills a soul, and the orb shines.
+- Where nature sits in the four schools.
 - A new name for the "divine" soul. Mo is happy to change it. It's the healing side.
 - Four schools beside the game's three Roots (Body, Mind, Soul). How do they sit together?
 - How common awakening was in the twins' time, at its height, and now.

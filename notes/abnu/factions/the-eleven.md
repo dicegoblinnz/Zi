@@ -21,7 +21,10 @@ Eleven individuals Abnu created to stop the dead jumping back. Seven are the vir
 - Putting them in the moon is all the eleven's seal was. It isn't the cause of memory loss. (Canon)
 - The Infiltrator died in that battle and is trapped in the moon with her. They knew what they were signing up for and are at peace with it. (Canon)
 - The Prophet keeps living life after life, to keep pushing people toward the virtues. So after the moon fell he was the first to suffer from it, and for a while the only one, slowly losing parts of himself. He wasn't yet called Alysta. See [[the-fall-of-the-moon]]. (Canon)
-- Alysta took down one of the Anunnaki using effectively no soul, only his expertise and anti-soul Abnu items. A massive feat. (Canon)
+- Alysta wears an Abnu amulet, a stone the Seven made with him to fight his memory loss. Mo says he's "technically stuck inside" it, and that it was made to help "only for it to be stuck". Not gone into yet. (Canon)
+- Holding Abnu suppresses the soul, so wearing it means he can never awaken his. He's always dormant and can't command his soul to do anything. (Canon)
+- He developed Abnu-laced gear instead: handcuffs, whips, bolas and nets with Abnu shaved to dust and worked into the material, which drain a person's ability to use their soul. (Canon)
+- With those and his expertise he took down one of the Anunnaki. A massive feat. (Canon)
 - In the story to come, Alysta is among those who have to stop the Queen once she's released. See [[dimitri]]. (Canon)
 - The Seven saw souls weakening and made [[rebirth]]. (Canon)
 
@@ -34,7 +37,7 @@ Eleven individuals Abnu created to stop the dead jumping back. Seven are the vir
 - Sisa's Sumerian source (niĝ-si-sá) is from Claude's memory and still to be checked. Anukush (untiring) is a spare name.
 - Alysta's soul is pure "now". Was it ever otherwise? The older Abnu had him an emperor taking his sons' bodies.
 - What is the Prophet losing, and what does a prophet who's forgetting teach?
-- Alysta and soul: can't he use it, or won't he?
+- The amulet: what does "stuck inside it" mean, and how does that sit with him living life after life?
 - When and why does he come to be called Alysta?
 - Are the eleven made from nothing, or are they souls Abnu chose?
 - Why are the four above the Seven? Rank, age, or only that their tasks are harder?

@@ -4,6 +4,8 @@
 
 The order Mo has told it in. No dates or lengths yet.
 
+The setting is meant to be played in more than one time, the way some games offer eras: the Queen's time, Dimitri's rising (the modern time and the main story) and the Queen's return. So nothing has to be fixed to one "now". (Canon, 24 Nov)
+
 1. Ten moons of Abnu make souls. People live, die and go up to the Garden. Nobody comes back.
 2. People before civilisation, then the first civilisation, the twins' people. Souls begin to be awakened.
 3. The twins are taken as children, rise, and she becomes the first queen of the world. They're assassinated.

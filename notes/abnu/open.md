@@ -2,11 +2,12 @@
 
 Most load-bearing first. A question leaves this list when Mo answers it and the answer's in an entry.
 
-## Asked 24 Nov, waiting on Mo
-1. How has the Spymaster kept his memory and stayed free for over a thousand years? (Proposed: he wasn't at the last battle, and he goes body to body without ever dying.)
-2. Lock the Anunnaki as the returned dead? Mo's happy to play along, not locked.
-3. Where does a table's crew stand beside Dimitri's story?
-4. Alysta and soul: can't he use it, or won't he?
+## Asked 24 Nov (second round), waiting on Mo
+1. The serpent: a Sumerian name, and is he a soul that jumped into a sea beast?
+2. Alysta's amulet: does it hold his memory and shut his soul?
+3. How the Spymaster has kept his memory since the fall. (Proposed: body to body, never dying.)
+4. Sumerian as the old tongue: the Anunnaki, the Seven and Abnu.
+5. Who beat the farmer. (Proposed: the Spymaster.)
 
 ## Next up: the magic session
 Mo wants to sit down and build the magic properly. The first pass is in `cosmos/the-soul.md`.
@@ -18,9 +19,15 @@ Mo wants to sit down and build the magic properly. The first pass is in `cosmos/
 - Is there something past the fourth?
 - Better names for the four awakenings, and for the divine soul.
 - Destroying a soul by giving your own.
-- Abnu items that work against soul.
+- Soul containers (orb, gourd, amulet, moon) and Abnu gear.
+- Where nature sits in the schools.
+- Staying on the earth with no body.
 
 ## Next
+- What the Collector wants, and how the Seven stand him.
+- The molefolk: Mo's "whole thing" on them, what buried them, whether anyone knows.
+- A Sumerian word for the Collector's gourd (to look up, not guess).
+- What each playable time looks like: who rules, what's at stake.
 - What "the field" is that the moon fell through, and where the Garden sits.
 - What the Prophet is losing, and when he becomes Alysta.
 - Dimitri: who he is and why he can free her. Mo's next telling on him.

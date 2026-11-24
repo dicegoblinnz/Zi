@@ -13,7 +13,7 @@ Abnu is the special rock the moons are made of, and it's where souls are made. T
 - Abnu makes the life force of people: souls are created there and sent down to the planet to be born and live a life. (Canon)
 - The ten moons each served a purpose and worked in synchronicity, a perfect balance for making souls. (Canon)
 - Abnu suspends souls and stops their use. That's what makes it so powerful, and a soul trapped inside it is as good as dead, if not worse. (Canon)
-- Things made of Abnu work against soul. The dagger is one, and Alysta used anti-soul Abnu items to beat one of the Anunnaki. (Canon)
+- Holding an Abnu stone suppresses your soul. Things made of it or laced with its dust work against soul: the dagger, Alysta's amulet, and his cuffs, whips, bolas and nets. (Canon)
 - There were rocks between the moons. The Queen pulled them down as her meteor shower. See [[the-queens-war]]. (Canon)
 - There's a creator, but like on Earth he isn't present, so the setting has no need to mention gods. People worship the Seven instead. (Canon)
 - When people abused coming back from death, Abnu created eleven individuals to stop it. See [[the-eleven]]. (Canon)

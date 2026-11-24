@@ -16,7 +16,8 @@ Working label. The twins' rule after they came back, the war between the Anunnak
 - The land was far more connected then. The meteors destroyed it and left an archipelago, which is the Kingdom of [[montia]] today. (Canon)
 - She couldn't control the shower as it fell, because her power ran out. It wiped out her and her people. (Canon)
 - She didn't mind dying, since she believed she'd just jump back in. (Canon)
-- The moment she died she was caught and thrown inside one of the moons, unable to escape. The Seven had been planning the mass eradication for a long time, which is why it went easily when the moment came. They can only take a soul at the moment of death. The Queen and the Anunnaki were all trapped in that moon. (Canon)
+- The moment she died she was caught and thrown inside one of the moons, unable to escape. The Seven had been planning the mass eradication for a long time, which is why it went easily when the moment came. They can only take a soul at the moment of death. The Queen and the Anunnaki who died there were trapped in that moon. (Canon)
+- Not every Anunnaki died in that encounter, and many ordinary souls died in it too. A handful of Anunnaki weren't engaged at all. See [[anunnaki]] for who's left. (Canon)
 - The Infiltrator died there too and is trapped with her. They knew what they were signing up for and are at peace with it. (Canon)
 
 ## What people believe
